@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="UnitAction" format=3 uid="uid://wt0bsp6e5stq"]
+
+[ext_resource type="Texture2D" uid="uid://c3k6gvpdtrxaq" path="res://assets/spritesheets/ui/Icons/Icon - Stop.tres" id="1_u2ev5"]
+[ext_resource type="Script" uid="uid://xlg4eskiphgu" path="res://src/resources/UnitAction.gd" id="2_fxgol"]
+
+[resource]
+script = ExtResource("2_fxgol")
+id = "stop"
+title = "Fermarsi"
+icon = ExtResource("1_u2ev5")
+action_type = 0
+metadata/_custom_type_script = "uid://xlg4eskiphgu"

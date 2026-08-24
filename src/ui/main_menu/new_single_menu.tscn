@@ -1,0 +1,149 @@
+[gd_scene format=3 uid="uid://c0rueoflmib6b"]
+
+[ext_resource type="Script" uid="uid://br01iquftcgqe" path="res://src/ui/main_menu/new_single_menu.gd" id="1_ickx4"]
+[ext_resource type="Texture2D" uid="uid://vimh2i4we860" path="res://assets/art/ui/background/menu-background-with-title.png" id="2_i501i"]
+[ext_resource type="Texture2D" uid="uid://cu6y8fbog3hcr" path="res://assets/art/ui/buttons/UI - Menu Button - 00.tres" id="3_nyvq8"]
+[ext_resource type="Texture2D" uid="uid://7pssj7k1t5w7" path="res://assets/art/ui/buttons/UI - Menu Button - 02.tres" id="4_i8884"]
+[ext_resource type="Texture2D" uid="uid://coylb07xse354" path="res://assets/art/ui/buttons/UI - Menu Button - 01.tres" id="5_3q65x"]
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="6_i77gt"]
+
+[node name="SingleGameMenu" type="Control" unique_id=1392140865]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ickx4")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1018145943]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_i501i")
+expand_mode = 3
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=750366083]
+layout_mode = 0
+offset_left = 258.0
+offset_top = 122.0
+offset_right = 383.0
+offset_bottom = 300.0
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="NewCampaignBtn" type="TextureButton" parent="VBoxContainer2" unique_id=882438303]
+custom_minimum_size = Vector2(125, 23)
+layout_mode = 2
+texture_normal = ExtResource("3_nyvq8")
+texture_pressed = ExtResource("4_i8884")
+texture_hover = ExtResource("5_3q65x")
+texture_disabled = ExtResource("3_nyvq8")
+texture_focused = ExtResource("5_3q65x")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="VBoxContainer2/NewCampaignBtn" unique_id=1537953361]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("6_i77gt")
+theme_override_font_sizes/font_size = 10
+text = "New Campaign"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LoadGameBtn" type="TextureButton" parent="VBoxContainer2" unique_id=1051634868]
+custom_minimum_size = Vector2(125, 23)
+layout_mode = 2
+texture_normal = ExtResource("3_nyvq8")
+texture_pressed = ExtResource("4_i8884")
+texture_hover = ExtResource("5_3q65x")
+texture_disabled = ExtResource("3_nyvq8")
+texture_focused = ExtResource("5_3q65x")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="VBoxContainer2/LoadGameBtn" unique_id=1709276838]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("6_i77gt")
+theme_override_font_sizes/font_size = 10
+text = "Load Game"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CustomScenarioBtn" type="TextureButton" parent="VBoxContainer2" unique_id=986106187]
+custom_minimum_size = Vector2(125, 23)
+layout_mode = 2
+texture_normal = ExtResource("3_nyvq8")
+texture_pressed = ExtResource("4_i8884")
+texture_hover = ExtResource("5_3q65x")
+texture_disabled = ExtResource("3_nyvq8")
+texture_focused = ExtResource("5_3q65x")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="VBoxContainer2/CustomScenarioBtn" unique_id=317132388]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("6_i77gt")
+theme_override_font_sizes/font_size = 10
+text = "Custom Scenario"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BackButton" type="TextureButton" parent="VBoxContainer2" unique_id=2087708610]
+custom_minimum_size = Vector2(125, 23)
+layout_mode = 2
+texture_normal = ExtResource("3_nyvq8")
+texture_pressed = ExtResource("4_i8884")
+texture_hover = ExtResource("5_3q65x")
+texture_disabled = ExtResource("3_nyvq8")
+texture_focused = ExtResource("5_3q65x")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="VBoxContainer2/BackButton" unique_id=1156326652]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("6_i77gt")
+theme_override_font_sizes/font_size = 10
+text = "Previous Menu"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="VBoxContainer2/NewCampaignBtn" to="." method="_on_new_campaign_btn_pressed"]
+[connection signal="pressed" from="VBoxContainer2/LoadGameBtn" to="." method="_on_load_game_btn_pressed"]
+[connection signal="pressed" from="VBoxContainer2/CustomScenarioBtn" to="." method="_on_custom_scenario_btn_pressed"]
+[connection signal="pressed" from="VBoxContainer2/BackButton" to="." method="_on_back_button_pressed"]

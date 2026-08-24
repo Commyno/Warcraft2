@@ -1,0 +1,15 @@
+[gd_resource type="Theme" format=3 uid="uid://dip3epl1kc4sl"]
+
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="1_ykxgh"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jteq1"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i7fa7"]
+bg_color = Color(0, 0.2017467, 0.99999994, 1)
+
+[resource]
+default_font = ExtResource("1_ykxgh")
+default_font_size = 12
+StatsBar/styles/background = SubResource("StyleBoxFlat_jteq1")
+StatsBar/styles/fill = SubResource("StyleBoxFlat_i7fa7")

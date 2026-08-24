@@ -1,0 +1,8 @@
+[gd_resource type="AtlasTexture" format=3 uid="uid://cxafmyoi3vbjy"]
+
+[ext_resource type="Texture2D" uid="uid://dvhuw0tif6day" path="res://assets/spritesheets/humans/units/footman/Humans - Footman.png" id="1_ft3pu"]
+
+[resource]
+atlas = ExtResource("1_ft3pu")
+region = Rect2(20, 130, 30, 49)
+margin = Rect2(0, 1, 1, 3)

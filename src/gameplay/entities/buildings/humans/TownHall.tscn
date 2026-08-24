@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://bmsb85571t2vm"]
+
+[ext_resource type="PackedScene" uid="uid://gqjr7f7ijo08" path="res://src/gameplay/entities/buildings/base_building.tscn" id="1_tjke5"]
+
+[node name="TownHallBuilding" unique_id=1889694065 instance=ExtResource("1_tjke5")]
+max_health = 2000.0
+is_under_construction = true
+
+[node name="CollisionShape2D" parent="." index="1" unique_id=223898250]
+position = Vector2(0, 0)
+
+[node name="SelectionRing" parent="." index="2" unique_id=523229799]
+position = Vector2(0, 0)
+
+[node name="NavigationObstacle2D" parent="." index="3" unique_id=969329888]
+position = Vector2(0, 0)
+
+[node name="HealthBar" parent="." index="4" unique_id=1652500946]
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = -58.0
+
+[node name="PlacementArea" parent="." index="5" unique_id=735967493]
+position = Vector2(0, 0)

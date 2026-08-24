@@ -1,0 +1,136 @@
+[gd_scene format=3 uid="uid://ucav2se4qjt7"]
+
+[ext_resource type="Script" uid="uid://dikj3g11i2b5e" path="res://src/ui/main_menu/new_multi_menu.gd" id="1_87rn3"]
+[ext_resource type="Texture2D" uid="uid://vimh2i4we860" path="res://assets/art/ui/background/menu-background-with-title.png" id="2_ghnqs"]
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="3_qnolc"]
+[ext_resource type="Texture2D" uid="uid://cu6y8fbog3hcr" path="res://assets/art/ui/buttons/UI - Menu Button - 00.tres" id="4_30v6j"]
+[ext_resource type="Texture2D" uid="uid://7pssj7k1t5w7" path="res://assets/art/ui/buttons/UI - Menu Button - 02.tres" id="5_256r2"]
+[ext_resource type="Texture2D" uid="uid://coylb07xse354" path="res://assets/art/ui/buttons/UI - Menu Button - 01.tres" id="6_7xhj2"]
+
+[node name="MultiGameMenu" type="Control" unique_id=1392140865]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_87rn3")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1018145943]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_ghnqs")
+expand_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=443580289]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="VBoxContainer" unique_id=1039666974]
+custom_minimum_size = Vector2(0, 125)
+layout_mode = 2
+
+[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer" unique_id=1110172370]
+layout_mode = 2
+theme_override_constants/margin_left = 180
+theme_override_constants/margin_right = 180
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer3" unique_id=1278346937]
+layout_mode = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_qnolc")
+theme_override_font_sizes/font_size = 20
+text = "Multi Game"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1770107743]
+layout_mode = 2
+theme_override_constants/margin_left = 180
+theme_override_constants/margin_right = 180
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/MarginContainer" unique_id=160069344]
+custom_minimum_size = Vector2(200, 150)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer/ScrollContainer" unique_id=1787266188]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer" unique_id=1690986803]
+layout_mode = 2
+theme_override_constants/margin_left = 150
+theme_override_constants/margin_right = 150
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer2" unique_id=441816870]
+layout_mode = 2
+theme_override_constants/separation = 30
+alignment = 1
+
+[node name="BackButton" type="TextureButton" parent="VBoxContainer/MarginContainer2/HBoxContainer" unique_id=782868579]
+custom_minimum_size = Vector2(125, 23)
+layout_mode = 2
+texture_normal = ExtResource("4_30v6j")
+texture_pressed = ExtResource("5_256r2")
+texture_hover = ExtResource("6_7xhj2")
+texture_disabled = ExtResource("4_30v6j")
+texture_focused = ExtResource("6_7xhj2")
+ignore_texture_size = true
+stretch_mode = 1
+
+[node name="ButtonLabel" type="Label" parent="VBoxContainer/MarginContainer2/HBoxContainer/BackButton" unique_id=1731076064]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_qnolc")
+theme_override_font_sizes/font_size = 10
+text = "Back"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StartButton" type="TextureButton" parent="VBoxContainer/MarginContainer2/HBoxContainer" unique_id=1512714669]
+custom_minimum_size = Vector2(125, 23)
+layout_mode = 2
+texture_normal = ExtResource("4_30v6j")
+texture_pressed = ExtResource("5_256r2")
+texture_hover = ExtResource("6_7xhj2")
+texture_disabled = ExtResource("4_30v6j")
+texture_focused = ExtResource("6_7xhj2")
+ignore_texture_size = true
+stretch_mode = 1
+
+[node name="ButtonLabel" type="Label" parent="VBoxContainer/MarginContainer2/HBoxContainer/StartButton" unique_id=1367215397]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_qnolc")
+theme_override_font_sizes/font_size = 10
+text = "Start Game"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="VBoxContainer/MarginContainer2/HBoxContainer/BackButton" to="." method="_on_back_button_pressed"]

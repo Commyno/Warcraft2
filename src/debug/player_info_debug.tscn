@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://dii1aas0smovk"]
+
+[ext_resource type="Script" uid="uid://wvt4ypwdlvv" path="res://src/debug/player_info_debug.gd" id="1_k5wtt"]
+
+[node name="PlayerInfoDebug" type="HBoxContainer" unique_id=1633085138]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_k5wtt")
+
+[node name="PlayerID" type="Label" parent="." unique_id=2136107365]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
+
+[node name="Human" type="Label" parent="." unique_id=907835281]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
+
+[node name="Color" type="ColorRect" parent="." unique_id=210255060]
+custom_minimum_size = Vector2(15, 15)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Race" type="Label" parent="." unique_id=207129502]
+custom_minimum_size = Vector2(55, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
+
+[node name="SpawnPosition" type="Label" parent="." unique_id=135327380]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
+
+[node name="Gold" type="Label" parent="." unique_id=1173186076]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
+
+[node name="Lumber" type="Label" parent="." unique_id=749301151]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
+
+[node name="Oil" type="Label" parent="." unique_id=1030049366]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
+
+[node name="Units" type="Label" parent="." unique_id=20788852]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
+
+[node name="Buildings" type="Label" parent="." unique_id=1041015713]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1

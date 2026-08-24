@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" format=3 uid="uid://c16cqy7x18v8t"]
+
+[ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/spritesheets/humans/buildings/Humans - Human Buildings (Summer).png" id="1_b3xpd"]
+
+[resource]
+atlas = ExtResource("1_b3xpd")
+region = Rect2(4, 4, 128, 128)

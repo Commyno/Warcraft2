@@ -1,0 +1,189 @@
+class_name BaseBuilding
+extends StaticBody2D
+
+@export var player_id: int = 0
+
+# --- PARAMETRI CONFIGURABILI ---
+@export_group("Edificio")
+@export var building_name: String = "Edificio Base"
+@export var building_icon:  Texture = preload("uid://de3gns0d6qacn")
+@export var building_spritesheet: Texture2D
+
+@export_group("Azioni e Abilità")
+@export var available_actions: Array[UnitAction] = []
+
+# --- STATISTICHE DI BASE ---
+@export_group("Vitalità")
+@export var max_health: float = 500.0
+
+# --- PARAMETRI DI COSTRUZIONE ---
+@export_group("Costruzione")
+@export var build_time: float = 10.0
+@export var is_under_construction: bool = true
+@export var region_under_construction: Rect2
+@export var region_half_built: Rect2
+@export var region_completed: Rect2
+
+# --- RIFERIMENTI NODI ---
+@onready var sprite: Sprite2D = $Sprite2D
+@onready var collision_shape: CollisionShape2D = $CollisionShape2D
+@onready var nav_obstacle: NavigationObstacle2D = $NavigationObstacle2D
+@onready var health_bar: ProgressBar = $HealthBar
+@onready var selectable_component: SelectableComponent = get_node_or_null("SelectableComponent")
+
+# --- SEGNALI ---
+signal health_changed(new_health: float, max_health: float)
+signal construction_completed
+signal construction_progress_updated(current_hp: float, max_hp: float)
+signal destroyed()
+
+# --- VARIABILI INTERNE ---
+var current_health: float
+var is_destroyed: bool = false
+var construction_progress: float = 0.0 # Da 0.0 a 1.0
+var active_builders: Array[Node2D] = []
+
+func _ready() -> void:
+	# 1. Nascondi il cerchio di selezione all'avvio
+	if selectable_component:
+		selectable_component.deselect()
+	
+	if building_spritesheet and sprite:
+		sprite.texture = building_spritesheet
+		sprite.region_enabled = true
+		
+	# Inizializza l'ostacolo per la navmesh
+	if nav_obstacle:
+		nav_obstacle.affect_navigation_mesh = true
+		
+	health_changed.connect(_on_health_changed)
+
+	# Gestione dello stato iniziale (già costruito vs cantiere)
+	if is_under_construction:
+		place_under_construction()
+	else:
+		complete_construction()
+		
+	if health_bar:
+		health_bar.max_value = max_health
+		health_bar.value = current_health
+
+func _process(delta: float) -> void:
+	if is_under_construction and not active_builders.is_empty():
+		_advance_construction(delta)
+
+# --- SISTEMA DI SELEZIONE ---
+
+func select() -> void:
+	if selectable_component: selectable_component.select()
+
+func deselect() -> void:
+	if selectable_component: selectable_component.deselect()
+
+func is_selected() -> bool:
+	return selectable_component.is_selected if selectable_component else false
+
+# --- SISTEMA DI DANNO E DISTRUZIONE ---
+
+func take_damage(amount: float) -> void:
+	if is_destroyed:
+		return
+		
+	current_health -= amount
+	health_changed.emit(current_health, max_health)
+	
+	print(building_name, " ha subito ", amount, " danni. Vita residua: ", current_health)
+	
+	if current_health <= 0.0:
+		destroy_building()
+
+func heal(amount: float) -> void:
+	if is_destroyed:
+		return
+		
+	current_health = min(current_health + amount, max_health)
+	health_changed.emit(current_health, max_health)
+
+func destroy_building() -> void:
+	is_destroyed = true
+	destroyed.emit()
+	
+	if collision_shape:
+		collision_shape.set_deferred("disabled", true)
+	if nav_obstacle:
+		nav_obstacle.affect_navigation_mesh = false
+		
+	if health_bar:
+		health_bar.visible = false
+		
+	print(building_name, " è stato distrutto!")
+	
+	spawn_rubble()
+	queue_free()
+
+func spawn_rubble() -> void:
+	if not sprite or not sprite.texture:
+		return
+		
+	var rubble = Sprite2D.new()
+	rubble.texture = sprite.texture
+	rubble.region_enabled = sprite.region_enabled
+	rubble.region_rect = sprite.region_rect # FONDAMENTALE PER NON MOSTRARE TUTTO L'ATLAS
+	rubble.global_position = global_position
+	rubble.modulate = Color(0.2, 0.2, 0.2, 0.8)
+	
+	get_parent().add_child(rubble)
+
+# --- GESTIONE UI ---
+
+func _on_health_changed(new_health: float, _max: float) -> void:
+	if health_bar:
+		health_bar.value = new_health
+
+# --- GESTIONE COSTRUZIONE ---
+
+func register_builder(builder: Node2D) -> void:
+	if not active_builders.has(builder):
+		active_builders.append(builder)
+
+func unregister_builder(builder: Node2D) -> void:
+	if active_builders.has(builder):
+		active_builders.erase(builder)
+
+func place_under_construction() -> void:
+	is_under_construction = true
+	construction_progress = 0.0
+	current_health = 1.0 # Parte con pochissima vita
+	_set_building_region(region_under_construction)
+
+func _advance_construction(delta: float) -> void:
+	var count = active_builders.size()
+	var speed_multiplier = 1.0 + (count - 1) * 0.5 
+	
+	construction_progress += (delta / build_time) * speed_multiplier
+	construction_progress = clamp(construction_progress, 0.0, 1.0)
+	
+	current_health = lerp(1.0, max_health, construction_progress)
+	construction_progress_updated.emit(current_health, max_health)
+	health_changed.emit(current_health, max_health) # Aggiorna l'UI durante la costruzione
+	
+	# Transizione alla fase "metà costruito"
+	if construction_progress >= 0.5 and construction_progress < 1.0:
+		_set_building_region(region_half_built)			
+	
+	# Completamento
+	if construction_progress >= 1.0:
+		complete_construction()
+
+func complete_construction() -> void:
+	is_under_construction = false
+	active_builders.clear()
+	current_health = max_health
+	
+	_set_building_region(region_completed)
+	health_changed.emit(current_health, max_health)
+	construction_completed.emit()
+	
+func _set_building_region(region: Rect2) -> void:
+	if sprite and sprite.region_enabled and region != Rect2():
+		sprite.region_rect = region

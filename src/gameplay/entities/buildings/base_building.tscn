@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://gqjr7f7ijo08"]
+
+[ext_resource type="Script" uid="uid://dtv6btrhvydlp" path="res://src/gameplay/entities/buildings/base_building.gd" id="1_tpccr"]
+[ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/spritesheets/humans/buildings/Humans - Human Buildings (Summer).png" id="2_p3hth"]
+[ext_resource type="Script" uid="uid://3e5qiqyf3ev3" path="res://src/gameplay/entities/units/selection_ring.gd" id="3_a17aa"]
+[ext_resource type="Script" uid="uid://65xprcgadmde" path="res://src/gameplay/entities/selectable_component.gd" id="4_wmeqw"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tpccr"]
+radius = 64.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omghk"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e33uh"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_p3hth"]
+radius = 128.0
+
+[node name="BaseBuilding" type="StaticBody2D" unique_id=1889694065 groups=["buildings", "selectable_units"]]
+script = ExtResource("1_tpccr")
+building_spritesheet = ExtResource("2_p3hth")
+is_under_construction = false
+region_under_construction = Rect2(539, 586, 61, 52)
+region_half_built = Rect2(270, 154, 111, 95)
+region_completed = Rect2(270, 17, 119, 104)
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1061573362]
+texture = ExtResource("2_p3hth")
+region_enabled = true
+region_rect = Rect2(270, 17, 119, 104)
+
+[node name="SelectionRing" type="Node2D" parent="." unique_id=523229799]
+z_index = -1
+script = ExtResource("3_a17aa")
+radius = 96.0
+
+[node name="SelectableComponent" type="Node2D" parent="." unique_id=1665141408 node_paths=PackedStringArray("selection_ring")]
+script = ExtResource("4_wmeqw")
+selection_ring = NodePath("../SelectionRing")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=223898250]
+shape = SubResource("CircleShape2D_tpccr")
+
+[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="." unique_id=969329888]
+radius = 70.0
+affect_navigation_mesh = true
+
+[node name="HealthBar" type="ProgressBar" parent="." unique_id=1652500946]
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = -58.0
+theme_override_styles/background = SubResource("StyleBoxFlat_omghk")
+theme_override_styles/fill = SubResource("StyleBoxFlat_e33uh")
+value = 100.0
+show_percentage = false
+
+[node name="PlacementArea" type="Area2D" parent="." unique_id=735967493]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlacementArea" unique_id=400391067]
+shape = SubResource("CircleShape2D_p3hth")

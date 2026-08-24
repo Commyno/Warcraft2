@@ -1,0 +1,138 @@
+[gd_scene format=3 uid="uid://dk43yp5y68y7g"]
+
+[ext_resource type="Script" uid="uid://co2wsxlcixnf1" path="res://src/core/scenes/game_scene.gd" id="1_6ci8a"]
+[ext_resource type="Script" uid="uid://dty50j5hpu3lx" path="res://src/debug/GridDebug.gd" id="2_04vno"]
+[ext_resource type="PackedScene" uid="uid://c7tjgkp7hofeu" path="res://src/ui/pause_menu/confirm_end_menu.tscn" id="2_pne3y"]
+[ext_resource type="PackedScene" uid="uid://datkqsd5032nl" path="res://src/ui/transaction/end_game_screen.tscn" id="2_rul3w"]
+[ext_resource type="PackedScene" uid="uid://dwct7eo8yrrur" path="res://src/levels/level_objects/building_placement_manager.tscn" id="3_ckpro"]
+[ext_resource type="Script" uid="uid://ccfs0c13co3o4" path="res://src/levels/level_objects/selection_manager.gd" id="4_hu2nw"]
+[ext_resource type="PackedScene" uid="uid://co67x1u0gnsv1" path="res://src/gameplay/entities/units/humans/peasant.tscn" id="5_erm7f"]
+[ext_resource type="Script" uid="uid://dap2xc5gj4whk" path="res://src/ui/ui_manager.gd" id="5_hvw6c"]
+[ext_resource type="PackedScene" uid="uid://bmsb85571t2vm" path="res://src/gameplay/entities/buildings/humans/TownHall.tscn" id="6_gypgx"]
+[ext_resource type="PackedScene" uid="uid://m8opeelrdpmc" path="res://src/gameplay/entities/buildings/humans/Barracks.tscn" id="7_g7m04"]
+[ext_resource type="PackedScene" uid="uid://ps0namuswefp" path="res://src/gameplay/entities/buildings/humans/Farm.tscn" id="8_ixduv"]
+[ext_resource type="Script" uid="uid://ctoliwylc1vd2" path="res://src/gameplay/camera/RTSCamera.gd" id="10_pne3y"]
+[ext_resource type="Script" uid="uid://cwqoqoahfpjhe" path="res://src/core/scenes/pause_root.gd" id="11_q7n0o"]
+[ext_resource type="PackedScene" uid="uid://d0a4dccu6h0bf" path="res://src/ui/pause_menu/pause_menu.tscn" id="12_337e0"]
+[ext_resource type="Script" uid="uid://c5omt4lkh6711" path="res://src/core/scenes/debug_root.gd" id="13_620dx"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_feqws"]
+parsed_geometry_type = 1
+cell_size = 32.0
+agent_radius = 14.0
+
+[node name="GameScene" type="Node" unique_id=139105073]
+process_mode = 3
+script = ExtResource("1_6ci8a")
+end_game_screen_packed = ExtResource("2_rul3w")
+confirm_end_game_menu_packed = ExtResource("2_pne3y")
+
+[node name="Systems" type="Node" parent="." unique_id=2062574217]
+
+[node name="World" type="Node2D" parent="." unique_id=1959542813]
+process_mode = 1
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="World" unique_id=1463267438]
+navigation_polygon = SubResource("NavigationPolygon_feqws")
+
+[node name="LevelRoot" type="Node2D" parent="World/NavigationRegion2D" unique_id=787980036]
+
+[node name="EntitiesRoot" type="Node2D" parent="World/NavigationRegion2D" unique_id=521639637]
+z_index = 3
+y_sort_enabled = true
+
+[node name="Peasant" parent="World/NavigationRegion2D/EntitiesRoot" unique_id=330192060 instance=ExtResource("5_erm7f")]
+position = Vector2(797, 1008)
+
+[node name="EffectsRoot" type="Node2D" parent="World/NavigationRegion2D" unique_id=554532313]
+z_index = 4
+
+[node name="Players" type="Node2D" parent="." unique_id=2111469624]
+
+[node name="Debugs" type="Node2D" parent="." unique_id=1969771342]
+process_mode = 3
+
+[node name="GrigliaDebug" type="Node2D" parent="Debugs" unique_id=6476930]
+script = ExtResource("2_04vno")
+grid_size = 100
+grid_dimensions = Vector2i(32, 32)
+
+[node name="BuildingPlacementManager" parent="." unique_id=2018586043 instance=ExtResource("3_ckpro")]
+
+[node name="SelectionManager" type="Node2D" parent="." unique_id=31750775 groups=["selection_manager"]]
+z_index = 9
+script = ExtResource("4_hu2nw")
+formation_spacing = null
+
+[node name="Environment" type="Node2D" parent="." unique_id=1620180002]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=227667023]
+zoom = Vector2(1.5, 1.5)
+script = ExtResource("10_pne3y")
+
+[node name="HudLayer" type="CanvasLayer" parent="." unique_id=1341287175 node_paths=PackedStringArray("placement_manager")]
+process_mode = 1
+layer = 10
+script = ExtResource("5_hvw6c")
+placement_manager = NodePath("../BuildingPlacementManager")
+townhall_scene = ExtResource("6_gypgx")
+barracks_scene = ExtResource("7_g7m04")
+farm_scene = ExtResource("8_ixduv")
+
+[node name="HudRoot" type="Control" parent="HudLayer" unique_id=747448011]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="PauseLayer" type="CanvasLayer" parent="." unique_id=1414029977]
+process_mode = 2
+layer = 20
+
+[node name="PauseRoot" type="Control" parent="PauseLayer" unique_id=1217912902]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("11_q7n0o")
+
+[node name="ConfirmEndMenu" parent="PauseLayer/PauseRoot" unique_id=420413355 instance=ExtResource("2_pne3y")]
+layout_mode = 1
+
+[node name="PauseMenu" parent="PauseLayer/PauseRoot" unique_id=1358632953 instance=ExtResource("12_337e0")]
+layout_mode = 1
+
+[node name="TransitionLayer" type="CanvasLayer" parent="." unique_id=2097354683]
+process_mode = 3
+layer = 100
+
+[node name="TransitionRoot" type="Control" parent="TransitionLayer" unique_id=1518226800]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="DebugLayer" type="CanvasLayer" parent="." unique_id=514496153]
+process_mode = 3
+layer = 128
+
+[node name="DebugRoot" type="Control" parent="DebugLayer" unique_id=1874487972]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+mouse_behavior_recursive = 1
+script = ExtResource("13_620dx")

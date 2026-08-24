@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="UnitAction" format=3 uid="uid://coqgbsbqbx5vp"]
+
+[ext_resource type="Texture2D" uid="uid://b3pc0f7d6hibd" path="res://assets/spritesheets/ui/Icons/Icon - Patrol.tres" id="1_m6gjj"]
+[ext_resource type="Script" uid="uid://xlg4eskiphgu" path="res://src/resources/UnitAction.gd" id="2_jik31"]
+
+[resource]
+script = ExtResource("2_jik31")
+id = "patroll"
+title = "Difendere"
+icon = ExtResource("1_m6gjj")
+metadata/_custom_type_script = "uid://xlg4eskiphgu"

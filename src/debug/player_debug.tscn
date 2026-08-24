@@ -1,0 +1,101 @@
+[gd_scene format=3 uid="uid://kpwsylemtds6"]
+
+[ext_resource type="Script" uid="uid://ccyixmpgyyqjs" path="res://src/debug/player_debug.gd" id="1_srdn3"]
+
+[node name="PlayerDebug" type="Control" unique_id=608488699]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_srdn3")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1366846596]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 134.0
+offset_top = 107.0
+offset_right = 473.0
+offset_bottom = 242.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1534580340]
+layout_mode = 2
+
+[node name="HBoxTitle" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1994237599]
+layout_mode = 2
+
+[node name="PlayerID" type="Label" parent="MarginContainer/VBoxContainer/HBoxTitle" unique_id=692962176]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "PlayerID"
+horizontal_alignment = 1
+
+[node name="Human" type="Label" parent="MarginContainer/VBoxContainer/HBoxTitle" unique_id=1493005519]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "Human"
+horizontal_alignment = 1
+
+[node name="Color" type="Label" parent="MarginContainer/VBoxContainer/HBoxTitle" unique_id=1610684110]
+custom_minimum_size = Vector2(15, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "Co."
+horizontal_alignment = 1
+
+[node name="Race" type="Label" parent="MarginContainer/VBoxContainer/HBoxTitle" unique_id=1181173086]
+custom_minimum_size = Vector2(55, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "Race"
+horizontal_alignment = 1
+
+[node name="Gold" type="Label" parent="MarginContainer/VBoxContainer/HBoxTitle" unique_id=1497300476]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "Gold"
+horizontal_alignment = 1
+
+[node name="SpawnPosition" type="Label" parent="MarginContainer/VBoxContainer/HBoxTitle" unique_id=1735084892]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "Spawn"
+horizontal_alignment = 1
+
+[node name="Lumber" type="Label" parent="MarginContainer/VBoxContainer/HBoxTitle" unique_id=1236041958]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "Lumber"
+horizontal_alignment = 1
+
+[node name="Oil" type="Label" parent="MarginContainer/VBoxContainer/HBoxTitle" unique_id=1168758931]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "Oil"
+horizontal_alignment = 1
+
+[node name="Units" type="Label" parent="MarginContainer/VBoxContainer/HBoxTitle" unique_id=1654376247]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "Units"
+horizontal_alignment = 1
+
+[node name="Buildings" type="Label" parent="MarginContainer/VBoxContainer/HBoxTitle" unique_id=252789035]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "Builds"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1671459863]
+layout_mode = 2

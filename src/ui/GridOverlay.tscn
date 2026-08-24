@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://dbvic7tm21lr"]
+
+[ext_resource type="Script" uid="uid://c8j568nef6xn7" path="res://src/ui/grid_overlay.gd" id="1_vn8mt"]
+
+[node name="GridOverlay" type="Node2D" unique_id=672767848]
+z_index = -1
+script = ExtResource("1_vn8mt")

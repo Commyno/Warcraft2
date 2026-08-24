@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" format=3 uid="uid://da4ke8dfu6328"]
+
+[ext_resource type="Texture2D" uid="uid://cbmp64ax74kth" path="res://assets/spritesheets/humans/units/peasant_old/Warcraft2Sheet1.png" id="1_dnp6u"]
+
+[resource]
+atlas = ExtResource("1_dnp6u")
+region = Rect2(394, 400, 0, 80)

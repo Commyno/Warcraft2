@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://c5r6rroxncul8"]
+
+[ext_resource type="Script" uid="uid://dqlqtmr0t6ako" path="res://src/gameplay/entities/buildings/base_resource_building.gd" id="1_wiw5u"]
+[ext_resource type="Texture2D" uid="uid://e0ggs00l7mhs" path="res://assets/spritesheets/miscellaneous/Buildings - Miscellaneous.png" id="2_cjnhh"]
+[ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/spritesheets/humans/buildings/Humans - Human Buildings (Summer).png" id="2_puxpm"]
+[ext_resource type="Script" uid="uid://3e5qiqyf3ev3" path="res://src/gameplay/entities/units/selection_ring.gd" id="3_cjnhh"]
+[ext_resource type="Script" uid="uid://65xprcgadmde" path="res://src/gameplay/entities/selectable_component.gd" id="4_tb734"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3c6u8"]
+size = Vector2(128, 128)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omghk"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e33uh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_omghk"]
+size = Vector2(128, 128)
+
+[node name="BaseResourceBuilding" type="StaticBody2D" unique_id=1889694065 groups=["buildings", "selectable_units"]]
+script = ExtResource("1_wiw5u")
+resources_spritesheet = ExtResource("2_cjnhh")
+region_under_working = Rect2(3, 99, 96, 96)
+region_waiting = Rect2(3, 3, 96, 96)
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1061573362]
+texture = ExtResource("2_puxpm")
+region_enabled = true
+region_rect = Rect2(270, 17, 119, 104)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=223898250]
+shape = SubResource("RectangleShape2D_3c6u8")
+
+[node name="SelectionRing" type="Node2D" parent="." unique_id=523229799]
+visible = false
+z_index = -1
+script = ExtResource("3_cjnhh")
+radius = 128.0
+
+[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="." unique_id=969329888]
+radius = 90.0
+affect_navigation_mesh = true
+
+[node name="HealthBar" type="ProgressBar" parent="." unique_id=1652500946]
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = -58.0
+theme_override_styles/background = SubResource("StyleBoxFlat_omghk")
+theme_override_styles/fill = SubResource("StyleBoxFlat_e33uh")
+value = 100.0
+show_percentage = false
+
+[node name="PlacementArea" type="Area2D" parent="." unique_id=735967493]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlacementArea" unique_id=400391067]
+shape = SubResource("RectangleShape2D_omghk")
+
+[node name="SelectableComponent" type="Node2D" parent="." unique_id=1665141408 node_paths=PackedStringArray("selection_ring")]
+script = ExtResource("4_tb734")
+selection_ring = NodePath("../SelectionRing")

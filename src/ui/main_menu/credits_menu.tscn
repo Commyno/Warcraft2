@@ -1,0 +1,104 @@
+[gd_scene format=3 uid="uid://kwuk2562g1gn"]
+
+[ext_resource type="Script" uid="uid://d3pp6mcm37e5a" path="res://src/ui/main_menu/credits_menu.gd" id="1_31t30"]
+[ext_resource type="Texture2D" uid="uid://vimh2i4we860" path="res://assets/art/ui/background/menu-background-with-title.png" id="2_rkvcj"]
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="3_kds5a"]
+[ext_resource type="Texture2D" uid="uid://cu6y8fbog3hcr" path="res://assets/art/ui/buttons/UI - Menu Button - 00.tres" id="4_g0smo"]
+[ext_resource type="Texture2D" uid="uid://7pssj7k1t5w7" path="res://assets/art/ui/buttons/UI - Menu Button - 02.tres" id="5_0xorv"]
+[ext_resource type="Texture2D" uid="uid://coylb07xse354" path="res://assets/art/ui/buttons/UI - Menu Button - 01.tres" id="6_c75bp"]
+
+[node name="MainMenu" type="Control" unique_id=1392140865]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_31t30")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1018145943]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_rkvcj")
+expand_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=443580289]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="VBoxContainer" unique_id=1039666974]
+custom_minimum_size = Vector2(0, 125)
+layout_mode = 2
+
+[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer" unique_id=1110172370]
+layout_mode = 2
+theme_override_constants/margin_left = 180
+theme_override_constants/margin_right = 180
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer3" unique_id=1278346937]
+layout_mode = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_kds5a")
+theme_override_font_sizes/font_size = 20
+text = "Credits"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1770107743]
+layout_mode = 2
+theme_override_constants/margin_left = 120
+theme_override_constants/margin_right = 120
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/MarginContainer" unique_id=160069344]
+custom_minimum_size = Vector2(200, 150)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer/ScrollContainer" unique_id=1787266188]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer" unique_id=1690986803]
+layout_mode = 2
+theme_override_constants/margin_left = 250
+theme_override_constants/margin_right = 250
+
+[node name="BackButton" type="TextureButton" parent="VBoxContainer/MarginContainer2" unique_id=782868579]
+custom_minimum_size = Vector2(125, 23)
+layout_mode = 2
+texture_normal = ExtResource("4_g0smo")
+texture_pressed = ExtResource("5_0xorv")
+texture_hover = ExtResource("6_c75bp")
+texture_disabled = ExtResource("4_g0smo")
+texture_focused = ExtResource("6_c75bp")
+ignore_texture_size = true
+stretch_mode = 1
+
+[node name="ButtonLabel" type="Label" parent="VBoxContainer/MarginContainer2/BackButton" unique_id=1731076064]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_kds5a")
+theme_override_font_sizes/font_size = 10
+text = "Back"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="VBoxContainer/MarginContainer2/BackButton" to="." method="_on_back_button_pressed"]

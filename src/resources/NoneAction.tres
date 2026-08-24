@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="UnitAction" format=3 uid="uid://c8ttovw0q4ob"]
+
+[ext_resource type="Script" uid="uid://xlg4eskiphgu" path="res://src/resources/UnitAction.gd" id="2_40kmx"]
+
+[resource]
+script = ExtResource("2_40kmx")
+id = "none"
+title = ""
+action_type = 0
+shortcut_key = 0
+metadata/_custom_type_script = "uid://xlg4eskiphgu"

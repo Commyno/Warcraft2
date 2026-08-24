@@ -1,0 +1,124 @@
+[gd_scene format=3 uid="uid://bwrwkgmap2h4y"]
+
+[ext_resource type="Script" uid="uid://gqn0e2w6187q" path="res://src/core/scenes/loading_screen.gd" id="1_sahfl"]
+[ext_resource type="Texture2D" uid="uid://bqmdstw63xphh" path="res://assets/art/ui/background/SfondoLoading_1920x1080.png" id="2_hsdnb"]
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="3_su2gw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omghk"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1pnvc"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_axiy8"]
+bg_color = Color(0.7058824, 0.5058824, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Animation" id="Animation_7gs3x"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_sahfl"]
+resource_name = "transition"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hsdnb"]
+_data = {
+&"RESET": SubResource("Animation_7gs3x"),
+&"transition": SubResource("Animation_sahfl")
+}
+
+[node name="LoadingScreen" type="CanvasLayer" unique_id=227322397 node_paths=PackedStringArray("animation_player")]
+layer = 100
+script = ExtResource("1_sahfl")
+animation_player = NodePath("AnimationPlayer")
+
+[node name="Panel" type="Panel" parent="." unique_id=2131977730]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_omghk")
+
+[node name="TextureRect" type="TextureRect" parent="Panel" unique_id=923583396]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_hsdnb")
+expand_mode = 3
+
+[node name="ProgressBar" type="ProgressBar" parent="Panel" unique_id=1135164391]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -60.0
+offset_right = 100.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_styles/background = SubResource("StyleBoxFlat_1pnvc")
+theme_override_styles/fill = SubResource("StyleBoxFlat_axiy8")
+step = 1.0
+show_percentage = false
+
+[node name="ProgressLabel" type="Label" parent="Panel/ProgressBar" unique_id=890064560]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -61.5
+offset_top = -8.5
+offset_right = 61.5
+offset_bottom = 8.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3_su2gw")
+theme_override_font_sizes/font_size = 12
+text = "Caricamento in corso"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1038135037]
+libraries/ = SubResource("AnimationLibrary_hsdnb")
+autoplay = &"transition"

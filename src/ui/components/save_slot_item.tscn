@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://coxcc0bmrvixl"]
+
+[ext_resource type="Script" uid="uid://u3m288qyk8qm" path="res://src/ui/components/save_slot_item.gd" id="1_mm4ud"]
+[ext_resource type="Texture2D" uid="uid://cu6y8fbog3hcr" path="res://assets/art/ui/buttons/UI - Menu Button - 00.tres" id="2_ej3o8"]
+[ext_resource type="Texture2D" uid="uid://7pssj7k1t5w7" path="res://assets/art/ui/buttons/UI - Menu Button - 02.tres" id="3_cn2nj"]
+[ext_resource type="Texture2D" uid="uid://coylb07xse354" path="res://assets/art/ui/buttons/UI - Menu Button - 01.tres" id="4_mklgp"]
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="5_gdg2b"]
+
+[node name="SaveSlotItem" type="Control" unique_id=919663264]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mm4ud")
+
+[node name="SaveSlotButton" type="TextureButton" parent="." unique_id=1154074689]
+custom_minimum_size = Vector2(125, 23)
+layout_mode = 0
+texture_normal = ExtResource("2_ej3o8")
+texture_pressed = ExtResource("3_cn2nj")
+texture_hover = ExtResource("4_mklgp")
+texture_disabled = ExtResource("2_ej3o8")
+texture_focused = ExtResource("4_mklgp")
+ignore_texture_size = true
+stretch_mode = 1
+
+[node name="SaveNameLabel" type="Label" parent="SaveSlotButton" unique_id=1768504078]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("5_gdg2b")
+theme_override_font_sizes/font_size = 10
+text = "Autosave"
+horizontal_alignment = 1
+vertical_alignment = 1

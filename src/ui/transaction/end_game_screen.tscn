@@ -1,0 +1,220 @@
+[gd_scene format=3 uid="uid://datkqsd5032nl"]
+
+[ext_resource type="Texture2D" uid="uid://dm5am0lgkad0a" path="res://assets/art/ui/background/Victory Humans Background.jpeg" id="1_aolnw"]
+[ext_resource type="Script" uid="uid://cqe3b6etljwq0" path="res://src/ui/transaction/end_game_screen.gd" id="1_mfcrx"]
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="1_q5ith"]
+[ext_resource type="Texture2D" uid="uid://di5cb8k7348y6" path="res://assets/art/ui/buttons/UI - Menu Button 2 - 00.tres" id="3_srvtf"]
+[ext_resource type="Texture2D" uid="uid://273ajucsnd77" path="res://assets/art/ui/buttons/UI - Menu Button 2 - 01.tres" id="4_mfcrx"]
+[ext_resource type="Texture2D" uid="uid://d4d5t3l18y0ea" path="res://assets/art/ui/buttons/UI - Menu Button 2 - 03.tres" id="5_ml2p3"]
+
+[node name="EndGameScene" type="Control" unique_id=420413355]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mfcrx")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1398927662]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.46666667)
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1278110063]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_aolnw")
+expand_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1433124185]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Space" type="Control" parent="VBoxContainer" unique_id=1971310751]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="Status" type="HBoxContainer" parent="VBoxContainer" unique_id=1242973087]
+layout_mode = 2
+theme_override_constants/separation = 50
+alignment = 1
+
+[node name="Outcome" type="VBoxContainer" parent="VBoxContainer/Status" unique_id=311181688]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Status/Outcome" unique_id=1741353701]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1.004, 1.004, 1.004, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_q5ith")
+theme_override_font_sizes/font_size = 14
+text = "Outcome"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Value" type="Label" parent="VBoxContainer/Status/Outcome" unique_id=1139813715]
+layout_mode = 2
+theme_override_colors/font_color = Color(1.004, 1.004, 1.004, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_q5ith")
+theme_override_font_sizes/font_size = 32
+text = "Defeat"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Rank" type="VBoxContainer" parent="VBoxContainer/Status" unique_id=1118694630]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Status/Rank" unique_id=1686394301]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1.004, 1.004, 1.004, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_q5ith")
+theme_override_font_sizes/font_size = 14
+text = "Rank"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Value" type="Label" parent="VBoxContainer/Status/Rank" unique_id=578032412]
+layout_mode = 2
+theme_override_colors/font_color = Color(1.004, 1.004, 1.004, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_q5ith")
+theme_override_font_sizes/font_size = 26
+text = "Servant"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Score" type="VBoxContainer" parent="VBoxContainer/Status" unique_id=1897719295]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Status/Score" unique_id=406164947]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1.004, 1.004, 1.004, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_q5ith")
+theme_override_font_sizes/font_size = 14
+text = "Score"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Value" type="Label" parent="VBoxContainer/Status/Score" unique_id=1494972502]
+layout_mode = 2
+theme_override_colors/font_color = Color(1.004, 1.004, 1.004, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_q5ith")
+theme_override_font_sizes/font_size = 26
+text = "700"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StatisticsList" type="VBoxContainer" parent="VBoxContainer" unique_id=1878343865]
+layout_mode = 2
+
+[node name="Space2" type="Control" parent="VBoxContainer" unique_id=529753385]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=136287870]
+layout_mode = 2
+theme_override_constants/separation = 100
+alignment = 1
+
+[node name="Replay" type="TextureButton" parent="VBoxContainer/HBoxContainer" unique_id=326143832]
+custom_minimum_size = Vector2(90, 28)
+layout_mode = 2
+texture_normal = ExtResource("3_srvtf")
+texture_pressed = ExtResource("4_mfcrx")
+texture_hover = ExtResource("5_ml2p3")
+texture_disabled = ExtResource("3_srvtf")
+texture_focused = ExtResource("4_mfcrx")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/Replay" unique_id=335106327]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("1_q5ith")
+theme_override_font_sizes/font_size = 10
+text = "Replay"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MainMenu" type="TextureButton" parent="VBoxContainer/HBoxContainer" unique_id=911486510]
+custom_minimum_size = Vector2(90, 28)
+layout_mode = 2
+texture_normal = ExtResource("3_srvtf")
+texture_pressed = ExtResource("4_mfcrx")
+texture_hover = ExtResource("5_ml2p3")
+texture_disabled = ExtResource("3_srvtf")
+texture_focused = ExtResource("4_mfcrx")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MainMenu" unique_id=1582528722]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("1_q5ith")
+theme_override_font_sizes/font_size = 10
+text = "MainMenu"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Replay" to="." method="_on_replay_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/MainMenu" to="." method="_on_main_menu_pressed"]

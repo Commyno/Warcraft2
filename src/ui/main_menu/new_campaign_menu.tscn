@@ -1,0 +1,126 @@
+[gd_scene format=3 uid="uid://c0013ctlrfydb"]
+
+[ext_resource type="Script" uid="uid://dqqwc0wyf57n1" path="res://src/ui/main_menu/new_campaign_menu.gd" id="1_d8ny6"]
+[ext_resource type="Texture2D" uid="uid://vimh2i4we860" path="res://assets/art/ui/background/menu-background-with-title.png" id="2_5s8ym"]
+[ext_resource type="Texture2D" uid="uid://cu6y8fbog3hcr" path="res://assets/art/ui/buttons/UI - Menu Button - 00.tres" id="3_kdjxm"]
+[ext_resource type="Texture2D" uid="uid://7pssj7k1t5w7" path="res://assets/art/ui/buttons/UI - Menu Button - 02.tres" id="4_v6iee"]
+[ext_resource type="Texture2D" uid="uid://coylb07xse354" path="res://assets/art/ui/buttons/UI - Menu Button - 01.tres" id="5_u6afg"]
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="6_8dx1f"]
+
+[node name="NewCampaignMenu" type="Control" unique_id=1392140865]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_d8ny6")
+orc_campaign_01 = "uid://brpedufv5hwx2"
+human_campaign_01 = "uid://ggt7hfibc867"
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1018145943]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_5s8ym")
+expand_mode = 3
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=750366083]
+layout_mode = 0
+offset_left = 258.0
+offset_top = 122.0
+offset_right = 383.0
+offset_bottom = 300.0
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="OrcBtn" type="TextureButton" parent="VBoxContainer2" unique_id=882438303]
+custom_minimum_size = Vector2(125, 23)
+layout_mode = 2
+texture_normal = ExtResource("3_kdjxm")
+texture_pressed = ExtResource("4_v6iee")
+texture_hover = ExtResource("5_u6afg")
+texture_disabled = ExtResource("3_kdjxm")
+texture_focused = ExtResource("5_u6afg")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="VBoxContainer2/OrcBtn" unique_id=1537953361]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("6_8dx1f")
+theme_override_font_sizes/font_size = 10
+text = "Orc Campaing"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HumanBtn" type="TextureButton" parent="VBoxContainer2" unique_id=1051634868]
+custom_minimum_size = Vector2(125, 23)
+layout_mode = 2
+texture_normal = ExtResource("3_kdjxm")
+texture_pressed = ExtResource("4_v6iee")
+texture_hover = ExtResource("5_u6afg")
+texture_disabled = ExtResource("3_kdjxm")
+texture_focused = ExtResource("5_u6afg")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="VBoxContainer2/HumanBtn" unique_id=1709276838]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("6_8dx1f")
+theme_override_font_sizes/font_size = 10
+text = "Human Campaing"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer2" unique_id=1835495152]
+layout_mode = 2
+
+[node name="BackButton" type="TextureButton" parent="VBoxContainer2" unique_id=2087708610]
+custom_minimum_size = Vector2(125, 23)
+layout_mode = 2
+texture_normal = ExtResource("3_kdjxm")
+texture_pressed = ExtResource("4_v6iee")
+texture_hover = ExtResource("5_u6afg")
+texture_disabled = ExtResource("3_kdjxm")
+texture_focused = ExtResource("5_u6afg")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="VBoxContainer2/BackButton" unique_id=1156326652]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("6_8dx1f")
+theme_override_font_sizes/font_size = 10
+text = "Previous Menu"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="VBoxContainer2/OrcBtn" to="." method="_on_orc_btn_pressed"]
+[connection signal="pressed" from="VBoxContainer2/HumanBtn" to="." method="_on_human_btn_pressed"]
+[connection signal="pressed" from="VBoxContainer2/BackButton" to="." method="_on_back_button_pressed"]

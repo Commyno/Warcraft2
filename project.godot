@@ -1,0 +1,70 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Warcraft 2 - Return  to war"
+config/version="0.1.0"
+run/main_scene="uid://bmkmppohbmn7q"
+config/use_hidden_project_data_directory=false
+config/features=PackedStringArray("4.7", "GL Compatibility")
+run/max_fps=240
+boot_splash/image="uid://ywcjhrqdbbmf"
+config/icon="uid://6steaegwtefg"
+boot_splash/minimum_display_time=1
+
+[autoload]
+
+Globals="*uid://dmji6vt1h161k"
+FormationManager="*uid://cqxbygf7gw8nt"
+PlayerData="*uid://blcnwaen60mui"
+SaveManager="*uid://h80jraw8rh06"
+MatchData="*uid://cd30cxotowox5"
+SceneLoader="*uid://xi23osnx5ph"
+GridManager="*uid://4jplu6jou6mk"
+
+[display]
+
+window/size/viewport_width=640
+window/size/viewport_height=360
+window/size/window_width_override=1922
+window/size/window_height_override=1081
+window/subwindows/embed_subwindows=false
+window/stretch/mode="canvas_items"
+window/stretch/scale_mode="integer"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/yati/plugin.cfg")
+
+[file_customization]
+
+folder_colors={
+"res://assets/": "purple",
+"res://assets/spritesheets/": "purple"
+}
+
+[layer_names]
+
+2d_render/layer_1="World"
+2d_render/layer_4="Player"
+2d_render/layer_5="Enemy"
+2d_render/layer_8="Interactable"
+
+[physics]
+
+3d/physics_engine="Jolt Physics"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
+rendering_device/driver.windows="d3d12"
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"

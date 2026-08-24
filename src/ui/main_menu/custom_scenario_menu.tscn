@@ -1,0 +1,354 @@
+[gd_scene format=3 uid="uid://7bqqhqnenv3s"]
+
+[ext_resource type="Script" uid="uid://etgummq2lk8v" path="res://src/ui/main_menu/custom_scenario_menu.gd" id="1_tym1d"]
+[ext_resource type="Texture2D" uid="uid://vimh2i4we860" path="res://assets/art/ui/background/menu-background-with-title.png" id="2_lv4yw"]
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="3_qdqgk"]
+[ext_resource type="Texture2D" uid="uid://cu6y8fbog3hcr" path="res://assets/art/ui/buttons/UI - Menu Button - 00.tres" id="4_kduj3"]
+[ext_resource type="Texture2D" uid="uid://7pssj7k1t5w7" path="res://assets/art/ui/buttons/UI - Menu Button - 02.tres" id="5_muf3i"]
+[ext_resource type="Texture2D" uid="uid://coylb07xse354" path="res://assets/art/ui/buttons/UI - Menu Button - 01.tres" id="6_vt4v7"]
+
+[sub_resource type="Theme" id="Theme_tym1d"]
+PopupMenu/font_sizes/font_size = 10
+PopupMenu/fonts/font = ExtResource("3_qdqgk")
+
+[node name="CustomScenarioMenu" type="Control" unique_id=1392140865]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tym1d")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1018145943]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_lv4yw")
+expand_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=443580289]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="VBoxContainer" unique_id=1039666974]
+custom_minimum_size = Vector2(0, 125)
+layout_mode = 2
+
+[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer" unique_id=1110172370]
+layout_mode = 2
+theme_override_constants/margin_left = 180
+theme_override_constants/margin_right = 180
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer3" unique_id=1278346937]
+layout_mode = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_qdqgk")
+theme_override_font_sizes/font_size = 20
+text = "Custom Scenario"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1770107743]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_right = 100
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer" unique_id=1636989340]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=836982099]
+layout_mode = 2
+
+[node name="YourRaceLabel" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=571281247]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3_qdqgk")
+theme_override_font_sizes/font_size = 10
+text = "Your Race:"
+
+[node name="ResourcesLabel" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1353092470]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3_qdqgk")
+theme_override_font_sizes/font_size = 10
+text = "Resources:"
+
+[node name="UnitsLabel" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=633203845]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3_qdqgk")
+theme_override_font_sizes/font_size = 10
+text = "Units:"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=69370687]
+layout_mode = 2
+
+[node name="YourRaceOB" type="OptionButton" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=829297232]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = SubResource("Theme_tym1d")
+theme_override_fonts/font = ExtResource("3_qdqgk")
+theme_override_font_sizes/font_size = 10
+selected = 3
+item_count = 4
+popup/item_0/text = "Human"
+popup/item_0/id = 0
+popup/item_1/text = "Orc"
+popup/item_1/id = 1
+popup/item_2/text = "Map Default"
+popup/item_2/id = 2
+popup/item_3/text = "Random"
+popup/item_3/id = 3
+
+[node name="ResourcesOB" type="OptionButton" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=677394438]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = SubResource("Theme_tym1d")
+theme_override_fonts/font = ExtResource("3_qdqgk")
+theme_override_font_sizes/font_size = 10
+selected = 0
+item_count = 5
+popup/item_0/text = "Map Default"
+popup/item_0/id = 0
+popup/item_1/text = "Random"
+popup/item_1/id = 1
+popup/item_2/text = "Low"
+popup/item_2/id = 2
+popup/item_3/text = "Medium"
+popup/item_3/id = 3
+popup/item_4/text = "High"
+popup/item_4/id = 4
+
+[node name="UnitsOB" type="OptionButton" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1078768769]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = SubResource("Theme_tym1d")
+theme_override_fonts/font = ExtResource("3_qdqgk")
+theme_override_font_sizes/font_size = 10
+selected = 0
+item_count = 2
+popup/item_0/text = "Map Default"
+popup/item_0/id = 0
+popup/item_1/text = "One Peasant Only"
+popup/item_1/id = 1
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=1716177446]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=1446105803]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3_qdqgk")
+theme_override_font_sizes/font_size = 10
+text = "Opponents:"
+
+[node name="Label2" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=1849429059]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3_qdqgk")
+theme_override_font_sizes/font_size = 10
+text = "Map Tileset:"
+
+[node name="Label3" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=1318134147]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3_qdqgk")
+theme_override_font_sizes/font_size = 10
+text = "Selected Map:"
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=1119562135]
+layout_mode = 2
+
+[node name="OpponentsOB" type="OptionButton" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=128818452]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = SubResource("Theme_tym1d")
+theme_override_fonts/font = ExtResource("3_qdqgk")
+theme_override_font_sizes/font_size = 10
+selected = 0
+item_count = 5
+popup/item_0/text = "Map Default"
+popup/item_0/id = 0
+popup/item_1/text = "1 Opponent"
+popup/item_1/id = 1
+popup/item_2/text = "2 Opponent"
+popup/item_2/id = 2
+popup/item_3/text = "3 Opponent"
+popup/item_3/id = 3
+popup/item_4/text = "4 Opponent"
+popup/item_4/id = 4
+
+[node name="MapTilesetOB" type="OptionButton" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=973555897]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = SubResource("Theme_tym1d")
+theme_override_fonts/font = ExtResource("3_qdqgk")
+theme_override_font_sizes/font_size = 10
+selected = 0
+item_count = 3
+popup/item_0/text = "Map Default"
+popup/item_0/id = 0
+popup/item_1/text = "Random"
+popup/item_1/id = 1
+popup/item_2/text = "Forest"
+popup/item_2/id = 2
+
+[node name="MapSelect" type="Button" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=1622390680]
+custom_minimum_size = Vector2(120, 22)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer4/MapSelect" unique_id=120188655]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3_qdqgk")
+theme_override_font_sizes/font_size = 10
+text = "Select Map"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=1919258894]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=1836419614]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Control2" type="Control" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=1336728601]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SelectedMapInfo" type="RichTextLabel" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=2028476693]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/normal_font = ExtResource("3_qdqgk")
+theme_override_font_sizes/normal_font_size = 10
+bbcode_enabled = true
+fit_content = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer" unique_id=1690986803]
+layout_mode = 2
+theme_override_constants/margin_left = 150
+theme_override_constants/margin_right = 150
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer2" unique_id=441816870]
+layout_mode = 2
+theme_override_constants/separation = 30
+alignment = 1
+
+[node name="BackButton" type="TextureButton" parent="VBoxContainer/MarginContainer2/HBoxContainer" unique_id=782868579]
+custom_minimum_size = Vector2(125, 23)
+layout_mode = 2
+texture_normal = ExtResource("4_kduj3")
+texture_pressed = ExtResource("5_muf3i")
+texture_hover = ExtResource("6_vt4v7")
+texture_disabled = ExtResource("4_kduj3")
+texture_focused = ExtResource("6_vt4v7")
+ignore_texture_size = true
+stretch_mode = 1
+
+[node name="ButtonLabel" type="Label" parent="VBoxContainer/MarginContainer2/HBoxContainer/BackButton" unique_id=1731076064]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_qdqgk")
+theme_override_font_sizes/font_size = 10
+text = "Back"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StartGameButton" type="TextureButton" parent="VBoxContainer/MarginContainer2/HBoxContainer" unique_id=1512714669]
+custom_minimum_size = Vector2(125, 23)
+layout_mode = 2
+texture_normal = ExtResource("4_kduj3")
+texture_pressed = ExtResource("5_muf3i")
+texture_hover = ExtResource("6_vt4v7")
+texture_disabled = ExtResource("4_kduj3")
+texture_focused = ExtResource("6_vt4v7")
+ignore_texture_size = true
+stretch_mode = 1
+
+[node name="ButtonLabel" type="Label" parent="VBoxContainer/MarginContainer2/HBoxContainer/StartGameButton" unique_id=1367215397]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_qdqgk")
+theme_override_font_sizes/font_size = 10
+text = "Start Game"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Control2" type="Control" parent="VBoxContainer" unique_id=2145100578]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[connection signal="pressed" from="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer4/MapSelect" to="." method="_on_map_select_pressed"]
+[connection signal="pressed" from="VBoxContainer/MarginContainer2/HBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/MarginContainer2/HBoxContainer/StartGameButton" to="." method="_on_start_game_button_pressed"]

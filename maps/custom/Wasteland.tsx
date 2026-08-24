@@ -1,0 +1,1719 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tileset version="1.10" tiledversion="1.12.2" name="Wasteland" tilewidth="32" tileheight="32" spacing="1" tilecount="380" columns="19">
+ <image source="../../assets/art/world/tilesets/wastelandTiles.png" width="626" height="659"/>
+ <tile id="70">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="71">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="72">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="73">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="74">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="75">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="76">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="77">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="78">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="79">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="80">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="81">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="82">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="83">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="84">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="85">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="86">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="87">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="88">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="89">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+   <object id="2" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="90">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="91">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="92">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="93">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="94">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="95">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="96">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="97">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="98">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="99">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="100">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="101">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="126">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="163">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="177">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="178">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="179">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="180">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="181">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="182">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="183">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="184">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="185">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="186">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="187">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="188">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="189">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="190">
+  <properties>
+   <property name="nav_layer" type="int" value="0"/>
+  </properties>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="191">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="192">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="193">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="194">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="195">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="196">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="197">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="198">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="199">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="200">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="233">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="234">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="235">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="236">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="237">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="238">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="239">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="240">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="241">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="242">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="243">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="244">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="245">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="246">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="247">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="248">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="249">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="250">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="251">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="252">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="253">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="254">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="255">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="256">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="257">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="258">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="259">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="260">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="261">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="262">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="263">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="264">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="265">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="266">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="267">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="268">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="269">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="270">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="271">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="272">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="273">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="274">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="275">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="276">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="277">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="278">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="279">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="280">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="281">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="282">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="283">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="284">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="285">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="286">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="287">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="288">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="289">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="290">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="291">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="292">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="293">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="294">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="295">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="330">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="331">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="332">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="333">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="334">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="335">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="336">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="337">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="338">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="339">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="340">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="341">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="342">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="343">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="344">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="345">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="346">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="347">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="348">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="349">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="350">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="351">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="352">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="353">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="354">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="355">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="356">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="357">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="358">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="359">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="360">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="361">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="362">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="363">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="364">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="365">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="366">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="367">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="368">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="369">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="370">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="371">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="372">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="navigation_layer" type="int" value="0"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <wangsets>
+  <wangset name="Terreni" type="corner" tile="-1">
+   <wangcolor name="Ground" color="#ff0000" tile="-1" probability="1"/>
+   <wangcolor name="DarkGorund" color="#00ff00" tile="-1" probability="1"/>
+   <wangcolor name="Water" color="#0000ff" tile="-1" probability="1"/>
+   <wangcolor name="Forest" color="#ff7700" tile="-1" probability="1"/>
+   <wangcolor name="Wall" color="#00e9ff" tile="-1" probability="1"/>
+   <wangcolor name="Rocks" color="#ff00d8" tile="-1" probability="1"/>
+   <wangcolor name="Ground2" color="#ffff00" tile="-1" probability="1"/>
+   <wangcolor name="DarkGround2" color="#a000ff" tile="-1" probability="1"/>
+   <wangtile tileid="102" wangid="0,4,0,1,0,1,0,1"/>
+   <wangtile tileid="103" wangid="0,4,0,4,0,1,0,1"/>
+   <wangtile tileid="105" wangid="0,4,0,4,0,4,0,1"/>
+   <wangtile tileid="106" wangid="0,1,0,4,0,4,0,1"/>
+   <wangtile tileid="107" wangid="0,1,0,1,0,4,0,1"/>
+   <wangtile tileid="108" wangid="0,1,0,4,0,4,0,4"/>
+   <wangtile tileid="109" wangid="0,1,0,1,0,4,0,4"/>
+   <wangtile tileid="110" wangid="0,1,0,1,0,1,0,4"/>
+   <wangtile tileid="111" wangid="0,4,0,1,0,4,0,4"/>
+   <wangtile tileid="112" wangid="0,4,0,4,0,1,0,4"/>
+   <wangtile tileid="116" wangid="0,1,0,1,0,4,0,4"/>
+   <wangtile tileid="124" wangid="0,4,0,1,0,1,0,4"/>
+   <wangtile tileid="125" wangid="0,4,0,4,0,4,0,4"/>
+   <wangtile tileid="127" wangid="0,4,0,1,0,1,0,1"/>
+   <wangtile tileid="128" wangid="0,4,0,4,0,1,0,1"/>
+   <wangtile tileid="129" wangid="0,1,0,4,0,1,0,1"/>
+   <wangtile tileid="130" wangid="0,1,0,4,0,4,0,1"/>
+   <wangtile tileid="131" wangid="0,1,0,1,0,4,0,1"/>
+   <wangtile tileid="135" wangid="0,4,0,4,0,1,0,4"/>
+   <wangtile tileid="136" wangid="0,4,0,1,0,1,0,4"/>
+   <wangtile tileid="137" wangid="0,4,0,4,0,4,0,4"/>
+   <wangtile tileid="138" wangid="0,4,0,4,0,4,0,4"/>
+   <wangtile tileid="139" wangid="0,6,0,2,0,2,0,2"/>
+   <wangtile tileid="140" wangid="0,6,0,6,0,2,0,2"/>
+   <wangtile tileid="141" wangid="0,2,0,6,0,2,0,2"/>
+   <wangtile tileid="142" wangid="0,6,0,6,0,6,0,2"/>
+   <wangtile tileid="143" wangid="0,2,0,6,0,6,0,2"/>
+   <wangtile tileid="144" wangid="0,2,0,2,0,6,0,2"/>
+   <wangtile tileid="145" wangid="0,2,0,6,0,6,0,6"/>
+   <wangtile tileid="146" wangid="0,2,0,2,0,6,0,6"/>
+   <wangtile tileid="147" wangid="0,2,0,2,0,2,0,6"/>
+   <wangtile tileid="148" wangid="0,6,0,2,0,6,0,6"/>
+   <wangtile tileid="149" wangid="0,6,0,6,0,2,0,6"/>
+   <wangtile tileid="150" wangid="0,6,0,6,0,2,0,6"/>
+   <wangtile tileid="151" wangid="0,6,0,0,0,6,0,6"/>
+   <wangtile tileid="153" wangid="0,2,0,2,0,6,0,6"/>
+   <wangtile tileid="161" wangid="0,6,0,2,0,2,0,6"/>
+   <wangtile tileid="164" wangid="0,6,0,2,0,2,0,2"/>
+   <wangtile tileid="165" wangid="0,6,0,6,0,2,0,2"/>
+   <wangtile tileid="166" wangid="0,2,0,6,0,2,0,2"/>
+   <wangtile tileid="167" wangid="0,2,0,6,0,6,0,2"/>
+   <wangtile tileid="168" wangid="0,2,0,2,0,6,0,2"/>
+   <wangtile tileid="169" wangid="0,2,0,2,0,6,0,6"/>
+   <wangtile tileid="170" wangid="0,2,0,2,0,2,0,6"/>
+   <wangtile tileid="171" wangid="0,2,0,6,0,2,0,6"/>
+   <wangtile tileid="172" wangid="0,6,0,2,0,6,0,2"/>
+   <wangtile tileid="173" wangid="0,6,0,2,0,2,0,6"/>
+   <wangtile tileid="174" wangid="0,6,0,6,0,6,0,6"/>
+   <wangtile tileid="175" wangid="0,6,0,6,0,6,0,6"/>
+   <wangtile tileid="176" wangid="0,6,0,6,0,6,0,6"/>
+   <wangtile tileid="177" wangid="0,2,0,2,0,2,0,8"/>
+   <wangtile tileid="178" wangid="0,8,0,2,0,2,0,2"/>
+   <wangtile tileid="179" wangid="0,8,0,2,0,2,0,8"/>
+   <wangtile tileid="180" wangid="0,8,0,2,0,2,0,8"/>
+   <wangtile tileid="181" wangid="0,8,0,2,0,2,0,8"/>
+   <wangtile tileid="183" wangid="0,2,0,8,0,8,0,8"/>
+   <wangtile tileid="184" wangid="0,2,0,2,0,8,0,8"/>
+   <wangtile tileid="185" wangid="0,2,0,2,0,8,0,8"/>
+   <wangtile tileid="187" wangid="0,2,0,2,0,8,0,2"/>
+   <wangtile tileid="188" wangid="0,2,0,2,0,2,0,8"/>
+   <wangtile tileid="189" wangid="0,2,0,8,0,2,0,2"/>
+   <wangtile tileid="193" wangid="0,8,0,8,0,2,0,2"/>
+   <wangtile tileid="194" wangid="0,8,0,8,0,2,0,2"/>
+   <wangtile tileid="195" wangid="0,8,0,8,0,2,0,8"/>
+   <wangtile tileid="196" wangid="0,2,0,8,0,8,0,2"/>
+   <wangtile tileid="198" wangid="0,2,0,8,0,8,0,2"/>
+   <wangtile tileid="199" wangid="0,2,0,8,0,8,0,8"/>
+   <wangtile tileid="200" wangid="0,8,0,8,0,8,0,2"/>
+   <wangtile tileid="201" wangid="0,2,0,2,0,2,0,3"/>
+   <wangtile tileid="202" wangid="0,2,0,2,0,2,0,3"/>
+   <wangtile tileid="203" wangid="0,3,0,2,0,2,0,2"/>
+   <wangtile tileid="204" wangid="0,3,0,2,0,2,0,2"/>
+   <wangtile tileid="205" wangid="0,3,0,2,0,2,0,3"/>
+   <wangtile tileid="206" wangid="0,3,0,2,0,2,0,3"/>
+   <wangtile tileid="207" wangid="0,3,0,2,0,2,0,3"/>
+   <wangtile tileid="208" wangid="0,2,0,2,0,3,0,2"/>
+   <wangtile tileid="209" wangid="0,2,0,2,0,3,0,2"/>
+   <wangtile tileid="210" wangid="0,2,0,2,0,3,0,3"/>
+   <wangtile tileid="211" wangid="0,2,0,2,0,3,0,3"/>
+   <wangtile tileid="212" wangid="0,2,0,2,0,3,0,3"/>
+   <wangtile tileid="213" wangid="0,3,0,2,0,3,0,2"/>
+   <wangtile tileid="214" wangid="0,3,0,2,0,3,0,3"/>
+   <wangtile tileid="215" wangid="0,3,0,2,0,3,0,3"/>
+   <wangtile tileid="216" wangid="0,2,0,3,0,2,0,2"/>
+   <wangtile tileid="217" wangid="0,2,0,3,0,2,0,2"/>
+   <wangtile tileid="218" wangid="0,2,0,3,0,2,0,3"/>
+   <wangtile tileid="219" wangid="0,3,0,3,0,2,0,2"/>
+   <wangtile tileid="220" wangid="0,3,0,3,0,2,0,2"/>
+   <wangtile tileid="221" wangid="0,3,0,3,0,2,0,2"/>
+   <wangtile tileid="222" wangid="0,3,0,3,0,2,0,3"/>
+   <wangtile tileid="223" wangid="0,3,0,3,0,2,0,3"/>
+   <wangtile tileid="224" wangid="0,2,0,3,0,3,0,2"/>
+   <wangtile tileid="225" wangid="0,2,0,3,0,3,0,2"/>
+   <wangtile tileid="226" wangid="0,2,0,3,0,3,0,2"/>
+   <wangtile tileid="227" wangid="0,2,0,3,0,3,0,3"/>
+   <wangtile tileid="228" wangid="0,2,0,3,0,3,0,3"/>
+   <wangtile tileid="229" wangid="0,3,0,3,0,3,0,2"/>
+   <wangtile tileid="230" wangid="0,3,0,3,0,3,0,2"/>
+   <wangtile tileid="231" wangid="0,3,0,2,0,3,0,2"/>
+   <wangtile tileid="232" wangid="0,2,0,3,0,2,0,3"/>
+   <wangtile tileid="233" wangid="0,1,0,1,0,1,0,7"/>
+   <wangtile tileid="234" wangid="0,7,0,1,0,1,0,7"/>
+   <wangtile tileid="235" wangid="0,7,0,1,0,1,0,1"/>
+   <wangtile tileid="237" wangid="0,7,0,1,0,1,0,7"/>
+   <wangtile tileid="238" wangid="0,7,0,1,0,1,0,7"/>
+   <wangtile tileid="239" wangid="0,7,0,1,0,1,0,7"/>
+   <wangtile tileid="240" wangid="0,1,0,1,0,7,0,1"/>
+   <wangtile tileid="241" wangid="0,1,0,1,0,7,0,1"/>
+   <wangtile tileid="243" wangid="0,1,0,1,0,7,0,7"/>
+   <wangtile tileid="247" wangid="0,7,0,1,0,7,0,7"/>
+   <wangtile tileid="249" wangid="0,1,0,7,0,1,0,1"/>
+   <wangtile tileid="251" wangid="0,7,0,7,0,1,0,7"/>
+   <wangtile tileid="252" wangid="0,7,0,7,0,1,0,1"/>
+   <wangtile tileid="254" wangid="0,7,0,7,0,1,0,1"/>
+   <wangtile tileid="255" wangid="0,1,0,7,0,7,0,7"/>
+   <wangtile tileid="256" wangid="0,1,0,7,0,7,0,1"/>
+   <wangtile tileid="257" wangid="0,1,0,7,0,7,0,1"/>
+   <wangtile tileid="258" wangid="0,1,0,7,0,7,0,1"/>
+   <wangtile tileid="259" wangid="0,1,0,7,0,7,0,7"/>
+   <wangtile tileid="260" wangid="0,7,0,7,0,7,0,1"/>
+   <wangtile tileid="261" wangid="0,7,0,7,0,7,0,7"/>
+   <wangtile tileid="263" wangid="0,7,0,7,0,7,0,7"/>
+   <wangtile tileid="264" wangid="0,1,0,1,0,1,0,2"/>
+   <wangtile tileid="265" wangid="0,1,0,1,0,1,0,2"/>
+   <wangtile tileid="266" wangid="0,2,0,1,0,1,0,1"/>
+   <wangtile tileid="267" wangid="0,2,0,1,0,1,0,1"/>
+   <wangtile tileid="268" wangid="0,2,0,1,0,1,0,2"/>
+   <wangtile tileid="269" wangid="0,2,0,1,0,1,0,2"/>
+   <wangtile tileid="270" wangid="0,2,0,1,0,1,0,2"/>
+   <wangtile tileid="271" wangid="0,1,0,1,0,2,0,1"/>
+   <wangtile tileid="272" wangid="0,1,0,1,0,2,0,1"/>
+   <wangtile tileid="273" wangid="0,1,0,1,0,2,0,2"/>
+   <wangtile tileid="274" wangid="0,1,0,1,0,2,0,2"/>
+   <wangtile tileid="275" wangid="0,1,0,1,0,2,0,2"/>
+   <wangtile tileid="276" wangid="0,2,0,1,0,2,0,1"/>
+   <wangtile tileid="277" wangid="0,2,0,1,0,2,0,1"/>
+   <wangtile tileid="278" wangid="0,2,0,1,0,2,0,2"/>
+   <wangtile tileid="279" wangid="0,2,0,1,0,2,0,2"/>
+   <wangtile tileid="280" wangid="0,1,0,2,0,1,0,1"/>
+   <wangtile tileid="281" wangid="0,1,0,2,0,1,0,1"/>
+   <wangtile tileid="282" wangid="0,1,0,2,0,1,0,2"/>
+   <wangtile tileid="283" wangid="0,1,0,2,0,1,0,2"/>
+   <wangtile tileid="284" wangid="0,2,0,2,0,1,0,1"/>
+   <wangtile tileid="285" wangid="0,2,0,2,0,1,0,1"/>
+   <wangtile tileid="286" wangid="0,2,0,2,0,1,0,1"/>
+   <wangtile tileid="287" wangid="0,2,0,2,0,1,0,2"/>
+   <wangtile tileid="288" wangid="0,2,0,2,0,1,0,2"/>
+   <wangtile tileid="289" wangid="0,1,0,2,0,2,0,1"/>
+   <wangtile tileid="290" wangid="0,1,0,2,0,2,0,1"/>
+   <wangtile tileid="291" wangid="0,1,0,2,0,2,0,1"/>
+   <wangtile tileid="292" wangid="0,1,0,2,0,2,0,2"/>
+   <wangtile tileid="293" wangid="0,1,0,2,0,2,0,2"/>
+   <wangtile tileid="294" wangid="0,2,0,2,0,2,0,1"/>
+   <wangtile tileid="295" wangid="0,2,0,2,0,2,0,1"/>
+   <wangtile tileid="296" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="297" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="298" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="299" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="300" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="301" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="302" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="303" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="304" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="305" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="306" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="307" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="308" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="309" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="310" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="311" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="312" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="313" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="314" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="315" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="316" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="317" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="318" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="319" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="320" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="321" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="322" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="323" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="324" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="325" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="326" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="327" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="328" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="329" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="330" wangid="0,2,0,2,0,2,0,2"/>
+   <wangtile tileid="331" wangid="0,2,0,2,0,2,0,2"/>
+   <wangtile tileid="332" wangid="0,2,0,2,0,2,0,2"/>
+   <wangtile tileid="333" wangid="0,2,0,2,0,2,0,2"/>
+   <wangtile tileid="334" wangid="0,2,0,2,0,2,0,2"/>
+   <wangtile tileid="335" wangid="0,2,0,2,0,2,0,2"/>
+   <wangtile tileid="336" wangid="0,2,0,2,0,2,0,2"/>
+   <wangtile tileid="337" wangid="0,2,0,2,0,2,0,2"/>
+   <wangtile tileid="338" wangid="0,2,0,2,0,2,0,2"/>
+   <wangtile tileid="339" wangid="0,8,0,8,0,8,0,8"/>
+   <wangtile tileid="340" wangid="0,8,0,8,0,8,0,8"/>
+   <wangtile tileid="341" wangid="0,8,0,8,0,8,0,8"/>
+   <wangtile tileid="342" wangid="0,8,0,8,0,8,0,8"/>
+   <wangtile tileid="344" wangid="0,8,0,8,0,8,0,8"/>
+   <wangtile tileid="345" wangid="0,8,0,8,0,8,0,8"/>
+   <wangtile tileid="346" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="347" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="348" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="349" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="350" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="351" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="352" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="353" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="354" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="355" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="356" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="357" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="358" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="359" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="360" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="362" wangid="0,7,0,7,0,7,0,7"/>
+  </wangset>
+ </wangsets>
+</tileset>

@@ -1,0 +1,259 @@
+[gd_scene format=3 uid="uid://cnc02i4p4l754"]
+
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="1_2dqnk"]
+[ext_resource type="Script" uid="uid://xuvhq4f5pv1r" path="res://src/ui/transaction/statistics_player.gd" id="1_hlmhm"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omghk"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9734543, 0.7876757, 7.70092e-07, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e33uh"]
+bg_color = Color(0, 0.44705883, 0.81960785, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0.8, 0.8, 0)
+
+[node name="StatisticsPlayer" type="VBoxContainer" unique_id=2008155476]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 52.0
+grow_horizontal = 2
+theme_override_constants/separation = 2
+alignment = 1
+script = ExtResource("1_hlmhm")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1996488604]
+layout_mode = 2
+theme_override_constants/separation = 9
+alignment = 1
+
+[node name="Units" type="VBoxContainer" parent="HBoxContainer" unique_id=1534787137]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Units" unique_id=368368142]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1.004, 1.004, 1.004, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_2dqnk")
+theme_override_font_sizes/font_size = 14
+text = "Units"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="HBoxContainer/Units" unique_id=532934929]
+custom_minimum_size = Vector2(80, 16)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("1_2dqnk")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/background = SubResource("StyleBoxFlat_omghk")
+theme_override_styles/fill = SubResource("StyleBoxFlat_e33uh")
+max_value = 1.0
+value = 0.6
+
+[node name="Buildings" type="VBoxContainer" parent="HBoxContainer" unique_id=1714732308]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Buildings" unique_id=1227247595]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1.004, 1.004, 1.004, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_2dqnk")
+theme_override_font_sizes/font_size = 14
+text = "Buildings"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="HBoxContainer/Buildings" unique_id=1438925632]
+custom_minimum_size = Vector2(80, 16)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("1_2dqnk")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/background = SubResource("StyleBoxFlat_omghk")
+theme_override_styles/fill = SubResource("StyleBoxFlat_e33uh")
+max_value = 1.0
+value = 0.6
+
+[node name="Gold" type="VBoxContainer" parent="HBoxContainer" unique_id=315641074]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Gold" unique_id=1106886221]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1.004, 1.004, 1.004, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_2dqnk")
+theme_override_font_sizes/font_size = 14
+text = "Gold"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="HBoxContainer/Gold" unique_id=1401095311]
+custom_minimum_size = Vector2(80, 16)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("1_2dqnk")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/background = SubResource("StyleBoxFlat_omghk")
+theme_override_styles/fill = SubResource("StyleBoxFlat_e33uh")
+max_value = 1.0
+value = 0.6
+
+[node name="Lumber" type="VBoxContainer" parent="HBoxContainer" unique_id=1994137910]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Lumber" unique_id=987610729]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1.004, 1.004, 1.004, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_2dqnk")
+theme_override_font_sizes/font_size = 14
+text = "Lumber"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="HBoxContainer/Lumber" unique_id=1297851182]
+custom_minimum_size = Vector2(80, 16)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("1_2dqnk")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/background = SubResource("StyleBoxFlat_omghk")
+theme_override_styles/fill = SubResource("StyleBoxFlat_e33uh")
+max_value = 1.0
+value = 0.6
+
+[node name="Oil" type="VBoxContainer" parent="HBoxContainer" unique_id=1579889982]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Oil" unique_id=205593531]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1.004, 1.004, 1.004, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_2dqnk")
+theme_override_font_sizes/font_size = 14
+text = "Oil"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="HBoxContainer/Oil" unique_id=1079838522]
+custom_minimum_size = Vector2(80, 16)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("1_2dqnk")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/background = SubResource("StyleBoxFlat_omghk")
+theme_override_styles/fill = SubResource("StyleBoxFlat_e33uh")
+max_value = 1.0
+value = 0.6
+
+[node name="Kills" type="VBoxContainer" parent="HBoxContainer" unique_id=2011153511]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Kills" unique_id=1109405431]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1.004, 1.004, 1.004, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_2dqnk")
+theme_override_font_sizes/font_size = 14
+text = "Kills"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="HBoxContainer/Kills" unique_id=1367453726]
+custom_minimum_size = Vector2(80, 16)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("1_2dqnk")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/background = SubResource("StyleBoxFlat_omghk")
+theme_override_styles/fill = SubResource("StyleBoxFlat_e33uh")
+max_value = 1.0
+value = 0.6
+
+[node name="Razings" type="VBoxContainer" parent="HBoxContainer" unique_id=1062858117]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Razings" unique_id=50865240]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1.004, 1.004, 1.004, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_2dqnk")
+theme_override_font_sizes/font_size = 14
+text = "Razings"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="HBoxContainer/Razings" unique_id=1738802502]
+custom_minimum_size = Vector2(80, 16)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("1_2dqnk")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/background = SubResource("StyleBoxFlat_omghk")
+theme_override_styles/fill = SubResource("StyleBoxFlat_e33uh")
+max_value = 1.0
+value = 0.6
+
+[node name="FactionPlayer" type="Label" parent="." unique_id=1409032357]
+layout_mode = 2
+theme_override_colors/font_color = Color(1.004, 1.004, 1.004, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 3
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_2dqnk")
+theme_override_font_sizes/font_size = 16
+text = "Nation of Azeroth - You"
+horizontal_alignment = 1
+vertical_alignment = 1

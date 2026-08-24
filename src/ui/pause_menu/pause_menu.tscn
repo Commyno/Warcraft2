@@ -1,0 +1,272 @@
+[gd_scene format=3 uid="uid://d0a4dccu6h0bf"]
+
+[ext_resource type="Script" uid="uid://dus7jcls32nrp" path="res://src/ui/pause_menu/pause_menu.gd" id="1_t4fdi"]
+[ext_resource type="Texture2D" uid="uid://cu6y8fbog3hcr" path="res://assets/art/ui/buttons/UI - Menu Button - 00.tres" id="2_j7lcx"]
+[ext_resource type="Texture2D" uid="uid://7pssj7k1t5w7" path="res://assets/art/ui/buttons/UI - Menu Button - 02.tres" id="3_peth0"]
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="3_w8c3i"]
+[ext_resource type="Texture2D" uid="uid://coylb07xse354" path="res://assets/art/ui/buttons/UI - Menu Button - 01.tres" id="4_qrgyy"]
+[ext_resource type="Texture2D" uid="uid://di5cb8k7348y6" path="res://assets/art/ui/buttons/UI - Menu Button 2 - 00.tres" id="5_r4bpe"]
+[ext_resource type="Texture2D" uid="uid://273ajucsnd77" path="res://assets/art/ui/buttons/UI - Menu Button 2 - 01.tres" id="6_vk1qi"]
+[ext_resource type="Texture2D" uid="uid://d4d5t3l18y0ea" path="res://assets/art/ui/buttons/UI - Menu Button 2 - 03.tres" id="7_0lk4h"]
+
+[node name="PauseMenu" type="Control" unique_id=420413355 groups=["pause_menu"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_t4fdi")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1398927662]
+modulate = Color(1, 1, 1, 0.5019608)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1095028635]
+custom_minimum_size = Vector2(200, 260)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -105.0
+offset_top = -130.0
+offset_right = 105.0
+offset_bottom = 130.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer" unique_id=1342070928]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer" unique_id=523893448]
+layout_mode = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer" unique_id=1970614314]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer" unique_id=1140107304]
+layout_mode = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_w8c3i")
+theme_override_font_sizes/font_size = 20
+text = "Menu"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer/VBoxContainer" unique_id=1928353441]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="SaveButton" type="TextureButton" parent="MarginContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1838507604]
+custom_minimum_size = Vector2(80, 28)
+layout_mode = 2
+texture_normal = ExtResource("5_r4bpe")
+texture_pressed = ExtResource("7_0lk4h")
+texture_hover = ExtResource("6_vk1qi")
+texture_disabled = ExtResource("5_r4bpe")
+texture_focused = ExtResource("6_vk1qi")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer/HBoxContainer/SaveButton" unique_id=843798581]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_w8c3i")
+theme_override_font_sizes/font_size = 10
+text = "Save (F11)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LoadButton" type="TextureButton" parent="MarginContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=581944603]
+custom_minimum_size = Vector2(80, 28)
+layout_mode = 2
+texture_normal = ExtResource("5_r4bpe")
+texture_pressed = ExtResource("7_0lk4h")
+texture_hover = ExtResource("6_vk1qi")
+texture_disabled = ExtResource("5_r4bpe")
+texture_focused = ExtResource("6_vk1qi")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer/HBoxContainer/LoadButton" unique_id=2054973871]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_w8c3i")
+theme_override_font_sizes/font_size = 10
+text = "Load (F12)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OptionsButton" type="TextureButton" parent="MarginContainer/MarginContainer/VBoxContainer" unique_id=646545941]
+custom_minimum_size = Vector2(90, 28)
+layout_mode = 2
+texture_normal = ExtResource("2_j7lcx")
+texture_pressed = ExtResource("3_peth0")
+texture_hover = ExtResource("4_qrgyy")
+texture_disabled = ExtResource("2_j7lcx")
+texture_focused = ExtResource("4_qrgyy")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer/OptionsButton" unique_id=1950309797]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_w8c3i")
+theme_override_font_sizes/font_size = 10
+text = "Options (F5)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HelpButton" type="TextureButton" parent="MarginContainer/MarginContainer/VBoxContainer" unique_id=1811051811]
+custom_minimum_size = Vector2(90, 28)
+layout_mode = 2
+texture_normal = ExtResource("2_j7lcx")
+texture_pressed = ExtResource("3_peth0")
+texture_hover = ExtResource("4_qrgyy")
+texture_disabled = ExtResource("2_j7lcx")
+texture_focused = ExtResource("4_qrgyy")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer/HelpButton" unique_id=1059209538]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_w8c3i")
+theme_override_font_sizes/font_size = 10
+text = "Help (F1)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScenarioObjectivesButton" type="TextureButton" parent="MarginContainer/MarginContainer/VBoxContainer" unique_id=1292785924]
+custom_minimum_size = Vector2(90, 28)
+layout_mode = 2
+texture_normal = ExtResource("2_j7lcx")
+texture_pressed = ExtResource("3_peth0")
+texture_hover = ExtResource("4_qrgyy")
+texture_disabled = ExtResource("2_j7lcx")
+texture_focused = ExtResource("4_qrgyy")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer/ScenarioObjectivesButton" unique_id=1932136892]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_w8c3i")
+theme_override_font_sizes/font_size = 10
+text = "Scenario Objectives"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EndScenarioButton" type="TextureButton" parent="MarginContainer/MarginContainer/VBoxContainer" unique_id=374436292]
+custom_minimum_size = Vector2(90, 28)
+layout_mode = 2
+texture_normal = ExtResource("2_j7lcx")
+texture_pressed = ExtResource("3_peth0")
+texture_hover = ExtResource("4_qrgyy")
+texture_disabled = ExtResource("2_j7lcx")
+texture_focused = ExtResource("4_qrgyy")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer/EndScenarioButton" unique_id=2070204575]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_w8c3i")
+theme_override_font_sizes/font_size = 10
+text = "End Scenario"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Control" type="Control" parent="MarginContainer/MarginContainer/VBoxContainer" unique_id=186507817]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="ReturnToGameButton" type="TextureButton" parent="MarginContainer/MarginContainer/VBoxContainer" unique_id=1735395542]
+custom_minimum_size = Vector2(90, 28)
+layout_mode = 2
+texture_normal = ExtResource("2_j7lcx")
+texture_pressed = ExtResource("4_qrgyy")
+texture_hover = ExtResource("3_peth0")
+texture_disabled = ExtResource("2_j7lcx")
+texture_focused = ExtResource("4_qrgyy")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer/ReturnToGameButton" unique_id=800004240]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_w8c3i")
+theme_override_font_sizes/font_size = 10
+text = "Return to Game (Esc)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="MarginContainer/MarginContainer/VBoxContainer/HBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/VBoxContainer/HBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/VBoxContainer/OptionsButton" to="." method="_on_options_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/VBoxContainer/HelpButton" to="." method="_on_help_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/VBoxContainer/ScenarioObjectivesButton" to="." method="_on_scenario_objectives_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/VBoxContainer/EndScenarioButton" to="." method="_on_end_scenario_button_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/VBoxContainer/ReturnToGameButton" to="." method="_on_return_to_game_button_pressed"]

@@ -1,0 +1,8 @@
+[gd_resource type="AtlasTexture" format=3 uid="uid://5uvub1gyajg2"]
+
+[ext_resource type="Texture2D" uid="uid://je2ho52dgyi4" path="res://assets/spritesheets/humans/units/peasant_old/Humans - Peasant.png" id="1_y4ebr"]
+
+[resource]
+atlas = ExtResource("1_y4ebr")
+region = Rect2(173, 367, 22, 23)
+margin = Rect2(4, 0, 4, 9)

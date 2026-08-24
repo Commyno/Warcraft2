@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://du81fow7urjxf"]
+
+[ext_resource type="Script" uid="uid://1hrm5q3yv2of" path="res://src/debug/debug_overlay.gd" id="1_wtwl3"]
+
+[node name="DebugTextOverlay" type="Control" unique_id=785115389]
+custom_minimum_size = Vector2(640, 320)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_wtwl3")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1421946029]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -59.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1644132437]
+layout_mode = 2
+
+[node name="FpsLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=167849295]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "70 fps"
+horizontal_alignment = 2
+
+[node name="VersionInfo" type="Label" parent="MarginContainer/VBoxContainer" unique_id=390175425]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "1.0.0"
+horizontal_alignment = 2
+
+[node name="DebugInfo" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1670903691]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Nessun info"
+horizontal_alignment = 2

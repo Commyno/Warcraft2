@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://dwct7eo8yrrur"]
+
+[ext_resource type="Script" uid="uid://disiw0trh4tf5" path="res://src/levels/level_objects/building_placement_manager.gd" id="1_oqsdf"]
+[ext_resource type="PackedScene" uid="uid://dbvic7tm21lr" path="res://src/ui/GridOverlay.tscn" id="2_wtmx7"]
+
+[node name="BuildingPlacementManager" type="Node2D" unique_id=2018586043]
+script = ExtResource("1_oqsdf")
+grid_overlay_scene = ExtResource("2_wtmx7")

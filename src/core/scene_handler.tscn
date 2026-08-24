@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://bmkmppohbmn7q"]
+
+[ext_resource type="Script" uid="uid://bgq8u8otwciqy" path="res://src/core/scene_handler.gd" id="1_ox7js"]
+[ext_resource type="PackedScene" uid="uid://dugeawcv6b14x" path="res://src/ui/main_menu/main_menu.tscn" id="2_f8iwc"]
+[ext_resource type="PackedScene" uid="uid://c0rueoflmib6b" path="res://src/ui/main_menu/new_single_menu.tscn" id="3_35quw"]
+[ext_resource type="PackedScene" uid="uid://ucav2se4qjt7" path="res://src/ui/main_menu/new_multi_menu.tscn" id="4_ds1bp"]
+[ext_resource type="PackedScene" uid="uid://deva2i2s4pbhn" path="res://src/ui/main_menu/settings_menu.tscn" id="4_m6gaq"]
+[ext_resource type="PackedScene" uid="uid://kwuk2562g1gn" path="res://src/ui/main_menu/credits_menu.tscn" id="5_7lxe1"]
+[ext_resource type="PackedScene" uid="uid://7bqqhqnenv3s" path="res://src/ui/main_menu/custom_scenario_menu.tscn" id="5_dcbt0"]
+[ext_resource type="PackedScene" uid="uid://bf4jehkglb58x" path="res://src/ui/main_menu/load_game_menu.tscn" id="8_dcbt0"]
+[ext_resource type="PackedScene" uid="uid://c0013ctlrfydb" path="res://src/ui/main_menu/new_campaign_menu.tscn" id="8_ds1bp"]
+[ext_resource type="PackedScene" uid="uid://cev4666n7e5jw" path="res://src/ui/main_menu/map_select_popup.tscn" id="10_dcbt0"]
+
+[node name="SceneHandler" type="Node" unique_id=1455003058]
+script = ExtResource("1_ox7js")
+main_menu_packed = ExtResource("2_f8iwc")
+new_single_menu_packed = ExtResource("3_35quw")
+new_multi_menu_packed = ExtResource("4_ds1bp")
+settings_menu_packed = ExtResource("4_m6gaq")
+credits_menu_packed = ExtResource("5_7lxe1")
+new_campaign_menu_packed = ExtResource("8_ds1bp")
+load_game_menu_packed = ExtResource("8_dcbt0")
+custom_scenario_menu_packed = ExtResource("5_dcbt0")
+load_map_select_popup_packed = ExtResource("10_dcbt0")
+game_scene_path = "uid://dk43yp5y68y7g"

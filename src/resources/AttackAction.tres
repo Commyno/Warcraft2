@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="UnitAction" format=3 uid="uid://c3u0yj0hhhpp2"]
+
+[ext_resource type="Texture2D" uid="uid://kgljok8ttcv6" path="res://assets/spritesheets/ui/Icons/Icon - Attack.tres" id="1_mi72j"]
+[ext_resource type="Script" uid="uid://xlg4eskiphgu" path="res://src/resources/UnitAction.gd" id="2_yqvsq"]
+
+[resource]
+script = ExtResource("2_yqvsq")
+id = "attack"
+title = "Attaccare"
+icon = ExtResource("1_mi72j")
+action_type = 2
+shortcut_key = 65
+metadata/_custom_type_script = "uid://xlg4eskiphgu"

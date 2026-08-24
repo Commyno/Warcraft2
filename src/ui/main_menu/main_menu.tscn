@@ -1,0 +1,177 @@
+[gd_scene format=3 uid="uid://dugeawcv6b14x"]
+
+[ext_resource type="Script" uid="uid://dx215epjstvtb" path="res://src/ui/main_menu/main_menu.gd" id="1_6ut4k"]
+[ext_resource type="Texture2D" uid="uid://vimh2i4we860" path="res://assets/art/ui/background/menu-background-with-title.png" id="1_osdni"]
+[ext_resource type="Texture2D" uid="uid://cu6y8fbog3hcr" path="res://assets/art/ui/buttons/UI - Menu Button - 00.tres" id="2_vivct"]
+[ext_resource type="Texture2D" uid="uid://7pssj7k1t5w7" path="res://assets/art/ui/buttons/UI - Menu Button - 02.tres" id="3_6ut4k"]
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="3_vivct"]
+[ext_resource type="Texture2D" uid="uid://coylb07xse354" path="res://assets/art/ui/buttons/UI - Menu Button - 01.tres" id="4_hhctb"]
+
+[node name="MainMenu" type="Control" unique_id=1392140865]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6ut4k")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1018145943]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_osdni")
+expand_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1458170142]
+layout_mode = 0
+offset_left = 258.0
+offset_top = 122.0
+offset_right = 383.0
+offset_bottom = 300.0
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="SinglePlayer" type="TextureButton" parent="VBoxContainer" unique_id=416568513]
+custom_minimum_size = Vector2(125, 23)
+layout_mode = 2
+texture_normal = ExtResource("2_vivct")
+texture_pressed = ExtResource("3_6ut4k")
+texture_hover = ExtResource("4_hhctb")
+texture_disabled = ExtResource("2_vivct")
+texture_focused = ExtResource("4_hhctb")
+ignore_texture_size = true
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/SinglePlayer" unique_id=1337410662]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_vivct")
+theme_override_font_sizes/font_size = 10
+text = "Single Player Game"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MultiPlayer" type="TextureButton" parent="VBoxContainer" unique_id=1602412729]
+custom_minimum_size = Vector2(125, 23)
+layout_mode = 2
+texture_normal = ExtResource("2_vivct")
+texture_pressed = ExtResource("3_6ut4k")
+texture_hover = ExtResource("4_hhctb")
+texture_disabled = ExtResource("2_vivct")
+texture_focused = ExtResource("4_hhctb")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/MultiPlayer" unique_id=407373458]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_vivct")
+theme_override_font_sizes/font_size = 10
+text = "Multi Player Game"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ShowCredits" type="TextureButton" parent="VBoxContainer" unique_id=1748820704]
+custom_minimum_size = Vector2(125, 23)
+layout_mode = 2
+texture_normal = ExtResource("2_vivct")
+texture_pressed = ExtResource("3_6ut4k")
+texture_hover = ExtResource("4_hhctb")
+texture_disabled = ExtResource("2_vivct")
+texture_focused = ExtResource("4_hhctb")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/ShowCredits" unique_id=1561494568]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_vivct")
+theme_override_font_sizes/font_size = 10
+text = "Show Credits"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ShowSettings" type="TextureButton" parent="VBoxContainer" unique_id=838609993]
+custom_minimum_size = Vector2(125, 23)
+layout_mode = 2
+texture_normal = ExtResource("2_vivct")
+texture_pressed = ExtResource("3_6ut4k")
+texture_hover = ExtResource("4_hhctb")
+texture_disabled = ExtResource("2_vivct")
+texture_focused = ExtResource("4_hhctb")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/ShowSettings" unique_id=213280130]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_vivct")
+theme_override_font_sizes/font_size = 10
+text = "Settings"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ExitProgram" type="TextureButton" parent="VBoxContainer" unique_id=2091383143]
+custom_minimum_size = Vector2(125, 23)
+layout_mode = 2
+texture_normal = ExtResource("2_vivct")
+texture_pressed = ExtResource("3_6ut4k")
+texture_hover = ExtResource("4_hhctb")
+texture_disabled = ExtResource("2_vivct")
+texture_focused = ExtResource("4_hhctb")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/ExitProgram" unique_id=1571930162]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1.0039686, 0.98428696, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_vivct")
+theme_override_font_sizes/font_size = 10
+text = "Exit Program"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="VBoxContainer/SinglePlayer" to="." method="_on_single_player_pressed"]
+[connection signal="pressed" from="VBoxContainer/MultiPlayer" to="." method="_on_multi_player_pressed"]
+[connection signal="pressed" from="VBoxContainer/ShowCredits" to="." method="_on_show_credits_pressed"]
+[connection signal="pressed" from="VBoxContainer/ShowSettings" to="." method="_on_show_settings_pressed"]
+[connection signal="pressed" from="VBoxContainer/ExitProgram" to="." method="_on_exit_program_pressed"]

@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bpvkvewau3nii"]
+
+[ext_resource type="Script" uid="uid://775a03mphmfl" path="res://src/gameplay/entities/units/death_unit.gd" id="1_hx7vk"]
+
+[node name="DeathUnit" type="Node2D" unique_id=113597620]
+script = ExtResource("1_hx7vk")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1721736345]

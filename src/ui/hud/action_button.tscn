@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://mfavlv18jfrk"]
+
+[ext_resource type="Texture2D" uid="uid://dojtkvc56hufu" path="res://assets/spritesheets/ui/UI - Action Button - 00.tres" id="1_bqhoh"]
+[ext_resource type="Texture2D" uid="uid://ch53wmug5155u" path="res://assets/spritesheets/ui/UI - Action Button - 01.tres" id="2_8ndrf"]
+[ext_resource type="Texture2D" uid="uid://cfhglcososivi" path="res://assets/spritesheets/ui/UI - Action Button - 02.tres" id="3_y5bge"]
+[ext_resource type="Resource" uid="uid://c8ttovw0q4ob" path="res://src/resources/NoneAction.tres" id="5_r4yus"]
+[ext_resource type="Script" uid="uid://cyu5yo52wb5v3" path="res://src/ui/hud/action_button.gd" id="5_y5bge"]
+
+[node name="ActionButton" type="TextureButton" unique_id=399752971]
+custom_minimum_size = Vector2(31, 26)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -4.0
+offset_right = -613.0
+offset_bottom = -334.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("1_bqhoh")
+texture_pressed = ExtResource("3_y5bge")
+texture_hover = ExtResource("2_8ndrf")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("5_y5bge")
+current_action = ExtResource("5_r4yus")
+
+[node name="Icon" type="TextureRect" parent="." unique_id=1446022733]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1

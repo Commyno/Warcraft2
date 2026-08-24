@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ds8d6jf1yi5uw"]
+
+[ext_resource type="Script" uid="uid://ctoqyadaeyiq8" path="res://src/gameplay/player/player_ai.gd" id="1_0jn07"]
+
+[node name="PlayerAI" type="Node" unique_id=1731926564]
+script = ExtResource("1_0jn07")

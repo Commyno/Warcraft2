@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" format=3 uid="uid://dojtkvc56hufu"]
+
+[ext_resource type="Texture2D" uid="uid://bpm1nnv2u3xtc" path="res://assets/spritesheets/ui/Pulsanti interfaccia.png" id="1_bi0bn"]
+
+[resource]
+atlas = ExtResource("1_bi0bn")
+region = Rect2(1, 1, 50, 42)

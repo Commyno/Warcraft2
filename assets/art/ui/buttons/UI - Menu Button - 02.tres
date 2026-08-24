@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" format=3 uid="uid://7pssj7k1t5w7"]
+
+[ext_resource type="Texture2D" uid="uid://bv3fovd3cymkj" path="res://assets/art/ui/buttons/Pulsante menu.png" id="1_wjfcb"]
+
+[resource]
+atlas = ExtResource("1_wjfcb")
+region = Rect2(0, 0, 450, 80)
