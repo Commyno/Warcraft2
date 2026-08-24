@@ -62,8 +62,10 @@ func _unhandled_input(event: InputEvent) -> void:
 							unit.interact_with(clicked_target)
 				else:
 					# MOVIMENTO NORMALE SULLA MAPPA:
-					# Usiamo il GridManager per arrotondare al centro del tile e gestire la prelazione
-					var final_destination = GridManager.get_available_destination(target_position, mobile_units[0])
+					# Utilizziamo il GridManager per trovare un tile libero se il target è occupato
+					var final_destination = target_position
+					if not mobile_units.is_empty():
+						final_destination = GridManager.get_available_destination(target_position, mobile_units[0])
 					debug_click_pos = final_destination
 					queue_redraw()
 					FormationManager.move_units_in_formation(mobile_units, final_destination)

@@ -129,10 +129,12 @@ func is_selected() -> bool:
 # --- SISTEMA DI MOVIMENTO ---
 
 func move_to(target_pos: Vector2) -> void:
+# Prima di muoversi, libera la cella che eventualmente occupava prima
+	# 1. GridManager.release_unit_reservations(self)
+	
 	# 1. Assegni il bersaglio
 	nav_agent.target_position = target_pos
-	
-	# 2. TRUCCO GODOT 4: Forza la generazione immediata della rotta!
+	# Forza la generazione immediata della rotta!
 	nav_agent.get_current_navigation_path()
 	
 	# 3. Ora che la rotta è certa, chiediamo il prossimo punto
@@ -163,19 +165,21 @@ func _physics_process(_delta: float) -> void:
 		if nav_agent.is_navigation_finished() or distance_to_target <= current_offset_target:
 			# Se siamo arrivati a meno di 0.5 pixel dal centro, forziamo la posizione perfetta
 			
-			# NUOVA LOGICA: Se stiamo andando a terra (no interazione) e siamo vicini, scivoliamo al centro!
+			# NUOVA LOGICA: Se stiamo andando verso un pointposition (non un target) e siamo vicini, 
+			# scivoliamo al centro! Così bypassiamo il sistema di stop dell'agent
 			if current_target == null and distance_to_target > 0.5:
 				# Scivolamento dolce (bypassiamo il navigation agent per gli ultimi pixel)
 				global_position = global_position.move_toward(nav_agent.target_position, move_speed * _delta)
-				print("move_toward(" + str(nav_agent.target_position) + str(move_speed) + str(_delta))
 				return # Interrompiamo il frame qui, continuerà a scivolare al prossimo frame
 			
 			if current_target == null:
 				global_position = nav_agent.target_position 
-			
-			velocity = Vector2.ZERO
-			is_moving = false
-			update_animation()
+				velocity = Vector2.ZERO
+				is_moving = false
+				update_animation()
+				# PRELAZIONE: Registriamo ufficialmente questo tile come occupato da questa unità!
+				var current_tile = GridManager.get_tile_coords(global_position)
+				GridManager.try_reserve_tile(current_tile, self)
 			
 			# --- GESTIONE INTERAZIONE ---
 			if current_target != null:
@@ -350,7 +354,11 @@ func die() -> void:
 	# 3. Genera la sagoma
 	spawn_corpse()
 	
-	# 4. Distruggi l'unità
+	# 4. Libera la cella occupata così altri possono calpestarla
+	GridManager.release_unit_reservations(self)
+	# ... resto del codice di morte ...
+
+	# 5. Distruggi l'unità
 	queue_free()
 
 func spawn_corpse() -> void:

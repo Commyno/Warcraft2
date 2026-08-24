@@ -20,6 +20,7 @@ const PEASANT_TEXTURES = {
 @export var build_range: float = 40.0
 
 var peasant_state: PeasantState = PeasantState.IDLE
+var enter_direction: Vector2 = Vector2.DOWN
 
 # Building variables
 var target_building: BaseBuilding = null
@@ -53,73 +54,119 @@ func _start_interaction(target: Node2D) -> void:
 
 func enter_mine(mine: GoldMine) -> void:
 	peasant_state = PeasantState.MINING
-	# 1. Disattiviamo subito le collisioni e l'evitamento per evitare blocchi
+	
+	# 1. Memorizziamo la direzione da cui è entrato rispetto al centro della miniera
+	enter_direction = (global_position - mine.global_position).normalized()
+	if enter_direction == Vector2.ZERO:
+		enter_direction = Vector2.DOWN # Fallback di sicurezza
+
+	# 2. Disattiviamo collisioni e avoidance
 	if has_node("CollisionShape2D"):
-		$CollisionShape2D.set_deferred("disabled", true)
+		collision_shape.set_deferred("disabled", true)
 	
 	if has_node("NavigationAgent2D"):
 		nav_agent.avoidance_enabled = false
+
+	if has_node("HealthBar"):
+		health_bar.visible = false
+	
+	if has_node("SelectableComponent"):
+		if is_in_group("selectable_units"):
+			remove_from_group("selectable_units")
+	
+	deselect()
 		
-	# 2. Creiamo un Tween per gestire in modo fluido il movimento al centro e il fade-out
-	var tween = create_tween().set_parallel(true) # Esegue le animazioni insieme
+	var total_duration: float = 0.7
+	var half_duration: float = total_duration * 0.5 
 	
-	# Durata dell'effetto di entrata (es. 0.4 secondi)
-	var duration: float = 0.4
-	
-	# Muove dolcemente il peasant verso il centro esatto della miniera
-	tween.tween_property(self, "global_position", mine.global_position, duration)
-	
-	# Se usi uno Sprite2D standard o un CanvasItem, facciamo scendere l'alpha (modulate.a) a 0
+	# 3. Movimento al centro e fade-out nella prima metà
+	var tween_fade = create_tween().set_parallel(true)
+	tween_fade.tween_property(self, "global_position", mine.global_position, total_duration)
 	if unit_sprite:
-		tween.tween_property(unit_sprite, "modulate:a", 0.0, duration)
+		tween_fade.tween_property(unit_sprite, "modulate:a", 0.0, half_duration)
 		
-	# 3. Aspettiamo che il Tween finisca prima di congelare definitivamente il peasant
-	await tween.finished
+	await tween_fade.finished
 	
-	# 4. Ora che è invisibile ed è arrivato al centro, fermiamo i processi
 	visible = false
 	set_process(false)
 	set_physics_process(false)
 
 func exit_mine(gold_amount: int) -> void:
-
-	# 1. Riattiviamo i processi di base
 	set_process(true)
 	set_physics_process(true)
 	visible = true
-
-	# Partiamo completamente trasparenti
+	
 	if unit_sprite:
 		unit_sprite.modulate.a = 0.0
 
-	# 2. Calcoliamo la posizione di uscita dal centro della miniera
+	# 2. Calcoliamo la posizione di uscita usando la STESSA direzione d'ingresso
 	var exit_position = global_position
-	if target_mine and is_instance_valid(target_mine):
-		var direction_away = (global_position - target_mine.global_position).normalized()
-		if direction_away == Vector2.ZERO:
-			direction_away = Vector2.DOWN
-		exit_position = target_mine.global_position + (direction_away * 60.0)
+	
+	if target_mine and is_instance_valid(target_mine) and GridManager.tile_map_layer:
+		var mine_tile_coords = GridManager.get_tile_coords(target_mine.global_position)
+		
+		# Usiamo enter_direction per uscire dallo stesso lato in cui è entrato
+		var tile_offset = Vector2i.ZERO
+		if abs(enter_direction.x) > abs(enter_direction.y):
+			tile_offset.x = 1 if enter_direction.x > 0 else -1
+		else:
+			tile_offset.y = 1 if enter_direction.y > 0 else -1
+			
+		var target_exit_tile = mine_tile_coords + tile_offset
+		var raw_exit_pos = GridManager.get_global_from_tile(target_exit_tile)
+		exit_position = GridManager.get_available_destination(raw_exit_pos, self)
+	else:
+		# Fallback se manca il target
+		exit_position = global_position + (enter_direction * 32.0)
 
-	# 3. Creiamo il Tween speculare (Fade-In e movimento)
-	var tween = create_tween().set_parallel(true)
-	var duration: float = 0.4
+	# 3. Tween di movimento (durata totale 0.7s)
+	var total_duration: float = 0.7
+	var half_duration: float = total_duration * 0.5
 
-	tween.tween_property(self, "global_position", exit_position, duration)
+	# 1. Impostiamo la direzione corretta verso cui è rivolto mentre esce
+	# Se usciamo da una miniera, la direzione di camminata è opposta a enter_direction (oppure calcolata sul tragitto)
+	var exit_direction = (exit_position - global_position).normalized()
+	if exit_direction != Vector2.ZERO:
+		intended_dir = exit_direction
+		last_facing_dir = exit_direction
 
+	# 2. Forziamo l'animazione di camminata ("Walk") durante l'uscita
+	is_moving = true
+	update_animation()
+
+	# 3. Tween di movimento (durata totale 0.7s)
+	var tween = create_tween()
+	tween.tween_property(self, "global_position", exit_position, total_duration)
+
+	# 4. Fade-in nella seconda metà del percorso
 	if unit_sprite:
-		tween.tween_property(unit_sprite, "modulate:a", 1.0, duration)
+		var tween_fade = create_tween()
+		tween_fade.tween_interval(half_duration)
+		tween_fade.tween_property(unit_sprite, "modulate:a", 1.0, half_duration)
 
-	# 4. Aspettiamo che l'animazione di uscita sia completata
 	await tween.finished
 
-	# 5. Riattiviamo collisioni e avoidance
+	# 5. Fine movimento: fermiamo l'animazione di camminata
+	is_moving = false
+	update_animation()
+
+	# 5. Riattivazione collisioni e avoidance
 	if has_node("CollisionShape2D"):
 		collision_shape.set_deferred("disabled", false)
 
 	if has_node("NavigationAgent2D"):
 		nav_agent.avoidance_enabled = true
 
-	# 6. Gestione dell'oro e prossimo obiettivo
+	if has_node("HealthBar"):
+		health_bar.visible = true
+	
+	if has_node("SelectableComponent"):
+		if !is_in_group("selectable_units"):
+			add_to_group("selectable_units")
+	
+	deselect()
+	
+	# 6. Gestione oro / prossimo obiettivo
 	if gold_amount > 0:
 		current_resource = ResourceType.GOLD
 		resource_amount = gold_amount
@@ -138,8 +185,6 @@ func _go_to_town_hall() -> void:
 		move_to(target_hall.global_position)
 	else:
 		print("Errore: Nessun Municipio trovato sulla mappa!")
-
-# --- RESTO DEL CODICE (Animazioni, Costruzione, Colori) ---
 
 func update_animation_parameters(move_velocity: Vector2) -> void:
 	var move_dir: Vector2 = move_velocity.normalized()
