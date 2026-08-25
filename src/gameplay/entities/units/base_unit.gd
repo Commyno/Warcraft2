@@ -152,41 +152,45 @@ func _physics_process(_delta: float) -> void:
 		return
 	
 	var current_position: Vector2 = global_position
-	
-	# 1. Definiamo la tolleranza: ampia per edifici, stretta per punti a terra
-	#var required_distance = current_offset_target if current_target != null and current_target.is_in_group("interactable") else 15.0
-
 	var distance_to_target: float = 0
+	
 	if is_moving and nav_agent:
-		# Calcoliamo la distanza effettiva dal punto di destinazione finale
 		distance_to_target = global_position.distance_to(nav_agent.target_position)
 		
-		# 2. CONDIZIONE DI ARRIVO (usiamo required_distance!)
-		if nav_agent.is_navigation_finished() or distance_to_target <= current_offset_target:
-			# Se siamo arrivati a meno di 0.5 pixel dal centro, forziamo la posizione perfetta
+		# 1. SIAMO FISICAMENTE VICINI AL BERSAGLIO?
+		if distance_to_target <= current_offset_target:
 			
-			# NUOVA LOGICA: Se stiamo andando verso un pointposition (non un target) e siamo vicini, 
-			# scivoliamo al centro! Così bypassiamo il sistema di stop dell'agent
-			if current_target == null and distance_to_target > 0.5:
-				# Scivolamento dolce (bypassiamo il navigation agent per gli ultimi pixel)
-				global_position = global_position.move_toward(nav_agent.target_position, move_speed * _delta)
-				return # Interrompiamo il frame qui, continuerà a scivolare al prossimo frame
+			# Tolleranza alzata a 3.0 pixel per evitare conflitti con la fisica (2.49 < 3.0)
+			if current_target == null and distance_to_target > 3.0:
+				var global_position_tmp = global_position.move_toward(nav_agent.target_position, move_speed * _delta)
+				global_position = global_position_tmp
+				
+				# Fermiamo l'emissione del segnale di Avoidance per non farci respingere indietro
+				if nav_agent.avoidance_enabled:
+					nav_agent.set_velocity(Vector2.ZERO)
+				return 
 			
 			if current_target == null:
 				global_position = nav_agent.target_position 
 				velocity = Vector2.ZERO
 				is_moving = false
 				update_animation()
-				# PRELAZIONE: Registriamo ufficialmente questo tile come occupato da questa unità!
+				# PRELAZIONE: Registriamo ufficialmente questo tile come occupato!
 				var current_tile = GridManager.get_tile_coords(global_position)
 				GridManager.try_reserve_tile(current_tile, self)
 			
 			# --- GESTIONE INTERAZIONE ---
 			if current_target != null:
 				_start_interaction(current_target)
-				# Dimentichiamo il target per non ripetere l'azione ogni singolo frame
 				current_target = null 
 			
+			return
+			
+		# 2. SE IL NAV AGENT HA FINITO MA SIAMO LONTANI (es. bloccati)
+		elif nav_agent.is_navigation_finished():
+			velocity = Vector2.ZERO
+			is_moving = false
+			update_animation()
 			return
 
 		# 3. MOVIMENTO (Siamo ancora in viaggio)
@@ -194,14 +198,15 @@ func _physics_process(_delta: float) -> void:
 		intended_dir = current_position.direction_to(next_path_position)
 		var intended_velocity: Vector2 = intended_dir * move_speed
 		
-		# Manteniamo is_moving a true per tutta la durata del tragitto
 		is_moving = true
 		
 		if nav_agent.avoidance_enabled:
 			nav_agent.set_velocity(intended_velocity)
 		else:
 			_on_velocity_computed(intended_velocity)
-
+	else:
+		update_animation()
+		
 #Funzione virtuale: sovrascrivila nelle classi figlie!
 func _start_interaction(target: Node2D) -> void:
 	pass

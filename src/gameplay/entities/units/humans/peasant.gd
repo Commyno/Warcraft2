@@ -55,6 +55,10 @@ func _start_interaction(target: Node2D) -> void:
 func enter_mine(mine: GoldMine) -> void:
 	peasant_state = PeasantState.MINING
 	
+	is_moving = false
+	velocity = Vector2.ZERO
+	set_physics_process(false) # Spostato qui in alto!
+
 	# 1. Memorizziamo la direzione da cui è entrato rispetto al centro della miniera
 	enter_direction = (global_position - mine.global_position).normalized()
 	if enter_direction == Vector2.ZERO:
@@ -76,7 +80,11 @@ func enter_mine(mine: GoldMine) -> void:
 	
 	deselect()
 		
-	var total_duration: float = 0.7
+	# --- NUOVO: Calcolo dinamico della durata basato su move_speed ---
+	var distance = global_position.distance_to(mine.global_position)
+	# Usiamo move_speed (con un moltiplicatore opzionale se vuoi renderlo un po' più scattante)
+	var speed = max(move_speed, 1.0) # Evita divisioni per zero
+	var total_duration: float = distance / speed
 	var half_duration: float = total_duration * 0.5 
 	
 	# 3. Movimento al centro e fade-out nella prima metà
@@ -92,81 +100,79 @@ func enter_mine(mine: GoldMine) -> void:
 	set_physics_process(false)
 
 func exit_mine(gold_amount: int) -> void:
+	# Riattiviamo il process normale e rendiamo visibile il nodo[cite: 1]
 	set_process(true)
-	set_physics_process(true)
 	visible = true
 	
 	if unit_sprite:
 		unit_sprite.modulate.a = 0.0
 
-	# 2. Calcoliamo la posizione di uscita usando la STESSA direzione d'ingresso
+	# 1. Calcoliamo la posizione di uscita[cite: 1]
 	var exit_position = global_position
 	
 	if target_mine and is_instance_valid(target_mine) and GridManager.tile_map_layer:
-		var mine_tile_coords = GridManager.get_tile_coords(target_mine.global_position)
-		
-		# Usiamo enter_direction per uscire dallo stesso lato in cui è entrato
-		var tile_offset = Vector2i.ZERO
-		if abs(enter_direction.x) > abs(enter_direction.y):
-			tile_offset.x = 1 if enter_direction.x > 0 else -1
-		else:
-			tile_offset.y = 1 if enter_direction.y > 0 else -1
-			
-		var target_exit_tile = mine_tile_coords + tile_offset
-		var raw_exit_pos = GridManager.get_global_from_tile(target_exit_tile)
-		exit_position = GridManager.get_available_destination(raw_exit_pos, self)
+		# Passiamo la posizione della miniera, la sua dimensione in tile (3x3), 
+		# la direzione di entrata e il peasant stesso per i controlli di collisione
+		exit_position = GridManager.get_adjacent_free_position(target_mine.global_position, Vector2i(3, 3), enter_direction, self)
 	else:
 		# Fallback se manca il target
 		exit_position = global_position + (enter_direction * 32.0)
 
-	# 3. Tween di movimento (durata totale 0.7s)
-	var total_duration: float = 0.7
+	# --- MODIFICA 1: Calcolo dinamico della durata basato su move_speed ---
+	var distance = global_position.distance_to(exit_position)
+	var speed = max(move_speed, 1.0) # Evita divisioni per zero
+	var total_duration: float = distance / speed
 	var half_duration: float = total_duration * 0.5
 
-	# 1. Impostiamo la direzione corretta verso cui è rivolto mentre esce
-	# Se usciamo da una miniera, la direzione di camminata è opposta a enter_direction (oppure calcolata sul tragitto)
+	# 2. Impostiamo la direzione verso cui è rivolto mentre esce[cite: 1]
 	var exit_direction = (exit_position - global_position).normalized()
 	if exit_direction != Vector2.ZERO:
 		intended_dir = exit_direction
 		last_facing_dir = exit_direction
 
-	# 2. Forziamo l'animazione di camminata ("Walk") durante l'uscita
+	# 3. Forziamo l'animazione di camminata ("Walk") durante l'uscita[cite: 1]
 	is_moving = true
 	update_animation()
 
-	# 3. Tween di movimento (durata totale 0.7s)
+	# 4. Tween di movimento e dissolvenza[cite: 1]
 	var tween = create_tween()
 	tween.tween_property(self, "global_position", exit_position, total_duration)
 
-	# 4. Fade-in nella seconda metà del percorso
 	if unit_sprite:
 		var tween_fade = create_tween()
 		tween_fade.tween_interval(half_duration)
 		tween_fade.tween_property(unit_sprite, "modulate:a", 1.0, half_duration)
 
+	# ASPETTIAMO CHE IL MOVIMENTO DI USCITA SIA FINITO
 	await tween.finished
 
-	# 5. Fine movimento: fermiamo l'animazione di camminata
+	# 5. Fine movimento: fermiamo l'animazione di camminata[cite: 1]
 	is_moving = false
 	update_animation()
 
-	# 5. Riattivazione collisioni e avoidance
+	# 6. Riattivazione collisioni e avoidance[cite: 1]
 	if has_node("CollisionShape2D"):
 		collision_shape.set_deferred("disabled", false)
-
+	
 	if has_node("NavigationAgent2D"):
 		nav_agent.avoidance_enabled = true
-
+		# Previene il bug del ritorno a (0,0) che fa impazzire le coordinate
+		nav_agent.target_position = global_position
+		
 	if has_node("HealthBar"):
 		health_bar.visible = true
 	
 	if has_node("SelectableComponent"):
 		if !is_in_group("selectable_units"):
 			add_to_group("selectable_units")
-	
+			
 	deselect()
 	
-	# 6. Gestione oro / prossimo obiettivo
+	# --- MODIFICA 2: RIATTIVIAMO LA FISICA SOLO ADESSO! ---
+	# (così non va in conflitto con il NavigationAgent durante il Tween)
+	set_physics_process(true)
+	
+	# 7. Gestione oro / prossimo obiettivo[cite: 1]
 	if gold_amount > 0:
 		current_resource = ResourceType.GOLD
 		resource_amount = gold_amount
