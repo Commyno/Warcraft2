@@ -43,6 +43,7 @@ shape = SubResource("CircleShape2D_tpccr")
 [node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="." unique_id=969329888]
 radius = 70.0
 affect_navigation_mesh = true
+avoidance_layers = 2
 
 [node name="HealthBar" type="ProgressBar" parent="." unique_id=1652500946]
 offset_left = -64.0

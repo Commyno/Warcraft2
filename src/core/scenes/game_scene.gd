@@ -9,20 +9,6 @@ signal levelup
 const HUD_ROOT_UID           : String = "uid://ssce78o0mjpg"
 
 # Mappatura dei Tile ID di "logic" / "group 0" verso le scene del gioco
-#const ENVIRONMENT_TILE_ENTITIES = {
-	#455: preload("res://src/gameplay/entities/buildings/neutral/gold_mine.tscn"),
-#}
-#
-#const HUMANS_TILE_ENTITIES = {
-	#381: preload("res://src/gameplay/entities/units/humans/peasant.tscn"),
-	#421: preload("res://src/gameplay/entities/buildings/humans/TownHall.tscn"),
-#}
-#
-#const ORCS_TILE_ENTITIES = {
-	#382: preload("res://src/gameplay/entities/units/humans/peasant.tscn"),
-	#422: preload("res://src/gameplay/entities/buildings/humans/TownHall.tscn"),
-#}
-
 const TILE_MAP_ENTITIES = {
 	381: preload("res://src/gameplay/entities/units/humans/peasant.tscn"),
 	382: preload("res://src/gameplay/entities/units/humans/peasant.tscn"),

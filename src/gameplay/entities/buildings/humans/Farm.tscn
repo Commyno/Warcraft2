@@ -15,11 +15,11 @@ region_completed = Rect2(398, 4, 64, 64)
 [node name="Sprite2D" parent="." index="0" unique_id=1061573362]
 region_rect = Rect2(398, 4, 64, 64)
 
-[node name="CollisionShape2D" parent="." index="1" unique_id=223898250]
-shape = SubResource("CircleShape2D_nowah")
-
-[node name="SelectionRing" parent="." index="2" unique_id=523229799]
+[node name="SelectionRing" parent="." index="1" unique_id=523229799]
 radius = 32.0
 
-[node name="NavigationObstacle2D" parent="." index="3" unique_id=969329888]
+[node name="CollisionShape2D" parent="." index="3" unique_id=223898250]
+shape = SubResource("CircleShape2D_nowah")
+
+[node name="NavigationObstacle2D" parent="." index="4" unique_id=969329888]
 radius = 40.0

@@ -1,10 +1,13 @@
 extends Node
 
+const TREE_MAX_HEALTH: int = 50 # Quanta legna contiene un albero prima di crollare
+
 # Riferimento al TileMapLayer principale della mappa di gioco
 var tile_map_layer: TileMapLayer = null
-
 # Dizionario delle prenotazioni: Chiave = Vector2i (coordinate tile), Valore = Node2D (unità)
 var tile_reservations: Dictionary = {}
+# Dizionario per memorizzare la salute degli alberi. Chiave: Vector2i (coordinate tile)
+var trees_health: Dictionary = {}
 
 # --- 1. CONFIGURAZIONE E MAPPA ---
 
@@ -128,3 +131,54 @@ func get_adjacent_free_position(center_global_pos: Vector2, building_size: Vecto
 	# 6. Fallback di emergenza: se l'edificio è circondato da unità al 100%, 
 	# lo facciamo spawnare forzatamente nel punto ideale che avevamo calcolato
 	return get_global_from_tile(perimeter_tiles[0])
+
+# --- GESTIONE FORESTA ---
+
+# Verifica se un tile specifico è un albero leggendo il Custom Data
+func is_tree(tile_coords: Vector2i) -> bool:
+	# Controlla se il tile è registrato come albero attivo (o se non è ancora stato intaccato)
+	var tile_data = tile_map_layer.get_cell_tile_data(tile_coords)
+	if tile_data:
+		return tile_data.get_custom_data("is_wood") == true
+	return false
+
+# Funzione per tagliare l'albero. Restituisce la legna ottenuta.
+func chop_tree(tile_coords: Vector2i, damage: int) -> int:
+	if not is_tree(tile_coords):
+		return 0
+		
+	# Inizializza la vita dell'albero se è la prima volta che viene colpito
+	if not trees_health.has(tile_coords):
+		trees_health[tile_coords] = TREE_MAX_HEALTH
+		
+	trees_health[tile_coords] -= damage
+	var wood_yield = damage
+	
+	# Se l'albero è distrutto
+	if trees_health[tile_coords] <= 0:
+		wood_yield += trees_health[tile_coords] # Evita di dare più legna del dovuto se il danno sfora
+		trees_health.erase(tile_coords)
+		
+		# RIMUOVE IL TILE DALLA MAPPA (Sostituisci -1 con le coordinate dell'atlante di un "ceppo" se lo hai)
+		tile_map_layer.set_cell(tile_coords, -1) 
+		
+	return max(0, wood_yield)
+
+# Ricerca a spirale: cerca il tile albero più vicino partendo da un centro
+func get_closest_tree_around(start_tile: Vector2i, max_radius: int = 5) -> Vector2i:
+	# Controlla prima il centro stesso (se per caso l'albero c'è ancora)
+	if is_tree(start_tile):
+		return start_tile
+		
+	# Espande la ricerca ad anelli concentrici
+	for r in range(1, max_radius + 1):
+		# Lati orizzontali
+		for x in range(-r, r + 1):
+			if is_tree(start_tile + Vector2i(x, -r)): return start_tile + Vector2i(x, -r)
+			if is_tree(start_tile + Vector2i(x, r)): return start_tile + Vector2i(x, r)
+		# Lati verticali
+		for y in range(-r + 1, r):
+			if is_tree(start_tile + Vector2i(-r, y)): return start_tile + Vector2i(-r, y)
+			if is_tree(start_tile + Vector2i(r, y)): return start_tile + Vector2i(r, y)
+			
+	return Vector2i(-1, -1) # Nessun albero trovato nel raggio

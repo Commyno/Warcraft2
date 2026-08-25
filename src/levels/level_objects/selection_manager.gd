@@ -52,23 +52,44 @@ func _unhandled_input(event: InputEvent) -> void:
 			if mobile_units.size() > 0:
 				var target_position = get_global_mouse_position()
 
-				# 1. Controlliamo se abbiamo cliccato un oggetto interattivo
+				# 1. Controlliamo se abbiamo cliccato un oggetto interattivo (Nodi: Miniere, Nemici, Municipi)
 				var clicked_target = _get_object_under_mouse(target_position)
 
 				if clicked_target:
-					# INTERAZIONE: Ordiniamo alle unità di interagire con il bersaglio
+					# INTERAZIONE NODO: Ordiniamo alle unità di interagire con il bersaglio
 					for unit in mobile_units:
 						if unit.has_method("interact_with"):
 							unit.interact_with(clicked_target)
 				else:
-					# MOVIMENTO NORMALE SULLA MAPPA:
-					# Utilizziamo il GridManager per trovare un tile libero se il target è occupato
-					var final_destination = target_position
-					if not mobile_units.is_empty():
-						final_destination = GridManager.get_available_destination(target_position, mobile_units[0])
-					debug_click_pos = final_destination
-					queue_redraw()
-					FormationManager.move_units_in_formation(mobile_units, final_destination)
+					# 2. Controlliamo se abbiamo cliccato un TILE interattivo (es. Alberi)
+					var clicked_tile = GridManager.get_tile_coords(target_position)
+					
+					# Chiediamo al GridManager se quel tile specifico è legna
+					if GridManager.is_tree(clicked_tile):
+						var tree_global_pos = GridManager.get_global_from_tile(clicked_tile)
+						
+						for unit in mobile_units:
+							# Solo i Peasant hanno l'abilità di tagliare!
+							if unit is Peasant:
+								# Calcoliamo la direzione per farlo fermare dal lato giusto
+								var direction_to_tree = (tree_global_pos - unit.global_position).normalized()
+								# Troviamo il tile libero adiacente all'albero
+								var safe_destination = GridManager.get_adjacent_free_position(tree_global_pos, Vector2i(1, 1), direction_to_tree, unit)
+								
+								unit.interact_with_tile(clicked_tile, safe_destination)
+							else:
+								# Se per caso selezioni soldati e contadini insieme e clicchi un albero, 
+								# i soldati si muoveranno semplicemente lì vicino.
+								unit.move_to(GridManager.get_available_destination(target_position, unit))
+					
+					# 3. MOVIMENTO NORMALE SULLA MAPPA (Spazio vuoto)
+					else:
+						var final_destination = target_position
+						if not mobile_units.is_empty():
+							final_destination = GridManager.get_available_destination(target_position, mobile_units[0])
+						debug_click_pos = final_destination
+						queue_redraw()
+						FormationManager.move_units_in_formation(mobile_units, final_destination)
 
 func _draw():
 	if is_dragging:

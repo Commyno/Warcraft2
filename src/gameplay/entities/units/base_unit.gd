@@ -72,6 +72,8 @@ var last_facing_dir: Vector2 = Vector2.DOWN     # Per tracciare lo sguardo relat
 var intended_dir: Vector2 = Vector2.DOWN
 var current_target: Node2D = null
 var current_offset_target: float = 15.0
+var target_tile: Vector2i = Vector2i(-1, -1)
+var is_moving_to_tile: bool = false
 
 var state: String = "Idle"
 var last_state: String = "None"
@@ -160,17 +162,41 @@ func _physics_process(_delta: float) -> void:
 		# 1. SIAMO FISICAMENTE VICINI AL BERSAGLIO?
 		if distance_to_target <= current_offset_target:
 			
-			# Tolleranza alzata a 3.0 pixel per evitare conflitti con la fisica (2.49 < 3.0)
-			if current_target == null and distance_to_target > 3.0:
+			# Tolleranza di scivolamento (evita micro-vibrazioni con la fisica)
+			if current_target == null and not is_moving_to_tile and distance_to_target > 3.0:
 				var global_position_tmp = global_position.move_toward(nav_agent.target_position, move_speed * _delta)
 				global_position = global_position_tmp
-				
-				# Fermiamo l'emissione del segnale di Avoidance per non farci respingere indietro
 				if nav_agent.avoidance_enabled:
 					nav_agent.set_velocity(Vector2.ZERO)
 				return 
 			
-			if current_target == null:
+			# --- STRADA 1: INTERAZIONE NODO (es. Miniera, Municipio) ---
+			if current_target != null:
+				is_moving = false
+				velocity = Vector2.ZERO
+				if nav_agent:
+					nav_agent.set_velocity(Vector2.ZERO) 
+					nav_agent.target_position = global_position
+					
+				var target_to_interact = current_target 
+				current_target = null
+				_start_interaction(target_to_interact)
+				
+			# --- STRADA 2: INTERAZIONE TILE (es. Albero) ---
+			elif is_moving_to_tile:
+				is_moving = false
+				velocity = Vector2.ZERO
+				if nav_agent:
+					nav_agent.set_velocity(Vector2.ZERO)
+					nav_agent.target_position = global_position
+					
+				var tile_to_interact = target_tile
+				is_moving_to_tile = false
+				target_tile = Vector2i(-1, -1)
+				_start_tile_interaction(tile_to_interact)
+				
+			# --- STRADA 3: MOVIMENTO NORMALE (Punto a terra) ---
+			else:
 				global_position = nav_agent.target_position 
 				velocity = Vector2.ZERO
 				is_moving = false
@@ -178,11 +204,6 @@ func _physics_process(_delta: float) -> void:
 				# PRELAZIONE: Registriamo ufficialmente questo tile come occupato!
 				var current_tile = GridManager.get_tile_coords(global_position)
 				GridManager.try_reserve_tile(current_tile, self)
-			
-			# --- GESTIONE INTERAZIONE ---
-			if current_target != null:
-				_start_interaction(current_target)
-				current_target = null 
 			
 			return
 			
@@ -206,18 +227,22 @@ func _physics_process(_delta: float) -> void:
 			_on_velocity_computed(intended_velocity)
 	else:
 		update_animation()
-		
+
 #Funzione virtuale: sovrascrivila nelle classi figlie!
 func _start_interaction(target: Node2D) -> void:
 	pass
 
 func _on_velocity_computed(safe_velocity: Vector2) -> void:
-	velocity = safe_velocity
+	# 2. FILTRO ANTI-BUG: Se il calcolo è corrotto (NaN sulla x o y) o spropositato, lo annulliamo
+	if is_nan(safe_velocity.x) or is_nan(safe_velocity.y) or safe_velocity.length() > move_speed * 3.0:
+		velocity = Vector2.ZERO
+	else:
+		velocity = safe_velocity
+		
 	# Muoviamo FISICAMENTE l'unità
 	move_and_slide()
 	
-	# Chiamiamo l'aggiornamento dell'animazione DOPO esserci mossi,
-	# in modo che get_real_velocity() sia accurato
+	# Chiamiamo l'aggiornamento dell'animazione DOPO esserci mossi
 	update_animation()
 
 # --- GESTIONE ANIMAZIONI ---
@@ -417,7 +442,7 @@ func interact_with(target: Node2D) -> void:
 				# e non sulla linea matematica di confine dell'ostacolo.
 				#edge_offset = child.radius + 0.0 
 				# SOMMIAMO: raggio miniera + raggio unità + un piccolo margine
-				edge_offset = child.radius - 10 # + nav_agent.radius + 10.0
+				edge_offset = child.radius - 20 # + nav_agent.radius + 10.0
 				current_offset_target = edge_offset
 				break # Appena lo troviamo, interrompiamo la ricerca
 		
@@ -428,3 +453,14 @@ func interact_with(target: Node2D) -> void:
 	else:
 		# Bersaglio normale (punto a terra)
 		move_to(target.global_position)
+
+# Funzione per mandare l'unità verso un tile di risorse (es. albero)
+func interact_with_tile(tile_coords: Vector2i, safe_destination: Vector2) -> void:
+	target_tile = tile_coords
+	is_moving_to_tile = true
+	current_offset_target = 3.0 # Tolleranza di arrivo molto stretta
+	move_to(safe_destination)
+
+# Funzione virtuale che il Peasant sovrascriverà
+func _start_tile_interaction(tile_coords: Vector2i) -> void:
+	pass
