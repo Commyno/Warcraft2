@@ -1,6 +1,11 @@
-extends Node
+#extends Node solo DEBUG
+extends Node2D
 
 const TREE_MAX_HEALTH: int = 50 # Quanta legna contiene un albero prima di crollare
+# ID del tuo tileset (di solito è 0 se ne hai caricato solo uno)
+const STUMP_SOURCE_ID: int = 0 
+# Le coordinate X,Y del ceppo all'interno della griglia del tileset
+const STUMP_ATLAS_COORDS: Vector2i = Vector2i(12, 6)
 
 # Riferimento al TileMapLayer principale della mappa di gioco
 var tile_map_layer: TileMapLayer = null
@@ -8,6 +13,10 @@ var tile_map_layer: TileMapLayer = null
 var tile_reservations: Dictionary = {}
 # Dizionario per memorizzare la salute degli alberi. Chiave: Vector2i (coordinate tile)
 var trees_health: Dictionary = {}
+
+func _ready() -> void:
+	# Forza il GridManager a disegnare SOPRA a tutto il resto (alberi compresi)
+	z_index = 150 
 
 # --- 1. CONFIGURAZIONE E MAPPA ---
 
@@ -136,10 +145,20 @@ func get_adjacent_free_position(center_global_pos: Vector2, building_size: Vecto
 
 # Verifica se un tile specifico è un albero leggendo il Custom Data
 func is_tree(tile_coords: Vector2i) -> bool:
-	# Controlla se il tile è registrato come albero attivo (o se non è ancora stato intaccato)
-	var tile_data = tile_map_layer.get_cell_tile_data(tile_coords)
-	if tile_data:
-		return tile_data.get_custom_data("is_wood") == true
+	var tile_data: TileData = tile_map_layer.get_cell_tile_data(tile_coords)
+	
+	if tile_data != null:
+		# 1. Controlliamo se l'importatore di Tiled ha salvato la proprietà come Metadato
+		if tile_data.has_meta("is_wood"):
+			var is_wood = tile_data.get_meta("is_wood")
+			return is_wood == true
+			
+		# 2. (Opzionale) Manteniamo anche il vecchio controllo nel caso tu decida 
+		# di usare i Custom Data nativi di Godot in futuro
+		var custom_is_wood = tile_data.get_custom_data("is_wood")
+		if custom_is_wood != null:
+			return custom_is_wood == true
+			
 	return false
 
 # Funzione per tagliare l'albero. Restituisce la legna ottenuta.
@@ -159,8 +178,12 @@ func chop_tree(tile_coords: Vector2i, damage: int) -> int:
 		wood_yield += trees_health[tile_coords] # Evita di dare più legna del dovuto se il danno sfora
 		trees_health.erase(tile_coords)
 		
-		# RIMUOVE IL TILE DALLA MAPPA (Sostituisci -1 con le coordinate dell'atlante di un "ceppo" se lo hai)
-		tile_map_layer.set_cell(tile_coords, -1) 
+		# --- LA MAGIA DEL CEPPO ---
+		# Rimuove il quadrato verde di selezione (per evitare che rimanga sul ceppo)
+		remove_tile_highlight(tile_coords) # Solor DEBUG
+		
+		# Sostituisce il tile con il ceppo
+		tile_map_layer.set_cell(tile_coords, STUMP_SOURCE_ID, STUMP_ATLAS_COORDS)
 		
 	return max(0, wood_yield)
 
@@ -182,3 +205,81 @@ func get_closest_tree_around(start_tile: Vector2i, max_radius: int = 5) -> Vecto
 			if is_tree(start_tile + Vector2i(r, y)): return start_tile + Vector2i(r, y)
 			
 	return Vector2i(-1, -1) # Nessun albero trovato nel raggio
+
+
+# --- GESTIONE EVIDENZIAZIONE TILE (FEEDBACK VISIVO) --- SOLO DEBUG
+var targeted_tiles: Dictionary = {}
+const TILE_SIZE: Vector2 = Vector2(32, 32) # Cambialo se i tuoi tile sono 16x16 o 64x64!
+
+func add_tile_highlight(tile_coords: Vector2i) -> void:
+	if targeted_tiles.has(tile_coords):
+		targeted_tiles[tile_coords] += 1
+	else:
+		targeted_tiles[tile_coords] = 1
+	queue_redraw() # Richiede a Godot di aggiornare il disegno a schermo
+
+func remove_tile_highlight(tile_coords: Vector2i) -> void:
+	if targeted_tiles.has(tile_coords):
+		targeted_tiles[tile_coords] -= 1
+		if targeted_tiles[tile_coords] <= 0:
+			targeted_tiles.erase(tile_coords)
+	queue_redraw()
+
+# Questa funzione nativa di Godot disegna forme geometriche a schermo
+func _draw() -> void:
+	if not tile_map_layer: 
+		return
+		
+	for tile in targeted_tiles.keys():
+		# 1. Troviamo il centro del tile rispetto al TileMap
+		var local_center = tile_map_layer.map_to_local(tile)
+		
+		# 2. Lo convertiamo in coordinate globali assolute 
+		# (fondamentale se il TileMapLayer non si trova esattamente a 0,0)
+		var global_center = tile_map_layer.to_global(local_center)
+		
+		# 3. Calcoliamo l'angolo in alto a sinistra del rettangolo
+		var top_left = global_center - (TILE_SIZE / 2.0)
+		var rect = Rect2(top_left, TILE_SIZE)
+		
+		# Disegna il rettangolo (Colore Verde chiaro, NON riempito, spessore 2.0 pixel)
+		draw_rect(rect, Color(0.2, 0.9, 0.2, 0.8), false, 2.0)
+
+# Trova il centro del tile libero adiacente all'albero più vicino all'unità (comprese le diagonali)
+func get_best_chopping_position(tree_tile: Vector2i, unit_global_pos: Vector2) -> Vector2:
+	var best_pos: Vector2 = Vector2.ZERO
+	var min_dist: float = INF
+	var found_valid = false
+	
+	# Le 8 direzioni: Cardinali + Diagonali
+	var directions = [
+		Vector2i.UP,      # Nord (0, -1)
+		Vector2i.DOWN,    # Sud (0, 1)
+		Vector2i.LEFT,    # Ovest (-1, 0)
+		Vector2i.RIGHT,   # Est (1, 0)
+		Vector2i(1, -1),  # Nord-Est
+		Vector2i(1, 1),   # Sud-Est
+		Vector2i(-1, 1),  # Sud-Ovest
+		Vector2i(-1, -1)  # Nord-Ovest
+	]
+	
+	for dir in directions:
+		var neighbor_tile = tree_tile + dir
+		
+		# Controlla che il tile adiacente NON sia un altro albero 
+		# (Se hai altri ostacoli, es. acqua/muri, aggiungi qui il controllo)
+		if not is_tree(neighbor_tile):
+			var neighbor_global_center = get_global_from_tile(neighbor_tile)
+			var dist = neighbor_global_center.distance_squared_to(unit_global_pos)
+			
+			if dist < min_dist:
+				min_dist = dist
+				best_pos = neighbor_global_center
+				found_valid = true
+				
+	# Se trova un tile libero, restituisce il centro perfetto
+	if found_valid:
+		return best_pos
+		
+	# Fallback (se l'albero è completamente circondato, lo manda al centro dell'albero stesso)
+	return get_global_from_tile(tree_tile)

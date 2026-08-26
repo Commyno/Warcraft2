@@ -71,11 +71,8 @@ func _unhandled_input(event: InputEvent) -> void:
 						for unit in mobile_units:
 							# Solo i Peasant hanno l'abilità di tagliare!
 							if unit is Peasant:
-								# Calcoliamo la direzione per farlo fermare dal lato giusto
-								var direction_to_tree = (tree_global_pos - unit.global_position).normalized()
-								# Troviamo il tile libero adiacente all'albero
-								var safe_destination = GridManager.get_adjacent_free_position(tree_global_pos, Vector2i(1, 1), direction_to_tree, unit)
-								
+								# Troviamo il centro del tile adiacente più vicino e sicuro
+								var safe_destination = GridManager.get_best_chopping_position(clicked_tile, unit.global_position)
 								unit.interact_with_tile(clicked_tile, safe_destination)
 							else:
 								# Se per caso selezioni soldati e contadini insieme e clicchi un albero, 

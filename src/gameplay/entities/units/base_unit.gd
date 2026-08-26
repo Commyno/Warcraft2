@@ -72,8 +72,21 @@ var last_facing_dir: Vector2 = Vector2.DOWN     # Per tracciare lo sguardo relat
 var intended_dir: Vector2 = Vector2.DOWN
 var current_target: Node2D = null
 var current_offset_target: float = 15.0
-var target_tile: Vector2i = Vector2i(-1, -1)
+#var target_tile: Vector2i = Vector2i(-1, -1) Solo per DEBUG
 var is_moving_to_tile: bool = false
+
+# Quando questa variabile cambia, si attiva in automatico il codice qui sotto
+var target_tile: Vector2i = Vector2i(-1, -1):
+	set(value):
+		# Rimuovi l'evidenziazione dal VECCHIO bersaglio (se esisteva)
+		if target_tile != Vector2i(-1, -1) and GridManager:
+			GridManager.remove_tile_highlight(target_tile)
+			
+		target_tile = value
+		
+		# Aggiungi l'evidenziazione al NUOVO bersaglio (se esiste)
+		if target_tile != Vector2i(-1, -1) and GridManager:
+			GridManager.add_tile_highlight(target_tile)
 
 var state: String = "Idle"
 var last_state: String = "None"
@@ -209,9 +222,30 @@ func _physics_process(_delta: float) -> void:
 			
 		# 2. SE IL NAV AGENT HA FINITO MA SIAMO LONTANI (es. bloccati)
 		elif nav_agent.is_navigation_finished():
-			velocity = Vector2.ZERO
 			is_moving = false
+			velocity = Vector2.ZERO
 			update_animation()
+
+			if distance_to_target <= 50.0:
+				
+				# Se era un Nodo (es. Miniera)
+				if current_target != null:
+					if nav_agent:
+						nav_agent.set_velocity(Vector2.ZERO)
+						nav_agent.target_position = global_position
+					var target_to_interact = current_target 
+					current_target = null
+					_start_interaction(target_to_interact)
+					
+				# Se era un Tile (es. Albero)
+				elif is_moving_to_tile:
+					if nav_agent:
+						nav_agent.set_velocity(Vector2.ZERO)
+						nav_agent.target_position = global_position
+					var tile_to_interact = target_tile
+					is_moving_to_tile = false
+					target_tile = Vector2i(-1, -1)
+					_start_tile_interaction(tile_to_interact)
 			return
 
 		# 3. MOVIMENTO (Siamo ancora in viaggio)
@@ -272,11 +306,6 @@ func update_animation() -> void:
 			animation_tree.set("parameters/Walk/blend_position", move_dir)
 			state_machine.travel("Walk")
 			state = "Walk"
-		
-		elif is_attacking:
-			animation_tree.set("parameters/Attack/blend_position", move_dir)
-			state_machine.travel("Attack")
-			state = "Attack"
 		
 		else:
 			# Aggiorna BlendSpace e Stato Idle
@@ -458,7 +487,7 @@ func interact_with(target: Node2D) -> void:
 func interact_with_tile(tile_coords: Vector2i, safe_destination: Vector2) -> void:
 	target_tile = tile_coords
 	is_moving_to_tile = true
-	current_offset_target = 3.0 # Tolleranza di arrivo molto stretta
+	current_offset_target = 3.0 # La tolleranza stretta ora funzionerà benissimo!
 	move_to(safe_destination)
 
 # Funzione virtuale che il Peasant sovrascriverà

@@ -258,9 +258,6 @@ texture_filter = 1
 script = ExtResource("1_1l5ov")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1820984858]
-offset = Vector2(0, -5)
-hframes = 5
-vframes = 11
 
 [node name="SelectionRing" type="Node2D" parent="." unique_id=176872349]
 z_index = -1

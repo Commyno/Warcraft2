@@ -1,7 +1,7 @@
 class_name Peasant
 extends BaseUnit
 
-enum PeasantState { IDLE, MOVING, MINING, RETURNING_RESOURCES, CHOPPING }
+enum PeasantState { IDLE, MOVING, MINING, RETURNING_RESOURCES, CHOPPING, ATTACKING }
 enum ResourceType { NONE, WOOD, GOLD }
 
 const PEASANT_TEXTURES = {
@@ -33,8 +33,19 @@ var target_mine: GoldMine = null
 var current_resource: ResourceType = ResourceType.NONE
 var is_collecting: bool = false
 var resource_amount: int = 0
-var target_resource_tile: Vector2i = Vector2i(-1, -1)
+#var target_resource_tile: Vector2i = Vector2i(-1, -1) Solo DEBUG
 var action_timer: float = 0.0
+
+# Automatismo per il feedback visivo dell'albero in fase di taglio
+var target_resource_tile: Vector2i = Vector2i(-1, -1):
+	set(value):
+		if target_resource_tile != Vector2i(-1, -1) and GridManager:
+			GridManager.remove_tile_highlight(target_resource_tile)
+			
+		target_resource_tile = value
+		
+		if target_resource_tile != Vector2i(-1, -1) and GridManager:
+			GridManager.add_tile_highlight(target_resource_tile)
 
 func _ready() -> void:
 	super._ready()
@@ -54,7 +65,6 @@ func _process(delta: float) -> void:
 # --- GESTIONE INTERAZIONE E MINIERA ---
 
 func _start_interaction(target: Node2D) -> void:
-	
 	# --- 1. GESTIONE MINIERA (Raccolta) ---
 	if target is GoldMine:
 		# --- DIMENTICA LA LEGNA ---
@@ -199,7 +209,7 @@ func exit_mine(gold_amount: int) -> void:
 	is_moving = false
 	update_animation()
 
-# 6. Riattivazione collisioni e avoidance[cite: 6]
+	# 6. Riattivazione collisioni e avoidance[cite: 6]
 	if has_node("CollisionShape2D"):
 		collision_shape.set_deferred("disabled", false)
 	
@@ -244,6 +254,7 @@ func exit_mine(gold_amount: int) -> void:
 	#else:
 		#print("Errore: Nessun Municipio trovato sulla mappa!")
 func _go_to_town_hall():
+	peasant_state = PeasantState.RETURNING_RESOURCES
 	var valid_buildings = []
 	
 	# Recupera gli edifici dalla scena tramite i gruppi assegnati
@@ -324,7 +335,10 @@ func update_animation() -> void:
 			last_facing_dir = move_dir
 			state_machine.travel("Walk")
 			state = "Walk"
-		elif is_attacking:
+		elif peasant_state == PeasantState.ATTACKING:
+			state_machine.travel("Attack")
+			state = "Attack"
+		elif peasant_state == PeasantState.CHOPPING:
 			state_machine.travel("Attack")
 			state = "Attack"
 		else:
@@ -390,19 +404,40 @@ func _apply_team_color(color: Color) -> void:
 		push_warning("Nessuna texture trovata per il colore: ", color)
 
 # Quando arriva adiacente all'albero
+# Quando arriva adiacente all'albero
 func _start_tile_interaction(tile_coords: Vector2i) -> void:
+	
+	# --- 1. CONTROLLO ZAINO PIENO ---
+	# Se il contadino ha già dell'oro o della legna e clicchi un albero,
+	# prima deve andare a depositare le risorse al volo!
+	if current_resource != ResourceType.NONE and resource_amount > 0:
+		print("Ho già delle risorse! Vado a depositarle alla base.")
+		_go_to_town_hall()
+		return # Blocca l'inizio del taglio
+		
+	# --- 2. CONTROLLO ESISTENZA ALBERO ---
 	if GridManager.is_tree(tile_coords):
-		# --- DIMENTICA LA MINIERA ---
+		# DIMENTICA LA MINIERA
 		target_mine = null 
 		
 		peasant_state = PeasantState.CHOPPING
 		target_resource_tile = tile_coords
 		action_timer = CHOP_SPEED
 		
-		# Opzionale: Gira lo sprite verso l'albero
+		# Gira lo sprite verso l'albero (Aggiorniamo la memoria permanente della direzione!)
 		var tree_global_pos = GridManager.get_global_from_tile(tile_coords)
-		intended_dir = (tree_global_pos - global_position).normalized()
+		var face_direction = (tree_global_pos - global_position).normalized()
+		
+		intended_dir = face_direction
+		last_facing_dir = face_direction # <-- LA RIGA MAGICA
+		
 		update_animation()
+		
+	# --- 3. L'ALBERO È STATO DISTRUTTO MENTRE CAMMINAVA ---
+	else:
+		print("Albero non trovato all'arrivo! Ne cerco un altro vicino...")
+		# Invece di fermarsi a caso, cerca automaticamente il prossimo albero
+		_find_next_tree(tile_coords)
 
 # Il colpo d'ascia effettivo (chiamato dal _process ogni secondo)
 func _perform_chop() -> void:

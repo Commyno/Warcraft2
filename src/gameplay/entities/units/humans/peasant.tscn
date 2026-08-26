@@ -18,30 +18,31 @@
 radius = 12.0
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_it0x8"]
-animation = &"Peasant/death_down"
+animation = &"attack_down"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_x51p8"]
-animation = &"Peasant/attack_up"
+animation = &"attack_up"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ss7ad"]
-animation = &"Peasant/attack_right"
+animation = &"attack_right"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_f3l16"]
-animation = &"Peasant/attack_right"
+animation = &"attack_right"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8p6at"]
-animation = &"Peasant/attack_downright"
+animation = &"attack_downright"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_sn5uc"]
-animation = &"Peasant/attack_upright"
+animation = &"attack_upright"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_klbb3"]
-animation = &"Peasant/attack_downright"
+animation = &"attack_downright"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_we6oq"]
-animation = &"Peasant/attack_upright"
+animation = &"attack_upright"
 
 [sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_lujnm"]
+blend_mode = 1
 blend_point_0/node = SubResource("AnimationNodeAnimation_it0x8")
 blend_point_0/pos = Vector2(0, 1)
 blend_point_0/name = &"attack_down"
@@ -521,7 +522,7 @@ states/Start/position = Vector2(228, 100)
 states/Walk/node = SubResource("AnimationNodeBlendTree_0lsul")
 states/Walk/position = Vector2(394, -36.375)
 transitions = ["Death", "End", SubResource("AnimationNodeStateMachineTransition_i385o"), "Attack", "Death", SubResource("AnimationNodeStateMachineTransition_5h28n"), "Walk", "Attack", SubResource("AnimationNodeStateMachineTransition_y0wp2"), "Attack", "Walk", SubResource("AnimationNodeStateMachineTransition_pj461"), "Start", "Idle", SubResource("AnimationNodeStateMachineTransition_v4hrd"), "Idle", "Walk", SubResource("AnimationNodeStateMachineTransition_nda6x"), "Walk", "Idle", SubResource("AnimationNodeStateMachineTransition_3ilaj"), "Idle", "Attack", SubResource("AnimationNodeStateMachineTransition_ks5ap"), "Attack", "Idle", SubResource("AnimationNodeStateMachineTransition_xipae"), "Idle", "Death", SubResource("AnimationNodeStateMachineTransition_ksief")]
-graph_offset = Vector2(125.175064, -32.15249)
+graph_offset = Vector2(125.175064, -78.01023)
 
 [node name="Peasant" unique_id=330192060 instance=ExtResource("1_qa1gv")]
 script = ExtResource("2_1q6u8")
@@ -533,9 +534,6 @@ available_actions = Array[ExtResource("3_qhgxn")]([ExtResource("4_4b5el"), ExtRe
 
 [node name="Sprite2D" parent="." index="0" unique_id=1820984858]
 texture = ExtResource("3_uscwp")
-offset = Vector2(0, 0)
-hframes = 1
-vframes = 1
 region_enabled = true
 region_rect = Rect2(330, 153, 29, 30)
 
@@ -545,7 +543,7 @@ disabled = true
 
 [node name="NavigationAgent2D" parent="." index="4" unique_id=646343089]
 path_desired_distance = 32.0
-target_desired_distance = 1.0
+target_desired_distance = 16.0
 avoidance_enabled = false
 radius = 16.0
 debug_use_custom = true
@@ -555,6 +553,7 @@ debug_path_custom_color = Color(1, 0.26666668, 1, 1)
 libraries/ = ExtResource("4_7qhc5")
 
 [node name="AnimationTree" parent="." index="6" unique_id=1411396235]
+active = false
 tree_root = SubResource("AnimationNodeStateMachine_0lsul")
 parameters/Idle/ResourceState/current_state = "Normal"
 parameters/Idle/ResourceState/transition_request = ""
@@ -572,3 +571,10 @@ parameters/Walk/Walk_Wood/blend_position = Vector2(0, 0)
 [node name="HealthBar" parent="." index="7" unique_id=1902205037]
 offset_top = -30.0
 offset_bottom = -24.0
+
+[node name="Area2D" parent="." index="8" unique_id=970586467]
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" parent="Area2D" index="0" unique_id=1264182809]
+disabled = true
