@@ -16,9 +16,11 @@ func _ready() -> void:
 		push_warning("TileMap non assegnato al BuildingPlacementManager!")
 
 func _process(_delta: float) -> void:
-	if not is_placing or not preview_building:
-		return
+	if is_placing and preview_building:
+		show_preview_building()
 		
+
+func show_preview_building() -> void:
 	# 1. Calcola la posizione del mouse agganciata alla griglia (Grid Snapping)
 	var raw_mouse_pos = get_global_mouse_position()
 	var snapped_pos = raw_mouse_pos.snapped(Vector2(grid_size, grid_size))

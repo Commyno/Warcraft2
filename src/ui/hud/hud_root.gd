@@ -4,6 +4,7 @@ signal pause_menu(origin: String)
 
 @onready var single_selection_panel: PanelContainer = $MarginContainer/PanelContainer/VContainer/SingleSelectionPanel
 @onready var multi_selection_panel: PanelContainer = $MarginContainer/PanelContainer/VContainer/MultiSelectionPanel
+@onready var action_grid_mc: MarginContainer = $MarginContainer/PanelContainer/VContainer/ActionGridMC
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -31,9 +32,14 @@ func _on_selection_changed(selected_objects: Array[Node2D]) -> void:
 	if count == 0:
 		single_selection_panel.hide()
 		multi_selection_panel.hide()
+		action_grid_mc.hide()
 	elif count == 1:
 		multi_selection_panel.hide()
 		single_selection_panel.show()
+		if selected_objects[0] as BaseResourceBuilding:
+			action_grid_mc.hide()
+		else:
+			action_grid_mc.show()
 		# _update_single_panel_ui(selected_objects[0])
 	else:
 		single_selection_panel.hide()

@@ -1,0 +1,165 @@
+[gd_scene format=3 uid="uid://cidjmt5bpauh3"]
+
+[ext_resource type="Script" uid="uid://om2qa4ce83of" path="res://src/ui/hud/elements/unit_stats_box.gd" id="1_mywxw"]
+[ext_resource type="Texture2D" uid="uid://6steaegwtefg" path="res://assets/GameIcon.png" id="1_nxvsf"]
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="2_mywxw"]
+
+[node name="StatsBox" type="VBoxContainer" unique_id=1285141887]
+script = ExtResource("1_mywxw")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1304174071]
+layout_mode = 2
+
+[node name="ImageVBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1292049867]
+layout_mode = 2
+
+[node name="Portrait" type="TextureRect" parent="HBoxContainer/ImageVBoxContainer" unique_id=1284693393]
+custom_minimum_size = Vector2(40, 30)
+layout_mode = 2
+texture = ExtResource("1_nxvsf")
+expand_mode = 2
+
+[node name="HealthProgressBar" type="ProgressBar" parent="HBoxContainer/ImageVBoxContainer" unique_id=1725364935]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_mywxw")
+theme_override_font_sizes/font_size = 6
+allow_lesser = true
+
+[node name="NameVBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=887323535]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="NomeUnita" type="Label" parent="HBoxContainer/NameVBoxContainer" unique_id=1308202387]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_mywxw")
+theme_override_font_sizes/font_size = 10
+text = "Peasant"
+horizontal_alignment = 1
+
+[node name="Livello" type="Label" parent="HBoxContainer/NameVBoxContainer" unique_id=1482969852]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_mywxw")
+theme_override_font_sizes/font_size = 10
+text = "Livello 1"
+horizontal_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="." unique_id=164080787]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="LabelVBoxContainer" type="VBoxContainer" parent="HBoxContainer2" unique_id=673281293]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="ArmorLabel" type="Label" parent="HBoxContainer2/LabelVBoxContainer" unique_id=1323126532]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_mywxw")
+theme_override_font_sizes/font_size = 6
+text = "Armor: "
+horizontal_alignment = 2
+
+[node name="DamageLabel" type="Label" parent="HBoxContainer2/LabelVBoxContainer" unique_id=1527119395]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_mywxw")
+theme_override_font_sizes/font_size = 6
+text = "Damage: "
+horizontal_alignment = 2
+
+[node name="RangeLabel" type="Label" parent="HBoxContainer2/LabelVBoxContainer" unique_id=437840471]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_mywxw")
+theme_override_font_sizes/font_size = 6
+text = "Range: "
+horizontal_alignment = 2
+
+[node name="SightLabel" type="Label" parent="HBoxContainer2/LabelVBoxContainer" unique_id=868680720]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_mywxw")
+theme_override_font_sizes/font_size = 6
+text = "Sight: "
+horizontal_alignment = 2
+
+[node name="SpeedLabel" type="Label" parent="HBoxContainer2/LabelVBoxContainer" unique_id=1311201720]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_mywxw")
+theme_override_font_sizes/font_size = 6
+text = "Speed: "
+horizontal_alignment = 2
+
+[node name="ValueVBoxContainer" type="VBoxContainer" parent="HBoxContainer2" unique_id=1851453993]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="ArmorValue" type="Label" parent="HBoxContainer2/ValueVBoxContainer" unique_id=1631935579]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_mywxw")
+theme_override_font_sizes/font_size = 6
+text = "0"
+
+[node name="DamageValue" type="Label" parent="HBoxContainer2/ValueVBoxContainer" unique_id=1986159110]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_mywxw")
+theme_override_font_sizes/font_size = 6
+text = "1-5"
+
+[node name="RangeValue" type="Label" parent="HBoxContainer2/ValueVBoxContainer" unique_id=1167524524]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_mywxw")
+theme_override_font_sizes/font_size = 6
+text = "1"
+
+[node name="SightValue" type="Label" parent="HBoxContainer2/ValueVBoxContainer" unique_id=745732111]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_mywxw")
+theme_override_font_sizes/font_size = 6
+text = "4"
+
+[node name="SpeedValue" type="Label" parent="HBoxContainer2/ValueVBoxContainer" unique_id=1047387188]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_mywxw")
+theme_override_font_sizes/font_size = 6
+text = "10"

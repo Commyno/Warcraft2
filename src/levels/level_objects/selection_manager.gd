@@ -13,9 +13,6 @@ var currently_selected: Array[Node2D] = []
 # Soglia in pixel per distinguere un "click" da un "trascinamento"
 const DRAG_THRESHOLD: float = 10.0
 
-# Spaziatura tra le truppe all'interno della formazione (in pixel)
-@export var formation_spacing: float = 64.0
-
 # --- SEGNALI ---
 # Emesso ogni volta che la selezione cambia, passando l'array completo degli elementi selezionati
 signal selection_changed(selected_objects: Array[Node2D])
@@ -82,10 +79,11 @@ func _unhandled_input(event: InputEvent) -> void:
 					# 3. MOVIMENTO NORMALE SULLA MAPPA (Spazio vuoto)
 					else:
 						var final_destination = target_position
-						if not mobile_units.is_empty():
-							final_destination = GridManager.get_available_destination(target_position, mobile_units[0])
+						# Disegno sulla mappa il punto dove ho cliccato
+						final_destination = GridManager.get_available_destination(target_position)
 						debug_click_pos = final_destination
 						queue_redraw()
+						
 						FormationManager.move_units_in_formation(mobile_units, final_destination)
 
 func _draw():
@@ -143,19 +141,24 @@ func _process_selection():
 	# 3. Applica la priorità WC3: Unità > Edifici
 	var units_found: Array[BaseUnit] = []
 	var building_found: BaseBuilding = null
+	var resource_found: BaseResourceBuilding = null
 	
 	for obj in candidates:
 		if obj is BaseUnit:
 			units_found.append(obj as BaseUnit)
 		elif obj is BaseBuilding and building_found == null:
 			building_found = obj as BaseBuilding
-		
+		elif obj is BaseResourceBuilding and resource_found == null:
+			resource_found = obj as BaseResourceBuilding
+	
 	# Se ci sono unità, selezioniamo quelle. Altrimenti seleziona l'edificio (se presente).
 	if not units_found.is_empty():
 		for unit in units_found:
 			_select_object(unit)
 	elif building_found != null:
 		_select_object(building_found)
+	elif resource_found != null:
+		_select_object(resource_found)
 	
 	# 4. Emette il segnale finale verso l'UI (ActionGridUI, Portatili, ecc.)
 	selection_changed.emit(currently_selected)

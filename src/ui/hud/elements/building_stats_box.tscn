@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://l83peu7cjsl"]
+
+[ext_resource type="Script" uid="uid://bgpwsdjpfbhl5" path="res://src/ui/hud/elements/building_stats_box.gd" id="1_6e0s0"]
+[ext_resource type="Texture2D" uid="uid://6steaegwtefg" path="res://assets/GameIcon.png" id="1_joegs"]
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="2_6e0s0"]
+
+[node name="StatsBox" type="VBoxContainer" unique_id=1285141887]
+script = ExtResource("1_6e0s0")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1304174071]
+layout_mode = 2
+
+[node name="ImageVBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1292049867]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Portrait" type="TextureRect" parent="HBoxContainer/ImageVBoxContainer" unique_id=1284693393]
+custom_minimum_size = Vector2(40, 30)
+layout_mode = 2
+texture = ExtResource("1_joegs")
+expand_mode = 2
+
+[node name="HealthProgressBar" type="ProgressBar" parent="HBoxContainer/ImageVBoxContainer" unique_id=1725364935]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_6e0s0")
+theme_override_font_sizes/font_size = 6
+max_value = 1.0
+allow_lesser = true
+show_percentage = false
+
+[node name="HealthLabel" type="Label" parent="HBoxContainer/ImageVBoxContainer" unique_id=579705859]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("2_6e0s0")
+theme_override_font_sizes/font_size = 4
+text = "1200/1200"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NameVBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=887323535]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="NomeBuilding" type="Label" parent="HBoxContainer/NameVBoxContainer" unique_id=1308202387]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_6e0s0")
+theme_override_font_sizes/font_size = 10
+text = "Building"
+horizontal_alignment = 1
+
+[node name="TrainingBoxContainer" type="HBoxContainer" parent="." unique_id=164080787]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="TrainingLabel" type="Label" parent="TrainingBoxContainer" unique_id=1323126532]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_6e0s0")
+theme_override_font_sizes/font_size = 8
+text = "Training:"
+horizontal_alignment = 2
+
+[node name="TrainingIcon" type="TextureRect" parent="TrainingBoxContainer" unique_id=549767480]
+custom_minimum_size = Vector2(40, 30)
+layout_mode = 2
+texture = ExtResource("1_joegs")
+expand_mode = 2
+
+[node name="BuildProgressBar" type="ProgressBar" parent="." unique_id=235530655]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_6e0s0")
+theme_override_font_sizes/font_size = 7
+max_value = 1.0

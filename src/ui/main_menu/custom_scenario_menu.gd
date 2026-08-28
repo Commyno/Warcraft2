@@ -67,10 +67,10 @@ func _on_start_game_button_pressed() -> void:
 	
 	# 1.b Gestione dinamica delle risorse
 	var selected_resources_id = resources_ob.get_selected_id()
-	if selected_resources_id == Globals.ResourcesType.MAP_DEFAULT:
+	if selected_resources_id == Globals.MapResourcesType.MAP_DEFAULT:
 		MatchData.map_resources = map_data["default_resources_player"]
 	else:
-		MatchData.map_resources = selected_resources_id as Globals.ResourcesType
+		MatchData.map_resources = selected_resources_id as Globals.MapResourcesType
 
 	# 1.c Gestione dinamica delle unità
 	var selected_start_units_id = units_ob.get_selected_id()
@@ -90,7 +90,7 @@ func _on_start_game_button_pressed() -> void:
 	
 	# SETUP PARTECIPANTI (Stessa logica di prima)
 	var human_race: Globals.RaceType = MatchData.your_race
-	var resources_type: Globals.ResourcesType = MatchData.map_resources
+	var resource_type: Globals.MapResourcesType = MatchData.map_resources
 	var start_units_type: Globals.StartUnitsType = MatchData.start_units
 
 	# 1. Creiamo la lista dei colori disponibili e la mescoliamo casualmente
@@ -105,7 +105,7 @@ func _on_start_game_button_pressed() -> void:
 		"slot_id": 1,
 		"type": "Human",
 		"race": human_race,
-		"resources": resources_type,
+		"resources": resource_type,
 		"start_units": start_units_type,
 		"team": 1,
 		"color": available_colors.pop_front() 
@@ -129,7 +129,7 @@ func _on_start_game_button_pressed() -> void:
 			"slot_id": slot_id,
 			"type": "AI",
 			"race": ai_race,
-			"resources": resources_type,
+			"resources": resource_type,
 			"start_units": start_units_type,
 			"team": slot_id,
 			"color": assigned_color

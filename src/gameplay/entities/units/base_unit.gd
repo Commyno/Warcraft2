@@ -4,9 +4,12 @@ extends CharacterBody2D
 # --- ENUMERATORI PER TIPI DI DANNO E ARMATURA (Stile WC3) ---
 enum DamageType { NORMAL, PIERCING, SIEGE, MAGIC, HERO }
 enum ArmorType { UNARMORED, LIGHT, MEDIUM, HEAVY, FORTIFIED, HERO }
+enum UnitState { IDLE, MOVING, ATTACKING, PATROLING, BUILDING, REPARING, MINING, CHOPPING, RETURNING_RESOURCES }
 
 # --- PARAMETRI CONFIGURABILI DALL'INSPECTOR ---
 @export_group("Unità")
+@export var player_id: int = 1 : set = _set_player_id
+@export var player_color: Color = Color.BLUE : set = _set_player_color
 @export var unit_name:  String
 @export var unit_icon:  Texture = preload("uid://c0saq2cohbtd2")
 
@@ -68,6 +71,7 @@ var state_machine: AnimationNodeStateMachinePlayback
 var is_moving: bool = false                     # Per tracciare lo stato di movimento reale
 var is_interacting: bool = false                # Per tracciare lo stato di interazione
 var is_attacking: bool = false                  # Per tracciare lo stato di attacco
+var unit_state: UnitState = UnitState.IDLE
 var last_facing_dir: Vector2 = Vector2.DOWN     # Per tracciare lo sguardo relativo all'ultimo movimento
 var intended_dir: Vector2 = Vector2.DOWN
 var current_target: Node2D = null
@@ -126,6 +130,19 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	_handle_regeneration(delta)
 
+func _set_player_id(new_id: int) -> void:
+	player_id = new_id
+
+func _set_player_color(color: Color) -> void:
+	player_color = color
+	_apply_team_color(color)
+
+func _apply_team_color(color: Color) -> void:
+	pass
+
+func get_health() -> float:
+	return current_health / max_health
+
 # --- SISTEMA DI SELEZIONE ---
 
 func select() -> void:
@@ -143,9 +160,11 @@ func is_selected() -> bool:
 
 # --- SISTEMA DI MOVIMENTO ---
 
-func move_to(target_pos: Vector2) -> void:
-# Prima di muoversi, libera la cella che eventualmente occupava prima
+func move_to(target_pos: Vector2, arrival_offset: float = 16.0) -> void:
+	current_offset_target = arrival_offset
+	# Prima di muoversi, libera la cella che eventualmente occupava prima
 	# 1. GridManager.release_unit_reservations(self)
+	GridManager.release_unit_reservations(self)
 	
 	# 1. Assegni il bersaglio
 	nav_agent.target_position = target_pos
@@ -160,6 +179,7 @@ func move_to(target_pos: Vector2) -> void:
 	
 	# 5. Diciamo fisicamente all'unità che deve mettersi in marcia
 	is_moving = true
+	unit_state = UnitState.MOVING
 	update_animation()
 
 func _physics_process(_delta: float) -> void:
@@ -169,7 +189,8 @@ func _physics_process(_delta: float) -> void:
 	var current_position: Vector2 = global_position
 	var distance_to_target: float = 0
 	
-	if is_moving and nav_agent:
+	#if  is_moving and nav_agent:
+	if  unit_state == UnitState.MOVING and nav_agent:
 		distance_to_target = global_position.distance_to(nav_agent.target_position)
 		
 		# 1. SIAMO FISICAMENTE VICINI AL BERSAGLIO?
@@ -186,6 +207,7 @@ func _physics_process(_delta: float) -> void:
 			# --- STRADA 1: INTERAZIONE NODO (es. Miniera, Municipio) ---
 			if current_target != null:
 				is_moving = false
+				unit_state = UnitState.IDLE
 				velocity = Vector2.ZERO
 				if nav_agent:
 					nav_agent.set_velocity(Vector2.ZERO) 
@@ -193,11 +215,14 @@ func _physics_process(_delta: float) -> void:
 					
 				var target_to_interact = current_target 
 				current_target = null
+				update_animation() # Questo aggiornerà 
+				
 				_start_interaction(target_to_interact)
 				
 			# --- STRADA 2: INTERAZIONE TILE (es. Albero) ---
 			elif is_moving_to_tile:
 				is_moving = false
+				unit_state = UnitState.IDLE
 				velocity = Vector2.ZERO
 				if nav_agent:
 					nav_agent.set_velocity(Vector2.ZERO)
@@ -213,6 +238,7 @@ func _physics_process(_delta: float) -> void:
 				global_position = nav_agent.target_position 
 				velocity = Vector2.ZERO
 				is_moving = false
+				unit_state = UnitState.IDLE
 				update_animation()
 				# PRELAZIONE: Registriamo ufficialmente questo tile come occupato!
 				var current_tile = GridManager.get_tile_coords(global_position)
@@ -223,6 +249,7 @@ func _physics_process(_delta: float) -> void:
 		# 2. SE IL NAV AGENT HA FINITO MA SIAMO LONTANI (es. bloccati)
 		elif nav_agent.is_navigation_finished():
 			is_moving = false
+			unit_state = UnitState.IDLE
 			velocity = Vector2.ZERO
 			update_animation()
 
@@ -254,7 +281,7 @@ func _physics_process(_delta: float) -> void:
 		var intended_velocity: Vector2 = intended_dir * move_speed
 		
 		is_moving = true
-		
+		unit_state = UnitState.MOVING
 		if nav_agent.avoidance_enabled:
 			nav_agent.set_velocity(intended_velocity)
 		else:
@@ -299,7 +326,8 @@ func update_animation() -> void:
 		state_machine.travel("Death")
 		state = "Death"
 	else:
-		if is_moving and actual_speed > 10.0:
+		#if is_moving = true and actual_speed > 10.0:
+		if unit_state == UnitState.MOVING and actual_speed > 10.0:
 			last_facing_dir = move_dir
 			
 			# Aggiorna BlendSpace e Stato Walk
@@ -354,9 +382,7 @@ func take_damage(amount: float, source_damage_type: DamageType = DamageType.NORM
 	
 	# Emette il segnale per aggiornare eventuali barre della vita (UI)
 	health_changed.emit(current_health, max_health)
-	
-	collision_shape.disabled = true
-	
+		
 	print(name, " ha subito ", amount, " danni! Vita attuale: ", current_health)
 	
 	if current_health <= 0.0:
@@ -399,7 +425,9 @@ func die() -> void:
 	# Ferma il movimento
 	velocity = Vector2.ZERO
 	is_moving = false
+	unit_state = UnitState.IDLE
 	nav_agent.target_position = global_position
+	collision_shape.disabled = true
 	set_physics_process(false) 
 	
 	# 1. Avvia l'animazione di morte
@@ -466,19 +494,14 @@ func interact_with(target: Node2D) -> void:
 		# 3. Cerchiamo dinamicamente il raggio dell'ostacolo
 		for child in target.get_children():
 			if child is NavigationObstacle2D:
-				# Aggiungiamo un piccolo margine (+ 5.0) per essere sicuri 
-				# che il punto cada esattamente nell'area calpestabile (blu) 
-				# e non sulla linea matematica di confine dell'ostacolo.
-				#edge_offset = child.radius + 0.0 
 				# SOMMIAMO: raggio miniera + raggio unità + un piccolo margine
 				edge_offset = child.radius - 20 # + nav_agent.radius + 10.0
-				current_offset_target = edge_offset
 				break # Appena lo troviamo, interrompiamo la ricerca
 		
 		# 4. Applichiamo l'offset dinamico
 		var optimal_target_pos = target.global_position + (direction_to_unit * edge_offset)
 		
-		move_to(optimal_target_pos)
+		move_to(optimal_target_pos, edge_offset)
 	else:
 		# Bersaglio normale (punto a terra)
 		move_to(target.global_position)
@@ -487,8 +510,7 @@ func interact_with(target: Node2D) -> void:
 func interact_with_tile(tile_coords: Vector2i, safe_destination: Vector2) -> void:
 	target_tile = tile_coords
 	is_moving_to_tile = true
-	current_offset_target = 3.0 # La tolleranza stretta ora funzionerà benissimo!
-	move_to(safe_destination)
+	move_to(safe_destination, 3.0)
 
 # Funzione virtuale che il Peasant sovrascriverà
 func _start_tile_interaction(tile_coords: Vector2i) -> void:

@@ -29,7 +29,7 @@ extends Resource
 # Es: {"slot_id": 1, "start_pos": Vector2i(10, 10), "gold": 500, "lumber": 200}
 @export var max_players: int = 4
 @export var default_race_player: Globals.RaceType = Globals.RaceType.HUMAN
-@export var default_resources_player: Globals.ResourcesType = Globals.ResourcesType.MEDIUM
+@export var default_resources_player: Globals.MapResourcesType = Globals.MapResourcesType.MEDIUM
 @export var default_start_unit_player: Globals.StartUnitsType = Globals.StartUnitsType.ONE_PEASANT_ONLY
 @export var player_spawn_points: Array[Dictionary] = []
 

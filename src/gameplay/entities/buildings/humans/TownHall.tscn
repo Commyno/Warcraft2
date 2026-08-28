@@ -5,3 +5,6 @@
 [node name="TownHallBuilding" unique_id=1889694065 groups=["interactable", "town_hall"] instance=ExtResource("1_tjke5")]
 max_health = 2000.0
 is_under_construction = true
+
+[node name="SelectionRing" parent="." index="1" unique_id=523229799]
+radius = 64.0

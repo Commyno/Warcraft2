@@ -1,9 +1,6 @@
 class_name Peasant
 extends BaseUnit
 
-enum PeasantState { IDLE, MOVING, MINING, RETURNING_RESOURCES, CHOPPING, ATTACKING }
-enum ResourceType { NONE, WOOD, GOLD }
-
 const PEASANT_TEXTURES = {
 	Color.BLACK: preload("res://assets/spritesheets/humans/units/peasant/Humans_Peasant_BLACK.png"),
 	Color.BLUE: preload("res://assets/spritesheets/humans/units/peasant/Humans_Peasant_BLUE.png"),
@@ -17,21 +14,20 @@ const PEASANT_TEXTURES = {
 const CHOP_SPEED: float = 1.0 # Quanto tempo ci mette per dare un colpo di ascia (in secondi)
 const MAX_CARRY: int = 10     # Quanta legna può portare
 
-@export var player_id: int = 1 : set = _set_player_id
-@export var player_color: Color = Color.BLUE : set = _set_player_color
+# --- PARAMETRI CONFIGURABILI DALL'INSPECTOR ---
+@export_group("Building")
 @export var build_range: float = 40.0
 
-var peasant_state: PeasantState = PeasantState.IDLE
 var enter_direction: Vector2 = Vector2.DOWN
 
 # Building variables
-var target_building: BaseBuilding = null
 var is_building: bool = false
+var target_building: BaseBuilding = null
 
 # Mining variables
 var target_mine: GoldMine = null
-var current_resource: ResourceType = ResourceType.NONE
-var is_collecting: bool = false
+var current_resource: Globals.ResourceType = Globals.ResourceType.NONE
+#var is_collecting: bool = false
 var resource_amount: int = 0
 #var target_resource_tile: Vector2i = Vector2i(-1, -1) Solo DEBUG
 var action_timer: float = 0.0
@@ -56,7 +52,7 @@ func _process(delta: float) -> void:
 	_handle_building_logic()
 	
 	# --- CICLO DI TAGLIO LEGNA ---
-	if peasant_state == PeasantState.CHOPPING:
+	if unit_state == UnitState.CHOPPING:
 		action_timer -= delta
 		if action_timer <= 0.0:
 			action_timer = CHOP_SPEED
@@ -65,40 +61,43 @@ func _process(delta: float) -> void:
 # --- GESTIONE INTERAZIONE E MINIERA ---
 
 func _start_interaction(target: Node2D) -> void:
+	# 1. Sganciamento dal eventuale altra attività
+	_stop_collecting_task()
+	
 	# --- 1. GESTIONE MINIERA (Raccolta) ---
 	if target is GoldMine:
 		# --- DIMENTICA LA LEGNA ---
 		target_resource_tile = Vector2i(-1, -1) 
-		peasant_state = PeasantState.IDLE # Resetta eventuali stati di chopping
+		unit_state = UnitState.IDLE # Resetta eventuali stati di chopping
 		
 		# CONTROLLO: Il contadino ha già delle risorse in tasca?
-		if current_resource != ResourceType.NONE and resource_amount > 0:
+		if current_resource != Globals.ResourceType.NONE and resource_amount > 0:
 			print("Ho già delle risorse! Vado a depositarle al Municipio.")
 			_go_to_town_hall()
 			return
 			
 		# Se le tasche sono vuote, procede normalmente con l'ingresso
 		target_mine = target
-		is_collecting = true
+		#is_collecting = true
 		
-		if target.has_method("assign_worker"):
-			var success = target.assign_worker(self)
+		if target.has_method("register_worker"):
+			var success = target.register_worker(self)
 			if not success:
 				print("Miniera piena, non posso entrare!")
-
+	
 	# --- 2. GESTIONE DEPOSITO (Municipio o Lumber Mill) ---
 	elif target.is_in_group("town_hall") or target.is_in_group("lumber_mill"):
 		
-		if current_resource != ResourceType.NONE and resource_amount > 0:
+		if current_resource != Globals.ResourceType.NONE and resource_amount > 0:
 			print("Scaricato ", resource_amount, " risorse alla base!")
 			
 			# Qui è dove dirai al gioco di aggiungere effettivamente i soldi al giocatore.
 			# Esempio: GameManager.add_resource(player_id, current_resource, resource_amount)
 			
 			# 1. Svuotiamo lo zaino del contadino
-			current_resource = ResourceType.NONE
+			current_resource = Globals.ResourceType.NONE
 			resource_amount = 0
-			peasant_state = PeasantState.IDLE
+			unit_state = UnitState.IDLE
 			update_animation() # Questo farà tornare l'animazione senza sacco d'oro
 			
 			# 2. Torna automaticamente a lavorare
@@ -112,9 +111,9 @@ func _start_interaction(target: Node2D) -> void:
 				print("Lavoro finito, attendo ordini.")
 
 func enter_mine(mine: GoldMine) -> void:
-	peasant_state = PeasantState.MINING
+	#is_moving = false
+	unit_state = UnitState.MINING
 	
-	is_moving = false
 	velocity = Vector2.ZERO
 	set_physics_process(false) # Spostato qui in alto!
 
@@ -159,14 +158,14 @@ func enter_mine(mine: GoldMine) -> void:
 	set_physics_process(false)
 
 func exit_mine(gold_amount: int) -> void:
-	# Riattiviamo il process normale e rendiamo visibile il nodo[cite: 1]
+	# 1. Riattiviamo il process normale e rendiamo visibile il nodo[cite: 1]
 	set_process(true)
 	visible = true
 	
 	if unit_sprite:
 		unit_sprite.modulate.a = 0.0
 
-	# 1. Calcoliamo la posizione di uscita[cite: 1]
+	# 2. Calcoliamo la posizione di uscita[cite: 1]
 	var exit_position = global_position
 	
 	if target_mine and is_instance_valid(target_mine) and GridManager.tile_map_layer:
@@ -177,20 +176,21 @@ func exit_mine(gold_amount: int) -> void:
 		# Fallback se manca il target
 		exit_position = global_position + (enter_direction * 32.0)
 
-	# --- MODIFICA 1: Calcolo dinamico della durata basato su move_speed ---
+	# 2. Impostiamo la direzione verso cui è rivolto mentre esce[cite: 1]
+	# Calcolo dinamico della durata basato su move_speed ---
 	var distance = global_position.distance_to(exit_position)
 	var speed = max(move_speed, 1.0) # Evita divisioni per zero
 	var total_duration: float = distance / speed
 	var half_duration: float = total_duration * 0.5
 
-	# 2. Impostiamo la direzione verso cui è rivolto mentre esce[cite: 1]
 	var exit_direction = (exit_position - global_position).normalized()
 	if exit_direction != Vector2.ZERO:
 		intended_dir = exit_direction
 		last_facing_dir = exit_direction
 
 	# 3. Forziamo l'animazione di camminata ("Walk") durante l'uscita[cite: 1]
-	is_moving = true
+	#is_moving = true
+	unit_state = UnitState.MOVING
 	update_animation()
 
 	# 4. Tween di movimento e dissolvenza[cite: 1]
@@ -206,7 +206,8 @@ func exit_mine(gold_amount: int) -> void:
 	await tween.finished
 
 	# 5. Fine movimento: fermiamo l'animazione di camminata[cite: 1]
-	is_moving = false
+	#is_moving = false
+	unit_state = UnitState.IDLE
 	update_animation()
 
 	# 6. Riattivazione collisioni e avoidance[cite: 6]
@@ -236,25 +237,16 @@ func exit_mine(gold_amount: int) -> void:
 	
 	# 7. Gestione oro / prossimo obiettivo[cite: 6]
 	if gold_amount > 0:
-		current_resource = ResourceType.GOLD
+		current_resource = Globals.ResourceType.GOLD
 		resource_amount = gold_amount
 		print("Uscito dalla miniera con ", gold_amount, " di oro.")
 		_go_to_town_hall()
 	else:
-		peasant_state = PeasantState.IDLE
+		unit_state = UnitState.IDLE
 		target_mine = null
 
-#func _go_to_town_hall() -> void:
-	#peasant_state = PeasantState.RETURNING_RESOURCES
-	#
-	#var town_halls = get_tree().get_nodes_in_group("town_hall")
-	#if not town_halls.is_empty():
-		#var target_hall = town_halls[0] 
-		#move_to(target_hall.global_position)
-	#else:
-		#print("Errore: Nessun Municipio trovato sulla mappa!")
 func _go_to_town_hall():
-	peasant_state = PeasantState.RETURNING_RESOURCES
+	unit_state = UnitState.RETURNING_RESOURCES
 	var valid_buildings = []
 	
 	# Recupera gli edifici dalla scena tramite i gruppi assegnati
@@ -265,7 +257,7 @@ func _go_to_town_hall():
 	var potential_targets = town_halls.duplicate()
 	
 	# 1) Se il contadino porta legno, aggiungiamo anche i Lumber Mill alle opzioni
-	if current_resource == ResourceType.WOOD:
+	if current_resource == Globals.ResourceType.WOOD:
 		potential_targets.append_array(lumber_mills)
 		
 	# 2) Filtriamo i risultati in base al player_id
@@ -305,13 +297,13 @@ func update_animation_parameters(move_velocity: Vector2) -> void:
 	animation_tree.set("parameters/Attack/blend_position", move_dir)
 	
 	match current_resource:
-		ResourceType.NONE:
+		Globals.ResourceType.NONE:
 			animation_tree.set("parameters/Walk/ResourceState/transition_request", "Normal")
 			animation_tree.set("parameters/Idle/ResourceState/transition_request", "Normal")
-		ResourceType.GOLD:
+		Globals.ResourceType.GOLD:
 			animation_tree.set("parameters/Walk/ResourceState/transition_request", "Gold")
 			animation_tree.set("parameters/Idle/ResourceState/transition_request", "Gold")
-		ResourceType.WOOD:
+		Globals.ResourceType.WOOD:
 			animation_tree.set("parameters/Walk/ResourceState/transition_request", "Wood")
 			animation_tree.set("parameters/Idle/ResourceState/transition_request", "Wood")
 
@@ -331,14 +323,25 @@ func update_animation() -> void:
 		state_machine.travel("Death")
 		state = "Death"
 	else:
-		if is_moving and actual_speed > 10.0:
+		#if is_moving and actual_speed > 10.0:
+		if unit_state == UnitState.MOVING and actual_speed > 10.0:
 			last_facing_dir = move_dir
 			state_machine.travel("Walk")
 			state = "Walk"
-		elif peasant_state == PeasantState.ATTACKING:
+		elif unit_state == UnitState.RETURNING_RESOURCES:
+			last_facing_dir = move_dir
+			state_machine.travel("Walk")
+			state = "Walk"
+		elif unit_state == UnitState.ATTACKING:
 			state_machine.travel("Attack")
 			state = "Attack"
-		elif peasant_state == PeasantState.CHOPPING:
+		elif unit_state == UnitState.CHOPPING:
+			state_machine.travel("Attack")
+			state = "Attack"
+		elif unit_state == UnitState.MINING:
+			state_machine.travel("Idle")
+			state = "Idle"
+		elif unit_state == UnitState.BUILDING or unit_state == UnitState.REPARING:
 			state_machine.travel("Attack")
 			state = "Attack"
 		else:
@@ -387,13 +390,6 @@ func _stop_current_building_task() -> void:
 	is_building = false
 	target_building = null
 
-func _set_player_id(new_id: int) -> void:
-	player_id = new_id
-
-func _set_player_color(color: Color) -> void:
-	player_color = color
-	_apply_team_color(color)
-
 func _apply_team_color(color: Color) -> void:
 	if not unit_sprite:
 		return
@@ -406,21 +402,28 @@ func _apply_team_color(color: Color) -> void:
 # Quando arriva adiacente all'albero
 # Quando arriva adiacente all'albero
 func _start_tile_interaction(tile_coords: Vector2i) -> void:
-	
-	# --- 1. CONTROLLO ZAINO PIENO ---
-	# Se il contadino ha già dell'oro o della legna e clicchi un albero,
-	# prima deve andare a depositare le risorse al volo!
-	if current_resource != ResourceType.NONE and resource_amount > 0:
+	# 1. Sganciamento dal eventuale altra attività
+	_stop_collecting_task()
+
+	# 2. Controllo se zaino pieno
+	# Se il contadino ha già della legna e clicchi un albero, prima deve
+	# andare a depositare le risorse al volo!
+	if current_resource != Globals.ResourceType.WOOD and resource_amount > 0:
 		print("Ho già delle risorse! Vado a depositarle alla base.")
 		_go_to_town_hall()
 		return # Blocca l'inizio del taglio
 		
-	# --- 2. CONTROLLO ESISTENZA ALBERO ---
+	# 3. Verifico che il tile sia un albero e che non sia stato già
+	#  tagliato via
 	if GridManager.is_tree(tile_coords):
-		# DIMENTICA LA MINIERA
+		# Dimentico la miniera
 		target_mine = null 
+		# Mel caso abbia altre risorse che non erano legno altrimenti le 
+		# avrei depositate, le getto via
+		resource_amount = 0
+		current_resource != Globals.ResourceType.NONE
 		
-		peasant_state = PeasantState.CHOPPING
+		unit_state = UnitState.CHOPPING
 		target_resource_tile = tile_coords
 		action_timer = CHOP_SPEED
 		
@@ -433,7 +436,7 @@ func _start_tile_interaction(tile_coords: Vector2i) -> void:
 		
 		update_animation()
 		
-	# --- 3. L'ALBERO È STATO DISTRUTTO MENTRE CAMMINAVA ---
+	# --- 3. Albero già tagliato mentre ci arrivava, ne cerca un altro
 	else:
 		print("Albero non trovato all'arrivo! Ne cerco un altro vicino...")
 		# Invece di fermarsi a caso, cerca automaticamente il prossimo albero
@@ -445,14 +448,14 @@ func _perform_chop() -> void:
 	var obtained = GridManager.chop_tree(target_resource_tile, 5) 
 	
 	if obtained > 0:
-		current_resource = ResourceType.WOOD
+		current_resource = Globals.ResourceType.WOOD
 		resource_amount += obtained
 		
 		print("Legna attuale: ", resource_amount)
 		
 		if resource_amount >= MAX_CARRY:
 			print("Zaino pieno! Torno alla base.")
-			peasant_state = PeasantState.IDLE # Reset prima del viaggio
+			unit_state = UnitState.IDLE # Reset prima del viaggio
 			_go_to_town_hall()
 	else:
 		# L'albero è crollato prima di riempire lo zaino! 
@@ -473,9 +476,44 @@ func _find_next_tree(start_tile: Vector2i) -> void:
 		interact_with_tile(next_tree, safe_pos)
 	else:
 		print("Foresta disboscata! Nessun albero nel raggio.")
-		peasant_state = PeasantState.IDLE
+		unit_state = UnitState.IDLE
 		target_resource_tile = Vector2i(-1, -1)
 		
 		# Se ha almeno un po' di legna nello zaino, la porta a casa
 		if resource_amount > 0:
 			_go_to_town_hall()
+
+func _stop_collecting_task() -> void:
+	# --- 1. STOP ORO ---
+	if unit_state == UnitState.MINING:
+		if target_mine and is_instance_valid(target_mine):
+			# Nota: prima avevamo usato "unassign_worker", controlla quale nome usi nella GoldMine!
+			if target_mine.has_method("unregister_worker"):
+				target_mine.unregister_worker(self)
+		target_mine = null 
+		
+	# --- 2. STOP LEGNA ---
+	elif unit_state == UnitState.CHOPPING:
+		# Azzera le coordinate. Questo farà scattare il Setter,
+		# che chiederà al GridManager di spegnere il quadrato verde!
+		target_resource_tile = Vector2i(-1, -1)
+		
+		# Resetta il timer del colpo d'ascia
+		action_timer = 0.0
+	
+	# --- 3. STOP BUILDING ---
+	elif unit_state == UnitState.BUILDING:
+		_stop_current_building_task()
+	
+	# --- 4. PULIZIA GENERALE ---
+	# A prescindere da cosa stava facendo, torna in stato di riposo
+	unit_state = UnitState.IDLE
+	
+	# Chiama l'aggiornamento grafico: 
+	# non essendo più in CHOPPING, fermerà l'animazione dell'ascia
+	update_animation()
+
+
+func die() -> void:
+	_stop_collecting_task()
+	super()

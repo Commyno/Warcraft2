@@ -1,24 +1,26 @@
 class_name GoldMine
 extends BaseResourceBuilding
 
-enum MineState { IDLE, ACTIVE, DEPLETED, DESTROYED, INACTIVE }
-var current_state: MineState = MineState.IDLE
+var current_state: ResourceState = ResourceState.IDLE
 
-@export var texture_idle: Texture2D
-@export var texture_active: Texture2D
-@export var texture_depleted: Texture2D
+@export var idle_region: Rect2
+@export var active_region: Rect2
+@export var depleted_region: Rect2
 
 # --- VARIABILI PER I LAVORATORI ---
 @export var max_workers: int = 5
 @export var extraction_time: float = 2.0
 @export var gold_per_cycle: int = 10
 
-var assigned_workers: Array[Node2D] = []
+# --- SEGNALI ---
+signal state_changed(old_state: ResourceState, new_state: ResourceState)
+
+# --- Variabili publiche ---
 var extraction_timer: Timer
 
 func _ready() -> void:
+	super()
 	add_to_group("interactable")
-	change_state(MineState.IDLE)
 	
 	# Creazione del timer ciclico per la miniera
 	extraction_timer = Timer.new()
@@ -26,76 +28,84 @@ func _ready() -> void:
 	extraction_timer.one_shot = false
 	extraction_timer.timeout.connect(_on_extraction_tick)
 	add_child(extraction_timer)
+	extraction_timer.stop()
+	
+	# Imposto lo stao idle manualmente per non far scattare chagne_state
+	current_state = ResourceState.IDLE
+	_set_building_region(idle_region)
 
 func setup(resource_amount: int, status_active: bool) -> void:
-	if sprite: sprite.texture = texture_idle
 	max_resources = resource_amount
 	if status_active: 
-		change_state(MineState.IDLE)
+		change_state(ResourceState.IDLE)
 	else:
-		change_state(MineState.INACTIVE)
+		change_state(ResourceState.INACTIVE)
 
-func change_state(new_state: MineState) -> void:
+func change_state(new_state: ResourceState) -> void:
 	if current_state == new_state:
 		return
-		
+	
+	var old_state = current_state
 	current_state = new_state
 	
 	match current_state:
-		MineState.IDLE:
+		ResourceState.IDLE:
+			_set_building_region(idle_region)
 			add_to_group("interactable")
-			if sprite: sprite.texture = texture_idle
 			extraction_timer.stop()
-		MineState.ACTIVE:
+		ResourceState.ACTIVE:
+			_set_building_region(active_region)
 			add_to_group("interactable")
-			if sprite: sprite.texture = texture_active
 			if extraction_timer.is_stopped():
 				extraction_timer.start()
-		MineState.DEPLETED:
-			if sprite: sprite.texture = texture_depleted
+		ResourceState.DEPLETED:
+			_set_building_region(depleted_region)
 			remove_from_group("interactable")
 			extraction_timer.stop()
-		MineState.DESTROYED:
+		ResourceState.DESTROYED:
+			_set_building_region(depleted_region)
 			remove_from_group("interactable")
 			queue_free()
-		MineState.INACTIVE:
-			if sprite: sprite.texture = texture_depleted
+		ResourceState.INACTIVE:
+			_set_building_region(idle_region)
 			remove_from_group("interactable")
 			extraction_timer.stop()
+	
+	# Emetto il seganle di cambio stato
+	state_changed.emit(old_state, current_state)
 
 # --- GESTIONE LAVORATORI ---
 
-func assign_worker(peasant: Node2D) -> bool:
-	if assigned_workers.size() >= max_workers:
-		print("Miniera piena!")
-		return false
+func register_worker(worker: Node2D) -> bool:
+	if super(worker):
+		if current_state == ResourceState.IDLE:
+			change_state(ResourceState.ACTIVE)
+			
+		# Chiama la funzione di entrata sul peasant
+		if worker.has_method("enter_mine"):
+			worker.enter_mine(self)
 		
-	assigned_workers.append(peasant)
+		return true
 	
-	if current_state == MineState.IDLE:
-		change_state(MineState.ACTIVE)
-		
-	# Chiama la funzione di entrata sul peasant
-	if peasant.has_method("enter_mine"):
-		peasant.enter_mine(self)
-	
-	return true
+	return false
 
 func _on_extraction_tick() -> void:
-	if not assigned_workers.is_empty():
-		var peasant = assigned_workers.pop_front()
+	if not active_workers.is_empty():
+		var peasant = active_workers.pop_front()
 		
 		if is_instance_valid(peasant):
 			# Rilascia il peasant con il carico d'oro
-			peasant.exit_mine(gold_per_cycle)
+			var extracted = extract_resource(gold_per_cycle)
+			peasant.exit_mine(extracted)
 			
-	if assigned_workers.is_empty():
-		change_state(MineState.IDLE)
+	if active_workers.is_empty():
+		change_state(ResourceState.IDLE)
 
-func remove_worker_manually(peasant: Node2D) -> void:
-	if peasant in assigned_workers:
-		assigned_workers.erase(peasant)
-		peasant.exit_mine(0)
+func unregister_worker_manually(worker: Node2D) -> bool:
+	if unregister_worker(worker):
+		if worker.has_method("exit_mine"):
+			worker.exit_mine(0)
 		
-		if assigned_workers.is_empty():
-			change_state(MineState.IDLE)
+		if active_workers.is_empty():
+			change_state(ResourceState.IDLE)
+	return true

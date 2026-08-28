@@ -1,10 +1,14 @@
 class_name BaseResourceBuilding
 extends StaticBody2D
 
+enum ResourceState { IDLE, ACTIVE, DEPLETED, DESTROYED, INACTIVE }
+
 # --- IDENTIFICAZIONE RISORSA ---
 @export var resource_id: int = 0
-@export var resources_name: String = "Oro"
-@export var resources_spritesheet: Texture2D
+@export var resource_name: String = "Nome risorsa"
+@export var resource_type: Globals.ResourceType = Globals.ResourceType.GOLD
+@export var resource_spritesheet: Texture2D
+@export var resource_icon:  Texture = preload("uid://de3gns0d6qacn")
 
 @export_group("Azioni e Abilità")
 @export var available_actions: Array[UnitAction] = []
@@ -16,8 +20,6 @@ extends StaticBody2D
 @export_group("Produzione")
 @export var working_time: float = 2.0
 @export var max_worker_count: int = 4
-@export var region_under_working: Rect2
-@export var region_waiting: Rect2
 
 # --- RIFERIMENTI NODI ---
 @onready var sprite: Sprite2D = $Sprite2D
@@ -29,7 +31,7 @@ extends StaticBody2D
 signal resources_changed(new_resources: float, max_resources: float)
 signal worker_entered(worker: Node2D)
 signal worker_exited(worker: Node2D)
-signal depleted
+signal depleted()
 
 # --- VARIABILI INTERNE ---
 var current_resources: float
@@ -37,11 +39,6 @@ var is_depleted: bool = false
 var active_workers: Array[Node2D] = []
 
 func _ready() -> void:
-	if resources_spritesheet and sprite:
-		sprite.texture = resources_spritesheet
-		sprite.region_enabled = true
-		_set_building_region(region_waiting)
-	
 	current_resources = max_resources
 	
 	if nav_obstacle:
@@ -94,31 +91,35 @@ func spawn_depleted_ground() -> void:
 # --- GESTIONE LAVORATORI ---
 
 func can_accept_worker() -> bool:
-	return not is_depleted and active_workers.size() < max_worker_count
+	if active_workers.size() >= max_worker_count:
+		print("Miniera piena!")
+		return false
+	if is_depleted:
+		print("Miniera distrutta!")
+		return false
+	return true
 
 func register_worker(worker: Node2D) -> bool:
 	if can_accept_worker() and not active_workers.has(worker):
 		active_workers.append(worker)
 		worker_entered.emit(worker)
-		_update_visual_state()
 		return true
 	return false
 
-func unregister_worker(worker: Node2D) -> void:
+func unregister_worker(worker: Node2D) -> bool:
 	if active_workers.has(worker):
 		active_workers.erase(worker)
 		worker_exited.emit(worker)
-		_update_visual_state()
-
-func _update_visual_state() -> void:
-	if active_workers.is_empty():
-		_set_building_region(region_waiting)
-	else:
-		_set_building_region(region_under_working)
+		return true
+	return false
 
 func _set_building_region(region: Rect2) -> void:
-	if sprite and sprite.region_enabled and region != Rect2():
+	if sprite:
+		sprite.region_enabled = true
 		sprite.region_rect = region
+
+func get_health_perc() -> float:
+	return 1.0 # Questo edificio non può essere distrutto dai giocatori
 
 # --- SELEZIONE ---
 

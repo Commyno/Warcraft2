@@ -66,14 +66,14 @@ func try_reserve_tile(tile_coords: Vector2i, unit: Node2D) -> bool:
 
 # Restituisce la posizione globale corretta: se il tile desiderato è occupato, 
 # trova il primo tile libero disponibile nelle vicinanze o lungo il percorso.
-func get_available_destination(target_global_pos: Vector2, unit: Node2D) -> Vector2:
+func get_available_destination(target_global_pos: Vector2, unit: Node2D = null) -> Vector2:
 	if not tile_map_layer:
 		return target_global_pos
 
 	var target_tile = get_tile_coords(target_global_pos)
 
 	# Se il tile di destinazione è libero o già di proprietà di questa unità, usalo
-	if not tile_reservations.has(target_tile) or tile_reservations[target_tile] == unit:
+	if unit == null or not tile_reservations.has(target_tile) or tile_reservations[target_tile] == unit:
 		return get_global_from_tile(target_tile)
 
 	# PRELAZIONE: Se il tile è occupato, cerchiamo un tile libero a spirale/adiacente (raggio 1 e 2)

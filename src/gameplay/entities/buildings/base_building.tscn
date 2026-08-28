@@ -23,11 +23,6 @@ region_under_construction = Rect2(539, 586, 61, 52)
 region_half_built = Rect2(270, 154, 111, 95)
 region_completed = Rect2(270, 17, 119, 104)
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1061573362]
-texture = ExtResource("2_p3hth")
-region_enabled = true
-region_rect = Rect2(270, 17, 119, 104)
-
 [node name="SelectionRing" type="Node2D" parent="." unique_id=523229799]
 z_index = -1
 script = ExtResource("3_a17aa")
@@ -36,6 +31,11 @@ radius = 96.0
 [node name="SelectableComponent" type="Node2D" parent="." unique_id=1665141408 node_paths=PackedStringArray("selection_ring")]
 script = ExtResource("4_wmeqw")
 selection_ring = NodePath("../SelectionRing")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1061573362]
+texture = ExtResource("2_p3hth")
+region_enabled = true
+region_rect = Rect2(270, 17, 119, 104)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=223898250]
 shape = SubResource("CircleShape2D_tpccr")

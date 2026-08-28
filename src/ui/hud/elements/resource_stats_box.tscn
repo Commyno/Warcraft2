@@ -1,0 +1,81 @@
+[gd_scene format=3 uid="uid://cuycp45w1u4p4"]
+
+[ext_resource type="Texture2D" uid="uid://6steaegwtefg" path="res://assets/GameIcon.png" id="1_6icxs"]
+[ext_resource type="Script" uid="uid://1akmev0rti66" path="res://src/ui/hud/elements/resource_stats_box.gd" id="1_obtdh"]
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="2_obtdh"]
+
+[node name="StatsBox" type="VBoxContainer" unique_id=1285141887]
+script = ExtResource("1_obtdh")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1304174071]
+layout_mode = 2
+
+[node name="ImageVBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1292049867]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="Portrait" type="TextureRect" parent="HBoxContainer/ImageVBoxContainer" unique_id=1284693393]
+custom_minimum_size = Vector2(40, 30)
+layout_mode = 2
+texture = ExtResource("1_6icxs")
+expand_mode = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="HBoxContainer/ImageVBoxContainer" unique_id=1725364935]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_obtdh")
+theme_override_font_sizes/font_size = 6
+allow_lesser = true
+show_percentage = false
+
+[node name="NameVBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=887323535]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="NomeUnita" type="Label" parent="HBoxContainer/NameVBoxContainer" unique_id=1308202387]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_obtdh")
+theme_override_font_sizes/font_size = 10
+text = "Resource"
+horizontal_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="." unique_id=164080787]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="LabelVBoxContainer" type="VBoxContainer" parent="HBoxContainer2" unique_id=673281293]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="AmountLabel" type="Label" parent="HBoxContainer2/LabelVBoxContainer" unique_id=1323126532]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_obtdh")
+theme_override_font_sizes/font_size = 8
+text = "Gold Left: "
+horizontal_alignment = 2
+
+[node name="ValueVBoxContainer" type="VBoxContainer" parent="HBoxContainer2" unique_id=1851453993]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="AmountValue" type="Label" parent="HBoxContainer2/ValueVBoxContainer" unique_id=1631935579]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_obtdh")
+theme_override_font_sizes/font_size = 8
+text = "0"

@@ -1,12 +1,9 @@
 [gd_scene format=3 uid="uid://bkpxip1v5ofhn"]
 
 [ext_resource type="Script" uid="uid://h50n331favkx" path="res://src/gameplay/entities/buildings/neutral/gold_mine.gd" id="1_f0tba"]
-[ext_resource type="Texture2D" uid="uid://bu6gxvayxccva" path="res://assets/spritesheets/miscellaneous/Gold Mine - 00.tres" id="2_2emft"]
 [ext_resource type="Texture2D" uid="uid://e0ggs00l7mhs" path="res://assets/spritesheets/miscellaneous/Buildings - Miscellaneous.png" id="3_7syh0"]
-[ext_resource type="Texture2D" uid="uid://dgr8mrb70w1b0" path="res://assets/spritesheets/miscellaneous/Gold Mine - 01.tres" id="3_fu7ff"]
 [ext_resource type="Script" uid="uid://3e5qiqyf3ev3" path="res://src/gameplay/entities/units/selection_ring.gd" id="3_ufxx6"]
 [ext_resource type="Script" uid="uid://65xprcgadmde" path="res://src/gameplay/entities/selectable_component.gd" id="4_bf5qs"]
-[ext_resource type="Texture2D" uid="uid://bmgowm45v1uhe" path="res://assets/spritesheets/miscellaneous/Distrutto - 01.tres" id="4_m4gsa"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_3fq35"]
 radius = 50.0
@@ -20,18 +17,16 @@ radius = 128.0
 
 [node name="GoldMine" type="StaticBody2D" unique_id=1889694065 groups=["buildings", "selectable_units"]]
 script = ExtResource("1_f0tba")
-texture_idle = ExtResource("2_2emft")
-texture_active = ExtResource("3_fu7ff")
-texture_depleted = ExtResource("4_m4gsa")
+idle_region = Rect2(3, 8, 96, 89)
+active_region = Rect2(3, 104, 96, 89)
+depleted_region = Rect2(433, 74, 59, 52)
 max_workers = 4
-resources_spritesheet = ExtResource("3_7syh0")
-region_under_working = Rect2(3, 99, 96, 96)
-region_waiting = Rect2(3, 3, 96, 96)
+resource_spritesheet = ExtResource("3_7syh0")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1061573362]
 texture = ExtResource("3_7syh0")
 region_enabled = true
-region_rect = Rect2(3, 8, 96, 89)
+region_rect = Rect2(433, 74, 59, 52)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=223898250]
 shape = SubResource("CircleShape2D_3fq35")
@@ -40,7 +35,7 @@ shape = SubResource("CircleShape2D_3fq35")
 visible = false
 z_index = -1
 script = ExtResource("3_ufxx6")
-radius = 96.0
+radius = 64.0
 
 [node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="." unique_id=969329888]
 radius = 55.0

@@ -1,10 +1,10 @@
 class_name BaseBuilding
 extends StaticBody2D
 
-@export var player_id: int = 0
-
 # --- PARAMETRI CONFIGURABILI ---
 @export_group("Edificio")
+@export var player_id: int = 1 : set = _set_player_id
+@export var player_color: Color = Color.BLUE : set = _set_player_color
 @export var building_name: String = "Edificio Base"
 @export var building_icon:  Texture = preload("uid://de3gns0d6qacn")
 @export var building_spritesheet: Texture2D
@@ -35,13 +35,17 @@ extends StaticBody2D
 signal health_changed(new_health: float, max_health: float)
 signal construction_completed
 signal construction_progress_updated(current_hp: float, max_hp: float)
+signal work_completed
 signal destroyed()
 
 # --- VARIABILI INTERNE ---
 var current_health: float
 var is_destroyed: bool = false
-var construction_progress: float = 0.0 # Da 0.0 a 1.0
+var construction_progress_perc: float = 0.0 # Da 0.0 a 1.0
 var active_builders: Array[Node2D] = []
+
+var is_training: bool = false
+var training_progress_perc: float = 0.0 # Da 0.0 a 1.0
 
 func _ready() -> void:
 	# 1. Nascondi il cerchio di selezione all'avvio
@@ -71,6 +75,19 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if is_under_construction and not active_builders.is_empty():
 		_advance_construction(delta)
+
+func _set_player_id(new_id: int) -> void:
+	player_id = new_id
+
+func _set_player_color(color: Color) -> void:
+	player_color = color
+	_apply_team_color(color)
+
+func _apply_team_color(color: Color) -> void:
+	pass
+
+func get_health_perc() -> float:
+	return current_health / max_health
 
 # --- SISTEMA DI SELEZIONE ---
 
@@ -152,7 +169,7 @@ func unregister_builder(builder: Node2D) -> void:
 
 func place_under_construction() -> void:
 	is_under_construction = true
-	construction_progress = 0.0
+	construction_progress_perc = 0.0
 	current_health = 1.0 # Parte con pochissima vita
 	_set_building_region(region_under_construction)
 
@@ -160,19 +177,19 @@ func _advance_construction(delta: float) -> void:
 	var count = active_builders.size()
 	var speed_multiplier = 1.0 + (count - 1) * 0.5 
 	
-	construction_progress += (delta / build_time) * speed_multiplier
-	construction_progress = clamp(construction_progress, 0.0, 1.0)
+	construction_progress_perc += (delta / build_time) * speed_multiplier
+	construction_progress_perc = clamp(construction_progress_perc, 0.0, 1.0)
 	
-	current_health = lerp(1.0, max_health, construction_progress)
+	current_health = lerp(1.0, max_health, construction_progress_perc)
 	construction_progress_updated.emit(current_health, max_health)
 	health_changed.emit(current_health, max_health) # Aggiorna l'UI durante la costruzione
 	
 	# Transizione alla fase "metà costruito"
-	if construction_progress >= 0.5 and construction_progress < 1.0:
+	if construction_progress_perc >= 0.5 and construction_progress_perc < 1.0:
 		_set_building_region(region_half_built)			
 	
 	# Completamento
-	if construction_progress >= 1.0:
+	if construction_progress_perc >= 1.0:
 		complete_construction()
 
 func complete_construction() -> void:

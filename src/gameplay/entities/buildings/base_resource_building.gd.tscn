@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://c5r6rroxncul8"]
 
 [ext_resource type="Script" uid="uid://dqlqtmr0t6ako" path="res://src/gameplay/entities/buildings/base_resource_building.gd" id="1_wiw5u"]
-[ext_resource type="Texture2D" uid="uid://e0ggs00l7mhs" path="res://assets/spritesheets/miscellaneous/Buildings - Miscellaneous.png" id="2_cjnhh"]
 [ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/spritesheets/humans/buildings/Humans - Human Buildings (Summer).png" id="2_puxpm"]
 [ext_resource type="Script" uid="uid://3e5qiqyf3ev3" path="res://src/gameplay/entities/units/selection_ring.gd" id="3_cjnhh"]
 [ext_resource type="Script" uid="uid://65xprcgadmde" path="res://src/gameplay/entities/selectable_component.gd" id="4_tb734"]
@@ -18,9 +17,6 @@ size = Vector2(128, 128)
 
 [node name="BaseResourceBuilding" type="StaticBody2D" unique_id=1889694065 groups=["buildings", "selectable_units"]]
 script = ExtResource("1_wiw5u")
-resources_spritesheet = ExtResource("2_cjnhh")
-region_under_working = Rect2(3, 99, 96, 96)
-region_waiting = Rect2(3, 3, 96, 96)
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1061573362]
 texture = ExtResource("2_puxpm")

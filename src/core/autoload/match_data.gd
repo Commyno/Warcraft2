@@ -13,7 +13,7 @@ var selected_map_data   : Dictionary = {} # Conterrà tutti i dati (nome, dimens
 var map_dimensions      : Vector2i = Vector2i.ZERO
 var max_players         : int = 8
 var your_race           : Globals.RaceType = Globals.RaceType.HUMAN
-var map_resources       : Globals.ResourcesType
+var map_resources       : Globals.MapResourcesType
 var start_units         : Globals.StartUnitsType
 var map_tileset         : Globals.MapTilesetType
 
@@ -41,7 +41,7 @@ func reset_match_data() -> void:
 	
 	max_players = 8
 	your_race = Globals.RaceType.MAP_DEFAULT
-	map_resources = Globals.ResourcesType.MAP_DEFAULT
+	map_resources = Globals.MapResourcesType.MAP_DEFAULT
 	start_units = Globals.StartUnitsType.MAP_DEFAULT
 	map_tileset = Globals.MapTilesetType.MAP_DEFAULT
 	map_dimensions = Vector2i.ZERO
@@ -111,7 +111,7 @@ func preload_maps(folder_path: String) -> void:
 					# Variabili locali rinominate (meta_*) per evitare conflitti coi nomi in alto
 					var meta_max_players = map_instance.get_meta("max_players") if map_instance.has_meta("max_players") else 2
 					var meta_def_race = map_instance.get_meta("default_race_player") if map_instance.has_meta("default_race_player") else Globals.RaceType.HUMAN
-					var meta_def_res = map_instance.get_meta("default_resources_player") if map_instance.has_meta("default_resources_player") else Globals.ResourcesType.LOW
+					var meta_def_res = map_instance.get_meta("default_resources_player") if map_instance.has_meta("default_resources_player") else Globals.MapResourcesType.LOW
 					var meta_def_units = map_instance.get_meta("default_start_unit_player") if map_instance.has_meta("default_start_unit_player") else Globals.StartUnitsType.ONE_PEASANT_ONLY
 					
 					available_maps_cache.append({
