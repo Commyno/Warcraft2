@@ -16,6 +16,7 @@ enum UnitState { IDLE, MOVING, ATTACKING, PATROLING, BUILDING, REPARING, MINING,
 @export_group("Azioni e Abilita")
 @export var available_actions: Array[UnitAction] = []
 
+
 # --- STATISTICHE DI BASE ---
 @export_group("Vitalità")
 @export var max_health: float = 100.0
