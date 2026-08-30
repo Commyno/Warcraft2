@@ -5,11 +5,13 @@ extends Node
 # SIGNALS
 # ==========================================
 signal game_over(victorious: bool)
-signal resources_changed(gold: int, lumber: int, oil: int)
+signal resources_changed(gold: int, lumber: int, oil: int, food_used: int, food_max: int)
+signal upgrade_unlocked(upgrade_id: String, new_level: int)
 
 # ==========================================
 # CONSTANTS (PUNTEGGI)
 # ==========================================
+const MAX_FOOD_LIMIT: int = 200 # Limite massimo di cap in Warcraft II
 
 # Punti assegnati per la distruzione di edifici nemici (Umani / Orchi)
 const BUILDING_SCORES = {
@@ -57,55 +59,59 @@ const BTDP_HERO_EXCEPTIONS = {
 	"dentarg": 100
 }
 
+
+# ==========================================
+# VARIABLES: IDENTITY & STATE
+# ==========================================
+@export var player_id      : int = 0
+@export var player_name    : String = ""
+@export var is_human       : bool = false
+@export var is_ai          : bool = false
+@export var is_local_player: bool = false
+var spawn_position         : Vector2i = Vector2i.ZERO
+var color                  : Color = Color.WHITE
+var faction                : String = "Alliance"
+var has_won                : bool = false
+var total_score            : int = 0
+
+
 # ==========================================
 # VARIABLES: RESOURCES (PRIVATE)
 # ==========================================
 var _gold_counts   : int = 0
 var _lumber_counts : int = 0
 var _oil_counts    : int = 0
+var _food_used     : int = 0
+var _food_max      : int = 0
 
-# ==========================================
-# VARIABLES: IDENTITY & STATE
-# ==========================================
-var player_id      : int = 0
-var player_name    : String = ""
-var is_human       : bool = false
-var spawn_position : Vector2i = Vector2i.ZERO
-var color          : Color = Color.WHITE
-var faction        : String = "Neutrale"
-var has_won        : bool = false
-var total_score    : int = 0
-
-# ==========================================
-# VARIABLES: READ-ONLY RESOURCES
-# ==========================================
-var gold_counts   : int:
+# Read-Only Getters
+var gold_counts   : int: 
 	get: return _gold_counts
 var lumber_counts : int:
 	get: return _lumber_counts
-var oil_counts    : int:
+var oil_counts    : int: 
 	get: return _oil_counts
+var food_used     : int: 
+	get: return _food_used
+var food_max      : int: 
+	get: return _food_max
+
 
 # ==========================================
-# VARIABLES: CURRENT ENTITY COUNTS (DYNAMIC)
+# VARIABLES: UPGRADES & TECH TREE
 # ==========================================
-var current_units_count: int:
-	get:
-		var all_units = get_tree().get_nodes_in_group("units")
-		var count = 0
-		for unita in all_units:
-			if "player_id" in unita and unita.player_id == self.player_id:
-				count += 1
-		return count
+# Dizionario degli upgrade attivi e livello (es. {"sword_level": 2, "shield_level": 1})
+var unlocked_upgrades: Dictionary = {}
 
-var current_buildings_count : int:
-	get:
-		var all_buildings = get_tree().get_nodes_in_group("buildings")
-		var count = 0
-		for edificio in all_buildings:
-			if "player_id" in edificio and edificio.player_id == self.player_id:
-				count += 1
-		return count
+# Mappa degli edifici attivi per tipo per controlli Tech-Tree (es. {"barracks": 2, "blacksmith": 1})
+var active_building_types: Dictionary = {}
+
+
+# ==========================================
+# VARIABLES: ENTITY COUNTERS
+# ==========================================
+var current_units_count     : int = 0
+var current_buildings_count : int = 0
 
 # ==========================================
 # VARIABLES: LIFETIME STATISTICS (TOTALS)
@@ -113,8 +119,6 @@ var current_buildings_count : int:
 # Totali di produzione (incrementati quando il giocatore crea qualcosa)
 var total_units_trained   : int = 0
 var total_buildings_built : int = 0
-
-# Totali globali di distruzione
 var total_units_killed        : int = 0
 var total_buildings_destroyed : int = 0
 
@@ -130,80 +134,140 @@ func _ready() -> void:
 # ==========================================
 # SETUP & INITIALIZATION
 # ==========================================
-func setup(id: int, start_pos: Vector2, config: Dictionary) -> void:
+func setup(id: int, start_pos: Vector2i, config: Dictionary) -> void:
 	self.player_id = id
 	self.spawn_position = start_pos
 	
-	# Dati di Identità
-	self.player_name = config.get("name", "Giocatore " + str(id))
+	self.player_name = config.get("name", "Player " + str(id))
 	self.color = config.get("color", Color.WHITE)
-	self.faction = config.get("faction", "Umani")
+	self.faction = config.get("faction", "Alliance")
 	self.is_human = config.get("type", "") == "Human"
-	
-	# Dati delle Risorse (usiamo le variabili private _ per non far scattare i getter in errore)
-	self._gold_counts = config.get("gold", 0)
-	self._lumber_counts = config.get("wood", 0)
+	self.is_local_player = config.get("is_local", false)
+	self.is_ai = not self.is_human
+
+	self._gold_counts = config.get("gold", 1000)
+	self._lumber_counts = config.get("lumber", 500)
 	self._oil_counts = config.get("oil", 0)
+	self._food_used = 0
+	self._food_max = config.get("starting_food_max", 1) # Es. 1 fornito dalla Town Hall iniziale
 	
-	# Avvisiamo l'UI
-	resources_changed.emit(_gold_counts, _lumber_counts, _oil_counts)
+	_notify_resources_changed()
 
 # ==========================================
 # RESOURCE MANAGEMENT
 # ==========================================
+func can_afford(gold: int, lumber: int, oil: int, food: int = 0) -> bool:
+	var has_res = _gold_counts >= gold and _lumber_counts >= lumber and _oil_counts >= oil
+	var has_food = (_food_used + food) <= _food_max
+	return has_res and has_food
+
+func spend_resources(gold: int, lumber: int, oil: int) -> void:
+	_gold_counts -= gold
+	_lumber_counts -= lumber
+	_oil_counts -= oil
+	_notify_resources_changed()
+
+func refund_resources(gold: int, lumber: int, oil: int) -> void:
+	_gold_counts += gold
+	_lumber_counts += lumber
+	_oil_counts += oil
+	_notify_resources_changed()
+
 func add_gold(amount: int) -> void:
 	_gold_counts += amount
-	resources_changed.emit(_gold_counts, _lumber_counts, _oil_counts)
+	_notify_resources_changed()
 
 func add_lumber(amount: int) -> void:
 	_lumber_counts += amount
-	resources_changed.emit(_gold_counts, _lumber_counts, _oil_counts)
+	_notify_resources_changed()
 
 func add_oil(amount: int) -> void:
 	_oil_counts += amount
-	resources_changed.emit(_gold_counts, _lumber_counts, _oil_counts)
+	_notify_resources_changed()
 
-func can_afford(gold_cost: int, lumber_cost: int, oil_cost: int) -> bool:
-	return _gold_counts >= gold_cost and _lumber_counts >= lumber_cost and _oil_counts >= oil_cost
+func consume_food(amount: int) -> void:
+	_food_used += amount
+	_notify_resources_changed()
 
-func spend_resources(gold_cost: int, lumber_cost: int, oil_cost: int) -> void:
-	_gold_counts -= gold_cost
-	_lumber_counts -= lumber_cost
-	_oil_counts -= oil_cost
-	resources_changed.emit(_gold_counts, _lumber_counts, _oil_counts)
+func release_food(amount: int) -> void:
+	_food_used = maxi(0, _food_used - amount)
+	_notify_resources_changed()
+
+func add_food_capacity(amount: int) -> void:
+	_food_max = mini(MAX_FOOD_LIMIT, _food_max + amount)
+	_notify_resources_changed()
+
+func remove_food_capacity(amount: int) -> void:
+	_food_max = maxi(0, _food_max - amount)
+	_notify_resources_changed()
+
+func _notify_resources_changed() -> void:
+	resources_changed.emit(_gold_counts, _lumber_counts, _oil_counts, _food_used, _food_max)
+
+
+# ==========================================
+# UPGRADES & TECH TREE
+# ==========================================
+func unlock_upgrade(upgrade_id: String, bonus_value: int = 1) -> void:
+	unlocked_upgrades[upgrade_id] = unlocked_upgrades.get(upgrade_id, 0) + bonus_value
+	upgrade_unlocked.emit(upgrade_id, unlocked_upgrades[upgrade_id])
+
+func get_upgrade_level(upgrade_id: String) -> int:
+	return unlocked_upgrades.get(upgrade_id, 0)
+
+func has_building(building_id: String) -> bool:
+	return active_building_types.get(building_id, 0) > 0
+
+
+# ==========================================
+# ENTITY REGISTRATION (TRACKING IN REAL TIME)
+# ==========================================
+func register_unit_spawned(unit_data: UnitData) -> void:
+	current_units_count += 1
+	total_units_trained += 1
+	consume_food(unit_data.food_cost)
+
+func register_unit_destroyed(unit_data: UnitData) -> void:
+	current_units_count = maxi(0, current_units_count - 1)
+	release_food(unit_data.food_cost)
+
+func register_building_completed(building_id: String, food_provided: int = 0) -> void:
+	current_buildings_count += 1
+	total_buildings_built += 1
+	active_building_types[building_id] = active_building_types.get(building_id, 0) + 1
+	
+	if food_provided > 0:
+		add_food_capacity(food_provided)
+
+func register_building_lost(building_id: String, food_provided: int = 0) -> void:
+	current_buildings_count = maxi(0, current_buildings_count - 1)
+	
+	if active_building_types.has(building_id):
+		active_building_types[building_id] = maxi(0, active_building_types[building_id] - 1)
+		
+	if food_provided > 0:
+		remove_food_capacity(food_provided)
+		
+	check_defeat()
+
 
 # ==========================================
 # STATISTICS & SCORE TRACKING
 # ==========================================
-
-# Da chiamare quando l'edificio del giocatore finisce l'addestramento
-func register_unit_trained() -> void:
-	total_units_trained += 1
-
-# Da chiamare quando il peon del giocatore finisce di costruire
-func register_building_built() -> void:
-	total_buildings_built += 1
-
-# Da chiamare quando un'unità di questo giocatore distrugge un'unità nemica
 func register_unit_kill(unit_type: String) -> void:
 	total_units_killed += 1
-	if kills_details.has(unit_type):
-		kills_details[unit_type] += 1
-	else:
-		kills_details[unit_type] = 1
+	kills_details[unit_type] = kills_details.get(unit_type, 0) + 1
 
-# Da chiamare quando un'unità di questo giocatore uccide un Eroe nemico
 func register_hero_kill(hero_type: String) -> void:
 	total_units_killed += 1
 	heroes_killed.append(hero_type)
 
-# Da chiamare quando un'unità di questo giocatore distrugge un edificio nemico
 func register_building_razed(building_type: String) -> void:
 	total_buildings_destroyed += 1
-	if buildings_razed_details.has(building_type):
-		buildings_razed_details[building_type] += 1
-	else:
-		buildings_razed_details[building_type] = 1
+	buildings_razed_details[building_type] = buildings_razed_details.get(building_type, 0) + 1
+
+
+
 
 # ==========================================
 # SCORE CALCULATION
@@ -211,34 +275,24 @@ func register_building_razed(building_type: String) -> void:
 func calculate_final_score() -> int:
 	total_score = 0
 	
-	# 1. Bonus Vittoria
 	if has_won:
 		total_score += 500
 		
-	# 2. Punti Unità
 	for unit in kills_details.keys():
 		var count = kills_details[unit]
-		var pts = UNIT_SCORES.get(unit, 10) # 10 punti base se non trovata
+		var pts = UNIT_SCORES.get(unit, 10)
 		total_score += count * pts
 		
-	# 3. Punti Edifici
 	for building in buildings_razed_details.keys():
 		var count = buildings_razed_details[building]
 		var pts = BUILDING_SCORES.get(building, 0)
 		total_score += count * pts
 		
-	# 4. Punti Eroi
 	for hero in heroes_killed:
 		total_score += _get_hero_points(hero)
 		
 	return total_score
 
-func _get_hero_points(hero_type: String) -> int:
-	if BTDP_HERO_EXCEPTIONS.has(hero_type):
-		return BTDP_HERO_EXCEPTIONS[hero_type]
-	
-	# Assumiamo per ora che tutti gli altri Eroi siano di Tides of Darkness
-	return TIDES_OF_DARKNESS_HERO_SCORE
 
 # ==========================================
 # GAME STATE

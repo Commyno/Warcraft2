@@ -1,6 +1,12 @@
 extends Node
 
 # ==========================================
+# CONSTANTS (PUNTEGGI)
+# ==========================================
+
+
+
+# ==========================================
 # IMPOSTAZIONI DELLA PARTITA IN CORSO
 # ==========================================
 var game_mode: Globals.GameType = Globals.GameType.CAMPAIGN
