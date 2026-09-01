@@ -1,62 +1,18 @@
-[gd_scene format=3 uid="uid://bkpxip1v5ofhn"]
+[gd_scene format=3 uid="uid://bq68pwpb62jg0"]
 
-[ext_resource type="Script" uid="uid://h50n331favkx" path="res://src/gameplay/entities/buildings/neutral/gold_mine.gd" id="1_f0tba"]
-[ext_resource type="Texture2D" uid="uid://e0ggs00l7mhs" path="res://assets/spritesheets/miscellaneous/Buildings - Miscellaneous.png" id="3_7syh0"]
-[ext_resource type="Script" uid="uid://3e5qiqyf3ev3" path="res://src/gameplay/entities/units/selection_ring.gd" id="3_ufxx6"]
-[ext_resource type="Script" uid="uid://65xprcgadmde" path="res://src/gameplay/entities/selectable_component.gd" id="4_bf5qs"]
+[ext_resource type="Script" uid="uid://chvo3gidrbbit" path="res://src/gameplay/entities/buildings/neutral/gold_mine.gd" id="1_f0tba"]
+[ext_resource type="PackedScene" uid="uid://dte1tuljlbqt8" path="res://src/gameplay/entities/buildings/resource_building.tscn" id="1_f7tvw"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_3fq35"]
-radius = 50.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omghk"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e33uh"]
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_p2okp"]
-radius = 128.0
-
-[node name="GoldMine" type="StaticBody2D" unique_id=1889694065 groups=["buildings", "selectable_units"]]
+[node name="GoldMine" unique_id=1889694065 instance=ExtResource("1_f7tvw")]
 script = ExtResource("1_f0tba")
-idle_region = Rect2(3, 8, 96, 89)
-active_region = Rect2(3, 104, 96, 89)
-depleted_region = Rect2(433, 74, 59, 52)
 max_workers = 4
-resource_spritesheet = ExtResource("3_7syh0")
+resource_per_cycle = 10
+building_name = "Miniera"
+building_spritesheet = null
+region_completed = Rect2(3, 8, 96, 89)
+region_idle = Rect2(3, 8, 96, 89)
+region_active = Rect2(3, 104, 96, 89)
+region_depleted = Rect2(433, 8, 63, 59)
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1061573362]
-texture = ExtResource("3_7syh0")
-region_enabled = true
-region_rect = Rect2(433, 74, 59, 52)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=223898250]
-shape = SubResource("CircleShape2D_3fq35")
-
-[node name="SelectionRing" type="Node2D" parent="." unique_id=523229799]
-visible = false
-z_index = -1
-script = ExtResource("3_ufxx6")
-radius = 64.0
-
-[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="." unique_id=969329888]
-radius = 55.0
-affect_navigation_mesh = true
-avoidance_layers = 2
-
-[node name="HealthBar" type="ProgressBar" parent="." unique_id=1652500946]
-offset_left = -64.0
-offset_top = -64.0
-offset_right = 64.0
-offset_bottom = -58.0
-theme_override_styles/background = SubResource("StyleBoxFlat_omghk")
-theme_override_styles/fill = SubResource("StyleBoxFlat_e33uh")
-value = 100.0
-show_percentage = false
-
-[node name="PlacementArea" type="Area2D" parent="." unique_id=735967493]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlacementArea" unique_id=400391067]
-shape = SubResource("CircleShape2D_p2okp")
-
-[node name="SelectableComponent" type="Node2D" parent="." unique_id=1665141408 node_paths=PackedStringArray("selection_ring")]
-script = ExtResource("4_bf5qs")
-selection_ring = NodePath("../SelectionRing")
+[node name="Sprite2D" parent="." index="2" unique_id=1061573362]
+region_rect = Rect2(3, 8, 96, 89)

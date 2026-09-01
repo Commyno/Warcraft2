@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://cdp0lbjingbod"]
+
+[ext_resource type="PackedScene" uid="uid://dbvpvnxbtn1su" path="res://src/gameplay/entities/buildings/production_building.tscn" id="1_r3mtd"]
+[ext_resource type="Script" uid="uid://bdvowwie5sfrw" path="res://src/gameplay/entities/buildings/humans/town_hall.gd" id="2_fr43j"]
+[ext_resource type="Script" uid="uid://bwo8h3bftdqwy" path="res://src/resources/unit_data.gd" id="3_glky6"]
+
+[node name="TownHall" unique_id=1889694065 instance=ExtResource("1_r3mtd")]
+script = ExtResource("2_fr43j")
+trainable_units = Array[ExtResource("3_glky6")]([])
+
+[node name="NavigationObstacle2D" parent="." index="4" unique_id=969329888]
+radius = 90.0

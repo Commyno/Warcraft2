@@ -1,25 +1,35 @@
-[gd_scene format=3 uid="uid://ps0namuswefp"]
+[gd_scene format=3 uid="uid://dy2al0y75sb1r"]
 
-[ext_resource type="PackedScene" uid="uid://gqjr7f7ijo08" path="res://src/gameplay/entities/buildings/base_building.tscn" id="1_q4aah"]
+[ext_resource type="PackedScene" uid="uid://dbvpvnxbtn1su" path="res://src/gameplay/entities/buildings/production_building.tscn" id="1_enm2v"]
+[ext_resource type="Texture2D" uid="uid://2om5ope4lk8r" path="res://assets/spritesheets/ui/UI - Icons.png" id="2_7ui8n"]
+[ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/spritesheets/humans/buildings/Humans - Human Buildings (Summer).png" id="3_xhu21"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_nowah"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_7ui8n"]
+atlas = ExtResource("2_7ui8n")
+region = Rect2(398, 128, 46, 38)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xhu21"]
 radius = 32.0
 
-[node name="FarmBuilding" unique_id=1889694065 instance=ExtResource("1_q4aah")]
-max_health = 2000.0
-is_under_construction = true
+[node name="Farm" unique_id=1889694065 instance=ExtResource("1_enm2v")]
+max_queue_size = 0
+building_name = "Farm"
+building_icon = SubResource("AtlasTexture_7ui8n")
+building_spritesheet = ExtResource("3_xhu21")
+build_time = 30.0
 region_under_construction = Rect2(547, 527, 48, 39)
-region_half_built = Rect2(398, 73, 63, 59)
+region_first_step_build = Rect2(539, 586, 61, 52)
+region_second_step_build = Rect2(398, 73, 63, 59)
 region_completed = Rect2(398, 4, 64, 64)
 
-[node name="Sprite2D" parent="." index="0" unique_id=1061573362]
-region_rect = Rect2(398, 4, 64, 64)
-
-[node name="SelectionRing" parent="." index="1" unique_id=523229799]
+[node name="SelectionRing" parent="." index="0" unique_id=523229799]
 radius = 32.0
 
+[node name="Sprite2D" parent="." index="2" unique_id=1061573362]
+region_rect = Rect2(398, 4, 64, 64)
+
 [node name="CollisionShape2D" parent="." index="3" unique_id=223898250]
-shape = SubResource("CircleShape2D_nowah")
+shape = SubResource("CircleShape2D_xhu21")
 
 [node name="NavigationObstacle2D" parent="." index="4" unique_id=969329888]
 radius = 40.0

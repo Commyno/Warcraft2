@@ -17,11 +17,6 @@ radius = 128.0
 
 [node name="BaseBuilding" type="StaticBody2D" unique_id=1889694065 groups=["buildings", "selectable_units"]]
 script = ExtResource("1_tpccr")
-building_spritesheet = ExtResource("2_p3hth")
-is_under_construction = false
-region_under_construction = Rect2(539, 586, 61, 52)
-region_half_built = Rect2(270, 154, 111, 95)
-region_completed = Rect2(270, 17, 119, 104)
 
 [node name="SelectionRing" type="Node2D" parent="." unique_id=523229799]
 z_index = -1
@@ -52,6 +47,7 @@ offset_right = 64.0
 offset_bottom = -58.0
 theme_override_styles/background = SubResource("StyleBoxFlat_omghk")
 theme_override_styles/fill = SubResource("StyleBoxFlat_e33uh")
+step = 1.0
 value = 100.0
 show_percentage = false
 

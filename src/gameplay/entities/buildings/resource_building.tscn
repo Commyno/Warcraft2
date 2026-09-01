@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://dte1tuljlbqt8"]
+
+[ext_resource type="PackedScene" uid="uid://gqjr7f7ijo08" path="res://src/gameplay/entities/buildings/base_building.tscn" id="1_pxcn6"]
+[ext_resource type="Script" uid="uid://dvxg0fwtkpavx" path="res://src/gameplay/entities/buildings/resource_building.gd" id="2_m4jdb"]
+[ext_resource type="Texture2D" uid="uid://e0ggs00l7mhs" path="res://assets/spritesheets/miscellaneous/Buildings - Miscellaneous.png" id="3_o8spf"]
+
+[node name="BaseResource" unique_id=1889694065 instance=ExtResource("1_pxcn6")]
+script = ExtResource("2_m4jdb")
+resource_id = 0
+resource_type = 2
+max_resources = 10000
+working_time = 2.0
+max_worker_count = 4
+building_name = "Resource"
+building_spritesheet = ExtResource("3_o8spf")
+region_under_construction = Rect2(0, 0, 0, 0)
+region_half_built = Rect2(0, 0, 0, 0)
+region_completed = Rect2(0, 0, 0, 0)
+
+[node name="Sprite2D" parent="." index="2" unique_id=1061573362]
+texture = ExtResource("3_o8spf")
+
+[node name="NavigationObstacle2D" parent="." index="4" unique_id=969329888]
+radius = 90.0

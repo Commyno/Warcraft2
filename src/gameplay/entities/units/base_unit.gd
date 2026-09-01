@@ -8,7 +8,7 @@ enum UnitState { IDLE, MOVING, ATTACKING, PATROLING, BUILDING, REPARING, MINING,
 
 # --- PARAMETRI CONFIGURABILI DALL'INSPECTOR ---
 @export_group("Unità")
-@export var player_id: int = 1 : set = _set_player_id
+@export var player_owner: Player # Assegnato allo spawn o tramite editor
 @export var player_color: Color = Color.BLUE : set = _set_player_color
 @export var unit_name:  String
 @export var unit_icon:  Texture = preload("uid://c0saq2cohbtd2")
@@ -62,6 +62,7 @@ signal died()
 const INTERACT_DISTANCE: float = 40.0           # Quanto vicino deve essere per intereggire
 
 # --- VARIABILI VITA ---
+var player_id: int = -1 : get = _get_player_id
 var current_health: float
 var current_mana: float
 var is_dead: bool = false
@@ -131,8 +132,10 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	_handle_regeneration(delta)
 
-func _set_player_id(new_id: int) -> void:
-	player_id = new_id
+func _get_player_id() -> int:
+	if is_instance_valid(player_owner):
+		return player_owner.player_id
+	return -1
 
 func _set_player_color(color: Color) -> void:
 	player_color = color
@@ -490,19 +493,19 @@ func interact_with(target: Node2D) -> void:
 		var direction_to_unit = (global_position - target.global_position).normalized()
 		
 		# 2. Valore di default
-		var edge_offset: float = 50.0
+		var edge_offset: float = 5.0 #50.0
 		
 		# 3. Cerchiamo dinamicamente il raggio dell'ostacolo
 		for child in target.get_children():
 			if child is NavigationObstacle2D:
 				# SOMMIAMO: raggio miniera + raggio unità + un piccolo margine
-				edge_offset = child.radius - 20 # + nav_agent.radius + 10.0
+				edge_offset = child.radius - 18 # + nav_agent.radius + 10.0
 				break # Appena lo troviamo, interrompiamo la ricerca
 		
 		# 4. Applichiamo l'offset dinamico
 		var optimal_target_pos = target.global_position + (direction_to_unit * edge_offset)
 		
-		move_to(optimal_target_pos, edge_offset)
+		move_to(optimal_target_pos, 5.0) #edge_offset)
 	else:
 		# Bersaglio normale (punto a terra)
 		move_to(target.global_position)

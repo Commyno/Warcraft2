@@ -141,15 +141,15 @@ func _process_selection():
 	# 3. Applica la priorità WC3: Unità > Edifici
 	var units_found: Array[BaseUnit] = []
 	var building_found: BaseBuilding = null
-	var resource_found: BaseResourceBuilding = null
+	var resource_found: ResourceBuilding = null
 	
 	for obj in candidates:
 		if obj is BaseUnit:
 			units_found.append(obj as BaseUnit)
 		elif obj is BaseBuilding and building_found == null:
 			building_found = obj as BaseBuilding
-		elif obj is BaseResourceBuilding and resource_found == null:
-			resource_found = obj as BaseResourceBuilding
+		elif obj is ResourceBuilding and resource_found == null:
+			resource_found = obj as ResourceBuilding
 	
 	# Se ci sono unità, selezioniamo quelle. Altrimenti seleziona l'edificio (se presente).
 	if not units_found.is_empty():

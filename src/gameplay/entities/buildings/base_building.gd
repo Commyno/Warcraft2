@@ -1,12 +1,14 @@
 class_name BaseBuilding
 extends StaticBody2D
 
+enum BuildingState { IDLE, ACTIVE, DEPLETED, DESTROYED, INACTIVE }
+
 # --- PARAMETRI CONFIGURABILI ---
 @export_group("Edificio")
-@export var player_id: int = 1 : set = _set_player_id
+@export var player_owner: Player # Assegnato allo spawn o tramite editor
 @export var player_color: Color = Color.BLUE : set = _set_player_color
 @export var building_name: String = "Edificio Base"
-@export var building_icon:  Texture = preload("uid://de3gns0d6qacn")
+@export var building_icon:  Texture = preload("uid://dibevppt5yrf2")
 @export var building_spritesheet: Texture2D
 
 @export_group("Azioni e Abilità")
@@ -19,10 +21,14 @@ extends StaticBody2D
 # --- PARAMETRI DI COSTRUZIONE ---
 @export_group("Costruzione")
 @export var build_time: float = 10.0
-@export var is_under_construction: bool = true
+@export var is_under_construction: bool = false
 @export var region_under_construction: Rect2
-@export var region_half_built: Rect2
+@export var region_first_step_build: Rect2
+@export var region_second_step_build: Rect2
 @export var region_completed: Rect2
+@export var region_idle: Rect2
+@export var region_active: Rect2
+@export var region_depleted: Rect2
 
 # --- RIFERIMENTI NODI ---
 @onready var sprite: Sprite2D = $Sprite2D
@@ -36,10 +42,13 @@ signal health_changed(new_health: float, max_health: float)
 signal construction_completed
 signal construction_progress_updated(current_hp: float, max_hp: float)
 signal work_completed
+signal depleted()
 signal destroyed()
 
 # --- VARIABILI INTERNE ---
+var player_id: int = -1 : get = _get_player_id
 var current_health: float
+var is_depleted: bool = false
 var is_destroyed: bool = false
 var construction_progress_perc: float = 0.0 # Da 0.0 a 1.0
 var active_builders: Array[Node2D] = []
@@ -58,26 +67,27 @@ func _ready() -> void:
 		
 	# Inizializza l'ostacolo per la navmesh
 	if nav_obstacle:
-		nav_obstacle.affect_navigation_mesh = true
+		nav_obstacle.affect_navigation_mesh = false
 		
 	health_changed.connect(_on_health_changed)
-
-	# Gestione dello stato iniziale (già costruito vs cantiere)
-	if is_under_construction:
-		place_under_construction()
-	else:
-		complete_construction()
-		
+	
+	current_health = max_health
 	if health_bar:
 		health_bar.max_value = max_health
 		health_bar.value = current_health
+	
+	# Gestione dello stato iniziale (già costruito)
+	active_builders.clear()	
+	_set_building_region(region_completed)
 
 func _process(delta: float) -> void:
 	if is_under_construction and not active_builders.is_empty():
 		_advance_construction(delta)
 
-func _set_player_id(new_id: int) -> void:
-	player_id = new_id
+func _get_player_id() -> int:
+	if is_instance_valid(player_owner):
+		return player_owner.player_id
+	return -1
 
 func _set_player_color(color: Color) -> void:
 	player_color = color
@@ -138,6 +148,28 @@ func destroy_building() -> void:
 	spawn_rubble()
 	queue_free()
 
+## Rende l'edificio una decorazione inerte: niente collisioni,
+## navmesh, selezione, input o logica di processo.
+func _disable_interactivity() -> void:
+	if collision_shape:
+		collision_shape.set_deferred("disabled", true)
+	if nav_obstacle:
+		nav_obstacle.affect_navigation_mesh = false
+	if health_bar:
+		health_bar.visible = false
+	if selectable_component:
+		selectable_component.deselect()
+
+	# Blocca il click-picking sul corpo fisico (StaticBody2D è un CollisionObject2D)
+	input_pickable = false
+
+	# Esce da tutti i gruppi che lo rendono bersagliabile/selezionabile
+	remove_from_group("interactable")
+	remove_from_group("selectable_units")  # rimuovi/aggiungi i gruppi che usi davvero
+
+	# Ferma qualsiasi logica per-frame (costruzione, ecc.)
+	set_process(false)
+
 func spawn_rubble() -> void:
 	if not sprite or not sprite.texture:
 		return
@@ -185,8 +217,10 @@ func _advance_construction(delta: float) -> void:
 	health_changed.emit(current_health, max_health) # Aggiorna l'UI durante la costruzione
 	
 	# Transizione alla fase "metà costruito"
-	if construction_progress_perc >= 0.5 and construction_progress_perc < 1.0:
-		_set_building_region(region_half_built)			
+	if construction_progress_perc >= 0.33 and construction_progress_perc < 0.66:
+		_set_building_region(region_first_step_build)
+	if construction_progress_perc >= 0.66 and construction_progress_perc < 1.0:
+		_set_building_region(region_second_step_build)
 	
 	# Completamento
 	if construction_progress_perc >= 1.0:
@@ -202,5 +236,6 @@ func complete_construction() -> void:
 	construction_completed.emit()
 	
 func _set_building_region(region: Rect2) -> void:
-	if sprite and sprite.region_enabled and region != Rect2():
+	if sprite  and region != Rect2():
+		sprite.region_enabled = true
 		sprite.region_rect = region

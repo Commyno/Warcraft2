@@ -48,7 +48,7 @@ func _ready() -> void:
 	_apply_team_color(Color.BLUE)
 
 func _process(delta: float) -> void:
-	super._process(delta)
+	super(delta)
 	_handle_building_logic()
 	
 	# --- CICLO DI TAGLIO LEGNA ---
@@ -111,6 +111,9 @@ func _start_interaction(target: Node2D) -> void:
 				print("Lavoro finito, attendo ordini.")
 
 func enter_mine(mine: GoldMine) -> void:
+	if !is_instance_valid(target_mine) or target_mine.is_depleted:
+		return
+	
 	#is_moving = false
 	unit_state = UnitState.MINING
 	

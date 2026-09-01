@@ -267,8 +267,6 @@ func register_building_razed(building_type: String) -> void:
 	buildings_razed_details[building_type] = buildings_razed_details.get(building_type, 0) + 1
 
 
-
-
 # ==========================================
 # SCORE CALCULATION
 # ==========================================
@@ -293,6 +291,10 @@ func calculate_final_score() -> int:
 		
 	return total_score
 
+func _get_hero_points(hero_type: String) -> int:
+	if BTDP_HERO_EXCEPTIONS.has(hero_type):
+		return BTDP_HERO_EXCEPTIONS[hero_type]
+	return TIDES_OF_DARKNESS_HERO_SCORE
 
 # ==========================================
 # GAME STATE

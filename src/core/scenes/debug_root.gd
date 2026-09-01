@@ -19,7 +19,7 @@ func _ready() -> void:
 	pass # Replace with function body.
 
 func _unhandled_input(event: InputEvent) -> void:
-ù	if event is InputEventKey and event.keycode == KEY_1:
+	if event is InputEventKey and event.keycode == KEY_1:
 		if event.pressed and not event.echo:
 			_set_debug_panel_visible(true)
 		elif not event.pressed:

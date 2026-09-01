@@ -1,46 +1,36 @@
-class_name BaseResourceBuilding
-extends StaticBody2D
-
-enum ResourceState { IDLE, ACTIVE, DEPLETED, DESTROYED, INACTIVE }
+class_name ResourceBuilding
+extends BaseBuilding
 
 # --- IDENTIFICAZIONE RISORSA ---
 @export var resource_id: int = 0
-@export var resource_name: String = "Nome risorsa"
 @export var resource_type: Globals.ResourceType = Globals.ResourceType.GOLD
-@export var resource_spritesheet: Texture2D
-@export var resource_icon:  Texture = preload("uid://de3gns0d6qacn")
-
-@export_group("Azioni e Abilità")
-@export var available_actions: Array[UnitAction] = []
 
 # --- STATISTICHE RISORSA ---
 @export_group("Riserva")
-@export var max_resources: float = 10000.0
+@export var max_resources: int = 10000
 
+# --- VARIABILI PER I LAVORATORI ---
 @export_group("Produzione")
+@export var max_workers: int = 4
 @export var working_time: float = 2.0
-@export var max_worker_count: int = 4
-
-# --- RIFERIMENTI NODI ---
-@onready var sprite: Sprite2D = $Sprite2D
-@onready var collision_shape: CollisionShape2D = $CollisionShape2D
-@onready var nav_obstacle: NavigationObstacle2D = $NavigationObstacle2D
-@onready var selectable: SelectableComponent = get_node_or_null("SelectableComponent")
+@export var resource_per_cycle: int = 10
 
 # --- SEGNALI ---
 signal resources_changed(new_resources: float, max_resources: float)
 signal worker_entered(worker: Node2D)
 signal worker_exited(worker: Node2D)
-signal depleted()
 
 # --- VARIABILI INTERNE ---
-var current_resources: float
-var is_depleted: bool = false
+var current_resources: int
 var active_workers: Array[Node2D] = []
 
 func _ready() -> void:
+	super()
+	add_to_group("interactable")
+	
 	current_resources = max_resources
 	
+	# Inizializza l'ostacolo per la navmesh
 	if nav_obstacle:
 		nav_obstacle.affect_navigation_mesh = true
 
@@ -63,17 +53,22 @@ func extract_resource(amount: float) -> float:
 func deplete_resource() -> void:
 	if is_depleted:
 		return
-		
-	is_depleted = true
-	depleted.emit()
 	
-	if collision_shape:
-		collision_shape.set_deferred("disabled", true)
-	if nav_obstacle:
-		nav_obstacle.affect_navigation_mesh = false
-			
-	spawn_depleted_ground()
-	queue_free()
+	is_depleted = true
+	
+	# 1. Spegne collisioni, navmesh, selezione, input, _process
+	_disable_interactivity()
+	
+	# 2. Mostra la texture di "miniera esaurita" (region_depleted è su BaseBuilding)
+	_set_building_region(region_depleted)
+	
+	# 3. Notifica i sottotipi (GoldMine) e chiunque altro sia in ascolto
+	_on_depleted()      # ← hook per i sottotipi (chiamata diretta, ordine garantito)
+	depleted.emit()
+
+## Virtuale: i figli lo sovrascrivono per reagire alla deplezione.
+func _on_depleted() -> void:
+	pass
 
 func spawn_depleted_ground() -> void:
 	if not sprite or not sprite.texture:
@@ -88,10 +83,21 @@ func spawn_depleted_ground() -> void:
 	
 	get_parent().add_child(rubble)
 
+# --- SISTEMA DI DANNO E DISTRUZIONE ---
+#Override delle funzioni di distruzione in quanto non puo essere distrutta
+func take_damage(amount: float) -> void:
+	pass
+
+func heal(amount: float) -> void:
+	pass
+
+func destroy_building() -> void:
+	pass
+
 # --- GESTIONE LAVORATORI ---
 
 func can_accept_worker() -> bool:
-	if active_workers.size() >= max_worker_count:
+	if active_workers.size() >= max_workers:
 		print("Miniera piena!")
 		return false
 	if is_depleted:
@@ -113,21 +119,5 @@ func unregister_worker(worker: Node2D) -> bool:
 		return true
 	return false
 
-func _set_building_region(region: Rect2) -> void:
-	if sprite:
-		sprite.region_enabled = true
-		sprite.region_rect = region
-
 func get_health_perc() -> float:
 	return 1.0 # Questo edificio non può essere distrutto dai giocatori
-
-# --- SELEZIONE ---
-
-func select() -> void:
-	if selectable: selectable.select()
-
-func deselect() -> void:
-	if selectable: selectable.deselect()
-
-func is_selected() -> bool:
-	return selectable.is_selected if selectable else false

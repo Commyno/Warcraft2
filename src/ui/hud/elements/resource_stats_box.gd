@@ -19,7 +19,7 @@ func setup(entity: Node2D) -> void:
 	update(entity)
 
 func update(entity: Node2D) -> void:
-	var building = entity as BaseResourceBuilding
+	var building = entity as ResourceBuilding
 	if building == null:
 		return
 	

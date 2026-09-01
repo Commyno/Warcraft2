@@ -58,7 +58,7 @@ func _on_selection_changed(selected_objects: Array[Node2D]) -> void:
 			# 3. Chiama la funzione setup()
 			if stats_box.has_method("setup"):
 				stats_box.setup(selected_object)
-		elif selected_object is BaseResourceBuilding:
+		elif selected_object is ResourceBuilding:
 			# 1. Istanzia la scena (crea l'oggetto in memoria)
 			var stats_box = RESOURCE_STATS_BOX.instantiate()
 			
@@ -91,7 +91,7 @@ func _update_ui(entity: Node2D) -> void:
 		if panel and panel.has_method("update"):
 			panel.update(entity)
 	
-	elif entity is BaseResourceBuilding:
+	elif entity is ResourceBuilding:
 		var panel = get_child(0) as ResourceStatsBox
 		if panel and panel.has_method("update"):
 			panel.update(entity)

@@ -4,13 +4,9 @@
 [ext_resource type="Script" uid="uid://dty50j5hpu3lx" path="res://src/debug/GridDebug.gd" id="2_04vno"]
 [ext_resource type="PackedScene" uid="uid://c7tjgkp7hofeu" path="res://src/ui/pause_menu/confirm_end_menu.tscn" id="2_pne3y"]
 [ext_resource type="PackedScene" uid="uid://datkqsd5032nl" path="res://src/ui/transaction/end_game_screen.tscn" id="2_rul3w"]
-[ext_resource type="PackedScene" uid="uid://dwct7eo8yrrur" path="res://src/levels/level_objects/building_placement_manager.tscn" id="3_ckpro"]
-[ext_resource type="Script" uid="uid://ccfs0c13co3o4" path="res://src/levels/level_objects/selection_manager.gd" id="4_hu2nw"]
-[ext_resource type="PackedScene" uid="uid://co67x1u0gnsv1" path="res://src/gameplay/entities/units/humans/peasant.tscn" id="5_erm7f"]
+[ext_resource type="PackedScene" uid="uid://dwct7eo8yrrur" path="res://src/core/level_objects/building_placement_manager.tscn" id="3_ckpro"]
+[ext_resource type="Script" uid="uid://ccfs0c13co3o4" path="res://src/core/level_objects/selection_manager.gd" id="4_hu2nw"]
 [ext_resource type="Script" uid="uid://dap2xc5gj4whk" path="res://src/ui/ui_manager.gd" id="5_hvw6c"]
-[ext_resource type="PackedScene" uid="uid://bmsb85571t2vm" path="res://src/gameplay/entities/buildings/humans/TownHall.tscn" id="6_gypgx"]
-[ext_resource type="PackedScene" uid="uid://m8opeelrdpmc" path="res://src/gameplay/entities/buildings/humans/Barracks.tscn" id="7_g7m04"]
-[ext_resource type="PackedScene" uid="uid://ps0namuswefp" path="res://src/gameplay/entities/buildings/humans/Farm.tscn" id="8_ixduv"]
 [ext_resource type="Script" uid="uid://ctoliwylc1vd2" path="res://src/gameplay/camera/RTSCamera.gd" id="10_pne3y"]
 [ext_resource type="Script" uid="uid://cwqoqoahfpjhe" path="res://src/core/scenes/pause_root.gd" id="11_q7n0o"]
 [ext_resource type="PackedScene" uid="uid://d0a4dccu6h0bf" path="res://src/ui/pause_menu/pause_menu.tscn" id="12_337e0"]
@@ -41,9 +37,6 @@ navigation_polygon = SubResource("NavigationPolygon_feqws")
 z_index = 3
 y_sort_enabled = true
 
-[node name="Peasant" parent="World/NavigationRegion2D/EntitiesRoot" unique_id=330192060 instance=ExtResource("5_erm7f")]
-position = Vector2(797, 1008)
-
 [node name="EffectsRoot" type="Node2D" parent="World/NavigationRegion2D" unique_id=554532313]
 z_index = 4
 
@@ -62,7 +55,6 @@ grid_dimensions = Vector2i(32, 32)
 [node name="SelectionManager" type="Node2D" parent="." unique_id=31750775 groups=["selection_manager"]]
 z_index = 9
 script = ExtResource("4_hu2nw")
-formation_spacing = null
 
 [node name="Environment" type="Node2D" parent="." unique_id=1620180002]
 
@@ -75,9 +67,6 @@ process_mode = 1
 layer = 10
 script = ExtResource("5_hvw6c")
 placement_manager = NodePath("../BuildingPlacementManager")
-townhall_scene = ExtResource("6_gypgx")
-barracks_scene = ExtResource("7_g7m04")
-farm_scene = ExtResource("8_ixduv")
 
 [node name="HudRoot" type="Control" parent="HudLayer" unique_id=747448011]
 layout_mode = 3

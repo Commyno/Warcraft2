@@ -36,7 +36,7 @@ func _on_selection_changed(selected_objects: Array[Node2D]) -> void:
 	elif count == 1:
 		multi_selection_panel.hide()
 		single_selection_panel.show()
-		if selected_objects[0] as BaseResourceBuilding:
+		if selected_objects[0] as ResourceBuilding:
 			action_grid_mc.hide()
 		else:
 			action_grid_mc.show()

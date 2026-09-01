@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://dbvpvnxbtn1su"]
+
+[ext_resource type="PackedScene" uid="uid://gqjr7f7ijo08" path="res://src/gameplay/entities/buildings/base_building.tscn" id="1_vl2t2"]
+[ext_resource type="Script" uid="uid://cu75ygkwwpanc" path="res://src/gameplay/entities/buildings/production_building.gd" id="2_wuide"]
+
+[node name="ProductionBuilding" unique_id=1889694065 instance=ExtResource("1_vl2t2")]
+script = ExtResource("2_wuide")
+max_queue_size = 5
+spawn_offset = Vector2(0, 32)
+rally_point = Vector2(0, 0)
