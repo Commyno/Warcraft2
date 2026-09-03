@@ -2,9 +2,9 @@ extends Control
 
 signal pause_menu(origin: String)
 
-@onready var single_selection_panel: PanelContainer = $MarginContainer/PanelContainer/VContainer/SingleSelectionPanel
-@onready var multi_selection_panel: PanelContainer = $MarginContainer/PanelContainer/VContainer/MultiSelectionPanel
-@onready var action_grid_mc: MarginContainer = $MarginContainer/PanelContainer/VContainer/ActionGridMC
+@onready var single_selection_panel: PanelContainer = $PanelContainer/VContainer/SingleSelectionPanel
+@onready var multi_selection_panel: PanelContainer = $PanelContainer/VContainer/MultiSelectionPanel
+@onready var action_grid_mc: MarginContainer = $PanelContainer/VContainer/ActionGridMC
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://cyhf3jgmwgh72"]
+
+[ext_resource type="Script" uid="uid://cmckgl305axx2" path="res://src/ui/hud/elements/action_grid_mc.gd" id="1_xenlr"]
+[ext_resource type="PackedScene" uid="uid://mfavlv18jfrk" path="res://src/ui/hud/elements/action_button.tscn" id="2_prc5s"]
+
+[node name="ActionGridMC" type="MarginContainer" unique_id=1815573049]
+custom_minimum_size = Vector2(140, 93)
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+script = ExtResource("1_xenlr")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2117910808]
+layout_mode = 2
+color = Color(0.2520276, 0.25202766, 0.25202763, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=468586227]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="ActionGrid" type="GridContainer" parent="MarginContainer" unique_id=2055042113]
+layout_mode = 2
+theme_override_constants/h_separation = 2
+theme_override_constants/v_separation = 2
+columns = 3
+
+[node name="Slot0" parent="MarginContainer/ActionGrid" unique_id=399752971 instance=ExtResource("2_prc5s")]
+custom_minimum_size = Vector2(41, 25)
+layout_mode = 2
+
+[node name="Slot1" parent="MarginContainer/ActionGrid" unique_id=1940844761 instance=ExtResource("2_prc5s")]
+custom_minimum_size = Vector2(41, 25)
+layout_mode = 2
+
+[node name="Slot2" parent="MarginContainer/ActionGrid" unique_id=332034764 instance=ExtResource("2_prc5s")]
+custom_minimum_size = Vector2(41, 25)
+layout_mode = 2
+
+[node name="Slot3" parent="MarginContainer/ActionGrid" unique_id=2015652169 instance=ExtResource("2_prc5s")]
+custom_minimum_size = Vector2(41, 25)
+layout_mode = 2
+
+[node name="Slot4" parent="MarginContainer/ActionGrid" unique_id=783075452 instance=ExtResource("2_prc5s")]
+custom_minimum_size = Vector2(41, 25)
+layout_mode = 2
+
+[node name="Slot5" parent="MarginContainer/ActionGrid" unique_id=2144571605 instance=ExtResource("2_prc5s")]
+custom_minimum_size = Vector2(41, 25)
+layout_mode = 2
+
+[node name="Slot6" parent="MarginContainer/ActionGrid" unique_id=1702391336 instance=ExtResource("2_prc5s")]
+custom_minimum_size = Vector2(41, 25)
+layout_mode = 2
+
+[node name="Slot7" parent="MarginContainer/ActionGrid" unique_id=1874223239 instance=ExtResource("2_prc5s")]
+custom_minimum_size = Vector2(41, 25)
+layout_mode = 2
+
+[node name="Slot8" parent="MarginContainer/ActionGrid" unique_id=518218907 instance=ExtResource("2_prc5s")]
+custom_minimum_size = Vector2(41, 25)
+layout_mode = 2

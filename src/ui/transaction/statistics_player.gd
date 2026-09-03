@@ -2,33 +2,15 @@ class_name Statistics_grid
 extends VBoxContainer
 
 #Signals
+
 #Enum
+
 #Const
-# Array di dizionari che rappresenta la tua tabella
-const RANKS = [
-	{"min": 0,      "human": "Servant",      "orc": "Slave"},
-	{"min": 2001,   "human": "Peasant",      "orc": "Peon"},
-	{"min": 5001,   "human": "Squire",       "orc": "Rogue"},
-	{"min": 8001,   "human": "Footman",      "orc": "Grunt"},
-	{"min": 18001,  "human": "Corporal",     "orc": "Slasher"},
-	{"min": 28001,  "human": "Sergeant",     "orc": "Marauder"},
-	{"min": 40001,  "human": "Lieutenant",   "orc": "Commander"},
-	{"min": 55001,  "human": "Captain",      "orc": "Captain"},
-	{"min": 70001,  "human": "Major",        "orc": "Major"},
-	{"min": 85001,  "human": "Knight",       "orc": "Raider"},
-	{"min": 105001, "human": "General",      "orc": "General"},
-	{"min": 125001, "human": "Admiral",      "orc": "Master"},
-	{"min": 145001, "human": "Marshall",     "orc": "Marshall"},
-	{"min": 165001, "human": "Lord",         "orc": "Chieftain"},
-	{"min": 185001, "human": "Grand Admiral", "orc": "Overlord"},
-	{"min": 205001, "human": "Highlord",     "orc": "War Chief"},
-	{"min": 230001, "human": "Thundergod",   "orc": "Demigod"},
-	{"min": 255001, "human": "God",          "orc": "God"},
-	{"min": 280001, "human": "Designer",     "orc": "Designer"}
-]
 
 #Export
+
 #var public
+
 #var _private
 
 @onready var units_progress_bar: ProgressBar = $"HBoxContainer/Units/ProgressBar"
@@ -89,12 +71,3 @@ func _update_text_visibility(show: bool) -> void:
 		$HBoxContainer/Oil/Label.hide()
 		$HBoxContainer/Kills/Label.hide()
 		$HBoxContainer/Razings/Label.hide()
-
-#_on_callback()
-func get_rank_name(score: int, faction: String) -> String:
-	# Partiamo dall'ultimo rank (il più alto) e scendiamo
-	for i in range(RANKS.size() - 1, -1, -1):
-		if score >= RANKS[i]["min"]:
-			return RANKS[i]["human"] if faction == "Humans" else RANKS[i]["orc"]
-			
-	return "Unknown"

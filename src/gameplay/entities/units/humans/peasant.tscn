@@ -2,18 +2,11 @@
 
 [ext_resource type="PackedScene" uid="uid://c16jrqo7auhk1" path="res://src/gameplay/entities/units/base_unit.tscn" id="1_qa1gv"]
 [ext_resource type="Script" uid="uid://b8n1u6n3uqoua" path="res://src/gameplay/entities/units/humans/peasant.gd" id="2_1q6u8"]
-[ext_resource type="Script" uid="uid://xlg4eskiphgu" path="res://src/resources/UnitAction.gd" id="3_qhgxn"]
+[ext_resource type="Script" uid="uid://b4yn7h2qqjq6g" path="res://src/resources/ActionData/action_data.gd" id="3_7qhc5"]
 [ext_resource type="Texture2D" uid="uid://c05ctx6gflok6" path="res://assets/spritesheets/humans/units/peasant/Humans_Peasant_BLUE.png" id="3_uscwp"]
-[ext_resource type="Resource" uid="uid://kr6yvxdgatu2" path="res://data/action_buttons/MoveAction.tres" id="4_4b5el"]
+[ext_resource type="Resource" uid="uid://3jln7kt6s6oa" path="res://data/action_buttons/move_action_data.tres" id="4_2blpd"]
 [ext_resource type="AnimationLibrary" uid="uid://2iqnwyo6ubgj" path="res://assets/animations/units/Humas_Peasant.tres" id="4_7qhc5"]
-[ext_resource type="Resource" uid="uid://wt0bsp6e5stq" path="res://data/action_buttons/StopAction.tres" id="5_gii3i"]
-[ext_resource type="Resource" uid="uid://c3u0yj0hhhpp2" path="res://data/action_buttons/AttackAction.tres" id="6_8ackg"]
-[ext_resource type="Resource" uid="uid://coqgbsbqbx5vp" path="res://data/action_buttons/PatrolAction.tres" id="7_igboo"]
-[ext_resource type="Resource" uid="uid://bq6fujjxcv3vc" path="res://data/action_buttons/BuildAction.tres" id="8_6e7ul"]
-[ext_resource type="Resource" uid="uid://b4nc3tlf76k5o" path="res://data/action_buttons/RepairAction.tres" id="9_k57am"]
-[ext_resource type="Resource" uid="uid://c8ttovw0q4ob" path="res://data/action_buttons/NoneAction.tres" id="10_d8e08"]
-[ext_resource type="Resource" uid="uid://my3pk3ccn8dw" path="res://data/action_buttons/CollectAction.tres" id="11_orevp"]
-
+[ext_resource type="Resource" uid="uid://bh000cwjtw0jc" path="res://data/action_buttons/place_townhall_action_data.tres" id="5_2blpd"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2jfo3"]
 radius = 12.0
@@ -527,11 +520,9 @@ graph_offset = Vector2(125.175064, -78.01023)
 
 [node name="Peasant" unique_id=330192060 instance=ExtResource("1_qa1gv")]
 script = ExtResource("2_1q6u8")
-player_id = 1
-player_color = Color(0, 0, 1, 1)
 build_range = 40.0
 unit_name = "Peasant"
-available_actions = Array[ExtResource("3_qhgxn")]([ExtResource("4_4b5el"), ExtResource("5_gii3i"), ExtResource("6_8ackg"), ExtResource("7_igboo"), ExtResource("8_6e7ul"), ExtResource("9_k57am"), ExtResource("10_d8e08"), ExtResource("11_orevp"), ExtResource("10_d8e08"), ExtResource("10_d8e08"), ExtResource("10_d8e08"), ExtResource("10_d8e08")])
+available_actions = Array[ExtResource("3_7qhc5")]([ExtResource("4_2blpd"), ExtResource("5_2blpd")])
 
 [node name="Sprite2D" parent="." index="0" unique_id=1820984858]
 texture = ExtResource("3_uscwp")

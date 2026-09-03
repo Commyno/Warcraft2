@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="TargetPositionActionData" format=3 uid="uid://3jln7kt6s6oa"]
+
+[ext_resource type="Texture2D" uid="uid://c577iftllvvly" path="res://assets/spritesheets/ui/Icons/Icon - Move.tres" id="1_6nmi4"]
+[ext_resource type="Script" uid="uid://bolgf8ijrutth" path="res://src/resources/ActionData/target_position_action_data.gd" id="1_pljb4"]
+
+[resource]
+script = ExtResource("1_pljb4")
+description = "Spostarsi"
+icon = ExtResource("1_6nmi4")
+metadata/_custom_type_script = "uid://bolgf8ijrutth"

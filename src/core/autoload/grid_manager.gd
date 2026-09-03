@@ -32,17 +32,17 @@ func get_tile_coords(global_pos: Vector2) -> Vector2i:
 	var local_pos = tile_map_layer.to_local(global_pos)
 	return tile_map_layer.local_to_map(local_pos)
 
-func get_global_from_tile(tile_coords: Vector2i) -> Vector2:
+func get_tile_center_global(tile_coords: Vector2i) -> Vector2:
 	if not tile_map_layer:
 		return Vector2.ZERO
-	var local_pos = tile_map_layer.map_to_local(tile_coords)
+	var local_pos : Vector2 = tile_map_layer.map_to_local(tile_coords)
 	return tile_map_layer.to_global(local_pos)
 
 func snap_to_tile(global_pos: Vector2) -> Vector2:
 	if not tile_map_layer:
 		return global_pos
 	var coords = get_tile_coords(global_pos)
-	return get_global_from_tile(coords)
+	return get_tile_center_global(coords)
 
 # --- 3. GESTIONE PRENOTAZIONI E PRELAZIONE ---
 
@@ -74,7 +74,7 @@ func get_available_destination(target_global_pos: Vector2, unit: Node2D = null) 
 
 	# Se il tile di destinazione è libero o già di proprietà di questa unità, usalo
 	if unit == null or not tile_reservations.has(target_tile) or tile_reservations[target_tile] == unit:
-		return get_global_from_tile(target_tile)
+		return get_tile_center_global(target_tile)
 
 	# PRELAZIONE: Se il tile è occupato, cerchiamo un tile libero a spirale/adiacente (raggio 1 e 2)
 	# partendo da quello desiderato e allontanandoci verso l'unità
@@ -83,7 +83,7 @@ func get_available_destination(target_global_pos: Vector2, unit: Node2D = null) 
 			for y in range(-radius, radius + 1):
 				var candidate_tile = target_tile + Vector2i(x, y)
 				if not tile_reservations.has(candidate_tile):
-					return get_global_from_tile(candidate_tile)
+					return get_tile_center_global(candidate_tile)
 
 	# Fallback estremo: se la zona è totalmente intasata, l'unità resta ferma dove si trova
 	return unit.global_position
@@ -127,7 +127,7 @@ func get_adjacent_free_position(center_global_pos: Vector2, building_size: Vecto
 	
 	# 5. Iteriamo i tile ordinati e troviamo il primo libero
 	for tile in perimeter_tiles:
-		var global_pos = get_global_from_tile(tile)
+		var global_pos = get_tile_center_global(tile)
 		
 		# Sfruttiamo la tua funzione esistente per controllare se la destinazione è calpestabile
 		var safe_pos = get_available_destination(global_pos, unit)
@@ -139,7 +139,7 @@ func get_adjacent_free_position(center_global_pos: Vector2, building_size: Vecto
 			
 	# 6. Fallback di emergenza: se l'edificio è circondato da unità al 100%, 
 	# lo facciamo spawnare forzatamente nel punto ideale che avevamo calcolato
-	return get_global_from_tile(perimeter_tiles[0])
+	return get_tile_center_global(perimeter_tiles[0])
 
 # --- GESTIONE FORESTA ---
 
@@ -269,7 +269,7 @@ func get_best_chopping_position(tree_tile: Vector2i, unit_global_pos: Vector2) -
 		# Controlla che il tile adiacente NON sia un altro albero 
 		# (Se hai altri ostacoli, es. acqua/muri, aggiungi qui il controllo)
 		if not is_tree(neighbor_tile):
-			var neighbor_global_center = get_global_from_tile(neighbor_tile)
+			var neighbor_global_center = get_tile_center_global(neighbor_tile)
 			var dist = neighbor_global_center.distance_squared_to(unit_global_pos)
 			
 			if dist < min_dist:
@@ -282,4 +282,20 @@ func get_best_chopping_position(tree_tile: Vector2i, unit_global_pos: Vector2) -
 		return best_pos
 		
 	# Fallback (se l'albero è completamente circondato, lo manda al centro dell'albero stesso)
-	return get_global_from_tile(tree_tile)
+	return get_tile_center_global(tree_tile)
+
+# Building placemente
+func is_area_buildable(origin_tile: Vector2i, tile_size: Vector2i) -> bool:
+	# TODO: Da ripristinare non appena aggiorno TileSet su mappa
+	#for x in range(tile_size.x):
+		#for y in range(tile_size.y):
+			#var cell := origin_tile + Vector2i(x, y)
+			#if not is_cell_buildable(cell):
+				#return false
+	return true
+
+func is_cell_buildable(cell: Vector2i) -> bool:
+	var data := tile_map_layer.get_cell_tile_data(cell)
+	if data == null:
+		return false   # cella vuota = non costruibile
+	return data.get_custom_data("is_buildable") == true

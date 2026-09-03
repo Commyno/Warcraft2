@@ -70,7 +70,8 @@ const BTDP_HERO_EXCEPTIONS = {
 @export var is_local_player: bool = false
 var spawn_position         : Vector2i = Vector2i.ZERO
 var color                  : Color = Color.WHITE
-var faction                : String = "Alliance"
+var faction                : Globals.RaceType = Globals.RaceType.HUMANS #String = "Alliance"
+var team                   : int = 1
 var has_won                : bool = false
 var total_score            : int = 0
 
@@ -141,6 +142,7 @@ func setup(id: int, start_pos: Vector2i, config: Dictionary) -> void:
 	self.player_name = config.get("name", "Player " + str(id))
 	self.color = config.get("color", Color.WHITE)
 	self.faction = config.get("faction", "Alliance")
+	self.team = config.get("team", 1)
 	self.is_human = config.get("type", "") == "Human"
 	self.is_local_player = config.get("is_local", false)
 	self.is_ai = not self.is_human
@@ -161,10 +163,11 @@ func can_afford(gold: int, lumber: int, oil: int, food: int = 0) -> bool:
 	var has_food = (_food_used + food) <= _food_max
 	return has_res and has_food
 
-func spend_resources(gold: int, lumber: int, oil: int) -> void:
+func spend_resources(gold: int, lumber: int, oil: int, food: int) -> void:
 	_gold_counts -= gold
 	_lumber_counts -= lumber
 	_oil_counts -= oil
+	_food_used += min(food, food_max)
 	_notify_resources_changed()
 
 func refund_resources(gold: int, lumber: int, oil: int) -> void:
@@ -305,3 +308,6 @@ func check_defeat() -> void:
 
 func death() -> void:
 	game_over.emit(false)
+
+func _exit_tree() -> void:
+	PlayerManager.unregister_player(self)

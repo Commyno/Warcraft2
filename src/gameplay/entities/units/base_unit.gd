@@ -14,7 +14,7 @@ enum UnitState { IDLE, MOVING, ATTACKING, PATROLING, BUILDING, REPARING, MINING,
 @export var unit_icon:  Texture = preload("uid://c0saq2cohbtd2")
 
 @export_group("Azioni e Abilita")
-@export var available_actions: Array[UnitAction] = []
+@export var available_actions: Array[ActionData] = []
 
 
 # --- STATISTICHE DI BASE ---
@@ -146,6 +146,9 @@ func _apply_team_color(color: Color) -> void:
 
 func get_health() -> float:
 	return current_health / max_health
+
+func get_available_actions() -> Array[ActionData]:
+	return available_actions
 
 # --- SISTEMA DI SELEZIONE ---
 

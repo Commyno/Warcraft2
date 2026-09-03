@@ -9,7 +9,12 @@ var preview_building: BaseBuilding = null
 var building_scene_to_spawn: PackedScene = null
 var is_placing: bool = false
 
+var _building_tile_size: Vector2i = Vector2i.ONE
+var _action: PlaceBuildingActionData = null
+var _units: Array = []
+
 func _ready() -> void:
+	add_to_group("placement_manager")
 	if tilemap_layer and tilemap_layer.tile_set:
 		grid_size = float(tilemap_layer.tile_set.tile_size.x)
 	else:
@@ -18,47 +23,47 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if is_placing and preview_building:
 		show_preview_building()
-		
 
 func show_preview_building() -> void:
-	# 1. Calcola la posizione del mouse agganciata alla griglia (Grid Snapping)
 	var raw_mouse_pos = get_global_mouse_position()
-	var snapped_pos = raw_mouse_pos.snapped(Vector2(grid_size, grid_size))
-	
-	# Aggiorna la posizione dell'anteprima
+	var origin_tile: Vector2i = GridManager.get_tile_coords(raw_mouse_pos)
+	var snapped_pos: Vector2 = GridManager.get_tile_center_global(origin_tile)
+
 	preview_building.global_position = snapped_pos
-	
-	# 2. Aggiorna la griglia visibile attorno all'edificio
+
 	if grid_overlay_instance:
 		grid_overlay_instance.update_overlay(snapped_pos, true)
-	
-	# 3. Controlla le sovrapposizioni e imposta il colore dell'anteprima
-	if is_position_valid():
-		preview_building.modulate = Color(0.0, 1.0, 0.0, 0.6) # Verde (Posizione Valida)
-	else:
-		preview_building.modulate = Color(1.0, 0.0, 0.0, 0.6) # Rosso (Posizione Occupata)
 
-func _unhandled_input(event: InputEvent) -> void:
-	if not is_placing:
-		return
-		
-	# Conferma Piazzamento (Click Sinistro)
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		if is_position_valid():
-			place_building()
-			
-	# Annulla Piazzamento (Click Destro o ESC)
-	elif (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed) or event.is_action_pressed("ui_cancel"):
+	if is_position_valid():
+		preview_building.modulate = Color(0.0, 1.0, 0.0, 0.6)
+	else:
+		preview_building.modulate = Color(1.0, 0.0, 0.0, 0.6)
+
+func confirm() -> void:
+	if is_placing and is_position_valid():
+		place_building()
+
+func cancel() -> void:
+	if is_placing:
 		cancel_placement()
 
 # Avvia la modalità di piazzamento
-func start_placement(building_scene: PackedScene) -> void:
+func start_placement(action: PlaceBuildingActionData, units: Array) -> void:
 	if is_placing:
 		cancel_placement()
-		
-	building_scene_to_spawn = building_scene
-	preview_building = building_scene.instantiate() as BaseBuilding
+
+	if units.is_empty():
+		return
+	var owner_player: Player = units[0].player_owner
+	if owner_player == null or not action.building_data.is_affordable(owner_player):
+		return
 	
+	_action = action
+	_units = units
+	building_scene_to_spawn = action.building_data.building_scene
+	_building_tile_size = action.building_data.tile_size
+	preview_building = building_scene_to_spawn.instantiate() as BaseBuilding
+
 	# 1. Istanzia la griglia dalla PackedScene
 	if grid_overlay_scene:
 		grid_overlay_instance = grid_overlay_scene.instantiate() as GridOverlay
@@ -78,36 +83,26 @@ func start_placement(building_scene: PackedScene) -> void:
 func is_position_valid() -> bool:
 	if not preview_building:
 		return false
-		
-	var placement_area = preview_building.get_node_or_null("PlacementArea") as Area2D
-	if not placement_area:
-		return true # Se non c'è l'area, permette il piazzamento
-	
-	# Verifica se ci sono corpi fisici o altre aree sovrapposte
-	var overlapping_bodies = placement_area.get_overlapping_bodies()
-	var overlapping_areas = placement_area.get_overlapping_areas()
-	
-	# Filtra l'area dell'anteprima stessa se rilevata
-	overlapping_areas.erase(placement_area)
-	
-	# Se trova qualsiasi altro corpo o area dentro laPlacementArea, la posizione non è valida
-	if overlapping_bodies.size() > 0 or overlapping_areas.size() > 0:
-		return false
-		
-	return true
+	var origin_tile: Vector2i = GridManager.get_tile_coords(preview_building.global_position)
+	return GridManager.is_area_buildable(origin_tile, _building_tile_size)
+
+#func place_building() -> void:
+	#var final_position = preview_building.global_position
+#
+	## Istanzia l'edificio reale definitivo
+	#var real_building = building_scene_to_spawn.instantiate() as BaseBuilding
+	#real_building.global_position = final_position
+#
+	#get_parent().add_child(real_building)
+#
+	#real_building.place_under_construction()
+	#
+	#cancel_placement()	
 
 func place_building() -> void:
-	var final_position = preview_building.global_position
-
-	# Istanzia l'edificio reale definitivo
-	var real_building = building_scene_to_spawn.instantiate() as BaseBuilding
-	real_building.global_position = final_position
-
-	get_parent().add_child(real_building)
-
-	real_building.place_under_construction()
-	
-	cancel_placement()	
+	var origin_tile := GridManager.get_tile_coords(preview_building.global_position)
+	_action.execute(_units, origin_tile)
+	cancel_placement()
 
 func cancel_placement() -> void:
 	if preview_building:

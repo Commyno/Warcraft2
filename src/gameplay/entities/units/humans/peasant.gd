@@ -93,7 +93,13 @@ func _start_interaction(target: Node2D) -> void:
 			
 			# Qui è dove dirai al gioco di aggiungere effettivamente i soldi al giocatore.
 			# Esempio: GameManager.add_resource(player_id, current_resource, resource_amount)
-			
+			if current_resource == Globals.ResourceType.GOLD:
+				player_owner.add_gold(resource_amount)
+			elif current_resource == Globals.ResourceType.WOOD:
+				player_owner.add_lumber(resource_amount)
+			elif current_resource == Globals.ResourceType.OIL:
+				player_owner.add_oil(resource_amount)
+
 			# 1. Svuotiamo lo zaino del contadino
 			current_resource = Globals.ResourceType.NONE
 			resource_amount = 0
@@ -431,7 +437,7 @@ func _start_tile_interaction(tile_coords: Vector2i) -> void:
 		action_timer = CHOP_SPEED
 		
 		# Gira lo sprite verso l'albero (Aggiorniamo la memoria permanente della direzione!)
-		var tree_global_pos = GridManager.get_global_from_tile(tile_coords)
+		var tree_global_pos = GridManager.get_tile_center_global(tile_coords)
 		var face_direction = (tree_global_pos - global_position).normalized()
 		
 		intended_dir = face_direction
@@ -471,7 +477,7 @@ func _find_next_tree(start_tile: Vector2i) -> void:
 	
 	if next_tree != Vector2i(-1, -1):
 		# Trovato! Calcoliamo il tile adiacente per metterci vicini
-		var tree_global = GridManager.get_global_from_tile(next_tree)
+		var tree_global = GridManager.get_tile_center_global(next_tree)
 		# Usiamo la funzione del GridManager fingendo che l'albero sia 1x1
 		var safe_pos = GridManager.get_adjacent_free_position(tree_global, Vector2i(1, 1), Vector2.DOWN, self)
 		

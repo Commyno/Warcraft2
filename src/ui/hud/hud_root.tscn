@@ -9,7 +9,9 @@
 [ext_resource type="PackedScene" uid="uid://cidjmt5bpauh3" path="res://src/ui/hud/elements/unit_stats_box.tscn" id="7_v4x6o"]
 [ext_resource type="Script" uid="uid://bfie7qjoetlwc" path="res://src/ui/hud/multi_selection_panel.gd" id="8_ejq7m"]
 [ext_resource type="PackedScene" uid="uid://brjing0k5xjv2" path="res://src/ui/hud/elements/selected_unit_icon.tscn" id="9_q4k46"]
-[ext_resource type="Script" uid="uid://cmckgl305axx2" path="res://src/ui/hud/action_grid_mc.gd" id="10_ih71g"]
+[ext_resource type="PackedScene" uid="uid://cyhf3jgmwgh72" path="res://src/ui/hud/elements/action_grid_mc.tscn" id="10_duka1"]
+[ext_resource type="Script" uid="uid://bj57gb6453cai" path="res://src/ui/hud/top_bar_hud.gd" id="11_ih71g"]
+[ext_resource type="Texture2D" uid="uid://dibevppt5yrf2" path="res://assets/no-image.png" id="12_duka1"]
 
 [sub_resource type="Gradient" id="Gradient_n8phu"]
 colors = PackedColorArray(0.2270734, 0.17571586, 0.0033405628, 1, 0.22745098, 0.1764706, 0.003921569, 1)
@@ -30,38 +32,35 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_n8phu")
 
-[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1722369329]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=328675824]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
+offset_right = 140.0
 grow_vertical = 2
-mouse_filter = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer" unique_id=328675824]
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/PanelContainer" unique_id=169595552]
+[node name="TextureRect" type="TextureRect" parent="PanelContainer" unique_id=169595552]
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 texture = SubResource("GradientTexture2D_e33uh")
 
-[node name="VContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer" unique_id=2016300360]
+[node name="VContainer" type="VBoxContainer" parent="PanelContainer" unique_id=2016300360]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="MenuButtonMC" type="MarginContainer" parent="MarginContainer/PanelContainer/VContainer" unique_id=659468854]
+[node name="MenuButtonMC" type="MarginContainer" parent="PanelContainer/VContainer" unique_id=659468854]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 2
 
-[node name="ButtonMenu" type="HBoxContainer" parent="MarginContainer/PanelContainer/VContainer/MenuButtonMC" unique_id=1907967372]
+[node name="ButtonMenu" type="HBoxContainer" parent="PanelContainer/VContainer/MenuButtonMC" unique_id=1907967372]
 layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="MenuButton" type="TextureButton" parent="MarginContainer/PanelContainer/VContainer/MenuButtonMC/ButtonMenu" unique_id=460991588]
+[node name="MenuButton" type="TextureButton" parent="PanelContainer/VContainer/MenuButtonMC/ButtonMenu" unique_id=460991588]
 custom_minimum_size = Vector2(50, 18)
 layout_mode = 2
 texture_normal = ExtResource("2_wo8h0")
@@ -72,7 +71,7 @@ texture_focused = ExtResource("4_yr8y3")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="MarginContainer/PanelContainer/VContainer/MenuButtonMC/ButtonMenu/MenuButton" unique_id=941648040]
+[node name="Label" type="Label" parent="PanelContainer/VContainer/MenuButtonMC/ButtonMenu/MenuButton" unique_id=941648040]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -88,7 +87,7 @@ text = "Menu"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ExitButton" type="TextureButton" parent="MarginContainer/PanelContainer/VContainer/MenuButtonMC/ButtonMenu" unique_id=769210946]
+[node name="ExitButton" type="TextureButton" parent="PanelContainer/VContainer/MenuButtonMC/ButtonMenu" unique_id=769210946]
 custom_minimum_size = Vector2(50, 18)
 layout_mode = 2
 texture_normal = ExtResource("2_wo8h0")
@@ -99,7 +98,7 @@ texture_focused = ExtResource("4_yr8y3")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="MarginContainer/PanelContainer/VContainer/MenuButtonMC/ButtonMenu/ExitButton" unique_id=249904427]
+[node name="Label" type="Label" parent="PanelContainer/VContainer/MenuButtonMC/ButtonMenu/ExitButton" unique_id=249904427]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -115,68 +114,153 @@ text = "Exit"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer/VContainer" unique_id=138453965]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VContainer" unique_id=138453965]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 4
 
-[node name="ColorRect" type="ColorRect" parent="MarginContainer/PanelContainer/VContainer/MarginContainer" unique_id=594677750]
+[node name="ColorRect" type="ColorRect" parent="PanelContainer/VContainer/MarginContainer" unique_id=594677750]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 color = Color(0.096204735, 0.09620475, 0.096204735, 1)
 
-[node name="SingleSelectionPanel" type="PanelContainer" parent="MarginContainer/PanelContainer/VContainer" unique_id=1132322058]
+[node name="SingleSelectionPanel" type="PanelContainer" parent="PanelContainer/VContainer" unique_id=1132322058]
 custom_minimum_size = Vector2(0, 102)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_e33uh")
 script = ExtResource("6_yr8y3")
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer/VContainer/SingleSelectionPanel" unique_id=686607889]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VContainer/SingleSelectionPanel" unique_id=686607889]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 2
 
-[node name="StatsBox" parent="MarginContainer/PanelContainer/VContainer/SingleSelectionPanel/MarginContainer" unique_id=1285141887 instance=ExtResource("7_v4x6o")]
+[node name="StatsBox" parent="PanelContainer/VContainer/SingleSelectionPanel/MarginContainer" unique_id=1285141887 instance=ExtResource("7_v4x6o")]
 layout_mode = 2
 
-[node name="MultiSelectionPanel" type="PanelContainer" parent="MarginContainer/PanelContainer/VContainer" unique_id=2018418323]
+[node name="MultiSelectionPanel" type="PanelContainer" parent="PanelContainer/VContainer" unique_id=2018418323]
 visible = false
 custom_minimum_size = Vector2(0, 104)
 layout_mode = 2
 script = ExtResource("8_ejq7m")
 
-[node name="GridContainer" type="GridContainer" parent="MarginContainer/PanelContainer/VContainer/MultiSelectionPanel" unique_id=543805198]
+[node name="GridContainer" type="GridContainer" parent="PanelContainer/VContainer/MultiSelectionPanel" unique_id=543805198]
 layout_mode = 2
 columns = 4
 
-[node name="MarginContainer" parent="MarginContainer/PanelContainer/VContainer/MultiSelectionPanel/GridContainer" unique_id=1187726273 instance=ExtResource("9_q4k46")]
+[node name="MarginContainer" parent="PanelContainer/VContainer/MultiSelectionPanel/GridContainer" unique_id=1187726273 instance=ExtResource("9_q4k46")]
 layout_mode = 2
 
-[node name="Control" type="Control" parent="MarginContainer/PanelContainer/VContainer" unique_id=320024987]
+[node name="Control" type="Control" parent="PanelContainer/VContainer" unique_id=320024987]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ActionGridMC" type="MarginContainer" parent="MarginContainer/PanelContainer/VContainer" unique_id=900681629]
-custom_minimum_size = Vector2(140, 92)
+[node name="ActionGridMC" parent="PanelContainer/VContainer" unique_id=1815573049 instance=ExtResource("10_duka1")]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
-script = ExtResource("10_ih71g")
 
-[node name="ActionGrid" type="GridContainer" parent="MarginContainer/PanelContainer/VContainer/ActionGridMC" unique_id=426158920]
+[node name="TopBarHUD" type="PanelContainer" parent="." unique_id=1910700007]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 140.0
+offset_bottom = 18.0
+grow_horizontal = 2
+script = ExtResource("11_ih71g")
+
+[node name="TextureRect" type="TextureRect" parent="TopBarHUD" unique_id=2025127661]
+custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
-theme_override_constants/h_separation = 2
-theme_override_constants/v_separation = 2
-columns = 4
+texture = SubResource("GradientTexture2D_e33uh")
+expand_mode = 1
 
-[connection signal="pressed" from="MarginContainer/PanelContainer/VContainer/MenuButtonMC/ButtonMenu/MenuButton" to="." method="_on_menu_button_pressed"]
-[connection signal="pressed" from="MarginContainer/PanelContainer/VContainer/MenuButtonMC/ButtonMenu/ExitButton" to="." method="_on_exit_button_pressed"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TopBarHUD" unique_id=1317706684]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Control" type="Control" parent="TopBarHUD/HBoxContainer" unique_id=357485628]
+layout_mode = 2
+
+[node name="GoldBox" type="HBoxContainer" parent="TopBarHUD/HBoxContainer" unique_id=180480052]
+layout_mode = 2
+
+[node name="GoldTexture" type="TextureRect" parent="TopBarHUD/HBoxContainer/GoldBox" unique_id=1362171543]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("12_duka1")
+expand_mode = 1
+
+[node name="GoldLabel" type="Label" parent="TopBarHUD/HBoxContainer/GoldBox" unique_id=1854126177]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_ejq7m")
+theme_override_font_sizes/font_size = 12
+text = "1000"
+vertical_alignment = 1
+
+[node name="WoodBox" type="HBoxContainer" parent="TopBarHUD/HBoxContainer" unique_id=1712274531]
+layout_mode = 2
+
+[node name="LumberTexture" type="TextureRect" parent="TopBarHUD/HBoxContainer/WoodBox" unique_id=1111098504]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("12_duka1")
+expand_mode = 1
+
+[node name="LumberLabel" type="Label" parent="TopBarHUD/HBoxContainer/WoodBox" unique_id=1907312804]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_ejq7m")
+theme_override_font_sizes/font_size = 12
+text = "1000"
+vertical_alignment = 1
+
+[node name="OilBox" type="HBoxContainer" parent="TopBarHUD/HBoxContainer" unique_id=328354030]
+layout_mode = 2
+
+[node name="OilTexture" type="TextureRect" parent="TopBarHUD/HBoxContainer/OilBox" unique_id=189479934]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("12_duka1")
+expand_mode = 1
+
+[node name="OilLabel" type="Label" parent="TopBarHUD/HBoxContainer/OilBox" unique_id=1422895224]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_ejq7m")
+theme_override_font_sizes/font_size = 12
+text = "0"
+vertical_alignment = 1
+
+[node name="FoodBox" type="HBoxContainer" parent="TopBarHUD/HBoxContainer" unique_id=1795551877]
+layout_mode = 2
+
+[node name="FoodTexture" type="TextureRect" parent="TopBarHUD/HBoxContainer/FoodBox" unique_id=1325711778]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("12_duka1")
+expand_mode = 1
+
+[node name="FoodLabel" type="Label" parent="TopBarHUD/HBoxContainer/FoodBox" unique_id=1894333640]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_ejq7m")
+theme_override_font_sizes/font_size = 12
+text = "12/9"
+vertical_alignment = 1
+
+[connection signal="pressed" from="PanelContainer/VContainer/MenuButtonMC/ButtonMenu/MenuButton" to="." method="_on_menu_button_pressed"]
+[connection signal="pressed" from="PanelContainer/VContainer/MenuButtonMC/ButtonMenu/ExitButton" to="." method="_on_exit_button_pressed"]

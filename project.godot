@@ -29,6 +29,8 @@ SaveManager="*uid://h80jraw8rh06"
 MatchData="*uid://cd30cxotowox5"
 SceneLoader="*uid://xi23osnx5ph"
 GridManager="*uid://4jplu6jou6mk"
+PlayerManager="*uid://4kc5m8lgq68k"
+TargetingManager="*uid://chge0rqlgnv7k"
 
 [display]
 

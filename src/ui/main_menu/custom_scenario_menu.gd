@@ -59,7 +59,7 @@ func _on_start_game_button_pressed() -> void:
 	# 1.a Gestione dinamica della Fazione
 	var selected_race_id = your_race_ob.get_selected_id()
 	if selected_race_id == Globals.RaceType.RANDOM:
-		MatchData.your_race = [Globals.RaceType.HUMAN, Globals.RaceType.ORC].pick_random()
+		MatchData.your_race = [Globals.RaceType.HUMANS, Globals.RaceType.ORCS].pick_random()
 	elif selected_race_id == Globals.RaceType.MAP_DEFAULT:
 		MatchData.your_race = map_data["default_race_player"]
 	else:
@@ -108,7 +108,8 @@ func _on_start_game_button_pressed() -> void:
 		"resources": resource_type,
 		"start_units": start_units_type,
 		"team": 1,
-		"color": available_colors.pop_front() 
+		"color": available_colors.pop_front(),
+		"is_local": true
 	}
 		
 	var total_opponents: int = 0
@@ -119,7 +120,7 @@ func _on_start_game_button_pressed() -> void:
 	
 	for i in range(1, total_opponents + 1):
 		var slot_id: int = i + 1
-		var ai_race: Globals.RaceType = [Globals.RaceType.HUMAN, Globals.RaceType.ORC].pick_random()
+		var ai_race: Globals.RaceType = [Globals.RaceType.HUMANS, Globals.RaceType.ORCS].pick_random()
 		
 		# Estraiamo il prossimo colore disponibile (se la mappa dovesse supportare 
 		# più di 8 giocatori, mettiamo un colore di fallback come Color.WHITE)
@@ -132,7 +133,8 @@ func _on_start_game_button_pressed() -> void:
 			"resources": resource_type,
 			"start_units": start_units_type,
 			"team": slot_id,
-			"color": assigned_color
+			"color": assigned_color,
+			"is_local": false
 		}
 	
 	new_custom_scenario.emit("CustomScenarioMenu")

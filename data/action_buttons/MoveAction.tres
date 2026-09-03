@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="UnitAction" format=3 uid="uid://kr6yvxdgatu2"]
-
-[ext_resource type="Texture2D" uid="uid://c577iftllvvly" path="res://assets/spritesheets/ui/Icons/Icon - Move.tres" id="1_dlanp"]
-[ext_resource type="Script" uid="uid://xlg4eskiphgu" path="res://src/resources/UnitAction.gd" id="1_i6v2d"]
-
-[resource]
-script = ExtResource("1_i6v2d")
-icon = ExtResource("1_dlanp")
-metadata/_custom_type_script = "uid://xlg4eskiphgu"

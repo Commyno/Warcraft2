@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://cjm8d54a4f1ac"]
+
+[ext_resource type="PackedScene" uid="uid://c16jrqo7auhk1" path="res://src/gameplay/entities/units/base_unit.tscn" id="1_w2dym"]
+[ext_resource type="Script" uid="uid://rt3evge86fma" path="res://src/gameplay/entities/units/humans/caster_unit.gd" id="2_844gv"]
+[ext_resource type="Script" uid="uid://2ciohgdj6wc8" path="res://src/resources/EntityData/ability_data.gd" id="3_ojopt"]
+
+[node name="CasterUnit" unique_id=330192060 instance=ExtResource("1_w2dym")]
+script = ExtResource("2_844gv")
+abilities = Array[ExtResource("3_ojopt")]([])

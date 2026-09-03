@@ -42,11 +42,9 @@ const TILE_MAP_ENTITIES: Dictionary = {
 # ==========================================
 var _previous_menu: Array = []
 var ground_layer   : TileMapLayer = null
+var spawn_positions: Dictionary = {}    # { slot_id (int) : Vector2 }
 
 var local_player   : Player = null      # Giocatore Locale Umano
-var player_list    : Array[Player] = [] # Lista di tutti i giocatori
-var players_by_id  : Dictionary = {}    # { player_id (int) : Player }
-var spawn_positions: Dictionary = {}    # { slot_id (int) : Vector2 }
 
 @export var end_game_screen_packed : PackedScene = null
 @export var confirm_end_game_menu_packed : PackedScene = null
@@ -87,30 +85,14 @@ func _ready() -> void:
 # PLAYER SETUP
 # ==========================================
 func _init_players() -> void:
-	if MatchData.participants_setup.is_empty():
-		push_error("ATTENZIONE: Nessun giocatore trovato in MatchData!")
-		return
 
-	player_list.clear()
-	players_by_id.clear()
+	PlayerManager.create_players_from_match(players_node)
+	local_player = local_player
+	#local_player.game_over.connect(display_end_game_screen.bind(nuovo_player))
 
-	for player_id in MatchData.participants_setup.keys():
-		var config_giocatore: Dictionary = MatchData.participants_setup[player_id]
-		
-		var nuovo_player: Player = Player.new()
-		nuovo_player.name = "Player_" + str(player_id)
-		players_node.add_child(nuovo_player)
-		
-		nuovo_player.setup(player_id, Vector2i.ZERO, config_giocatore)
-		nuovo_player.game_over.connect(display_end_game_screen.bind(nuovo_player))
-		
-		if config_giocatore.get("type", "") == "Human":
-			local_player = nuovo_player 
-		
-		player_list.append(nuovo_player)
-		players_by_id[player_id] = nuovo_player
-		
-		print("✅ Registrato Player: ", nuovo_player.name, " (ID: ", player_id, ")")
+	#player_list.clear()
+	#players_by_id.clear()
+
 
 # ==========================================
 # LEVEL & MAP LOADING
@@ -187,7 +169,7 @@ func _parse_players(map_node: Node2D) -> void:
 	available_slots.shuffle()
 	
 	# Itera direttamente sulla lista delle istanze Player già create
-	for current_player in player_list:
+	for current_player in PlayerManager.players:
 		if available_slots.is_empty():
 			push_error("Ci sono più giocatori attivi che slot di partenza sulla mappa!")
 			break
@@ -227,10 +209,10 @@ func _parse_group_layer(map_node: Node2D, layer_name: String, player: Player) ->
 		# Verifico se c'è corrispondenza di razza tra quanto indicato sulla
 		# mappa e quanto scelto dal plaeyer. Se c'è discrepanza la risolve 
 		# con un offset differente
-		var tile_race: Globals.RaceType = Globals.RaceType.HUMAN
+		var tile_race: Globals.RaceType = Globals.RaceType.HUMANS
 		var offset_tile = 381
 		if player_race != tile_race:
-			if tile_race == Globals.RaceType.HUMAN:
+			if tile_race == Globals.RaceType.HUMANS:
 				offset_tile += 1
 			else:
 				offset_tile += -1
@@ -449,8 +431,7 @@ func display_end_game_screen(victorious: bool, _triggering_player: Player = null
 	remove_all_under_world()
 
 	var end_game_screen_scene: Control = end_game_screen_packed.instantiate()
-	end_game_screen_scene.setup_screen(victorious, player_list)
-	
+	end_game_screen_scene.setup_screen(victorious, PlayerManager.players)
 	var scene_handler: Node = get_node("/root/SceneHandler")
 	if scene_handler:
 		end_game_screen_scene.restart_scenario.connect(scene_handler.on_restart_scenario)
@@ -495,7 +476,7 @@ func player_defeat() -> void:
 		end_game_screen_scene.main_menu.connect(scene_handler.on_restart_menu)
 	
 	transition_root.add_child(end_game_screen_scene)
-	end_game_screen_scene.setup_screen(false, player_list)
+	end_game_screen_scene.setup_screen(false, PlayerManager.players)
 
 
 func enemy_death(exp_reward: int) -> void:

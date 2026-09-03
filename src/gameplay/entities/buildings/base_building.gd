@@ -12,7 +12,7 @@ enum BuildingState { IDLE, ACTIVE, DEPLETED, DESTROYED, INACTIVE }
 @export var building_spritesheet: Texture2D
 
 @export_group("Azioni e Abilità")
-@export var available_actions: Array[UnitAction] = []
+@export var available_actions: Array[ActionData] = []
 
 # --- STATISTICHE DI BASE ---
 @export_group("Vitalità")
@@ -98,6 +98,9 @@ func _apply_team_color(color: Color) -> void:
 
 func get_health_perc() -> float:
 	return current_health / max_health
+
+func get_available_actions() -> Array[ActionData]:
+	return available_actions
 
 # --- SISTEMA DI SELEZIONE ---
 

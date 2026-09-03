@@ -18,6 +18,11 @@ const DRAG_THRESHOLD: float = 10.0
 signal selection_changed(selected_objects: Array[Node2D])
 
 func _unhandled_input(event: InputEvent) -> void:
+	# Se siamo in targeting mode, lascia gestire il click al TargetingManager.
+	if TargetingManager.is_targeting():
+		TargetingManager.handle_input(event)
+		return   # il SelectionManager non fa nulla in questo click
+	
 	# --- 1. GESTIONE CLICK SINISTRO (Selezione) ---
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
@@ -63,7 +68,7 @@ func _unhandled_input(event: InputEvent) -> void:
 					
 					# Chiediamo al GridManager se quel tile specifico è legna
 					if GridManager.is_tree(clicked_tile):
-						var tree_global_pos = GridManager.get_global_from_tile(clicked_tile)
+						var tree_global_pos = GridManager.get_tile_center_global(clicked_tile)
 						
 						for unit in mobile_units:
 							# Solo i Peasant hanno l'abilità di tagliare!
@@ -207,3 +212,7 @@ func get_snapped_tile_position(global_click_pos: Vector2, tile_map_layer: TileMa
 	
 	# 4. Riportiamo tutto in coordinate globali del mondo di gioco
 	return tile_map_layer.to_global(local_center_pos)
+
+func show_click_marker(world_pos: Vector2) -> void:
+	debug_click_pos = world_pos   # la stessa var che usi per il click destro
+	queue_redraw()

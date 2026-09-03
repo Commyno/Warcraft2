@@ -33,6 +33,7 @@ var map_limit_right: float = 10000.0
 var map_limit_bottom: float = 10000.0
 
 func _ready() -> void:
+	add_to_group("game_camera")
 	target_zoom = zoom
 	
 func _process(delta: float) -> void:

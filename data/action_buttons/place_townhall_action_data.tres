@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PlaceBuildingActionData" format=3 uid="uid://bh000cwjtw0jc"]
+
+[ext_resource type="Texture2D" uid="uid://wioaljt1ijyh" path="res://assets/spritesheets/ui/Icons/Icon - Humans TownHall.tres" id="1_4826f"]
+[ext_resource type="Script" uid="uid://dcdhttu5o6dgd" path="res://src/resources/ActionData/place_building_action_data.gd" id="1_licw7"]
+[ext_resource type="Resource" uid="uid://biao03okejj7o" path="res://data/humans_race/buildings/humans_townhall_data.tres" id="1_rd4v5"]
+
+[resource]
+script = ExtResource("1_licw7")
+building_data = ExtResource("1_rd4v5")
+id = "townhall"
+title = "Costruisci Town Hall"
+description = "Descrizione Town Hall"
+icon = ExtResource("1_4826f")
+action_type = 1
+metadata/_custom_type_script = "uid://dcdhttu5o6dgd"

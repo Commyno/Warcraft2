@@ -137,7 +137,7 @@ func _instantiate_stat_grid(p: Player, global_stats: Player) -> void:
 		push_error("Il nodo statistics non ha un metodo 'setup'")
 
 func _select_background() -> void:
-	var is_human_faction = (the_player.faction.to_lower() == "humans" or the_player.faction.to_lower() == "umani")
+	var is_human_faction = (the_player.faction == Globals.RaceType.HUMANS)
 	var nuova_texture: Texture2D = null
 	
 	# Sostituiti gli "if true" con la logica della fazione
@@ -158,8 +158,8 @@ func _select_background() -> void:
 
 	texture_rect.texture = nuova_texture
 
-func _get_rank_name(score: int, faction: String) -> String:
-	var is_human_faction = (faction.to_lower() == "humans" or faction.to_lower() == "umani")
+func _get_rank_name(score: int, faction: Globals.RaceType) -> String:
+	var is_human_faction = (faction == Globals.RaceType.HUMANS)
 	
 	# Scorriamo la tabella al contrario per trovare lo scaglione giusto
 	for i in range(RANKS.size() - 1, -1, -1):

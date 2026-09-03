@@ -18,7 +18,7 @@ var selected_map_path   : String = ""
 var selected_map_data   : Dictionary = {} # Conterrà tutti i dati (nome, dimensione, giocatori)
 var map_dimensions      : Vector2i = Vector2i.ZERO
 var max_players         : int = 8
-var your_race           : Globals.RaceType = Globals.RaceType.HUMAN
+var your_race           : Globals.RaceType = Globals.RaceType.HUMANS
 var map_resources       : Globals.MapResourcesType
 var start_units         : Globals.StartUnitsType
 var map_tileset         : Globals.MapTilesetType
@@ -67,8 +67,8 @@ func get_player_color(id: int) -> Color:
 func get_player_race(id: int) -> Globals.RaceType:
 	if participants_setup.has(id):
 		# Usa .get() come sicurezza in caso la chiave "color" manchi nel dizionario
-		return participants_setup[id].get("race", Globals.RaceType.HUMAN)
-	return Globals.RaceType.HUMAN
+		return participants_setup[id].get("race", Globals.RaceType.HUMANS)
+	return Globals.RaceType.HUMANS
 
 func get_player_team(id: int) -> int:
 	if participants_setup.has(id):
@@ -116,7 +116,7 @@ func preload_maps(folder_path: String) -> void:
 					
 					# Variabili locali rinominate (meta_*) per evitare conflitti coi nomi in alto
 					var meta_max_players = map_instance.get_meta("max_players") if map_instance.has_meta("max_players") else 2
-					var meta_def_race = map_instance.get_meta("default_race_player") if map_instance.has_meta("default_race_player") else Globals.RaceType.HUMAN
+					var meta_def_race = map_instance.get_meta("default_race_player") if map_instance.has_meta("default_race_player") else Globals.RaceType.HUMANS
 					var meta_def_res = map_instance.get_meta("default_resources_player") if map_instance.has_meta("default_resources_player") else Globals.MapResourcesType.LOW
 					var meta_def_units = map_instance.get_meta("default_start_unit_player") if map_instance.has_meta("default_start_unit_player") else Globals.StartUnitsType.ONE_PEASANT_ONLY
 					

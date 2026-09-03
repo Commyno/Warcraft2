@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="BuildingData" format=3 uid="uid://biao03okejj7o"]
+
+[ext_resource type="Texture2D" uid="uid://wioaljt1ijyh" path="res://assets/spritesheets/ui/Icons/Icon - Humans TownHall.tres" id="1_hedpo"]
+[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/building_data.gd" id="1_kgn74"]
+[ext_resource type="PackedScene" uid="uid://cdp0lbjingbod" path="res://src/gameplay/entities/buildings/humans/town_hall.tscn" id="1_qkqp0"]
+
+[resource]
+script = ExtResource("1_kgn74")
+building_id = "humans_townhall"
+building_name = "Town Hall"
+description = "Descrizione Town Hall"
+icon = ExtResource("1_hedpo")
+building_scene = ExtResource("1_qkqp0")
+max_health = 1800
+food_provided = 1
+is_resource_dropoff = true
+accepts_gold = true
+accepts_wood = true
+gold_cost = 600
+wood_cost = 200
+metadata/_custom_type_script = "uid://cjdr3m81ncphw"
