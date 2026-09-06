@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://c16jrqo7auhk1" path="res://src/gameplay/entities/units/base_unit.tscn" id="1_qa1gv"]
 [ext_resource type="Script" uid="uid://b8n1u6n3uqoua" path="res://src/gameplay/entities/units/humans/peasant.gd" id="2_1q6u8"]
 [ext_resource type="Script" uid="uid://b4yn7h2qqjq6g" path="res://src/resources/ActionData/action_data.gd" id="3_7qhc5"]
-[ext_resource type="Texture2D" uid="uid://c05ctx6gflok6" path="res://assets/spritesheets/humans/units/peasant/Humans_Peasant_BLUE.png" id="3_uscwp"]
+[ext_resource type="Texture2D" uid="uid://c05ctx6gflok6" path="res://assets/art/humans/units/peasant/Humans_Peasant_BLUE.png" id="3_uscwp"]
 [ext_resource type="Resource" uid="uid://3jln7kt6s6oa" path="res://data/action_buttons/move_action_data.tres" id="4_2blpd"]
 [ext_resource type="AnimationLibrary" uid="uid://2iqnwyo6ubgj" path="res://assets/animations/units/Humas_Peasant.tres" id="4_7qhc5"]
 [ext_resource type="Resource" uid="uid://bexvmhf4682mu" path="res://data/action_buttons/stop_action_data.tres" id="5_vq64i"]

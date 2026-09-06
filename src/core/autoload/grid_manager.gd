@@ -11,6 +11,8 @@ const STUMP_ATLAS_COORDS: Vector2i = Vector2i(12, 6)
 var tile_map_layer: TileMapLayer = null
 # Dizionario delle prenotazioni: Chiave = Vector2i (coordinate tile), Valore = Node2D (unità)
 var tile_reservations: Dictionary = {}
+# Dizionario delle occupazioni stabili: Vector2i -> Node (Edificio, Risorsa, ecc.)
+var occupied_cells: Dictionary = {}
 # Dizionario per memorizzare la salute degli alberi. Chiave: Vector2i (coordinate tile)
 var trees_health: Dictionary = {}
 
@@ -140,6 +142,81 @@ func get_adjacent_free_position(center_global_pos: Vector2, building_size: Vecto
 	# 6. Fallback di emergenza: se l'edificio è circondato da unità al 100%, 
 	# lo facciamo spawnare forzatamente nel punto ideale che avevamo calcolato
 	return get_tile_center_global(perimeter_tiles[0])
+
+# --- REGISTRAZIONE E RIMOZIONE OCCUPAZIONE EDIFICI ---
+
+## Registra un'area rettangolare come occupata da un'entità
+func register_building_occupation(origin_tile: Vector2i, building_size: Vector2i, entity: Node) -> void:
+	for x in range(building_size.x):
+		for y in range(building_size.y):
+			var cell := origin_tile + Vector2i(x, y)
+			occupied_cells[cell] = entity
+
+## Libera le celle quando un edificio viene distrutto o rimosso
+func unregister_building_occupation(origin_tile: Vector2i, building_size: Vector2i) -> void:
+	for x in range(building_size.x):
+		for y in range(building_size.y):
+			var cell := origin_tile + Vector2i(x, y)
+			if occupied_cells.get(cell) != null:
+				occupied_cells.erase(cell)
+
+# --- VERIFICA COSTRUIBILITÀ AREA ---
+
+func is_area_buildable(origin_tile: Vector2i, tile_size: Vector2i) -> bool:
+	for x in range(tile_size.x):
+		for y in range(tile_size.y):
+			var cell := origin_tile + Vector2i(x, y)
+			
+			# 1. Controllo statico: il terreno della mappa è costruibile?
+			if not is_cell_buildable(cell):
+				return false
+			
+			# 2. Controllo dinamico: c'è già un albero non tagliato?
+			if is_tree(cell):
+				return false
+			
+			# 3. Controllo dinamico: la cella è già occupata da un altro edificio?
+			if is_cell_occupied(cell):
+				return false
+			
+			## 4. Controllo dinamico: ci sono unità mobili sopra la cella?
+			#if is_cell_blocked_by_unit(cell):
+				#return false
+	
+	return true
+
+func is_cell_occupied(cell: Vector2i) -> bool:
+	if occupied_cells.has(cell):
+		var occupier = occupied_cells[cell]
+		# Pulizia automatica se il nodo registrato è stato liberato (queue_free)
+		if is_instance_valid(occupier):
+			return true
+		else:
+			occupied_cells.erase(cell)
+	return false
+
+### Rileva se ci sono unità mobili sopra la cella usando un CircleShape o una Point Query 2D
+#func is_cell_blocked_by_unit(cell: Vector2i) -> bool:
+	## Controlla prima le prenotazioni logiche dei lavoratori
+	#if tile_reservations.has(cell) and is_instance_valid(tile_reservations[cell]):
+		#return true
+#
+	## Controllo fisico rapido tramite lo spazio 2D
+	#var world_center: Vector2 = get_tile_center_global(cell)
+	#var space_state = get_world_2d().direct_space_state
+	#
+	#var shape_param = PhysicsShapeQueryParameters2D.new()
+	#var circle = CircleShape2D.new()
+	#circle.radius = (TILE_SIZE.x / 2.0) * 0.75 # Leggermente più piccolo del tile
+	#shape_param.shape = circle
+	#shape_param.transform = Transform2D(0.0, world_center)
+	## Imposta la collision mask sul layer delle tue unità (es. layer 2 o 3)
+	#shape_param.collision_mask = 2 
+	#shape_param.collide_with_areas = false
+	#shape_param.collide_with_bodies = true
+#
+	#var hits = space_state.intersect_shape(shape_param, 1)
+	#return not hits.is_empty()
 
 # --- GESTIONE FORESTA ---
 
@@ -284,18 +361,18 @@ func get_best_chopping_position(tree_tile: Vector2i, unit_global_pos: Vector2) -
 	# Fallback (se l'albero è completamente circondato, lo manda al centro dell'albero stesso)
 	return get_tile_center_global(tree_tile)
 
-# Building placemente
-func is_area_buildable(origin_tile: Vector2i, tile_size: Vector2i) -> bool:
-	# TODO: Da ripristinare non appena aggiorno TileSet su mappa
+## Building placemente
+#func is_area_buildable(origin_tile: Vector2i, tile_size: Vector2i) -> bool:
+	## TODO: Da ripristinare non appena aggiorno TileSet su mappa
 	#for x in range(tile_size.x):
 		#for y in range(tile_size.y):
 			#var cell := origin_tile + Vector2i(x, y)
 			#if not is_cell_buildable(cell):
 				#return false
-	return true
+	#return true
 
 func is_cell_buildable(cell: Vector2i) -> bool:
 	var data := tile_map_layer.get_cell_tile_data(cell)
 	if data == null:
 		return false   # cella vuota = non costruibile
-	return data.get_custom_data("is_buildable") == true
+	return data.get_meta("is_buildable") == true

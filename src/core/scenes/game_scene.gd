@@ -253,6 +253,9 @@ func spawn_entity_by_key(faction_key: String, entity_key: String, global_pos: Ve
 
 	entities_root.add_child(entity)
 	entity.global_position = global_pos
+	if entity is BaseBuilding:
+		var origin_tile: Vector2i = GridManager.get_tile_coords(global_pos)
+		GridManager.register_building_occupation(origin_tile, entity.tile_size, entity)
 
 	# Iniezione diretta dell'istanza Player
 	if is_instance_valid(player_owner):
@@ -288,7 +291,14 @@ func _parse_entities_layer(map_node: Node2D, layer_name: String) -> void:
 			# Controlliamo se l'entità è di tipo ResourceBuilding
 			if spawned_entity is ResourceBuilding:
 				if spawned_entity.has_method("setup"):
-					spawned_entity.setup(10000, true)
+					spawned_entity.set_resources(10000)
+					var resource = 16000
+					if MatchData.map_resources == 0:
+						resource *= 32000
+					else:
+						resource *= MatchData.map_resources 
+					spawned_entity.set_resources(resource)
+	
 	
 	entities_layer.queue_free()
 

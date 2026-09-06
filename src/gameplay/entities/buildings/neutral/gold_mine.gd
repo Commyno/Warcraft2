@@ -1,7 +1,7 @@
 class_name GoldMine
 extends ResourceBuilding
 
-var current_state: BuildingState = BuildingState.IDLE
+var current_state: BuildingState = BuildingState.IDLE  : set = change_state
 
 # --- SEGNALI ---
 signal state_changed(old_state: BuildingState, new_state: BuildingState)
@@ -20,20 +20,14 @@ func _ready() -> void:
 	add_child(extraction_timer)
 	extraction_timer.stop()
 	
+	can_destroy = false
+	can_attack = false
+	
 	# Imposto lo stao idle manualmente per non far scattare chagne_state
 	current_state = BuildingState.IDLE
+	current_resources = Globals.ResourceType.GOLD
 	_set_building_region(region_idle)
-
-func setup(resource_amount: int, status_active: bool) -> void:
-	max_resources = resource_amount
-	current_resources = max_resources
-	resources_changed.emit(current_resources, max_resources)
-	
-	if status_active: 
-		change_state(BuildingState.IDLE)
-	else:
-		change_state(BuildingState.INACTIVE)
-
+		
 func change_state(new_state: BuildingState) -> void:
 	if current_state == new_state:
 		return

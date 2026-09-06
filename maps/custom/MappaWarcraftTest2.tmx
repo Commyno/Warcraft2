@@ -5,7 +5,7 @@
  </editorsettings>
  <properties>
   <property name="default_race_player" type="int" value="0"/>
-  <property name="default_resources_player" type="int" value="1"/>
+  <property name="default_resources_player" type="int" value="2"/>
   <property name="default_start_unit_player" type="int" value="1"/>
   <property name="max_players" type="int" value="3"/>
  </properties>

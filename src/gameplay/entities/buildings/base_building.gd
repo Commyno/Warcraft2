@@ -8,19 +8,15 @@ enum BuildingState { IDLE, ACTIVE, DEPLETED, DESTROYED, INACTIVE }
 @export var player_owner: Player # Assegnato allo spawn o tramite editor
 @export var player_color: Color = Color.BLUE : set = _set_player_color
 @export var building_name: String = "Edificio Base"
+@export_multiline var building_description: String = ""
 @export var building_icon:  Texture = preload("uid://dibevppt5yrf2")
 @export var building_spritesheet: Texture2D
 
 @export_group("Azioni e Abilità")
 @export var available_actions: Array[ActionData] = []
 
-# --- STATISTICHE DI BASE ---
-@export_group("Vitalità")
-@export var max_health: float = 500.0
-
 # --- PARAMETRI DI COSTRUZIONE ---
 @export_group("Costruzione")
-@export var build_time: float = 10.0
 @export var is_under_construction: bool = false
 @export var region_under_construction: Rect2
 @export var region_first_step_build: Rect2
@@ -29,6 +25,50 @@ enum BuildingState { IDLE, ACTIVE, DEPLETED, DESTROYED, INACTIVE }
 @export var region_idle: Rect2
 @export var region_active: Rect2
 @export var region_depleted: Rect2
+
+# ==========================================
+# GRIGLIA E POSIZIONAMENTO (TileMap / Grid)
+# ==========================================
+@export_group("Placement")
+@export var tile_size: Vector2i = Vector2i(3, 3) # Ingombro in tile (es. Farm 2x2, Barracks 3x3, Town Hall 4x4)
+@export var requires_water: bool = false         # True per Shipyard, Oil Platform, Foundry
+
+# ==========================================
+# COSTI E COSTRUZIONE
+# ==========================================
+@export_group("Construction & Economy")
+@export var build_time: float = 80.0             # Secondi necessari alla costruzione
+
+# ==========================================
+# STATISTICHE DIFENSIVE E VISIVE
+# ==========================================
+@export_group("Attributes")
+@export var max_health: int = 800
+@export var base_armor: int = 20                 # Gli edifici in WC2 hanno armatura alta
+@export var sight_range: int = 4                 # Raggio visivo (in tile)
+
+# ==========================================
+# CAPACITÀ SPECIALI / SUPPORTO
+# ==========================================
+@export_group("Capabilities")
+@export var food_provided: int = 0               # es. +4 per Farm/Pig Farm, +1 per Town Hall/Great Hall
+@export var is_resource_dropoff: bool = false    # True per Town Hall, Lumber Mill, Refinery
+@export var accepts_gold: bool = false
+@export var accepts_wood: bool = false
+@export var accepts_oil: bool = false
+
+# ==========================================
+# COMBATTIMENTO (Torri difensive)
+# ==========================================
+@export_group("Combat (Defensive Towers)")
+@export var can_attack: bool = false             # True per Guard Tower, Cannon Tower
+@export var can_destroy: bool = true             # False per Mine
+@export var basic_damage: int = 0
+@export var piercing_damage: int = 0
+@export var attack_range: float = 0.0
+@export var attack_cooldown: float = 1.0
+@export var can_attack_air: bool = false
+@export var can_attack_ground: bool = true
 
 # --- RIFERIMENTI NODI ---
 @onready var sprite: Sprite2D = $Sprite2D
@@ -47,13 +87,12 @@ signal destroyed()
 
 # --- VARIABILI INTERNE ---
 var player_id: int = -1 : get = _get_player_id
-var current_health: float
 var is_depleted: bool = false
 var is_destroyed: bool = false
-var construction_progress_perc: float = 0.0 # Da 0.0 a 1.0
-var active_builders: Array[Node2D] = []
-
 var is_training: bool = false
+var current_health: float
+var active_builders: Array[Node2D] = []
+var construction_progress_perc: float = 0.0 # Da 0.0 a 1.0
 var training_progress_perc: float = 0.0 # Da 0.0 a 1.0
 
 func _ready() -> void:
@@ -75,7 +114,7 @@ func _ready() -> void:
 	if health_bar:
 		health_bar.max_value = max_health
 		health_bar.value = current_health
-	
+		
 	# Gestione dello stato iniziale (già costruito)
 	active_builders.clear()	
 	_set_building_region(region_completed)
@@ -84,6 +123,33 @@ func _process(delta: float) -> void:
 	if is_under_construction and not active_builders.is_empty():
 		_advance_construction(delta)
 
+func setup(data: Resource) -> void:
+	self.building_name = data.building_name
+	self.building_description = data.description
+	self.building_icon = data.icon
+	self.tile_size = data.tile_size
+	self.requires_water = data.requires_water
+	self.build_time = data.build_time
+	self.max_health = data.max_health
+	current_health = max_health
+	if health_bar:
+		health_bar.max_value = max_health
+		health_bar.value = current_health
+	self.base_armor = data.base_armor
+	self.sight_range = data.sight_range
+	self.food_provided = data.food_provided
+	self.is_resource_dropoff = data.is_resource_dropoff
+	self.accepts_gold = data.accepts_gold
+	self.accepts_wood = data.accepts_wood
+	self.accepts_oil = data.accepts_oil
+	self.can_attack = data.can_attack
+	self.basic_damage = data.basic_damage
+	self.piercing_damage = data.piercing_damage
+	self.attack_range = data.attack_range
+	self.attack_cooldown = data.attack_cooldown
+	self.can_attack_air = data.can_attack_air
+	self.can_attack_ground = data.can_attack_ground
+	
 func _get_player_id() -> int:
 	if is_instance_valid(player_owner):
 		return player_owner.player_id

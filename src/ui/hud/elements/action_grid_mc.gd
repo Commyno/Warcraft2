@@ -10,6 +10,8 @@ extends MarginContainer
 
 var local_player: Player
 var current_selected_entity: Node
+# Pila delle pagine: ogni pagina è un set di azioni.
+var _page_stack: Array = []
 
 func _ready() -> void:
 	var selection_manager = _get_selection_manager()
@@ -39,27 +41,49 @@ func update_action_grid(selected_objects: Array) -> void:
 	current_selected_entity = null
 	if selected_objects.size() > 0:
 		current_selected_entity = selected_objects[0]
-	 
+	
+	# Cambiare selezione azzera SEMPRE la navigazione nei sottomenu.
+	_page_stack.clear()
 	_refresh_action_grid()
 
 func _refresh_action_grid() -> void:
 	_clear_all_slots()
-
+	
 	margin_container.visible = (current_selected_entity != null)
 	
 	if current_selected_entity == null:
 		return
+	
+	# Se siamo dentro un sottomenu, mostra quella pagina; altrimenti la radice.
+	var actions: Array[ActionData] = []
+	if not _page_stack.is_empty():
+		actions = _page_stack.back()
+	else:
+		actions = _get_root_actions()
+	
+	# Assegna ogni azione allo slot corrispondente (0..8)
+	for i in range(mini(actions.size(), slots.size())):
+		slots[i].setup(actions[i], local_player)
 
-	# Recupera le azioni disponibili dall'entità selezionata
+## Le azioni "di primo livello" dell'entità selezionata.
+func _get_root_actions() -> Array[ActionData]:
 	var actions: Array[ActionData] = []
 	if current_selected_entity.has_method("get_available_actions"):
 		actions = current_selected_entity.get_available_actions()
 	elif "available_actions" in current_selected_entity:
 		actions = current_selected_entity.available_actions
+	return actions
 
-	# Assegna ogni azione allo slot corrispondente (0..8)
-	for i in range(mini(actions.size(), slots.size())):
-		slots[i].setup(actions[i], local_player)
+## Apre un sottomenu impilando una nuova pagina.
+func push_page(sub_actions: Array[ActionData]) -> void:
+	_page_stack.append(sub_actions)
+	_refresh_action_grid()
+ 
+## Torna alla pagina precedente (o alla radice se era l'ultima).
+func pop_page() -> void:
+	if not _page_stack.is_empty():
+		_page_stack.pop_back()
+	_refresh_action_grid()
 
 func _get_selection_manager() -> Node:
 	var managers = get_tree().get_nodes_in_group("selection_manager")

@@ -86,19 +86,6 @@ func is_position_valid() -> bool:
 	var origin_tile: Vector2i = GridManager.get_tile_coords(preview_building.global_position)
 	return GridManager.is_area_buildable(origin_tile, _building_tile_size)
 
-#func place_building() -> void:
-	#var final_position = preview_building.global_position
-#
-	## Istanzia l'edificio reale definitivo
-	#var real_building = building_scene_to_spawn.instantiate() as BaseBuilding
-	#real_building.global_position = final_position
-#
-	#get_parent().add_child(real_building)
-#
-	#real_building.place_under_construction()
-	#
-	#cancel_placement()	
-
 func place_building() -> void:
 	var origin_tile := GridManager.get_tile_coords(preview_building.global_position)
 	_action.execute(_units, origin_tile)

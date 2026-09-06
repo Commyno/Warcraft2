@@ -83,6 +83,10 @@ func spawn_depleted_ground() -> void:
 	
 	get_parent().add_child(rubble)
 
+func set_resources(resource: int) -> void: #resource_amount: int, status_active: bool) -> void:
+	max_resources = resource
+	resources_changed.emit(current_resources, max_resources)
+
 # --- SISTEMA DI DANNO E DISTRUZIONE ---
 #Override delle funzioni di distruzione in quanto non puo essere distrutta
 func take_damage(amount: float) -> void:

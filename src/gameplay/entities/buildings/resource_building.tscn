@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://gqjr7f7ijo08" path="res://src/gameplay/entities/buildings/base_building.tscn" id="1_pxcn6"]
 [ext_resource type="Script" uid="uid://dvxg0fwtkpavx" path="res://src/gameplay/entities/buildings/resource_building.gd" id="2_m4jdb"]
-[ext_resource type="Texture2D" uid="uid://e0ggs00l7mhs" path="res://assets/spritesheets/miscellaneous/Buildings - Miscellaneous.png" id="3_o8spf"]
+[ext_resource type="Texture2D" uid="uid://e0ggs00l7mhs" path="res://assets/art/miscellaneous/Buildings - Miscellaneous.png" id="3_o8spf"]
 
 [node name="BaseResource" unique_id=1889694065 instance=ExtResource("1_pxcn6")]
 script = ExtResource("2_m4jdb")

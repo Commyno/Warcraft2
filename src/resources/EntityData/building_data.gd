@@ -52,6 +52,7 @@ enum BuildingType { PRODUCTION, ECONOMY, DEFENSE, TECH }
 # ==========================================
 @export_group("Combat (Defensive Towers)")
 @export var can_attack: bool = false             # True per Guard Tower, Cannon Tower
+@export var can_destroy: bool = true             # False per Mine
 @export var basic_damage: int = 0
 @export var piercing_damage: int = 0
 @export var attack_range: float = 0.0

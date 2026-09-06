@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="BuildingData" format=3 uid="uid://dh1x21s721dgh"]
+
+[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/building_data.gd" id="1_xkntl"]
+
+[resource]
+script = ExtResource("1_xkntl")
+metadata/_custom_type_script = "uid://cjdr3m81ncphw"

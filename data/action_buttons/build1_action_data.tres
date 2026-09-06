@@ -3,9 +3,12 @@
 [ext_resource type="Script" uid="uid://dxvkdxxr41niw" path="res://src/resources/ActionData/submenu_action_data.gd" id="1_8d6j7"]
 [ext_resource type="Texture2D" uid="uid://bq21mbjhcwlq3" path="res://assets/art/ui/icons/Icon - Build.tres" id="1_flkxk"]
 [ext_resource type="Script" uid="uid://b4yn7h2qqjq6g" path="res://src/resources/ActionData/action_data.gd" id="2_flkxk"]
+[ext_resource type="Resource" uid="uid://bh000cwjtw0jc" path="res://data/action_buttons/place_townhall_action_data.tres" id="4_ppgtc"]
+[ext_resource type="Resource" uid="uid://cqfflgfjvvimi" path="res://data/action_buttons/cancel_action_data.tres" id="5_4mmxv"]
 
 [resource]
 script = ExtResource("1_8d6j7")
+sub_actions = Array[ExtResource("2_flkxk")]([ExtResource("4_ppgtc"), null, null, null, null, null, null, null, ExtResource("5_4mmxv")])
 id = "build1"
 title = "Build"
 description = "Description Build"

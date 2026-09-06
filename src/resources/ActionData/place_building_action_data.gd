@@ -44,9 +44,14 @@ func _execute_action(_source_entities: Array, _target_data = null) -> void:
 	# Istanzia sotto entities_root (non GridManager)
 	var world_pos: Vector2 = GridManager.get_tile_center_global(_target_data)
 	var building: BaseBuilding = building_data.building_scene.instantiate()
+	if building:
+		building.setup(building_data)
+
 	if parent != null:
 		parent.add_child(building)
 	building.global_position = world_pos
+	var origin_tile: Vector2i = GridManager.get_tile_coords(world_pos)
+	GridManager.register_building_occupation(origin_tile, building_data.tile_size, building)
 	
 	# Proprietario (id + oggetto + colore), come nello spawn
 	if owner_player != null:
@@ -54,6 +59,7 @@ func _execute_action(_source_entities: Array, _target_data = null) -> void:
 		building.player_id = owner_player.player_id
 		if "player_color" in building:
 			building.player_color = owner_player.color
+	
 	
 	building.place_under_construction()
 

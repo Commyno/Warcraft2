@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="CancelActionData" format=3 uid="uid://cqfflgfjvvimi"]
+
+[ext_resource type="Script" uid="uid://dag2fp0vxo5yj" path="res://src/resources/ActionData/cancel_action_data.gd" id="1_41n50"]
+[ext_resource type="Texture2D" uid="uid://dlvfmayoyfx0n" path="res://assets/art/ui/icons/Icon - Cancel.tres" id="1_v2v4i"]
+
+[resource]
+script = ExtResource("1_41n50")
+id = "cancel"
+title = "Cancel"
+description = "Description Cancel"
+icon = ExtResource("1_v2v4i")
+shortcut_key = 4194305
+metadata/_custom_type_script = "uid://dag2fp0vxo5yj"
