@@ -6,6 +6,7 @@ extends ActionData
 
 func _init() -> void:
 	action_type = ActionType.TARGET_GRID_TILE
+	target_mode = ExecutionTargetMode.ANY
 
 func can_execute(source_entities: Array, player: Player) -> bool:
 	if player == null or building_data == null:
@@ -13,8 +14,8 @@ func can_execute(source_entities: Array, player: Player) -> bool:
 	# Delega l'affordabilità al BuildingData (che conosce i propri costi)
 	return building_data.is_affordable(player)
 
-func execute(source_entities: Array, target_tile = null) -> void:
-	if not (target_tile is Vector2i):
+func _execute_action(_source_entities: Array, _target_data = null) -> void:
+	if not (_target_data is Vector2i):
 		push_warning("%s: target_tile non è un Vector2i" % id)
 		return
 
@@ -22,10 +23,10 @@ func execute(source_entities: Array, target_tile = null) -> void:
 		push_warning("%s: building_data o scena mancante" % id)
 		return
 	
-	if source_entities.is_empty():
+	if _source_entities.is_empty():
 		return
 	
-	var builder = source_entities[0]
+	var builder = _source_entities[0]
 	var parent : Node2D = builder.get_parent()
 	var owner_player: Player = builder.player_owner   # il proprietario = quello del contadino
 	
@@ -41,7 +42,7 @@ func execute(source_entities: Array, target_tile = null) -> void:
 		)
 	
 	# Istanzia sotto entities_root (non GridManager)
-	var world_pos: Vector2 = GridManager.get_tile_center_global(target_tile)
+	var world_pos: Vector2 = GridManager.get_tile_center_global(_target_data)
 	var building: BaseBuilding = building_data.building_scene.instantiate()
 	if parent != null:
 		parent.add_child(building)

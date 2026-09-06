@@ -1,6 +1,9 @@
 class_name SelectionManager
 extends Node2D
 
+# Smart actions
+@export var smart_actions: Array[ActionData] = []
+
 # --- PROPRIETÀ E STATO ---
 var is_dragging: bool = false
 var start_pos: Vector2 = Vector2.ZERO
@@ -45,51 +48,61 @@ func _unhandled_input(event: InputEvent) -> void:
 	# --- 3. GESTIONE CLICK DESTRO (Ordine di Movimento in Formazione) ---
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
 		if event.pressed:
-			# Filtra solo le unità mobili per il movimento
-			var mobile_units: Array[BaseUnit] = []
-			for obj in currently_selected:
-				if obj is BaseUnit:
-					mobile_units.append(obj as BaseUnit)
-			
-			if mobile_units.size() > 0:
+
+			if currently_selected.size() > 0:
 				var target_position = get_global_mouse_position()
+				var actions := _get_smart_actions()   # le azioni contestuali dell'unità
+				var _local_player : Player = null #currently_selected[0].local_player
+				TargetingManager.resolve_smart_command(target_position, actions, currently_selected, _local_player)
+			
+			## Filtra solo le unità mobili per il movimento
+			#var mobile_units: Array[BaseUnit] = []
+			#for obj in currently_selected:
+				#if obj is BaseUnit:
+					#mobile_units.append(obj as BaseUnit)
+			#
+			#if mobile_units.size() > 0:
+				#var target_position = get_global_mouse_position()
+#
+				## 1. Controlliamo se abbiamo cliccato un oggetto interattivo (Nodi: Miniere, Nemici, Municipi)
+				#var clicked_target = _get_object_under_mouse(target_position)
+#
+				#if clicked_target:
+					## INTERAZIONE NODO: Ordiniamo alle unità di interagire con il bersaglio
+					#for unit in mobile_units:
+						#if unit.has_method("interact_with"):
+							#unit.interact_with(clicked_target)
+				#else:
+					## 2. Controlliamo se abbiamo cliccato un TILE interattivo (es. Alberi)
+					#var clicked_tile = GridManager.get_tile_coords(target_position)
+					#
+					## Chiediamo al GridManager se quel tile specifico è legna
+					#if GridManager.is_tree(clicked_tile):
+						#var tree_global_pos = GridManager.get_tile_center_global(clicked_tile)
+						#
+						#for unit in mobile_units:
+							## Solo i Peasant hanno l'abilità di tagliare!
+							#if unit is Peasant:
+								## Troviamo il centro del tile adiacente più vicino e sicuro
+								#var safe_destination = GridManager.get_best_chopping_position(clicked_tile, unit.global_position)
+								#unit.interact_with_tile(clicked_tile, safe_destination)
+							#else:
+								## Se per caso selezioni soldati e contadini insieme e clicchi un albero, 
+								## i soldati si muoveranno semplicemente lì vicino.
+								#unit.move_to(GridManager.get_available_destination(target_position, unit))
+					#
+					## 3. MOVIMENTO NORMALE SULLA MAPPA (Spazio vuoto)
+					#else:
+						#var final_destination = target_position
+						## Disegno sulla mappa il punto dove ho cliccato
+						#final_destination = GridManager.get_available_destination(target_position)
+						#debug_click_pos = final_destination
+						#queue_redraw()
+						#
+						#FormationManager.move_units_in_formation(mobile_units, final_destination)
 
-				# 1. Controlliamo se abbiamo cliccato un oggetto interattivo (Nodi: Miniere, Nemici, Municipi)
-				var clicked_target = _get_object_under_mouse(target_position)
-
-				if clicked_target:
-					# INTERAZIONE NODO: Ordiniamo alle unità di interagire con il bersaglio
-					for unit in mobile_units:
-						if unit.has_method("interact_with"):
-							unit.interact_with(clicked_target)
-				else:
-					# 2. Controlliamo se abbiamo cliccato un TILE interattivo (es. Alberi)
-					var clicked_tile = GridManager.get_tile_coords(target_position)
-					
-					# Chiediamo al GridManager se quel tile specifico è legna
-					if GridManager.is_tree(clicked_tile):
-						var tree_global_pos = GridManager.get_tile_center_global(clicked_tile)
-						
-						for unit in mobile_units:
-							# Solo i Peasant hanno l'abilità di tagliare!
-							if unit is Peasant:
-								# Troviamo il centro del tile adiacente più vicino e sicuro
-								var safe_destination = GridManager.get_best_chopping_position(clicked_tile, unit.global_position)
-								unit.interact_with_tile(clicked_tile, safe_destination)
-							else:
-								# Se per caso selezioni soldati e contadini insieme e clicchi un albero, 
-								# i soldati si muoveranno semplicemente lì vicino.
-								unit.move_to(GridManager.get_available_destination(target_position, unit))
-					
-					# 3. MOVIMENTO NORMALE SULLA MAPPA (Spazio vuoto)
-					else:
-						var final_destination = target_position
-						# Disegno sulla mappa il punto dove ho cliccato
-						final_destination = GridManager.get_available_destination(target_position)
-						debug_click_pos = final_destination
-						queue_redraw()
-						
-						FormationManager.move_units_in_formation(mobile_units, final_destination)
+func _get_smart_actions() -> Array[ActionData]:
+	return smart_actions
 
 func _draw():
 	if is_dragging:

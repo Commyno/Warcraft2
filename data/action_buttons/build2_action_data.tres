@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SubmenuActionData" format=3 uid="uid://5tvi7wxl3b3o"]
+
+[ext_resource type="Texture2D" uid="uid://cg6anwcuve868" path="res://assets/art/ui/icons/Icon - Build2.tres" id="1_0xvwp"]
+[ext_resource type="Script" uid="uid://dxvkdxxr41niw" path="res://src/resources/ActionData/submenu_action_data.gd" id="2_fxh1n"]
+[ext_resource type="Script" uid="uid://b4yn7h2qqjq6g" path="res://src/resources/ActionData/action_data.gd" id="3_mfs3o"]
+
+[resource]
+script = ExtResource("2_fxh1n")
+id = "build2"
+title = "Build extended"
+description = "Description Build"
+icon = ExtResource("1_0xvwp")
+target_mode = 1
+shortcut_key = 78
+metadata/_custom_type_script = "uid://dxvkdxxr41niw"

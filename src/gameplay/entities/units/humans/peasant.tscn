@@ -6,7 +6,12 @@
 [ext_resource type="Texture2D" uid="uid://c05ctx6gflok6" path="res://assets/spritesheets/humans/units/peasant/Humans_Peasant_BLUE.png" id="3_uscwp"]
 [ext_resource type="Resource" uid="uid://3jln7kt6s6oa" path="res://data/action_buttons/move_action_data.tres" id="4_2blpd"]
 [ext_resource type="AnimationLibrary" uid="uid://2iqnwyo6ubgj" path="res://assets/animations/units/Humas_Peasant.tres" id="4_7qhc5"]
-[ext_resource type="Resource" uid="uid://bh000cwjtw0jc" path="res://data/action_buttons/place_townhall_action_data.tres" id="5_2blpd"]
+[ext_resource type="Resource" uid="uid://bexvmhf4682mu" path="res://data/action_buttons/stop_action_data.tres" id="5_vq64i"]
+[ext_resource type="Resource" uid="uid://moq724rjihwe" path="res://data/action_buttons/attack_action_data.tres" id="6_qhgxn"]
+[ext_resource type="Resource" uid="uid://bm0sgywcw0ns4" path="res://data/action_buttons/repair_action_data.tres" id="7_4b5el"]
+[ext_resource type="Resource" uid="uid://duwyc6k56c1dp" path="res://data/action_buttons/gather_action_data.tres" id="8_gii3i"]
+[ext_resource type="Resource" uid="uid://25sba0lgjko5" path="res://data/action_buttons/build1_action_data.tres" id="9_8ackg"]
+[ext_resource type="Resource" uid="uid://5tvi7wxl3b3o" path="res://data/action_buttons/build2_action_data.tres" id="10_igboo"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2jfo3"]
 radius = 12.0
@@ -522,7 +527,7 @@ graph_offset = Vector2(125.175064, -78.01023)
 script = ExtResource("2_1q6u8")
 build_range = 40.0
 unit_name = "Peasant"
-available_actions = Array[ExtResource("3_7qhc5")]([ExtResource("4_2blpd"), ExtResource("5_2blpd")])
+available_actions = Array[ExtResource("3_7qhc5")]([ExtResource("4_2blpd"), ExtResource("5_vq64i"), ExtResource("6_qhgxn"), ExtResource("7_4b5el"), ExtResource("8_gii3i"), null, ExtResource("9_8ackg"), ExtResource("10_igboo"), null])
 
 [node name="Sprite2D" parent="." index="0" unique_id=1820984858]
 texture = ExtResource("3_uscwp")

@@ -5,6 +5,7 @@ func _init() -> void:
 	super()
 	id = "attack"
 	title = "Attacca"
+	target_mode = ExecutionTargetMode.ALL # Tutti i lavoratori selezionati vanno a raccogliere
 
 func _is_valid_target(source_entities: Array, target: Node2D) -> bool:
 	if not "player_id" in target:

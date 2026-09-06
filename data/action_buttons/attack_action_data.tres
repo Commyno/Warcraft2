@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="AttackActionData" format=3 uid="uid://moq724rjihwe"]
+
+[ext_resource type="Script" uid="uid://jviuw2kkqi2y" path="res://src/resources/ActionData/attack_action_data.gd" id="1_ldiqr"]
+[ext_resource type="Texture2D" uid="uid://kgljok8ttcv6" path="res://assets/art/ui/icons/Icon - Attack.tres" id="1_w014c"]
+[ext_resource type="Texture2D" uid="uid://bju2c0iqdtui5" path="res://assets/art/ui/cursors/Cursor-Cross-Creative-Concept.png" id="3_7pf1p"]
+
+[resource]
+script = ExtResource("1_ldiqr")
+id = "attack"
+title = "Muoversi ed attaccare"
+description = "Descrizione di muoversi ed attaccare"
+icon = ExtResource("1_w014c")
+action_type = 2
+shortcut_key = 65
+targeting_cursor = ExtResource("3_7pf1p")
+metadata/_custom_type_script = "uid://jviuw2kkqi2y"

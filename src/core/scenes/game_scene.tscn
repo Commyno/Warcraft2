@@ -89,6 +89,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+mouse_default_cursor_shape = 2
 script = ExtResource("11_q7n0o")
 
 [node name="ConfirmEndMenu" parent="PauseLayer/PauseRoot" unique_id=420413355 instance=ExtResource("2_pne3y")]

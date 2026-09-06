@@ -14,6 +14,8 @@ const PEASANT_TEXTURES = {
 const CHOP_SPEED: float = 1.0 # Quanto tempo ci mette per dare un colpo di ascia (in secondi)
 const MAX_CARRY: int = 10     # Quanta legna può portare
 
+enum Assignment { NONE, GATHERING_GOLD, GATHERING_WOOD }
+
 # --- PARAMETRI CONFIGURABILI DALL'INSPECTOR ---
 @export_group("Building")
 @export var build_range: float = 40.0
@@ -24,10 +26,10 @@ var enter_direction: Vector2 = Vector2.DOWN
 var is_building: bool = false
 var target_building: BaseBuilding = null
 
-# Mining variables
+# Collecting variables
+var current_assignment: Assignment = Assignment.NONE
 var target_mine: GoldMine = null
 var current_resource: Globals.ResourceType = Globals.ResourceType.NONE
-#var is_collecting: bool = false
 var resource_amount: int = 0
 #var target_resource_tile: Vector2i = Vector2i(-1, -1) Solo DEBUG
 var action_timer: float = 0.0
@@ -78,7 +80,7 @@ func _start_interaction(target: Node2D) -> void:
 			
 		# Se le tasche sono vuote, procede normalmente con l'ingresso
 		target_mine = target
-		#is_collecting = true
+		current_assignment = Assignment.GATHERING_GOLD
 		
 		if target.has_method("register_worker"):
 			var success = target.register_worker(self)
@@ -107,10 +109,12 @@ func _start_interaction(target: Node2D) -> void:
 			update_animation() # Questo farà tornare l'animazione senza sacco d'oro
 			
 			# 2. Torna automaticamente a lavorare
-			if target_mine and is_instance_valid(target_mine):
+			if current_assignment == Assignment.GATHERING_GOLD:
+			#if target_mine and is_instance_valid(target_mine):
 				print("Oro scaricato. Torno in miniera!")
 				interact_with(target_mine)
-			elif target_resource_tile != Vector2i(-1, -1):
+			elif current_assignment == Assignment.GATHERING_WOOD:
+			#elif target_resource_tile != Vector2i(-1, -1):
 				print("Legna scaricata. Torno nella foresta!")
 				_find_next_tree(target_resource_tile)
 			else:
@@ -433,6 +437,7 @@ func _start_tile_interaction(tile_coords: Vector2i) -> void:
 		current_resource != Globals.ResourceType.NONE
 		
 		unit_state = UnitState.CHOPPING
+		current_assignment = Assignment.GATHERING_WOOD
 		target_resource_tile = tile_coords
 		action_timer = CHOP_SPEED
 		
@@ -522,6 +527,9 @@ func _stop_collecting_task() -> void:
 	# non essendo più in CHOPPING, fermerà l'animazione dell'ascia
 	update_animation()
 
+func _clear_current_task() -> void:
+	super()
+	current_assignment = Assignment.NONE
 
 func die() -> void:
 	_stop_collecting_task()

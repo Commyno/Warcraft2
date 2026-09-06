@@ -132,63 +132,6 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	_handle_regeneration(delta)
 
-func _get_player_id() -> int:
-	if is_instance_valid(player_owner):
-		return player_owner.player_id
-	return -1
-
-func _set_player_color(color: Color) -> void:
-	player_color = color
-	_apply_team_color(color)
-
-func _apply_team_color(color: Color) -> void:
-	pass
-
-func get_health() -> float:
-	return current_health / max_health
-
-func get_available_actions() -> Array[ActionData]:
-	return available_actions
-
-# --- SISTEMA DI SELEZIONE ---
-
-func select() -> void:
-	if selectable_component:
-		selectable_component.select()
-
-func deselect() -> void:
-	if selectable_component:
-		selectable_component.deselect()
-
-func is_selected() -> bool:
-	if selectable_component:
-		return selectable_component.is_selected
-	return false
-
-# --- SISTEMA DI MOVIMENTO ---
-
-func move_to(target_pos: Vector2, arrival_offset: float = 16.0) -> void:
-	current_offset_target = arrival_offset
-	# Prima di muoversi, libera la cella che eventualmente occupava prima
-	# 1. GridManager.release_unit_reservations(self)
-	GridManager.release_unit_reservations(self)
-	
-	# 1. Assegni il bersaglio
-	nav_agent.target_position = target_pos
-	# Forza la generazione immediata della rotta!
-	nav_agent.get_current_navigation_path()
-	
-	# 3. Ora che la rotta è certa, chiediamo il prossimo punto
-	var next_path_pos = nav_agent.get_next_path_position()
-	
-	# 4. Calcoliamo la direzione
-	intended_dir = global_position.direction_to(next_path_pos)
-	
-	# 5. Diciamo fisicamente all'unità che deve mettersi in marcia
-	is_moving = true
-	unit_state = UnitState.MOVING
-	update_animation()
-
 func _physics_process(_delta: float) -> void:
 	if is_dead:
 		return
@@ -295,6 +238,85 @@ func _physics_process(_delta: float) -> void:
 			_on_velocity_computed(intended_velocity)
 	else:
 		update_animation()
+
+func _get_player_id() -> int:
+	if is_instance_valid(player_owner):
+		return player_owner.player_id
+	return -1
+
+func _set_player_color(color: Color) -> void:
+	player_color = color
+	_apply_team_color(color)
+
+func _apply_team_color(color: Color) -> void:
+	pass
+
+func get_health() -> float:
+	return current_health / max_health
+
+func get_available_actions() -> Array[ActionData]:
+	return available_actions
+
+# --- SISTEMA DI SELEZIONE ---
+
+func select() -> void:
+	if selectable_component:
+		selectable_component.select()
+
+func deselect() -> void:
+	if selectable_component:
+		selectable_component.deselect()
+
+func is_selected() -> bool:
+	if selectable_component:
+		return selectable_component.is_selected
+	return false
+
+# --- SISTEMA DI MOVIMENTO ---
+
+func move_to(target_pos: Vector2, arrival_offset: float = 16.0) -> void:
+	current_offset_target = arrival_offset
+	# Prima di muoversi, libera la cella che eventualmente occupava prima
+	# 1. GridManager.release_unit_reservations(self)
+	GridManager.release_unit_reservations(self)
+	
+	# 1. Assegni il bersaglio
+	nav_agent.target_position = target_pos
+	# Forza la generazione immediata della rotta!
+	nav_agent.get_current_navigation_path()
+	
+	# 3. Ora che la rotta è certa, chiediamo il prossimo punto
+	var next_path_pos = nav_agent.get_next_path_position()
+	
+	# 4. Calcoliamo la direzione
+	intended_dir = global_position.direction_to(next_path_pos)
+	
+	# 5. Diciamo fisicamente all'unità che deve mettersi in marcia
+	is_moving = true
+	unit_state = UnitState.MOVING
+	update_animation()
+
+func _clear_current_task() -> void:
+	# Solo pulizia logica: incarico e target. NON ferma il movimento.
+	current_target = null
+	is_moving_to_tile = false
+	target_tile = Vector2i(-1, -1)
+	# Rilascia le prenotazioni sui tile
+	GridManager.release_unit_reservations(self)
+
+func stop() -> void:
+	# 1. Annulla eventuali target/interazioni in corso
+	_clear_current_task()   # pulizia
+
+	# 2. Ferma il movimento
+	if nav_agent:
+		nav_agent.target_position = global_position   # destinazione = dove sei già
+	velocity = Vector2.ZERO
+	is_moving = false
+	unit_state = UnitState.IDLE
+
+	# 3. Aggiorna l'animazione (torna a idle)
+	update_animation()
 
 #Funzione virtuale: sovrascrivila nelle classi figlie!
 func _start_interaction(target: Node2D) -> void:

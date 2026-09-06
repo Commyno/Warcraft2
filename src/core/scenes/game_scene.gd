@@ -80,19 +80,15 @@ func _ready() -> void:
 	# 3. Configuriamo HUD e Telecamera
 	_load_hud(HUD_ROOT_UID)
 	_setup_level_camera()
-	
+
 # ==========================================
 # PLAYER SETUP
 # ==========================================
 func _init_players() -> void:
 
 	PlayerManager.create_players_from_match(players_node)
-	local_player = local_player
-	#local_player.game_over.connect(display_end_game_screen.bind(nuovo_player))
-
-	#player_list.clear()
-	#players_by_id.clear()
-
+	local_player = PlayerManager.local_player
+	local_player.game_over.connect(display_end_game_screen.bind(local_player))
 
 # ==========================================
 # LEVEL & MAP LOADING
@@ -180,6 +176,7 @@ func _parse_players(map_node: Node2D) -> void:
 		# Assegna la spawn position definitiva all'istanza Player
 		if spawn_positions.has(assigned_slot):
 			current_player.spawn_position = Vector2i(spawn_positions[assigned_slot])
+			#current_player.spawn_position = GridManager.get_tile_coords(spawn_positions[assigned_slot])
 		
 		print("Assegnato ", current_player.name, " al ", group_layer_name, " con colore: ", current_player.color)
 		

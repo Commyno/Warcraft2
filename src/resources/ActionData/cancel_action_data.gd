@@ -6,6 +6,7 @@ func _init() -> void:
 	title = "Annulla"
 	shortcut_key = KEY_ESCAPE
 	action_type = ActionType.IMMEDIATE
+	target_mode = ExecutionTargetMode.ALL # Tutti i lavoratori selezionati vanno a raccogliere
 
 func is_ui_action() -> bool:
 	return true

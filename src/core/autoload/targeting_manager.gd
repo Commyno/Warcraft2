@@ -37,6 +37,14 @@ func cancel() -> void:
 func is_targeting() -> bool:
 	return _active
 
+func resolve_smart_command(world_pos: Vector2, actions: Array, units: Array, player: Player) -> void:
+	var entity := _pick_entity_at(world_pos)
+	var tile := GridManager.get_tile_coords(world_pos)
+	for action in actions:
+		if action.accepts(entity, tile, world_pos, units, player):
+			action.execute(units, entity if entity != null else tile)
+			return
+
 ## Chiamato dal SelectionManager quando è in targeting mode.
 func handle_input(event: InputEvent) -> void:
 	if not _active:
@@ -89,10 +97,6 @@ func _get_world_mouse_position() -> Vector2:
 		return Vector2.ZERO
 	return cam.get_global_mouse_position()
 
-func _get_world_mouse_position_old() -> Vector2:
-	var viewport := get_viewport()
-	return viewport.get_canvas_transform().affine_inverse() * viewport.get_mouse_position()
-
 func _pick_entity_at(world_pos: Vector2) -> Node2D:
 	var space := get_viewport().get_world_2d().direct_space_state
 	var query := PhysicsPointQueryParameters2D.new()
@@ -105,7 +109,10 @@ func _pick_entity_at(world_pos: Vector2) -> Node2D:
 	return hits[0].collider as Node2D
 
 func _update_cursor(targeting: bool) -> void:
-	Input.set_default_cursor_shape(Input.CURSOR_CROSS if targeting else Input.CURSOR_ARROW)
+	if targeting and _action != null and _action.targeting_cursor != null:
+		Input.set_custom_mouse_cursor(_action.targeting_cursor, Input.CURSOR_ARROW, _action.cursor_hotspot)
+	else:
+		Input.set_custom_mouse_cursor(null)
 
 func _get_selection_manager() -> Node:
 	var m := get_tree().get_nodes_in_group("selection_manager")

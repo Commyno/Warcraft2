@@ -68,7 +68,8 @@ const BTDP_HERO_EXCEPTIONS = {
 @export var is_human       : bool = false
 @export var is_ai          : bool = false
 @export var is_local_player: bool = false
-var spawn_position         : Vector2i = Vector2i.ZERO
+#var spawn_position         : Vector2i = Vector2i.ZERO
+var spawn_position         : Vector2
 var color                  : Color = Color.WHITE
 var faction                : Globals.RaceType = Globals.RaceType.HUMANS #String = "Alliance"
 var team                   : int = 1

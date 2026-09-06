@@ -6,6 +6,7 @@ extends ActionData
 
 func _init() -> void:
 	action_type = ActionType.IMMEDIATE
+	target_mode = ExecutionTargetMode.ANY
 
 func can_execute(_source_entities: Array, player: Player) -> bool:
 	if player == null or upgrade_data == null:

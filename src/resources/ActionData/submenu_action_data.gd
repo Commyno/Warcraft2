@@ -7,6 +7,7 @@ extends ActionData
 
 func _init() -> void:
 	action_type = ActionType.IMMEDIATE
+	target_mode = ExecutionTargetMode.ANY
 
 func is_ui_action() -> bool:
 	return true
