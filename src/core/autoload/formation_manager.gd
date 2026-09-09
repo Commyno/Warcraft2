@@ -11,7 +11,16 @@ func move_units_in_formation(units: Array, target_position: Vector2) -> void:
 			
 	if movable_units.is_empty():
 		return
-		
+	
+	# 1. Prima di calcolare la formazione, liberiamo la mente e i vecchi tile
+	# di TUTTE le unità del gruppo
+	for unit in movable_units:
+		if unit.has_method("clear_assignment"):
+			unit.clear_assignment()
+		else:
+			# Fallback di sicurezza se ci finisce un'unità non standard
+			GridManager.release_unit_reservations(unit)
+	
 	# --- CASO SPECIALE: 1 SOLA UNITÀ ---
 	if movable_units.size() == 1:
 		var final_pos = GridManager.get_available_destination(target_position, movable_units[0])
@@ -34,7 +43,8 @@ func move_units_in_formation(units: Array, target_position: Vector2) -> void:
 		
 		var slot_position: Vector2 = target_position + Vector2(x_offset, y_offset)
 		
-		# Prima di mandarla, facciamo fare lo snap al centro del tile e verifichiamo la prelazione
-		var final_slot_position = GridManager.get_available_destination(slot_position, unit)
+		# auto_reserve = true prenota istantaneamente la cella!
+		# La prossima unità del ciclo vedrà questo tile come occupato e cercherà quello successivo.
+		var final_slot_position = GridManager.get_available_destination(slot_position, unit, true)
 		
 		unit.move_to(final_slot_position)

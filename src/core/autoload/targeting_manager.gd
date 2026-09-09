@@ -38,10 +38,17 @@ func is_targeting() -> bool:
 	return _active
 
 func resolve_smart_command(world_pos: Vector2, actions: Array, units: Array, player: Player) -> void:
-	var entity := _pick_entity_at(world_pos)
+	var entity := _get_object_under_mouse(world_pos)
 	var tile := GridManager.get_tile_coords(world_pos)
+	
 	for action in actions:
 		if action.accepts(entity, tile, world_pos, units, player):
+			
+			# --- LA REGOLA D'ORO: Ordine del giocatore ---
+			for unit in units:
+				if unit.has_method("clear_assignment"):
+					unit.clear_assignment()
+					
 			action.execute(units, entity if entity != null else tile)
 			return
 
@@ -75,6 +82,11 @@ func handle_input(event: InputEvent) -> void:
 func _resolve_and_execute(_event: InputEventMouseButton) -> void:
 	var world_pos: Vector2 = _get_world_mouse_position()
 
+	# --- LA REGOLA D'ORO: Ordine del giocatore ---
+	for unit in _units:
+		if unit.has_method("clear_assignment"):
+			unit.clear_assignment()
+
 	match _action.action_type:
 		ActionData.ActionType.TARGET_POSITION:
 			_get_selection_manager().show_click_marker(world_pos)
@@ -107,6 +119,23 @@ func _pick_entity_at(world_pos: Vector2) -> Node2D:
 	if hits.is_empty():
 		return null
 	return hits[0].collider as Node2D
+
+func _get_object_under_mouse(pos: Vector2) -> Node2D:
+	var space_state = get_viewport().get_world_2d().direct_space_state
+	var query = PhysicsPointQueryParameters2D.new()
+	query.position = pos
+	query.collide_with_areas = true  # Se la miniera è un'Area2D
+	query.collide_with_bodies = true # Se la miniera è uno StaticBody2D/RigidBody2D
+	
+	var results = space_state.intersect_point(query)
+	
+	for result in results:
+		var collider = result.collider
+		# Supponiamo che gli edifici o risorse siano in un gruppo specifico o ereditino da una classe
+		if collider.is_in_group("interactable") or collider is BaseBuilding:
+			return collider
+			
+	return null
 
 func _update_cursor(targeting: bool) -> void:
 	if targeting and _action != null and _action.targeting_cursor != null:

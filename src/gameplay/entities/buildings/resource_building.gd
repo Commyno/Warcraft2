@@ -2,7 +2,7 @@ class_name ResourceBuilding
 extends BaseBuilding
 
 # --- IDENTIFICAZIONE RISORSA ---
-@export var resource_id: int = 0
+#@export var resource_id: int = 0
 @export var resource_type: Globals.ResourceType = Globals.ResourceType.GOLD
 
 # --- STATISTICHE RISORSA ---
@@ -16,7 +16,7 @@ extends BaseBuilding
 @export var resource_per_cycle: int = 10
 
 # --- SEGNALI ---
-signal resources_changed(new_resources: float, max_resources: float)
+signal resources_changed(new_resources: int, max_resources: int)
 signal worker_entered(worker: Node2D)
 signal worker_exited(worker: Node2D)
 
@@ -37,15 +37,15 @@ func _ready() -> void:
 # --- SISTEMA DI ESTRAZIONE ---
 
 ## Ritorna l'ammontare effettivamente estratto
-func extract_resource(amount: float) -> float:
+func extract_resource(amount: int) -> int:
 	if is_depleted:
-		return 0.0
+		return 0
 		
-	var extracted = min(amount, current_resources)
+	var extracted : int = min(amount, current_resources)
 	current_resources -= extracted
 	resources_changed.emit(current_resources, max_resources)
 	
-	if current_resources <= 0.0:
+	if current_resources <= 0:
 		deplete_resource()
 		
 	return extracted
@@ -83,8 +83,9 @@ func spawn_depleted_ground() -> void:
 	
 	get_parent().add_child(rubble)
 
-func set_resources(resource: int) -> void: #resource_amount: int, status_active: bool) -> void:
-	max_resources = resource
+func set_resources(_resource: int, _max_resources) -> void: #resource_amount: int, status_active: bool) -> void:
+	current_resources = _resource
+	max_resources = _max_resources
 	resources_changed.emit(current_resources, max_resources)
 
 # --- SISTEMA DI DANNO E DISTRUZIONE ---

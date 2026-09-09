@@ -171,7 +171,7 @@ func _parse_players(map_node: Node2D) -> void:
 			break
 		
 		var assigned_slot = available_slots.pop_front()
-		var group_layer_name = "group " + str(assigned_slot)
+		var group_layer_name = "group " + str(1 + assigned_slot)
 		
 		# Assegna la spawn position definitiva all'istanza Player
 		if spawn_positions.has(assigned_slot):
@@ -291,57 +291,11 @@ func _parse_entities_layer(map_node: Node2D, layer_name: String) -> void:
 			# Controlliamo se l'entità è di tipo ResourceBuilding
 			if spawned_entity is ResourceBuilding:
 				if spawned_entity.has_method("setup"):
-					spawned_entity.set_resources(10000)
-					var resource = 16000
-					if MatchData.map_resources == 0:
-						resource *= 32000
-					else:
-						resource *= MatchData.map_resources 
-					spawned_entity.set_resources(resource)
+					var max_resource = 16000 * MatchData.map_resources
+					spawned_entity.set_resources(max_resource, max_resource)
 	
 	
 	entities_layer.queue_free()
-
-## Chiamala subito dopo aver fatto add_child() della mappa caricata
-#func _generate_dynamic_navmesh(map_tilemap_layer: TileMapLayer) -> void:
-	#var nav_poly = nav_region.navigation_polygon
-	#
-	#if not nav_poly:
-		#push_error("Nessun NavigationPolygon assegnato al NavigationRegion2D!")
-		#return
-#
-	## 1. Puliamo eventuali perimetri di mappe precedenti
-	#nav_poly.clear_outlines()
-#
-	#print("1. Attendo che i muri vengano caricati nella fisica...")
-	#await get_tree().physics_frame
-	#
-	## 2. Calcoliamo le dimensioni totali della mappa in pixel
-	#var used_rect = map_tilemap_layer.get_used_rect()
-	#var tile_size = map_tilemap_layer.tile_set.tile_size
-	#
-	#var top_left = Vector2(used_rect.position) * Vector2(tile_size)
-	#var bottom_right = Vector2(used_rect.end) * Vector2(tile_size)
-	#
-	## 3. Creiamo un array con i 4 angoli del rettangolo della mappa
-	#var bounding_outline = PackedVector2Array([
-		#top_left,
-		#Vector2(bottom_right.x, top_left.y),
-		#bottom_right,
-		#Vector2(top_left.x, bottom_right.y)
-	#])
-	#
-	## 4. Assegniamo il recinto al NavigationPolygon
-	#nav_poly.add_outline(bounding_outline)
-	#
-	## 5. Impostiamo l'Agent Radius via codice (se non l'hai già fatto nell'editor)
-	#nav_poly.agent_radius = 14.0 
-	#
-	## 6. Lanciamo il bake! 
-	## Godot prenderà il rettangolo, sottrarrà i muri fisici, applicherà il raggio e creerà l'area blu.
-	#nav_region.bake_navigation_polygon()
-	#
-	#print("NavMesh dinamica generata con successo!")
 
 # ==========================================
 # UI & HUD MANAGEMENT

@@ -25,7 +25,7 @@ func _ready() -> void:
 	
 	# Imposto lo stao idle manualmente per non far scattare chagne_state
 	current_state = BuildingState.IDLE
-	current_resources = Globals.ResourceType.GOLD
+	resource_type  = Globals.ResourceType.GOLD
 	_set_building_region(region_idle)
 		
 func change_state(new_state: BuildingState) -> void:

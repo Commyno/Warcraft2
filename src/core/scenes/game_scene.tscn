@@ -7,7 +7,12 @@
 [ext_resource type="PackedScene" uid="uid://dwct7eo8yrrur" path="res://src/core/level_objects/building_placement_manager.tscn" id="3_ckpro"]
 [ext_resource type="Script" uid="uid://ccfs0c13co3o4" path="res://src/core/level_objects/selection_manager.gd" id="4_hu2nw"]
 [ext_resource type="Script" uid="uid://dap2xc5gj4whk" path="res://src/ui/ui_manager.gd" id="5_hvw6c"]
+[ext_resource type="Script" uid="uid://b4yn7h2qqjq6g" path="res://src/resources/ActionData/action_data.gd" id="7_erm7f"]
+[ext_resource type="Resource" uid="uid://moq724rjihwe" path="res://data/action_buttons/attack_action_data.tres" id="8_q7edv"]
+[ext_resource type="Resource" uid="uid://bm0sgywcw0ns4" path="res://data/action_buttons/repair_action_data.tres" id="9_wfdp2"]
 [ext_resource type="Script" uid="uid://ctoliwylc1vd2" path="res://src/gameplay/camera/RTSCamera.gd" id="10_pne3y"]
+[ext_resource type="Resource" uid="uid://duwyc6k56c1dp" path="res://data/action_buttons/gather_action_data.tres" id="10_vbd6u"]
+[ext_resource type="Resource" uid="uid://3jln7kt6s6oa" path="res://data/action_buttons/move_action_data.tres" id="11_71en5"]
 [ext_resource type="Script" uid="uid://cwqoqoahfpjhe" path="res://src/core/scenes/pause_root.gd" id="11_q7n0o"]
 [ext_resource type="PackedScene" uid="uid://d0a4dccu6h0bf" path="res://src/ui/pause_menu/pause_menu.tscn" id="12_337e0"]
 [ext_resource type="Script" uid="uid://c5omt4lkh6711" path="res://src/core/scenes/debug_root.gd" id="13_620dx"]
@@ -55,6 +60,7 @@ grid_dimensions = Vector2i(32, 32)
 [node name="SelectionManager" type="Node2D" parent="." unique_id=31750775 groups=["selection_manager"]]
 z_index = 9
 script = ExtResource("4_hu2nw")
+smart_actions = Array[ExtResource("7_erm7f")]([ExtResource("8_q7edv"), ExtResource("9_wfdp2"), ExtResource("10_vbd6u"), ExtResource("11_71en5")])
 
 [node name="Environment" type="Node2D" parent="." unique_id=1620180002]
 

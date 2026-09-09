@@ -1,9 +1,10 @@
 [gd_scene format=3 uid="uid://gqjr7f7ijo08"]
 
 [ext_resource type="Script" uid="uid://dtv6btrhvydlp" path="res://src/gameplay/entities/buildings/base_building.gd" id="1_tpccr"]
-[ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/art/humans/buildings/Humans - Human Buildings (Summer).png" id="2_p3hth"]
+[ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/art/race/humans/buildings/Humans - Human Buildings (Summer).png" id="2_p3hth"]
 [ext_resource type="Script" uid="uid://3e5qiqyf3ev3" path="res://src/gameplay/entities/units/selection_ring.gd" id="3_a17aa"]
 [ext_resource type="Script" uid="uid://65xprcgadmde" path="res://src/gameplay/entities/selectable_component.gd" id="4_wmeqw"]
+
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_tpccr"]
 radius = 64.0

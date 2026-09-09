@@ -8,7 +8,7 @@ func _init() -> void:
 	action_type = ActionType.TARGET_GRID_TILE
 	target_mode = ExecutionTargetMode.ANY
 
-func can_execute(source_entities: Array, player: Player) -> bool:
+func can_execute(_source_entities: Array, player: Player) -> bool:
 	if player == null or building_data == null:
 		return false
 	# Delega l'affordabilità al BuildingData (che conosce i propri costi)

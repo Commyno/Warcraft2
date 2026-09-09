@@ -7,14 +7,14 @@ extends ActionData
 func _init() -> void:
 	action_type = ActionType.IMMEDIATE
 
-func can_execute(source_entities: Array, player: Player) -> bool:
-	var caster : CasterUnit = source_entities[0] as CasterUnit if not source_entities.is_empty() else null
+func can_execute(_source_entities: Array, player: Player) -> bool:
+	var caster : CasterUnit = _source_entities[0] as CasterUnit if not _source_entities.is_empty() else null
 	if caster == null or ability_data == null:
 		return false
 
 	return ability_data.can_cast(caster, player)
 
-func execute(source_entities: Array, _target_data = null) -> void:
+func execute(source_entities: Array, target_data = null) -> void:
 	var caster : CasterUnit = source_entities[0] as CasterUnit if not source_entities.is_empty() else null
 	if caster == null or ability_data == null:
 		return

@@ -48,16 +48,6 @@ func _on_selection_changed(selected_objects: Array[Node2D]) -> void:
 			# 3. Chiama la funzione setup()
 			if stats_box.has_method("setup"):
 				stats_box.setup(selected_object)
-		elif selected_object is BaseBuilding:
-			# 1. Istanzia la scena (crea l'oggetto in memoria)
-			var stats_box = BUILDING_STATS_BOX.instantiate()
-			
-			# 2. Aggiungilo come figlio del nodo corrente
-			add_child(stats_box)
-			
-			# 3. Chiama la funzione setup()
-			if stats_box.has_method("setup"):
-				stats_box.setup(selected_object)
 		elif selected_object is ResourceBuilding:
 			# 1. Istanzia la scena (crea l'oggetto in memoria)
 			var stats_box = RESOURCE_STATS_BOX.instantiate()
@@ -68,9 +58,21 @@ func _on_selection_changed(selected_objects: Array[Node2D]) -> void:
 			# 3. Chiama la funzione setup()
 			if stats_box.has_method("setup"):
 				stats_box.setup(selected_object)
+
+		elif selected_object is BaseBuilding:
+			# 1. Istanzia la scena (crea l'oggetto in memoria)
+			var stats_box = BUILDING_STATS_BOX.instantiate()
+			
+			# 2. Aggiungilo come figlio del nodo corrente
+			add_child(stats_box)
+			
+			# 3. Chiama la funzione setup()
+			if stats_box.has_method("setup"):
+				stats_box.setup(selected_object)
 		
 		show()
-		_update_ui(selected_object)
+		#_update_ui(selected_object)
+	
 	else:
 		# 1. Ripuliamo tutti i figli
 		for child in get_children():
@@ -91,7 +93,7 @@ func _update_ui(entity: Node2D) -> void:
 		if panel and panel.has_method("update"):
 			panel.update(entity)
 	
-	elif entity is ResourceBuilding:
-		var panel = get_child(0) as ResourceStatsBox
-		if panel and panel.has_method("update"):
-			panel.update(entity)
+	#elif entity is ResourceBuilding:
+		#var panel = get_child(0) as ResourceStatsBox
+		#if panel and panel.has_method("update"):
+			#panel.update(entity)

@@ -4,8 +4,8 @@ extends AbilityData
 @export var unit_to_spawn: UnitData       # Risorsa dello Scheletro da istanziare
 @export var summon_duration: float = 30.0 # Durata a tempo prima che muoia
 
-func can_execute(source_entities: Array, player: Player) -> bool:
-	var caster = source_entities[0] if not source_entities.is_empty() else null
+func can_execute(_source_entities: Array, player: Player) -> bool:
+	var caster = _source_entities[0] if not _source_entities.is_empty() else null
 	if caster == null:
 		return false
 	# cooldown attivo → non eseguibile

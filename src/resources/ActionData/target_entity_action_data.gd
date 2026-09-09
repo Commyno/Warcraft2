@@ -5,8 +5,14 @@ func _init() -> void:
 	action_type = ActionType.TARGET_ENTITY
 	target_mode = ExecutionTargetMode.ALL
 
-func accepts(entity, _tile, _pos, units, _player) -> bool:
-	return entity != null and _is_valid_target(units, entity)
+func accepts(_entity, _tile, _pos, _units, _player) -> bool:
+	if _entity == null or not (_entity is Node2D):
+		push_warning("%s: target_entity non valido" % id)
+		return false
+	if not _is_valid_target(_units, _entity):
+		push_warning("%s: target_entity non valido" % id)
+		return false
+	return true
 
 func _execute_action(_source_entities: Array, _target_data = null) -> void:
 	if not (_target_data is Node2D):
@@ -20,7 +26,7 @@ func _execute_action(_source_entities: Array, _target_data = null) -> void:
 		_apply_to_unit(entity, _target_data)
 
 # I figli sovrascrivono questo per aggiungere comportamento oltre al movimento.
-func _apply_to_unit(_entity: Node, _target_position: Vector2) -> void:
+func _apply_to_unit(_entity: Node, _target_position: Node) -> void:
 	if _entity.has_method("interact_with"):
 		_entity.interact_with(_target_position)
 

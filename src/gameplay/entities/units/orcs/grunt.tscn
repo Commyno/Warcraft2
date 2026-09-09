@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://d4gkx1a72tq2j"]
 
 [ext_resource type="PackedScene" uid="uid://c16jrqo7auhk1" path="res://src/gameplay/entities/units/base_unit.tscn" id="1_axat1"]
-[ext_resource type="Texture2D" uid="uid://bbigol2xir1tg" path="res://assets/art/humans/units/footman/Humans - Footman - Idle - downright - 00.tres" id="2_wdkq6"]
+[ext_resource type="Texture2D" uid="uid://bbigol2xir1tg" path="res://assets/art/race/humans/units/footman/Humans - Footman - Idle - downright - 00.tres" id="2_wdkq6"]
 [ext_resource type="AnimationLibrary" uid="uid://bpuy2w1wp5d2u" path="res://assets/animations/units/Footman.res" id="3_3qruj"]
+
 
 [sub_resource type="Animation" id="Animation_k12jx"]
 length = 0.001

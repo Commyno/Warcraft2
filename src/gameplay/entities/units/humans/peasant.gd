@@ -2,39 +2,29 @@ class_name Peasant
 extends BaseUnit
 
 const PEASANT_TEXTURES = {
-	Color.BLACK: preload("res://assets/spritesheets/humans/units/peasant/Humans_Peasant_BLACK.png"),
-	Color.BLUE: preload("res://assets/spritesheets/humans/units/peasant/Humans_Peasant_BLUE.png"),
-	Color.GREEN: preload("res://assets/spritesheets/humans/units/peasant/Humans_Peasant_GREEN.png"),
-	Color.ORANGE: preload("res://assets/spritesheets/humans/units/peasant/Humans_Peasant_ORANGE.png"),
-	Color.RED: preload("res://assets/spritesheets/humans/units/peasant/Humans_Peasant_RED.png"),
-	Color.VIOLET: preload("res://assets/spritesheets/humans/units/peasant/Humans_Peasant_VIOLET.png"),
-	Color.WHITE: preload("res://assets/spritesheets/humans/units/peasant/Humans_Peasant_WHITE.png"),
-	Color.YELLOW: preload("res://assets/spritesheets/humans/units/peasant/Humans_Peasant_YELLOW.png"),
+	Color.BLACK: preload("res://assets/art/race/humans/units/peasant/Humans_Peasant_BLACK.png"),
+	Color.BLUE: preload("res://assets/art/race/humans/units/peasant/Humans_Peasant_BLUE.png"),
+	Color.GREEN: preload("res://assets/art/race/humans/units/peasant/Humans_Peasant_GREEN.png"),
+	Color.ORANGE: preload("res://assets/art/race/humans/units/peasant/Humans_Peasant_ORANGE.png"),
+	Color.RED: preload("res://assets/art/race/humans/units/peasant/Humans_Peasant_RED.png"),
+	Color.VIOLET: preload("res://assets/art/race/humans/units/peasant/Humans_Peasant_VIOLET.png"),
+	Color.WHITE: preload("res://assets/art/race/humans/units/peasant/Humans_Peasant_WHITE.png"),
+	Color.YELLOW: preload("res://assets/art/race/humans/units/peasant/Humans_Peasant_YELLOW.png"),
 }
-const CHOP_SPEED: float = 1.0 # Quanto tempo ci mette per dare un colpo di ascia (in secondi)
-const MAX_CARRY: int = 10     # Quanta legna può portare
-
-enum Assignment { NONE, GATHERING_GOLD, GATHERING_WOOD }
 
 # --- PARAMETRI CONFIGURABILI DALL'INSPECTOR ---
 @export_group("Building")
 @export var build_range: float = 40.0
+@export var chop_speed: float =  1.0 # Quanto tempo ci mette per dare un colpo di ascia (in secondi)
+@export var max_carry: int =  10 # Quanta legna può portare
 
 var enter_direction: Vector2 = Vector2.DOWN
 
-# Building variables
+# TODO: Building variables (Da valutare in futuro, per ora le teniamo)
 var is_building: bool = false
-var target_building: BaseBuilding = null
 
 # Collecting variables
-var current_assignment: Assignment = Assignment.NONE
 var target_mine: GoldMine = null
-var current_resource: Globals.ResourceType = Globals.ResourceType.NONE
-var resource_amount: int = 0
-#var target_resource_tile: Vector2i = Vector2i(-1, -1) Solo DEBUG
-var action_timer: float = 0.0
-
-# Automatismo per il feedback visivo dell'albero in fase di taglio
 var target_resource_tile: Vector2i = Vector2i(-1, -1):
 	set(value):
 		if target_resource_tile != Vector2i(-1, -1) and GridManager:
@@ -44,6 +34,9 @@ var target_resource_tile: Vector2i = Vector2i(-1, -1):
 		
 		if target_resource_tile != Vector2i(-1, -1) and GridManager:
 			GridManager.add_tile_highlight(target_resource_tile)
+var current_resource: Globals.ResourceType = Globals.ResourceType.NONE
+var resource_amount: int = 0
+var action_timer: float = 0.0
 
 func _ready() -> void:
 	super._ready()
@@ -51,77 +44,61 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	super(delta)
-	_handle_building_logic()
+	#_handle_building_logic()
 	
 	# --- CICLO DI TAGLIO LEGNA ---
 	if unit_state == UnitState.CHOPPING:
 		action_timer -= delta
 		if action_timer <= 0.0:
-			action_timer = CHOP_SPEED
+			action_timer = chop_speed
 			_perform_chop()
 
 # --- GESTIONE INTERAZIONE E MINIERA ---
 
 func _start_interaction(target: Node2D) -> void:
-	# 1. Sganciamento dal eventuale altra attività
-	_stop_collecting_task()
-	
-	# --- 1. GESTIONE MINIERA (Raccolta) ---
+# --- 1. GESTIONE MINIERA ---
 	if target is GoldMine:
-		# --- DIMENTICA LA LEGNA ---
-		target_resource_tile = Vector2i(-1, -1) 
-		unit_state = UnitState.IDLE # Resetta eventuali stati di chopping
+		target_resource_tile = Vector2i(-1, -1) # Dimentica la legna
+		action_timer = 0.0
 		
-		# CONTROLLO: Il contadino ha già delle risorse in tasca?
 		if current_resource != Globals.ResourceType.NONE and resource_amount > 0:
 			print("Ho già delle risorse! Vado a depositarle al Municipio.")
+			current_assignment = AssignmentState.GATHER_GOLD
+			target_mine = target # <- SALVA IN MEMORIA LA MINIERA
 			_go_to_town_hall()
 			return
-			
-		# Se le tasche sono vuote, procede normalmente con l'ingresso
-		target_mine = target
-		current_assignment = Assignment.GATHERING_GOLD
+		
+		current_assignment = AssignmentState.GATHER_GOLD
+		target_mine = target # <- SALVA IN MEMORIA LA MINIERA
 		
 		if target.has_method("register_worker"):
 			var success = target.register_worker(self)
 			if not success:
-				print("Miniera piena, non posso entrare!")
+				print("Miniera piena!")
+				clear_assignment() 
 	
-	# --- 2. GESTIONE DEPOSITO (Municipio o Lumber Mill) ---
+	# --- 2. GESTIONE DEPOSITO (Municipio / Lumber Mill) ---
 	elif target.is_in_group("town_hall") or target.is_in_group("lumber_mill"):
-		
 		if current_resource != Globals.ResourceType.NONE and resource_amount > 0:
-			print("Scaricato ", resource_amount, " risorse alla base!")
-			
-			# Qui è dove dirai al gioco di aggiungere effettivamente i soldi al giocatore.
-			# Esempio: GameManager.add_resource(player_id, current_resource, resource_amount)
-			if current_resource == Globals.ResourceType.GOLD:
-				player_owner.add_gold(resource_amount)
-			elif current_resource == Globals.ResourceType.WOOD:
-				player_owner.add_lumber(resource_amount)
-			elif current_resource == Globals.ResourceType.OIL:
-				player_owner.add_oil(resource_amount)
+			if current_resource == Globals.ResourceType.GOLD: player_owner.add_gold(resource_amount)
+			elif current_resource == Globals.ResourceType.WOOD: player_owner.add_lumber(resource_amount)
+			elif current_resource == Globals.ResourceType.OIL: player_owner.add_oil(resource_amount)
 
-			# 1. Svuotiamo lo zaino del contadino
 			current_resource = Globals.ResourceType.NONE
 			resource_amount = 0
 			unit_state = UnitState.IDLE
-			update_animation() # Questo farà tornare l'animazione senza sacco d'oro
+			update_animation()
 			
-			# 2. Torna automaticamente a lavorare
-			if current_assignment == Assignment.GATHERING_GOLD:
-			#if target_mine and is_instance_valid(target_mine):
-				print("Oro scaricato. Torno in miniera!")
-				interact_with(target_mine)
-			elif current_assignment == Assignment.GATHERING_WOOD:
-			#elif target_resource_tile != Vector2i(-1, -1):
-				print("Legna scaricata. Torno nella foresta!")
+			# LEGGE DALLA MEMORIA SICURA (target_mine e target_resource_tile)
+			if current_assignment == AssignmentState.GATHER_GOLD and target_mine != null:
+				interact_with(target_mine) 
+			elif current_assignment == AssignmentState.GATHER_WOOD and target_resource_tile != Vector2i(-1, -1):
 				_find_next_tree(target_resource_tile)
 			else:
-				print("Lavoro finito, attendo ordini.")
+				clear_assignment()
 
 func enter_mine(mine: GoldMine) -> void:
-	if !is_instance_valid(target_mine) or target_mine.is_depleted:
+	if !is_instance_valid(current_target) or current_target.is_depleted:
 		return
 	
 	#is_moving = false
@@ -150,7 +127,13 @@ func enter_mine(mine: GoldMine) -> void:
 			remove_from_group("selectable_units")
 	
 	deselect()
-		
+	
+	# Sganciamo il Peasant dalla selezione attiva del giocatore
+	var sm = get_tree().get_first_node_in_group("selection_manager")
+	if sm and sm.currently_selected.has(self):
+		sm.currently_selected.erase(self)
+		sm.selection_changed.emit(sm.currently_selected)
+	
 	# --- NUOVO: Calcolo dinamico della durata basato su move_speed ---
 	var distance = global_position.distance_to(mine.global_position)
 	# Usiamo move_speed (con un moltiplicatore opzionale se vuoi renderlo un po' più scattante)
@@ -181,10 +164,10 @@ func exit_mine(gold_amount: int) -> void:
 	# 2. Calcoliamo la posizione di uscita[cite: 1]
 	var exit_position = global_position
 	
-	if target_mine and is_instance_valid(target_mine) and GridManager.tile_map_layer:
+	if current_target and is_instance_valid(current_target) and GridManager.tile_map_layer:
 		# Passiamo la posizione della miniera, la sua dimensione in tile (3x3), 
 		# la direzione di entrata e il peasant stesso per i controlli di collisione
-		exit_position = GridManager.get_adjacent_free_position(target_mine.global_position, Vector2i(3, 3), enter_direction, self)
+		exit_position = GridManager.get_adjacent_free_position(current_target.global_position, Vector2i(3, 3), enter_direction, self)
 	else:
 		# Fallback se manca il target
 		exit_position = global_position + (enter_direction * 32.0)
@@ -202,7 +185,6 @@ func exit_mine(gold_amount: int) -> void:
 		last_facing_dir = exit_direction
 
 	# 3. Forziamo l'animazione di camminata ("Walk") durante l'uscita[cite: 1]
-	#is_moving = true
 	unit_state = UnitState.MOVING
 	update_animation()
 
@@ -219,7 +201,6 @@ func exit_mine(gold_amount: int) -> void:
 	await tween.finished
 
 	# 5. Fine movimento: fermiamo l'animazione di camminata[cite: 1]
-	#is_moving = false
 	unit_state = UnitState.IDLE
 	update_animation()
 
@@ -256,10 +237,9 @@ func exit_mine(gold_amount: int) -> void:
 		_go_to_town_hall()
 	else:
 		unit_state = UnitState.IDLE
-		target_mine = null
+		current_target = null
 
 func _go_to_town_hall():
-	unit_state = UnitState.RETURNING_RESOURCES
 	var valid_buildings = []
 	
 	# Recupera gli edifici dalla scena tramite i gruppi assegnati
@@ -281,7 +261,6 @@ func _go_to_town_hall():
 	# 3) Troviamo l'edificio valido più vicino
 	var closest_building = null
 	var min_distance = INF # Inizializziamo a infinito per il primo confronto
-	
 	for building in valid_buildings:
 		# Usiamo distance_squared_to per evitare il calcolo della radice quadrata, ottimizzando le performance
 		var dist = global_position.distance_squared_to(building.global_position)
@@ -293,10 +272,61 @@ func _go_to_town_hall():
 	# Assegniamo la destinazione finale al NavigationAgent2D
 	if closest_building:
 		interact_with(closest_building)
-		#nav_agent.target_position = closest_building.global_position
-		# Inserisci qui l'eventuale cambio di stato (es. cambiare l'animazione o avviare il movimento)
 	else:
 		print("Nessun centro di deposito trovato per il Player ", player_id)
+
+# Quando arriva adiacente all'albero
+func _start_tile_interaction(tile_coords: Vector2i) -> void:
+	if current_resource != Globals.ResourceType.NONE and resource_amount > 0:
+		current_assignment = AssignmentState.GATHER_WOOD
+		target_resource_tile = tile_coords # <- SALVA L'ALBERO IN MEMORIA
+		_go_to_town_hall()
+		return 
+		
+	if GridManager.is_tree(tile_coords):
+		target_mine = null # Dimentica la miniera
+		unit_state = UnitState.CHOPPING
+		current_assignment = AssignmentState.GATHER_WOOD
+		target_resource_tile = tile_coords # <- SALVA L'ALBERO IN MEMORIA
+		action_timer = chop_speed
+		
+		var tree_global_pos = GridManager.get_tile_center_global(tile_coords)
+		intended_dir = (tree_global_pos - global_position).normalized()
+		last_facing_dir = intended_dir 
+		update_animation()
+	else:
+		if current_assignment == AssignmentState.GATHER_WOOD:
+			_find_next_tree(tile_coords)
+
+# Il colpo d'ascia effettivo (chiamato dal _process ogni secondo)
+func _perform_chop() -> void:
+	var obtained = GridManager.chop_tree(target_resource_tile, 5) # <- corretto
+	
+	if obtained > 0:
+		current_resource = Globals.ResourceType.WOOD
+		resource_amount += obtained
+		
+		if resource_amount >= max_carry:
+			unit_state = UnitState.IDLE 
+			_go_to_town_hall()
+	else:
+		_find_next_tree(target_resource_tile) # <- corretto
+
+# Ricerca un nuovo albero vicino a quello appena tagliato
+func _find_next_tree(start_tile: Vector2i) -> void:
+	var next_tree = GridManager.get_closest_tree_around(start_tile, 5)
+	
+	if next_tree != Vector2i(-1, -1):
+		var tree_global = GridManager.get_tile_center_global(next_tree)
+		var safe_pos = GridManager.get_adjacent_free_position(tree_global, Vector2i(1, 1), Vector2.DOWN, self)
+		interact_with_tile(next_tree, safe_pos) 
+	else:
+		if resource_amount > 0:
+			_go_to_town_hall()
+		else:
+			clear_assignment() # Nessuna legna, nessun albero: fermati del tutto.
+
+# --- GESTIONE ANIMAZIONWI ---
 
 func update_animation_parameters(move_velocity: Vector2) -> void:
 	var move_dir: Vector2 = move_velocity.normalized()
@@ -334,32 +364,32 @@ func update_animation() -> void:
 	
 	if is_dead:
 		state_machine.travel("Death")
-		state = "Death"
+		animation_state = "Death"
 	else:
 		#if is_moving and actual_speed > 10.0:
 		if unit_state == UnitState.MOVING and actual_speed > 10.0:
 			last_facing_dir = move_dir
 			state_machine.travel("Walk")
-			state = "Walk"
+			animation_state = "Walk"
 		elif unit_state == UnitState.RETURNING_RESOURCES:
 			last_facing_dir = move_dir
 			state_machine.travel("Walk")
-			state = "Walk"
+			animation_state = "Walk"
 		elif unit_state == UnitState.ATTACKING:
 			state_machine.travel("Attack")
-			state = "Attack"
+			animation_state = "Attack"
 		elif unit_state == UnitState.CHOPPING:
 			state_machine.travel("Attack")
-			state = "Attack"
+			animation_state = "Attack"
 		elif unit_state == UnitState.MINING:
 			state_machine.travel("Idle")
-			state = "Idle"
+			animation_state = "Idle"
 		elif unit_state == UnitState.BUILDING or unit_state == UnitState.REPARING:
 			state_machine.travel("Attack")
-			state = "Attack"
+			animation_state = "Attack"
 		else:
 			state_machine.travel("Idle")
-			state = "Idle"
+			animation_state = "Idle"
 	
 	if move_dir.x < -0.1:
 		unit_sprite.flip_h = true
@@ -367,23 +397,19 @@ func update_animation() -> void:
 		unit_sprite.flip_h = false
 
 func assign_build_task(building: BaseBuilding) -> void:
-	_stop_current_building_task()
-	target_building = building
+	clear_assignment() # <- Usa la funzione del padre
+	current_target = building
+	# In futuro modificheremo anche questa, ma per ora la teniamo così
 	move_to(building.global_position)
 
-func stop_or_change_task() -> void:
-	_stop_current_building_task()
-	
 func _handle_building_logic() -> void:
-	if not target_building or not is_instance_valid(target_building):
-		_stop_current_building_task()
-		return
-		
-	if not target_building.is_under_construction:
-		_stop_current_building_task()
+	if not current_target or \
+		not is_instance_valid(current_target) or \
+		not current_target.is_under_construction:
+		clear_assignment()
 		return
 	
-	var distance = global_position.distance_to(target_building.global_position)
+	var distance = global_position.distance_to(current_target.global_position)
 	
 	if distance <= build_range:
 		if nav_agent and not nav_agent.is_navigation_finished():
@@ -391,17 +417,20 @@ func _handle_building_logic() -> void:
 			
 		if not is_building:
 			is_building = true
-			target_building.register_builder(self)
+			current_target.register_builder(self)
 	elif is_building and distance > build_range:
 		is_building = false
-		target_building.unregister_builder(self)
+		current_target.unregister_builder(self)
 		
-func _stop_current_building_task() -> void:
-	if is_building and target_building and is_instance_valid(target_building):
-		target_building.unregister_builder(self)
-		
+# Sovrascriviamo la funzione del padre per aggiungere le pulizie specifiche del contadino
+func clear_assignment() -> void:
+	if unit_state == UnitState.MINING:
+		return
+	target_mine = null
+	target_resource_tile = Vector2i(-1, -1)
+	action_timer = 0.0
 	is_building = false
-	target_building = null
+	super()
 
 func _apply_team_color(color: Color) -> void:
 	if not unit_sprite:
@@ -412,125 +441,19 @@ func _apply_team_color(color: Color) -> void:
 	else:
 		push_warning("Nessuna texture trovata per il colore: ", color)
 
-# Quando arriva adiacente all'albero
-# Quando arriva adiacente all'albero
-func _start_tile_interaction(tile_coords: Vector2i) -> void:
-	# 1. Sganciamento dal eventuale altra attività
-	_stop_collecting_task()
-
-	# 2. Controllo se zaino pieno
-	# Se il contadino ha già della legna e clicchi un albero, prima deve
-	# andare a depositare le risorse al volo!
-	if current_resource != Globals.ResourceType.WOOD and resource_amount > 0:
-		print("Ho già delle risorse! Vado a depositarle alla base.")
-		_go_to_town_hall()
-		return # Blocca l'inizio del taglio
-		
-	# 3. Verifico che il tile sia un albero e che non sia stato già
-	#  tagliato via
-	if GridManager.is_tree(tile_coords):
-		# Dimentico la miniera
-		target_mine = null 
-		# Mel caso abbia altre risorse che non erano legno altrimenti le 
-		# avrei depositate, le getto via
-		resource_amount = 0
-		current_resource != Globals.ResourceType.NONE
-		
-		unit_state = UnitState.CHOPPING
-		current_assignment = Assignment.GATHERING_WOOD
-		target_resource_tile = tile_coords
-		action_timer = CHOP_SPEED
-		
-		# Gira lo sprite verso l'albero (Aggiorniamo la memoria permanente della direzione!)
-		var tree_global_pos = GridManager.get_tile_center_global(tile_coords)
-		var face_direction = (tree_global_pos - global_position).normalized()
-		
-		intended_dir = face_direction
-		last_facing_dir = face_direction # <-- LA RIGA MAGICA
-		
-		update_animation()
-		
-	# --- 3. Albero già tagliato mentre ci arrivava, ne cerca un altro
-	else:
-		print("Albero non trovato all'arrivo! Ne cerco un altro vicino...")
-		# Invece di fermarsi a caso, cerca automaticamente il prossimo albero
-		_find_next_tree(tile_coords)
-
-# Il colpo d'ascia effettivo (chiamato dal _process ogni secondo)
-func _perform_chop() -> void:
-	# Infligge 5 danni all'albero e ottiene legna
-	var obtained = GridManager.chop_tree(target_resource_tile, 5) 
-	
-	if obtained > 0:
-		current_resource = Globals.ResourceType.WOOD
-		resource_amount += obtained
-		
-		print("Legna attuale: ", resource_amount)
-		
-		if resource_amount >= MAX_CARRY:
-			print("Zaino pieno! Torno alla base.")
-			unit_state = UnitState.IDLE # Reset prima del viaggio
-			_go_to_town_hall()
-	else:
-		# L'albero è crollato prima di riempire lo zaino! 
-		# Dobbiamo cercare il prossimo albero a partire da qui.
-		_find_next_tree(target_resource_tile)
-
-# Ricerca un nuovo albero vicino a quello appena tagliato
-func _find_next_tree(start_tile: Vector2i) -> void:
-	var next_tree = GridManager.get_closest_tree_around(start_tile, 5)
-	
-	if next_tree != Vector2i(-1, -1):
-		# Trovato! Calcoliamo il tile adiacente per metterci vicini
-		var tree_global = GridManager.get_tile_center_global(next_tree)
-		# Usiamo la funzione del GridManager fingendo che l'albero sia 1x1
-		var safe_pos = GridManager.get_adjacent_free_position(tree_global, Vector2i(1, 1), Vector2.DOWN, self)
-		
-		print("Nuovo albero trovato! Ci vado.")
-		interact_with_tile(next_tree, safe_pos)
-	else:
-		print("Foresta disboscata! Nessun albero nel raggio.")
-		unit_state = UnitState.IDLE
-		target_resource_tile = Vector2i(-1, -1)
-		
-		# Se ha almeno un po' di legna nello zaino, la porta a casa
-		if resource_amount > 0:
-			_go_to_town_hall()
-
-func _stop_collecting_task() -> void:
-	# --- 1. STOP ORO ---
-	if unit_state == UnitState.MINING:
-		if target_mine and is_instance_valid(target_mine):
-			# Nota: prima avevamo usato "unassign_worker", controlla quale nome usi nella GoldMine!
-			if target_mine.has_method("unregister_worker"):
-				target_mine.unregister_worker(self)
-		target_mine = null 
-		
-	# --- 2. STOP LEGNA ---
-	elif unit_state == UnitState.CHOPPING:
-		# Azzera le coordinate. Questo farà scattare il Setter,
-		# che chiederà al GridManager di spegnere il quadrato verde!
-		target_resource_tile = Vector2i(-1, -1)
-		
-		# Resetta il timer del colpo d'ascia
-		action_timer = 0.0
-	
-	# --- 3. STOP BUILDING ---
-	elif unit_state == UnitState.BUILDING:
-		_stop_current_building_task()
-	
-	# --- 4. PULIZIA GENERALE ---
-	# A prescindere da cosa stava facendo, torna in stato di riposo
-	unit_state = UnitState.IDLE
-	
-	# Chiama l'aggiornamento grafico: 
-	# non essendo più in CHOPPING, fermerà l'animazione dell'ascia
-	update_animation()
-
-func _clear_current_task() -> void:
-	super()
-	current_assignment = Assignment.NONE
-
+# Quando l'unità muore, pulisce tutto in automatico
 func die() -> void:
-	_stop_collecting_task()
+	clear_assignment() # <- Usa la funzione del padre
 	super()
+
+func move_to(target_pos: Vector2, arrival_offset: float = 16.0) -> void:
+	if unit_state == UnitState.MINING: return
+	super(target_pos, arrival_offset)
+
+func interact_with(target: Node2D) -> void:
+	if unit_state == UnitState.MINING: return
+	super(target)
+
+func interact_with_tile(tile_coords: Vector2i, safe_destination: Vector2) -> void:
+	if unit_state == UnitState.MINING: return
+	super(tile_coords, safe_destination)

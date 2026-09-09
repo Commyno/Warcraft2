@@ -4,6 +4,7 @@ extends CharacterBody2D
 # --- ENUMERATORI PER TIPI DI DANNO E ARMATURA (Stile WC3) ---
 enum DamageType { NORMAL, PIERCING, SIEGE, MAGIC, HERO }
 enum ArmorType { UNARMORED, LIGHT, MEDIUM, HEAVY, FORTIFIED, HERO }
+enum AssignmentState { NONE, MOVE, ATTACK, PATROL, GATHER_GOLD, GATHER_WOOD, BUILD, REPAIR }
 enum UnitState { IDLE, MOVING, ATTACKING, PATROLING, BUILDING, REPARING, MINING, CHOPPING, RETURNING_RESOURCES }
 
 # --- PARAMETRI CONFIGURABILI DALL'INSPECTOR ---
@@ -70,32 +71,17 @@ var is_dead: bool = false
 # Dichiariamo state_machine senza @onready per inizializzarla in _ready() in sicurezza
 var state_machine: AnimationNodeStateMachinePlayback
 
-var is_moving: bool = false                     # Per tracciare lo stato di movimento reale
-var is_interacting: bool = false                # Per tracciare lo stato di interazione
-var is_attacking: bool = false                  # Per tracciare lo stato di attacco
 var unit_state: UnitState = UnitState.IDLE
+var current_assignment: AssignmentState = AssignmentState.NONE
+var current_target: Node2D = null
+var current_tile_target: Vector2i = Vector2i(-1, -1)
+
+var is_interacting: bool = false                # Per tracciare lo stato di interazione
+var current_offset_target: float = 15.0
+
+var animation_state: String = "Idle"
 var last_facing_dir: Vector2 = Vector2.DOWN     # Per tracciare lo sguardo relativo all'ultimo movimento
 var intended_dir: Vector2 = Vector2.DOWN
-var current_target: Node2D = null
-var current_offset_target: float = 15.0
-#var target_tile: Vector2i = Vector2i(-1, -1) Solo per DEBUG
-var is_moving_to_tile: bool = false
-
-# Quando questa variabile cambia, si attiva in automatico il codice qui sotto
-var target_tile: Vector2i = Vector2i(-1, -1):
-	set(value):
-		# Rimuovi l'evidenziazione dal VECCHIO bersaglio (se esisteva)
-		if target_tile != Vector2i(-1, -1) and GridManager:
-			GridManager.remove_tile_highlight(target_tile)
-			
-		target_tile = value
-		
-		# Aggiungi l'evidenziazione al NUOVO bersaglio (se esiste)
-		if target_tile != Vector2i(-1, -1) and GridManager:
-			GridManager.add_tile_highlight(target_tile)
-
-var state: String = "Idle"
-var last_state: String = "None"
 
 func _ready() -> void:
 	# 1. Nascondi il cerchio di selezione all'avvio
@@ -119,7 +105,7 @@ func _ready() -> void:
 	
 	# Riporta la velocità sulla navigation agent
 	if nav_agent:
-		nav_agent.max_speed = move_speed	
+		nav_agent.max_speed = move_speed
 	
 	# Imposta la UI della barra della vita
 	if health_bar:
@@ -139,57 +125,44 @@ func _physics_process(_delta: float) -> void:
 	var current_position: Vector2 = global_position
 	var distance_to_target: float = 0
 	
-	#if  is_moving and nav_agent:
-	if  unit_state == UnitState.MOVING and nav_agent:
+	if unit_state == UnitState.MOVING and nav_agent:
 		distance_to_target = global_position.distance_to(nav_agent.target_position)
 		
 		# 1. SIAMO FISICAMENTE VICINI AL BERSAGLIO?
 		if distance_to_target <= current_offset_target:
 			
-			# Tolleranza di scivolamento (evita micro-vibrazioni con la fisica)
-			if current_target == null and not is_moving_to_tile and distance_to_target > 3.0:
+			# Tolleranza di scivolamento
+			if current_target == null and current_tile_target == Vector2i(-1, -1) and distance_to_target > 3.0:
 				var global_position_tmp = global_position.move_toward(nav_agent.target_position, move_speed * _delta)
 				global_position = global_position_tmp
 				if nav_agent.avoidance_enabled:
 					nav_agent.set_velocity(Vector2.ZERO)
 				return 
 			
-			# --- STRADA 1: INTERAZIONE NODO (es. Miniera, Municipio) ---
+			unit_state = UnitState.IDLE
+			velocity = Vector2.ZERO
+			update_animation()
+
+			# --- STRADA 1: INTERAZIONE NODO ---
 			if current_target != null:
-				is_moving = false
-				unit_state = UnitState.IDLE
-				velocity = Vector2.ZERO
 				if nav_agent:
 					nav_agent.set_velocity(Vector2.ZERO) 
 					nav_agent.target_position = global_position
 					
 				var target_to_interact = current_target 
-				current_target = null
-				update_animation() # Questo aggiornerà 
-				
 				_start_interaction(target_to_interact)
 				
-			# --- STRADA 2: INTERAZIONE TILE (es. Albero) ---
-			elif is_moving_to_tile:
-				is_moving = false
-				unit_state = UnitState.IDLE
-				velocity = Vector2.ZERO
+			# --- STRADA 2: INTERAZIONE TILE ---
+			elif current_tile_target != Vector2i(-1, -1):
 				if nav_agent:
 					nav_agent.set_velocity(Vector2.ZERO)
 					nav_agent.target_position = global_position
 					
-				var tile_to_interact = target_tile
-				is_moving_to_tile = false
-				target_tile = Vector2i(-1, -1)
-				_start_tile_interaction(tile_to_interact)
+				_start_tile_interaction(current_tile_target)
 				
 			# --- STRADA 3: MOVIMENTO NORMALE (Punto a terra) ---
 			else:
 				global_position = nav_agent.target_position 
-				velocity = Vector2.ZERO
-				is_moving = false
-				unit_state = UnitState.IDLE
-				update_animation()
 				# PRELAZIONE: Registriamo ufficialmente questo tile come occupato!
 				var current_tile = GridManager.get_tile_coords(global_position)
 				GridManager.try_reserve_tile(current_tile, self)
@@ -198,31 +171,23 @@ func _physics_process(_delta: float) -> void:
 			
 		# 2. SE IL NAV AGENT HA FINITO MA SIAMO LONTANI (es. bloccati)
 		elif nav_agent.is_navigation_finished():
-			is_moving = false
 			unit_state = UnitState.IDLE
 			velocity = Vector2.ZERO
 			update_animation()
 
 			if distance_to_target <= 50.0:
+				if nav_agent:
+					nav_agent.set_velocity(Vector2.ZERO)
+					nav_agent.target_position = global_position
 				
 				# Se era un Nodo (es. Miniera)
 				if current_target != null:
-					if nav_agent:
-						nav_agent.set_velocity(Vector2.ZERO)
-						nav_agent.target_position = global_position
 					var target_to_interact = current_target 
-					current_target = null
 					_start_interaction(target_to_interact)
 					
 				# Se era un Tile (es. Albero)
-				elif is_moving_to_tile:
-					if nav_agent:
-						nav_agent.set_velocity(Vector2.ZERO)
-						nav_agent.target_position = global_position
-					var tile_to_interact = target_tile
-					is_moving_to_tile = false
-					target_tile = Vector2i(-1, -1)
-					_start_tile_interaction(tile_to_interact)
+				elif current_tile_target != Vector2i(-1, -1):
+					_start_tile_interaction(current_tile_target)
 			return
 
 		# 3. MOVIMENTO (Siamo ancora in viaggio)
@@ -230,7 +195,6 @@ func _physics_process(_delta: float) -> void:
 		intended_dir = current_position.direction_to(next_path_position)
 		var intended_velocity: Vector2 = intended_dir * move_speed
 		
-		is_moving = true
 		unit_state = UnitState.MOVING
 		if nav_agent.avoidance_enabled:
 			nav_agent.set_velocity(intended_velocity)
@@ -275,52 +239,48 @@ func is_selected() -> bool:
 # --- SISTEMA DI MOVIMENTO ---
 
 func move_to(target_pos: Vector2, arrival_offset: float = 16.0) -> void:
+	# Nessuna pulizia qui! Solo movimento.
 	current_offset_target = arrival_offset
-	# Prima di muoversi, libera la cella che eventualmente occupava prima
-	# 1. GridManager.release_unit_reservations(self)
-	GridManager.release_unit_reservations(self)
-	
-	# 1. Assegni il bersaglio
 	nav_agent.target_position = target_pos
-	# Forza la generazione immediata della rotta!
 	nav_agent.get_current_navigation_path()
-	
-	# 3. Ora che la rotta è certa, chiediamo il prossimo punto
 	var next_path_pos = nav_agent.get_next_path_position()
-	
-	# 4. Calcoliamo la direzione
 	intended_dir = global_position.direction_to(next_path_pos)
 	
-	# 5. Diciamo fisicamente all'unità che deve mettersi in marcia
-	is_moving = true
 	unit_state = UnitState.MOVING
 	update_animation()
 
-func _clear_current_task() -> void:
-	# Solo pulizia logica: incarico e target. NON ferma il movimento.
+func clear_assignment() -> void:
+	# 1. DEREGISTRAZIONE DI SICUREZZA (Basata sul Macro-Incarico)
+	match current_assignment:
+		AssignmentState.GATHER_GOLD:
+			if current_target != null and current_target.has_method("unregister_worker"):
+					current_target.unregister_worker(self)
+		AssignmentState.BUILD, AssignmentState.REPAIR:
+			if current_target != null and current_target.has_method("unregister_builder"):
+					current_target.unregister_builder(self)
+	
+	# 2. SVUOTA LA MEMORIA (Reset dei Target)
 	current_target = null
-	is_moving_to_tile = false
-	target_tile = Vector2i(-1, -1)
-	# Rilascia le prenotazioni sui tile
-	GridManager.release_unit_reservations(self)
-
-func stop() -> void:
-	# 1. Annulla eventuali target/interazioni in corso
-	_clear_current_task()   # pulizia
-
-	# 2. Ferma il movimento
-	if nav_agent:
-		nav_agent.target_position = global_position   # destinazione = dove sei già
-	velocity = Vector2.ZERO
-	is_moving = false
+	current_tile_target = Vector2i(-1, -1)
+	current_assignment = AssignmentState.NONE
+	
+	# 3. FERMA IL CORPO
 	unit_state = UnitState.IDLE
+	velocity = Vector2.ZERO
+	if nav_agent:
+		nav_agent.target_position = global_position # Resetta la destinazione a dove si trova ora
+	
+	# 4. PULIZIA GRID E ANIMAZIONE
+	GridManager.release_unit_reservations(self)
+	var standing_tile = GridManager.get_tile_coords(global_position)
+	GridManager.try_reserve_tile(standing_tile, self)
 
-	# 3. Aggiorna l'animazione (torna a idle)
 	update_animation()
 
-#Funzione virtuale: sovrascrivila nelle classi figlie!
-func _start_interaction(target: Node2D) -> void:
-	pass
+func stop() -> void:
+	# Il comando Stop del giocatore cancella ogni incarico, ferma l'agente 
+	# di navigazione e prenota automaticamente il tile sotto i piedi dell'unità!
+	clear_assignment()
 
 func _on_velocity_computed(safe_velocity: Vector2) -> void:
 	# 2. FILTRO ANTI-BUG: Se il calcolo è corrotto (NaN sulla x o y) o spropositato, lo annulliamo
@@ -353,7 +313,7 @@ func update_animation() -> void:
 	if(is_dead):
 		animation_tree.set("parameters/Death/blend_position", move_dir)
 		state_machine.travel("Death")
-		state = "Death"
+		animation_state = "Death"
 	else:
 		#if is_moving = true and actual_speed > 10.0:
 		if unit_state == UnitState.MOVING and actual_speed > 10.0:
@@ -362,13 +322,13 @@ func update_animation() -> void:
 			# Aggiorna BlendSpace e Stato Walk
 			animation_tree.set("parameters/Walk/blend_position", move_dir)
 			state_machine.travel("Walk")
-			state = "Walk"
+			animation_state = "Walk"
 		
 		else:
 			# Aggiorna BlendSpace e Stato Idle
 			animation_tree.set("parameters/Idle/blend_position", move_dir)
 			state_machine.travel("Idle")
-			state = "Idle"
+			animation_state = "Idle"
 	
 
 	# Gestione flip orizzontale
@@ -451,30 +411,29 @@ func die() -> void:
 	if health_bar:
 		health_bar.visible = false
 	
-	# Ferma il movimento
-	velocity = Vector2.ZERO
-	is_moving = false
-	unit_state = UnitState.IDLE
-	nav_agent.target_position = global_position
-	collision_shape.disabled = true
+	# 1. PULIZIA TOTALE: Ferma il movimento e avvisa miniere/edifici che il lavoratore è morto!
+	clear_assignment() 
+	
+	# 2. DISATTIVA LA FISICA
+	# Usiamo set_deferred per le collisioni per evitare errori se chiamato durante un frame fisico
+	collision_shape.set_deferred("disabled", true)
 	set_physics_process(false) 
 	
-	# 1. Avvia l'animazione di morte
-	# Assicurati che "Death" sia il nome esatto del nodo nell'AnimationTree
+	# 3. AVVIA ANIMAZIONE
 	update_animation()
 	
-	# 2. Attendi la fine dell'animazione
-	# Sostituisci 1.0 con la durata effettiva in secondi della tua animazione
+	# 4. ATTENDI FINE ANIMAZIONE
 	await get_tree().create_timer(0.6).timeout
 	
-	# 3. Genera la sagoma
+	# 5. GENERA IL CADAVERE (solo visivo)
 	spawn_corpse()
 	
-	# 4. Libera la cella occupata così altri possono calpestarla
+	# 6. LIBERA LA GRIGLIA
+	# Poiché clear_assignment() ha riprenotato il tile sotto ai suoi piedi per fermarsi,
+	# ora che è definitivamente morto (e c'è solo un cadavere calpestabile), lo liberiamo.
 	GridManager.release_unit_reservations(self)
-	# ... resto del codice di morte ...
-
-	# 5. Distruggi l'unità
+	
+	# 7. ELIMINA L'UNITÀ
 	queue_free()
 
 func spawn_corpse() -> void:
@@ -511,35 +470,34 @@ func _on_health_changed(new_health: float, _max: float) -> void:
 # --- GESTIONE IERAZIONI ---
 
 func interact_with(target: Node2D) -> void:
+	# Nessuna pulizia qui!
 	current_target = target
+	current_tile_target = Vector2i(-1, -1)
 	
 	if target.is_in_group("interactable"):
-		# 1. Calcoliamo la direzione verso la nostra unità
 		var direction_to_unit = (global_position - target.global_position).normalized()
+		var edge_offset: float = 5.0 
 		
-		# 2. Valore di default
-		var edge_offset: float = 5.0 #50.0
-		
-		# 3. Cerchiamo dinamicamente il raggio dell'ostacolo
 		for child in target.get_children():
 			if child is NavigationObstacle2D:
-				# SOMMIAMO: raggio miniera + raggio unità + un piccolo margine
-				edge_offset = child.radius - 18 # + nav_agent.radius + 10.0
-				break # Appena lo troviamo, interrompiamo la ricerca
+				edge_offset = child.radius - 18 
+				break 
 		
-		# 4. Applichiamo l'offset dinamico
 		var optimal_target_pos = target.global_position + (direction_to_unit * edge_offset)
-		
-		move_to(optimal_target_pos, 5.0) #edge_offset)
+		move_to(optimal_target_pos, 5.0) 
 	else:
-		# Bersaglio normale (punto a terra)
-		move_to(target.global_position)
+		move_to(target.global_position, 16.0)
 
 # Funzione per mandare l'unità verso un tile di risorse (es. albero)
 func interact_with_tile(tile_coords: Vector2i, safe_destination: Vector2) -> void:
-	target_tile = tile_coords
-	is_moving_to_tile = true
+	# Nessuna pulizia qui!
+	current_tile_target = tile_coords
+	current_target = null
 	move_to(safe_destination, 3.0)
+
+#Funzione virtuale: sovrascrivila nelle classi figlie!
+func _start_interaction(target: Node2D) -> void:
+	pass
 
 # Funzione virtuale che il Peasant sovrascriverà
 func _start_tile_interaction(tile_coords: Vector2i) -> void:

@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://chvo3gidrbbit" path="res://src/gameplay/entities/buildings/neutral/gold_mine.gd" id="1_f0tba"]
 [ext_resource type="PackedScene" uid="uid://dte1tuljlbqt8" path="res://src/gameplay/entities/buildings/resource_building.tscn" id="1_f7tvw"]
 [ext_resource type="Texture2D" uid="uid://dnf55x07x3dob" path="res://assets/art/ui/icons/Icon - Gold Mine.tres" id="3_f0tba"]
-[ext_resource type="Texture2D" uid="uid://bu6gxvayxccva" path="res://assets/art/miscellaneous/Gold Mine - 00.tres" id="4_7syh0"]
 
 [node name="GoldMine" unique_id=1889694065 instance=ExtResource("1_f7tvw")]
 script = ExtResource("1_f0tba")
@@ -12,7 +11,6 @@ resource_per_cycle = 10
 building_name = "Miniera"
 building_description = "Description Gold Mine"
 building_icon = ExtResource("3_f0tba")
-building_spritesheet = ExtResource("4_7syh0")
 region_completed = Rect2(3, 8, 96, 89)
 region_idle = Rect2(3, 8, 96, 89)
 region_active = Rect2(3, 104, 96, 89)

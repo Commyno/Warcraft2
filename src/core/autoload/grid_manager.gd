@@ -68,27 +68,39 @@ func try_reserve_tile(tile_coords: Vector2i, unit: Node2D) -> bool:
 
 # Restituisce la posizione globale corretta: se il tile desiderato è occupato, 
 # trova il primo tile libero disponibile nelle vicinanze o lungo il percorso.
-func get_available_destination(target_global_pos: Vector2, unit: Node2D = null) -> Vector2:
+func get_available_destination(target_global_pos: Vector2, unit: Node2D = null, auto_reserve: bool = true) -> Vector2:
 	if not tile_map_layer:
 		return target_global_pos
 
 	var target_tile = get_tile_coords(target_global_pos)
 
-	# Se il tile di destinazione è libero o già di proprietà di questa unità, usalo
-	if unit == null or not tile_reservations.has(target_tile) or tile_reservations[target_tile] == unit:
-		return get_tile_center_global(target_tile)
+	# Controllo rapido: il tile primario è calpestabile e libero da altre unità?
+	if is_cell_walkable(target_tile):
+		if unit == null or not tile_reservations.has(target_tile) or tile_reservations[target_tile] == unit:
+			if unit and auto_reserve:
+				try_reserve_tile(target_tile, unit)
+			return get_tile_center_global(target_tile)
 
-	# PRELAZIONE: Se il tile è occupato, cerchiamo un tile libero a spirale/adiacente (raggio 1 e 2)
-	# partendo da quello desiderato e allontanandoci verso l'unità
-	for radius in range(1, 4):
+	# PRELAZIONE: Se il tile è un albero, un edificio o è occupato da un'altra unità,
+	# cerchiamo il primo tile calpestabile e libero a spirale (raggio da 1 a 5)
+	for radius in range(1, 6):
 		for x in range(-radius, radius + 1):
 			for y in range(-radius, radius + 1):
+				# Controlliamo solo il perimetro esterno dell'anello corrente
+				if abs(x) != radius and abs(y) != radius:
+					continue
+					
 				var candidate_tile = target_tile + Vector2i(x, y)
-				if not tile_reservations.has(candidate_tile):
-					return get_tile_center_global(candidate_tile)
+				
+				# Deve essere calpestabile E non prenotato da altri
+				if is_cell_walkable(candidate_tile):
+					if not tile_reservations.has(candidate_tile) or tile_reservations[candidate_tile] == unit:
+						if unit and auto_reserve:
+							try_reserve_tile(candidate_tile, unit)
+						return get_tile_center_global(candidate_tile)
 
-	# Fallback estremo: se la zona è totalmente intasata, l'unità resta ferma dove si trova
-	return unit.global_position
+	# Fallback: se l'area è completamente sigillata, non muoverti
+	return unit.global_position if unit else target_global_pos
 
 func get_adjacent_free_position(center_global_pos: Vector2, building_size: Vector2i, ideal_direction: Vector2, unit: Node2D = null) -> Vector2:
 	var center_tile = get_tile_coords(center_global_pos)
@@ -301,6 +313,29 @@ func remove_tile_highlight(tile_coords: Vector2i) -> void:
 		if targeted_tiles[tile_coords] <= 0:
 			targeted_tiles.erase(tile_coords)
 	queue_redraw()
+
+# Verifica se un tile è fisicamente attraversabile/raggiungibile
+func is_cell_walkable(cell: Vector2i) -> bool:
+	if not tile_map_layer:
+		return false
+	
+	# 1. C'è un albero?
+	if is_tree(cell):
+		return false
+		
+	# 2. C'è un edificio?
+	if is_cell_occupied(cell):
+		return false
+		
+	# 3. Il tile esiste ed è valido nel TileMap?
+	var tile_data = tile_map_layer.get_cell_tile_data(cell)
+	if tile_data == null:
+		return false
+		
+	# Se usi metadati personalizzati per acqua/scogli, aggiungili qui:
+	# if tile_data.get_meta("is_water") == true: return false
+
+	return true
 
 # Questa funzione nativa di Godot disegna forme geometriche a schermo
 func _draw() -> void:

@@ -79,3 +79,5 @@ theme_override_constants/outline_size = 1
 theme_override_fonts/font = ExtResource("2_obtdh")
 theme_override_font_sizes/font_size = 8
 text = "0"
+
+[connection signal="tree_exited" from="." to="." method="_on_tree_exited"]

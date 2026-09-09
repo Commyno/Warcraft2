@@ -78,23 +78,21 @@ var total_score            : int = 0
 
 
 # ==========================================
-# VARIABLES: RESOURCES (PRIVATE)
+# VARIABLES: RESOURCES
 # ==========================================
 var _gold_counts   : int = 0
-var _lumber_counts : int = 0
-var _oil_counts    : int = 0
-var _food_used     : int = 0
-var _food_max      : int = 0
-
-# Read-Only Getters
 var gold_counts   : int: 
 	get: return _gold_counts
+var _lumber_counts : int = 0
 var lumber_counts : int:
 	get: return _lumber_counts
+var _oil_counts    : int = 0
 var oil_counts    : int: 
 	get: return _oil_counts
+var _food_used     : int = 0
 var food_used     : int: 
 	get: return _food_used
+var _food_max      : int = 0
 var food_max      : int: 
 	get: return _food_max
 

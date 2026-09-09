@@ -10,6 +10,9 @@ func _init() -> void:
 func _is_valid_target(source_entities: Array, target: Node2D) -> bool:
 	if not "player_id" in target:
 		return false
+	# Se  un entità neutra, non attaccare
+	if not "player_owner" in target or target.player_owner == null:
+		return false
 	# Bersaglio valido solo se di un player diverso da chi attacca.
 	var attacker_id: int = source_entities[0].player_id if not source_entities.is_empty() else -1
 	return target.player_id != attacker_id

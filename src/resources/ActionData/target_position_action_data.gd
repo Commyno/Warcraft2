@@ -9,12 +9,19 @@ func accepts(_entity, _tile, _pos, _units, _player) -> bool:
 	return true
 
 func _execute_action(_source_entities: Array, _target_data = null) -> void:
-	if not (_target_data is Vector2):
-		push_warning("%s: target_pos non è un Vector2" % id)
+	var position = Vector2.ZERO
+	if _target_data is Vector2i:
+		position = GridManager.get_tile_center_global(_target_data)
+	if _target_data is Vector2:
+		position = _target_data
+		return
+
+	if position == Vector2.ZERO:
+		push_warning("%s: target_pos non è una posizione valida" % id)
 		return
 
 	# Plumbing comune: risolvi una destinazione valida e muovi in formazione.
-	var final_destination: Vector2 = GridManager.get_available_destination(_target_data)
+	var final_destination: Vector2 = GridManager.get_available_destination(position)
 	FormationManager.move_units_in_formation(_source_entities, final_destination)
 
 	# Hook per i comportamenti specifici (attack-move, patrol...)

@@ -7,8 +7,8 @@ extends TargetEntityActionData
 func _init() -> void:
 	target_mode = ExecutionTargetMode.ANY 	# Solo il primo mago selezionato effettuerà il cast
 
-func can_execute(source_entities: Array, player: Player) -> bool:
-	var caster : CasterUnit = source_entities[0] as CasterUnit if not source_entities.is_empty() else null
+func can_execute(_source_entities: Array, player: Player) -> bool:
+	var caster : CasterUnit = _source_entities[0] as CasterUnit if not _source_entities.is_empty() else null
 	if caster == null or ability_data == null:
 		return false
 	return ability_data.can_cast(caster, player)

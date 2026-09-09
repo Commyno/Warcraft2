@@ -52,7 +52,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			if currently_selected.size() > 0:
 				var target_position = get_global_mouse_position()
 				var actions := _get_smart_actions()   # le azioni contestuali dell'unità
-				var _local_player : Player = null #currently_selected[0].local_player
+				var _local_player : Player = PlayerManager.get_local_player()
 				TargetingManager.resolve_smart_command(target_position, actions, currently_selected, _local_player)
 			
 			## Filtra solo le unità mobili per il movimento
@@ -160,7 +160,15 @@ func _process_selection():
 	var units_found: Array[BaseUnit] = []
 	var building_found: BaseBuilding = null
 	var resource_found: ResourceBuilding = null
-	
+
+	# Rimuovo tutto ciò che è stato selezionato ed è proprietàd di altri
+	var _local_player : Player = PlayerManager.get_local_player()
+	candidates = candidates.filter(func(obj):
+		if obj.player_owner != null:
+			return obj.player_id == _local_player.player_id
+		return true
+	)
+
 	for obj in candidates:
 		if obj is BaseUnit:
 			units_found.append(obj as BaseUnit)
@@ -197,9 +205,10 @@ func _get_object_under_mouse(pos: Vector2) -> Node2D:
 	var space_state = get_world_2d().direct_space_state
 	var query = PhysicsPointQueryParameters2D.new()
 	query.position = pos
-	query.collide_with_areas = true  # Se la miniera è un'Area2D
+	query.collide_with_areas = false  # Se la miniera è un'Area2D
 	query.collide_with_bodies = true # Se la miniera è uno StaticBody2D/RigidBody2D
-	
+	query.collision_mask = 0xFFFFFFFF
+
 	var results = space_state.intersect_point(query)
 	
 	for result in results:
