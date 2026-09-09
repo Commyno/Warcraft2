@@ -44,7 +44,6 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	super(delta)
-	#_handle_building_logic()
 	
 	# --- CICLO DI TAGLIO LEGNA ---
 	if unit_state == UnitState.CHOPPING:
@@ -56,8 +55,32 @@ func _process(delta: float) -> void:
 # --- GESTIONE INTERAZIONE E MINIERA ---
 
 func _start_interaction(target: Node2D) -> void:
+	# --- GESTIONE COSTRUZIONE E RIPARAZIONE ---
+	if target is BaseBuilding:
+		# Se l'edificio è in cantiere e il nostro ordine era BUILD
+		if target.is_under_construction and current_assignment == AssignmentState.BUILD:
+			unit_state = UnitState.BUILDING # Forza lo stato
+			#target_building = target
+			target.register_builder(self)
+			
+			# Si gira verso il centro dell'edificio
+			intended_dir = (target.global_position - global_position).normalized()
+			last_facing_dir = intended_dir
+			
+			# Aggiorna l'albero di animazione
+			update_animation()
+
+		# Gestione analoga se stiamo RIPARANDO un edificio danneggiato
+		elif target.is_damaged() and current_assignment == AssignmentState.REPAIR:
+			unit_state = UnitState.REPARING
+			#target_building = target
+			target.register_builder(self)
+			intended_dir = (target.global_position - global_position).normalized()
+			last_facing_dir = intended_dir
+			update_animation()
+	
 # --- 1. GESTIONE MINIERA ---
-	if target is GoldMine:
+	elif target is GoldMine:
 		target_resource_tile = Vector2i(-1, -1) # Dimentica la legna
 		action_timer = 0.0
 		
@@ -326,6 +349,13 @@ func _find_next_tree(start_tile: Vector2i) -> void:
 		else:
 			clear_assignment() # Nessuna legna, nessun albero: fermati del tutto.
 
+# --- GESTIONE BUILD ---
+
+func assign_build_task(building: BaseBuilding) -> void:
+	clear_assignment() # Azzera ordini precedenti
+	current_assignment = AssignmentState.BUILD
+	interact_with(building)
+
 # --- GESTIONE ANIMAZIONWI ---
 
 func update_animation_parameters(move_velocity: Vector2) -> void:
@@ -395,32 +425,6 @@ func update_animation() -> void:
 		unit_sprite.flip_h = true
 	elif move_dir.x > 0.1:
 		unit_sprite.flip_h = false
-
-func assign_build_task(building: BaseBuilding) -> void:
-	clear_assignment() # <- Usa la funzione del padre
-	current_target = building
-	# In futuro modificheremo anche questa, ma per ora la teniamo così
-	move_to(building.global_position)
-
-func _handle_building_logic() -> void:
-	if not current_target or \
-		not is_instance_valid(current_target) or \
-		not current_target.is_under_construction:
-		clear_assignment()
-		return
-	
-	var distance = global_position.distance_to(current_target.global_position)
-	
-	if distance <= build_range:
-		if nav_agent and not nav_agent.is_navigation_finished():
-			nav_agent.target_position = global_position
-			
-		if not is_building:
-			is_building = true
-			current_target.register_builder(self)
-	elif is_building and distance > build_range:
-		is_building = false
-		current_target.unregister_builder(self)
 		
 # Sovrascriviamo la funzione del padre per aggiungere le pulizie specifiche del contadino
 func clear_assignment() -> void:

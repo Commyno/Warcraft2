@@ -3,10 +3,20 @@
 [ext_resource type="PackedScene" uid="uid://dbvpvnxbtn1su" path="res://src/gameplay/entities/buildings/production_building.tscn" id="1_r3mtd"]
 [ext_resource type="Script" uid="uid://bdvowwie5sfrw" path="res://src/gameplay/entities/buildings/humans/town_hall.gd" id="2_fr43j"]
 [ext_resource type="Script" uid="uid://bwo8h3bftdqwy" path="res://src/resources/EntityData/unit_data.gd" id="3_glky6"]
+[ext_resource type="Texture2D" uid="uid://wioaljt1ijyh" path="res://assets/art/ui/icons/Icon - Humans TownHall.tres" id="4_ldwsq"]
+[ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/art/race/humans/buildings/Humans - Human Buildings (Summer).png" id="5_u020x"]
 
 [node name="TownHall" unique_id=1889694065 instance=ExtResource("1_r3mtd")]
 script = ExtResource("2_fr43j")
 trainable_units = Array[ExtResource("3_glky6")]([])
+building_name = "Town Hall"
+building_description = "Description Town Hall"
+building_icon = ExtResource("4_ldwsq")
+building_spritesheet = ExtResource("5_u020x")
+region_under_construction = Rect2(547, 527, 48, 39)
+region_first_step_build = Rect2(539, 586, 61, 52)
+region_second_step_build = Rect2(266, 132, 128, 128)
+region_completed = Rect2(266, 4, 128, 128)
 
 [node name="NavigationObstacle2D" parent="." index="4" unique_id=969329888]
 radius = 90.0

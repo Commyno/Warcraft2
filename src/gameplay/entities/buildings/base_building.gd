@@ -90,7 +90,7 @@ var player_id: int = -1 : get = _get_player_id
 var is_depleted: bool = false
 var is_destroyed: bool = false
 var is_training: bool = false
-var current_health: float
+var current_health: int
 var active_builders: Array[Node2D] = []
 var construction_progress_perc: float = 0.0 # Da 0.0 a 1.0
 var training_progress_perc: float = 0.0 # Da 0.0 a 1.0
@@ -132,9 +132,6 @@ func setup(data: Resource) -> void:
 	self.build_time = data.build_time
 	self.max_health = data.max_health
 	current_health = max_health
-	if health_bar:
-		health_bar.max_value = max_health
-		health_bar.value = current_health
 	self.base_armor = data.base_armor
 	self.sight_range = data.sight_range
 	self.food_provided = data.food_provided
@@ -167,6 +164,9 @@ func get_health_perc() -> float:
 
 func get_available_actions() -> Array[ActionData]:
 	return available_actions
+
+func is_damaged() -> bool:
+	return current_health < max_health and not is_under_construction
 
 # --- SISTEMA DI SELEZIONE ---
 
@@ -272,6 +272,12 @@ func place_under_construction() -> void:
 	is_under_construction = true
 	construction_progress_perc = 0.0
 	current_health = 1.0 # Parte con pochissima vita
+
+	if health_bar:
+			health_bar.visible = true
+			health_bar.max_value = max_health
+			health_bar.value = current_health
+
 	_set_building_region(region_under_construction)
 
 func _advance_construction(delta: float) -> void:
@@ -281,7 +287,7 @@ func _advance_construction(delta: float) -> void:
 	construction_progress_perc += (delta / build_time) * speed_multiplier
 	construction_progress_perc = clamp(construction_progress_perc, 0.0, 1.0)
 	
-	current_health = lerp(1.0, max_health, construction_progress_perc)
+	current_health = roundi(lerp(1.0, float(max_health), construction_progress_perc))
 	construction_progress_updated.emit(current_health, max_health)
 	health_changed.emit(current_health, max_health) # Aggiorna l'UI durante la costruzione
 	
@@ -297,10 +303,19 @@ func _advance_construction(delta: float) -> void:
 
 func complete_construction() -> void:
 	is_under_construction = false
-	active_builders.clear()
 	current_health = max_health
 	
+	if health_bar:
+		health_bar.visible = false
+
 	_set_building_region(region_completed)
+
+	var builders_to_release = active_builders.duplicate()
+	active_builders.clear()
+	for builder in builders_to_release:
+		if is_instance_valid(builder):
+			builder.clear_assignment()
+
 	health_changed.emit(current_health, max_health)
 	construction_completed.emit()
 	

@@ -2,7 +2,6 @@
 
 [ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/art/race/humans/buildings/Humans - Human Buildings (Summer).png" id="1_h1ruc"]
 
-
 [resource]
 atlas = ExtResource("1_h1ruc")
-region = Rect2(266, 4, 128, 128)
+region = Rect2(539, 586, 61, 52)

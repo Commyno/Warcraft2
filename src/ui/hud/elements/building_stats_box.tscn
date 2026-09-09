@@ -5,6 +5,11 @@
 [ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="2_6e0s0"]
 
 [node name="StatsBox" type="VBoxContainer" unique_id=1285141887]
+custom_minimum_size = Vector2(140, 102)
+offset_right = 140.0
+offset_bottom = 102.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("1_6e0s0")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1304174071]
@@ -76,8 +81,13 @@ layout_mode = 2
 texture = ExtResource("1_joegs")
 expand_mode = 2
 
+[node name="Control" type="Control" parent="." unique_id=307745930]
+layout_mode = 2
+size_flags_vertical = 3
+
 [node name="BuildProgressBar" type="ProgressBar" parent="." unique_id=235530655]
 layout_mode = 2
+size_flags_vertical = 8
 theme_override_fonts/font = ExtResource("2_6e0s0")
 theme_override_font_sizes/font_size = 7
 max_value = 1.0

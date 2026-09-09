@@ -80,18 +80,18 @@ func _on_selection_changed(selected_objects: Array[Node2D]) -> void:
 		
 		hide()
 
-func _update_ui(entity: Node2D) -> void:
+#func _update_ui(entity: Node2D) -> void:
 	# Qui aggiornerai i nodi figli (es. salute, nome, icona)
 
-	if entity is BaseUnit:
-		var panel = get_child(0) as UnitStatsBox
-		if panel and panel.has_method("update"):
-			panel.update(entity)
+	#if entity is BaseUnit:
+		#var panel = get_child(0) as UnitStatsBox
+		#if panel and panel.has_method("update"):
+			#panel.update(entity)
 	
-	elif entity is BaseBuilding:
-		var panel = get_child(0) as BuildingStatsBox
-		if panel and panel.has_method("update"):
-			panel.update(entity)
+	#elif entity is BaseBuilding:
+		#var panel = get_child(0) as BuildingStatsBox
+		#if panel and panel.has_method("setup"):
+			#panel.setup(entity)
 	
 	#elif entity is ResourceBuilding:
 		#var panel = get_child(0) as ResourceStatsBox

@@ -175,7 +175,7 @@ func _parse_players(map_node: Node2D) -> void:
 		
 		# Assegna la spawn position definitiva all'istanza Player
 		if spawn_positions.has(assigned_slot):
-			current_player.spawn_position = Vector2i(spawn_positions[assigned_slot])
+			current_player.spawn_position = Vector2i(spawn_positions[1 + assigned_slot])
 			#current_player.spawn_position = GridManager.get_tile_coords(spawn_positions[assigned_slot])
 		
 		print("Assegnato ", current_player.name, " al ", group_layer_name, " con colore: ", current_player.color)

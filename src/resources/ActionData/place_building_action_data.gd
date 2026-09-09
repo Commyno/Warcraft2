@@ -50,6 +50,7 @@ func _execute_action(_source_entities: Array, _target_data = null) -> void:
 	if parent != null:
 		parent.add_child(building)
 	building.global_position = world_pos
+
 	var origin_tile: Vector2i = GridManager.get_tile_coords(world_pos)
 	GridManager.register_building_occupation(origin_tile, building_data.tile_size, building)
 	
@@ -60,16 +61,13 @@ func _execute_action(_source_entities: Array, _target_data = null) -> void:
 		if "player_color" in building:
 			building.player_color = owner_player.color
 	
-	
 	building.place_under_construction()
 
 	# Manda il primo contadino selezionato a costruire.
 	#for unit in source_entities:   # Sostituire poi builder con unit
 	if builder != null:
-		if building.has_method("register_builder"):
-			building.register_builder(builder)
-		if builder.has_method("interact_with"):
-			builder.interact_with(building)
+		if builder.has_method("assign_build_task"):
+			builder.assign_build_task(building)
 
 
 func get_cost_string() -> String:
