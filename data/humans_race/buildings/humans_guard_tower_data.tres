@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="BuildingData" format=3 uid="uid://b3qqeewpicblq"]
+
+[ext_resource type="PackedScene" uid="uid://c4agq33dqg6cx" path="res://src/gameplay/entities/buildings/humans/scout_tower.tscn" id="1_op0na"]
+[ext_resource type="Texture2D" uid="uid://ceic5jtbd015j" path="res://assets/art/ui/icons/Icon - Humans Guard Tower.tres" id="2_o8ahj"]
+[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/building_data.gd" id="3_g0fvi"]
+
+[resource]
+script = ExtResource("3_g0fvi")
+building_id = "humans_guard_tower"
+building_name = "Guard Tower"
+description = "Descrizione Guard Tower"
+building_type = 2
+icon = ExtResource("2_o8ahj")
+building_scene = ExtResource("1_op0na")
+tile_size = Vector2i(2, 2)
+build_time = 140.0
+max_health = 130
+sight_range = 9
+can_attack = true
+basic_damage = 4
+piercing_damage = 12
+attack_range = 6.0
+can_attack_air = true
+gold_cost = 500
+wood_cost = 150
+metadata/_custom_type_script = "uid://cjdr3m81ncphw"

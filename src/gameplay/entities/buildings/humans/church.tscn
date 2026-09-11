@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://p8m4xryf8sak"]
+
+[ext_resource type="PackedScene" uid="uid://dbvpvnxbtn1su" path="res://src/gameplay/entities/buildings/production_building.tscn" id="1_sk6jw"]
+[ext_resource type="Script" uid="uid://cx1i5eyii7khf" path="res://src/gameplay/entities/buildings/humans/church.gd" id="2_t3kfs"]
+[ext_resource type="Texture2D" uid="uid://droql54fd2ybw" path="res://assets/art/ui/icons/Icon - Humans Church.tres" id="3_2lmgm"]
+[ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/art/race/humans/buildings/Humans - Human Buildings (Summer).png" id="4_kfaun"]
+
+[node name="Church" unique_id=1889694065 instance=ExtResource("1_sk6jw")]
+script = ExtResource("2_t3kfs")
+building_name = "Church"
+building_description = "Description Church"
+building_icon = ExtResource("3_2lmgm")
+building_spritesheet = ExtResource("4_kfaun")
+region_under_construction = Rect2(547, 527, 48, 39)
+region_first_step_build = Rect2(539, 586, 61, 52)
+region_second_step_build = Rect2(304, 360, 96, 96)
+region_completed = Rect2(304, 264, 96, 96)
+build_time = 175.0
+max_health = 700
+sight_range = 3
+can_attack_ground = false
+
+[node name="Sprite2D" parent="." index="2" unique_id=1061573362]
+region_rect = Rect2(304, 264, 96, 96)

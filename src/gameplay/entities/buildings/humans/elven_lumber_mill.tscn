@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://tr3e6rlw47q6"]
+
+[ext_resource type="PackedScene" uid="uid://dbvpvnxbtn1su" path="res://src/gameplay/entities/buildings/production_building.tscn" id="1_tda7d"]
+[ext_resource type="Script" uid="uid://hlxltxl0f1v0" path="res://src/gameplay/entities/buildings/humans/elven_lumber_mill.gd" id="2_sntrf"]
+[ext_resource type="Texture2D" uid="uid://bjcbxjca0oa0n" path="res://assets/art/ui/icons/Icon - Humans Elven Lumber Mill.tres" id="3_7gxbp"]
+[ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/art/race/humans/buildings/Humans - Human Buildings (Summer).png" id="4_vjqfy"]
+
+[node name="Elven Lumber Mill" unique_id=1889694065 instance=ExtResource("1_tda7d")]
+script = ExtResource("2_sntrf")
+building_name = "Elven Lumber Mill"
+building_description = "Description Elven Lumber Mill"
+building_icon = ExtResource("3_7gxbp")
+building_spritesheet = ExtResource("4_vjqfy")
+region_under_construction = Rect2(547, 527, 48, 39)
+region_first_step_build = Rect2(539, 586, 61, 52)
+region_second_step_build = Rect2(104, 360, 96, 96)
+region_completed = Rect2(104, 264, 96, 96)
+build_time = 150.0
+max_health = 600
+sight_range = 3
+can_attack_ground = false
+
+[node name="Sprite2D" parent="." index="2" unique_id=1061573362]
+region_rect = Rect2(104, 264, 96, 96)

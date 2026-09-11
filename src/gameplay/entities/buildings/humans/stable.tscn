@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://db7rmit0ca73g"]
+
+[ext_resource type="PackedScene" uid="uid://dbvpvnxbtn1su" path="res://src/gameplay/entities/buildings/production_building.tscn" id="1_y3nl2"]
+[ext_resource type="Script" uid="uid://bj5hfmkf3gmnm" path="res://src/gameplay/entities/buildings/humans/stable.gd" id="2_bikqj"]
+[ext_resource type="Texture2D" uid="uid://bqdfnt1f7qqfr" path="res://assets/art/ui/icons/Icon - Humans Stables.tres" id="3_17w3n"]
+[ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/art/race/humans/buildings/Humans - Human Buildings (Summer).png" id="4_ntniw"]
+
+[node name="Stable" unique_id=1889694065 instance=ExtResource("1_y3nl2")]
+script = ExtResource("2_bikqj")
+building_name = "Stable"
+building_description = "Description Stable"
+building_icon = ExtResource("3_17w3n")
+building_spritesheet = ExtResource("4_ntniw")
+region_under_construction = Rect2(547, 527, 48, 39)
+region_first_step_build = Rect2(539, 586, 61, 52)
+region_second_step_build = Rect2(204, 360, 96, 96)
+region_completed = Rect2(204, 264, 96, 96)
+build_time = 150.0
+max_health = 500
+sight_range = 3
+can_attack_ground = false
+
+[node name="Sprite2D" parent="." index="2" unique_id=1061573362]
+region_rect = Rect2(204, 264, 96, 96)

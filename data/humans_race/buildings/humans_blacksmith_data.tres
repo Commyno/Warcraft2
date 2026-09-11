@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="BuildingData" format=3 uid="uid://bnpfmkxnres6b"]
+
+[ext_resource type="PackedScene" uid="uid://d0rvybu8e47cf" path="res://src/gameplay/entities/buildings/humans/blacksmith.tscn" id="1_2ync0"]
+[ext_resource type="Texture2D" uid="uid://ey685kvw3wnk" path="res://assets/art/ui/icons/Icon - Humans Blacksmith.tres" id="2_dvphh"]
+[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/building_data.gd" id="3_4371x"]
+
+[resource]
+script = ExtResource("3_4371x")
+building_id = "humans_blacksmith"
+building_name = "Blacksmith"
+description = "Descrizione Blacksmith"
+building_type = 3
+icon = ExtResource("2_dvphh")
+building_scene = ExtResource("1_2ync0")
+build_time = 200.0
+max_health = 775
+sight_range = 3
+can_attack_ground = false
+gold_cost = 800
+wood_cost = 450
+oil_cost = 100
+metadata/_custom_type_script = "uid://cjdr3m81ncphw"

@@ -87,7 +87,7 @@ func is_position_valid() -> bool:
 	return GridManager.is_area_buildable(origin_tile, _building_tile_size)
 
 func place_building() -> void:
-	var origin_tile := GridManager.get_tile_coords(preview_building.global_position)
+	var origin_tile: Vector2i = GridManager.get_tile_coords(preview_building.global_position)
 	_action.execute(_units, origin_tile)
 	cancel_placement()
 

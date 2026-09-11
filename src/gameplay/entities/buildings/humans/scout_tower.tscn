@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://c4agq33dqg6cx"]
+
+[ext_resource type="PackedScene" uid="uid://dbvpvnxbtn1su" path="res://src/gameplay/entities/buildings/production_building.tscn" id="1_0hojn"]
+[ext_resource type="Script" uid="uid://bdvjaty4lqsue" path="res://src/gameplay/entities/buildings/humans/scout_tower.gd" id="2_u8tt1"]
+[ext_resource type="Texture2D" uid="uid://bq374xr5lts4w" path="res://assets/art/ui/icons/Icon - Humans Scout Tower.tres" id="3_ool3j"]
+[ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/art/race/humans/buildings/Humans - Human Buildings (Summer).png" id="4_w1dlg"]
+
+[node name="Scout Tower" unique_id=1889694065 instance=ExtResource("1_0hojn")]
+script = ExtResource("2_u8tt1")
+building_name = "Scout Tower"
+building_description = "Description Scout Tower"
+building_icon = ExtResource("3_ool3j")
+building_spritesheet = ExtResource("4_w1dlg")
+region_under_construction = Rect2(547, 527, 48, 39)
+region_first_step_build = Rect2(539, 586, 61, 52)
+region_second_step_build = Rect2(469, 86, 57, 46)
+region_completed = Rect2(468, 5, 58, 63)
+tile_size = Vector2i(2, 2)
+build_time = 60.0
+max_health = 100
+sight_range = 9
+can_attack_ground = false
+
+[node name="Sprite2D" parent="." index="2" unique_id=1061573362]
+region_rect = Rect2(468, 5, 58, 63)

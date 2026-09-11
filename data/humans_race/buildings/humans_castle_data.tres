@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="BuildingData" format=3 uid="uid://12khntjomo83"]
+
+[ext_resource type="PackedScene" uid="uid://cdp0lbjingbod" path="res://src/gameplay/entities/buildings/humans/town_hall.tscn" id="1_h6bkj"]
+[ext_resource type="Texture2D" uid="uid://dlpd5huu0k3nx" path="res://assets/art/ui/icons/Icon - Humans Castle.tres" id="2_h6bkj"]
+[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/building_data.gd" id="3_aa5jh"]
+
+[resource]
+script = ExtResource("3_aa5jh")
+building_id = "humans_castle"
+building_name = "Castle"
+description = "Descrizione Castle"
+icon = ExtResource("2_h6bkj")
+building_scene = ExtResource("1_h6bkj")
+build_time = 200.0
+max_health = 1600
+sight_range = 9
+food_provided = 1
+is_resource_dropoff = true
+accepts_gold = true
+accepts_wood = true
+gold_cost = 2500
+wood_cost = 1200
+oil_cost = 500
+metadata/_custom_type_script = "uid://cjdr3m81ncphw"

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="BuildingData" format=3 uid="uid://ddgk4oh46m7d3"]
+
+[ext_resource type="PackedScene" uid="uid://bhd711s6umvr8" path="res://src/gameplay/entities/buildings/humans/mage_tower.tscn" id="1_qhf66"]
+[ext_resource type="Texture2D" uid="uid://bau44suw08ie7" path="res://assets/art/ui/icons/Icon - Humans Mage Tower.tres" id="2_6udpp"]
+[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/building_data.gd" id="3_8rf2s"]
+
+[resource]
+script = ExtResource("3_8rf2s")
+building_id = "humans_mage_tower"
+building_name = "Mage Tower"
+description = "Descrizione Mage Tower"
+icon = ExtResource("2_6udpp")
+building_scene = ExtResource("1_qhf66")
+build_time = 125.0
+max_health = 500
+sight_range = 3
+can_attack_ground = false
+gold_cost = 1000
+wood_cost = 200
+metadata/_custom_type_script = "uid://cjdr3m81ncphw"

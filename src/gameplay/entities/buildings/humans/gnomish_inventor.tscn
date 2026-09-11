@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://b606i5f5ux76n"]
+
+[ext_resource type="PackedScene" uid="uid://dbvpvnxbtn1su" path="res://src/gameplay/entities/buildings/production_building.tscn" id="1_82j1d"]
+[ext_resource type="Script" uid="uid://f37jsvu2v1vc" path="res://src/gameplay/entities/buildings/humans/gnomish_inventor.gd" id="2_samsk"]
+[ext_resource type="Texture2D" uid="uid://b0fbn6eiva88b" path="res://assets/art/ui/icons/Icon - Humans Gnomish Inventor.tres" id="3_plvai"]
+[ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/art/race/humans/buildings/Humans - Human Buildings (Summer).png" id="4_h72jp"]
+
+[node name="Gnomish Inventor" unique_id=1889694065 instance=ExtResource("1_82j1d")]
+script = ExtResource("2_samsk")
+building_name = "Gnomish Inventor"
+building_description = "Description Gnomish Inventor"
+building_icon = ExtResource("3_plvai")
+building_spritesheet = ExtResource("4_h72jp")
+region_under_construction = Rect2(547, 527, 48, 39)
+region_first_step_build = Rect2(539, 586, 61, 52)
+region_second_step_build = Rect2(404, 552, 96, 96)
+region_completed = Rect2(404, 456, 96, 96)
+build_time = 150.0
+max_health = 500
+sight_range = 3
+can_attack_ground = false
+
+[node name="Sprite2D" parent="." index="2" unique_id=1061573362]
+region_rect = Rect2(404, 456, 96, 96)

@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://bhd711s6umvr8"]
+
+[ext_resource type="PackedScene" uid="uid://dbvpvnxbtn1su" path="res://src/gameplay/entities/buildings/production_building.tscn" id="1_aqu15"]
+[ext_resource type="Script" uid="uid://dm42vo6vniwxd" path="res://src/gameplay/entities/buildings/humans/mage_tower.gd" id="2_ev041"]
+[ext_resource type="Texture2D" uid="uid://bau44suw08ie7" path="res://assets/art/ui/icons/Icon - Humans Mage Tower.tres" id="3_nwc4t"]
+[ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/art/race/humans/buildings/Humans - Human Buildings (Summer).png" id="4_67twu"]
+
+[node name="Mage Tower" unique_id=1889694065 instance=ExtResource("1_aqu15")]
+script = ExtResource("2_ev041")
+building_name = "Mage Tower"
+building_description = "Description Mage Tower"
+building_icon = ExtResource("3_nwc4t")
+building_spritesheet = ExtResource("4_67twu")
+region_under_construction = Rect2(547, 527, 48, 39)
+region_first_step_build = Rect2(539, 586, 61, 52)
+region_second_step_build = Rect2(404, 360, 96, 96)
+region_completed = Rect2(404, 264, 96, 96)
+build_time = 125.0
+max_health = 500
+sight_range = 3
+can_attack_ground = false
+
+[node name="Sprite2D" parent="." index="2" unique_id=1061573362]
+region_rect = Rect2(404, 264, 96, 96)

@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://bnijeyu1u0sfl"]
+
+[ext_resource type="PackedScene" uid="uid://dbvpvnxbtn1su" path="res://src/gameplay/entities/buildings/production_building.tscn" id="1_h5eg8"]
+[ext_resource type="Script" uid="uid://sf4morkyundn" path="res://src/gameplay/entities/buildings/humans/barracks.gd" id="2_06s4m"]
+[ext_resource type="Texture2D" uid="uid://bbug80d1gurkj" path="res://assets/art/ui/icons/Icon - Humans Barracks.tres" id="3_78dlq"]
+[ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/art/race/humans/buildings/Humans - Human Buildings (Summer).png" id="4_bhclf"]
+[ext_resource type="Script" uid="uid://b4yn7h2qqjq6g" path="res://src/resources/ActionData/action_data.gd" id="5_jeefg"]
+[ext_resource type="Resource" uid="uid://slk1cqdrd4ex" path="res://data/action_buttons/train_footman_action_data.tres.tres" id="6_gfac7"]
+[ext_resource type="Resource" uid="uid://x5qoc4m56f8t" path="res://data/action_buttons/train_elven_archer_action_data.tres.tres" id="7_8j7kl"]
+[ext_resource type="Resource" uid="uid://bdjcr65fgdy7q" path="res://data/action_buttons/train_knight_action_data.tres.tres" id="8_06nxx"]
+[ext_resource type="Resource" uid="uid://be7uo8mya4qc8" path="res://data/action_buttons/train_ballista_action_data.tres.tres" id="9_csvf1"]
+
+[node name="Barracks" unique_id=1889694065 instance=ExtResource("1_h5eg8")]
+script = ExtResource("2_06s4m")
+building_name = "Barracks"
+building_description = "Description Barracks"
+building_icon = ExtResource("3_78dlq")
+building_spritesheet = ExtResource("4_bhclf")
+available_actions = Array[ExtResource("5_jeefg")]([ExtResource("6_gfac7"), ExtResource("7_8j7kl"), ExtResource("8_06nxx"), ExtResource("9_csvf1")])
+region_under_construction = Rect2(547, 527, 48, 39)
+region_first_step_build = Rect2(539, 586, 61, 52)
+region_second_step_build = Rect2(304, 552, 96, 96)
+region_completed = Rect2(304, 456, 96, 96)
+build_time = 200.0
+sight_range = 3
+can_attack_ground = false
+
+[node name="Sprite2D" parent="." index="2" unique_id=1061573362]
+region_rect = Rect2(304, 456, 96, 96)

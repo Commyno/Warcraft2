@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="BuildingData" format=3 uid="uid://8tjqkiqui450"]
+
+[ext_resource type="PackedScene" uid="uid://cdp0lbjingbod" path="res://src/gameplay/entities/buildings/humans/town_hall.tscn" id="1_jmw00"]
+[ext_resource type="Texture2D" uid="uid://dxvthu70w28n6" path="res://assets/art/ui/icons/Icon - Humans Keep.tres" id="2_jmw00"]
+[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/building_data.gd" id="3_y2waq"]
+
+[resource]
+script = ExtResource("3_y2waq")
+building_id = "humans_keep"
+building_name = "Keep"
+description = "Descrizione Keep"
+icon = ExtResource("2_jmw00")
+building_scene = ExtResource("1_jmw00")
+build_time = 200.0
+max_health = 1400
+sight_range = 6
+food_provided = 1
+is_resource_dropoff = true
+accepts_gold = true
+accepts_wood = true
+can_attack_ground = false
+gold_cost = 2000
+wood_cost = 1000
+oil_cost = 200
+metadata/_custom_type_script = "uid://cjdr3m81ncphw"

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="BuildingData" format=3 uid="uid://yms1jwaay3n1"]
+
+[ext_resource type="PackedScene" uid="uid://tr3e6rlw47q6" path="res://src/gameplay/entities/buildings/humans/elven_lumber_mill.tscn" id="1_qlckq"]
+[ext_resource type="Texture2D" uid="uid://bjcbxjca0oa0n" path="res://assets/art/ui/icons/Icon - Humans Elven Lumber Mill.tres" id="2_ewg40"]
+[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/building_data.gd" id="3_y141l"]
+
+[resource]
+script = ExtResource("3_y141l")
+building_id = "humans_elven_lumber_mill"
+building_name = "Elven Lumber Mill"
+description = "Descrizione Elven Lumber Mill"
+building_type = 1
+icon = ExtResource("2_ewg40")
+building_scene = ExtResource("1_qlckq")
+build_time = 150.0
+max_health = 600
+sight_range = 3
+can_attack_ground = false
+gold_cost = 600
+wood_cost = 450
+metadata/_custom_type_script = "uid://cjdr3m81ncphw"

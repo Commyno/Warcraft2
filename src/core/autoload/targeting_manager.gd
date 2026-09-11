@@ -38,8 +38,8 @@ func is_targeting() -> bool:
 	return _active
 
 func resolve_smart_command(world_pos: Vector2, actions: Array, units: Array, player: Player) -> void:
-	var entity := _get_object_under_mouse(world_pos)
-	var tile := GridManager.get_tile_coords(world_pos)
+	var entity: Node2D = _get_object_under_mouse(world_pos)
+	var tile: Vector2i = GridManager.get_tile_coords(world_pos)
 	
 	for action in actions:
 		if action.accepts(entity, tile, world_pos, units, player):

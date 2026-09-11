@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="BuildingData" format=3 uid="uid://c4joad7c25mrs"]
+
+[ext_resource type="PackedScene" uid="uid://db7rmit0ca73g" path="res://src/gameplay/entities/buildings/humans/stable.tscn" id="1_g3p55"]
+[ext_resource type="Texture2D" uid="uid://bqdfnt1f7qqfr" path="res://assets/art/ui/icons/Icon - Humans Stables.tres" id="2_a1cb4"]
+[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/building_data.gd" id="3_77kjo"]
+
+[resource]
+script = ExtResource("3_77kjo")
+building_id = "humans_stable"
+building_name = "Stable"
+description = "Descrizione Stable"
+icon = ExtResource("2_a1cb4")
+building_scene = ExtResource("1_g3p55")
+build_time = 150.0
+max_health = 500
+sight_range = 3
+can_attack_ground = false
+gold_cost = 1000
+wood_cost = 300
+metadata/_custom_type_script = "uid://cjdr3m81ncphw"

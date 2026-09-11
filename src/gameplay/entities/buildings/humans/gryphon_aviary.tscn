@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://vbjbe2c1ncs"]
+
+[ext_resource type="PackedScene" uid="uid://dbvpvnxbtn1su" path="res://src/gameplay/entities/buildings/production_building.tscn" id="1_ajda7"]
+[ext_resource type="Script" uid="uid://bctrxyc5nuawo" path="res://src/gameplay/entities/buildings/humans/gryphon_aviary.gd" id="2_hiww5"]
+[ext_resource type="Texture2D" uid="uid://c4scxd47c1n0s" path="res://assets/art/ui/icons/Icon - Humans Gryphon Aviary.tres" id="3_2bsfm"]
+[ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/art/race/humans/buildings/Humans - Human Buildings (Summer).png" id="4_0rf0y"]
+
+[node name="Gryphon Aviary" unique_id=1889694065 instance=ExtResource("1_ajda7")]
+script = ExtResource("2_hiww5")
+building_name = "Gryphon Aviary"
+building_description = "Descriptio Gryphon Aviary"
+building_icon = ExtResource("3_2bsfm")
+building_spritesheet = ExtResource("4_0rf0y")
+region_under_construction = Rect2(547, 527, 48, 39)
+region_first_step_build = Rect2(539, 586, 61, 52)
+region_second_step_build = Rect2(504, 400, 89, 93)
+region_completed = Rect2(504, 303, 96, 94)
+build_time = 150.0
+max_health = 500
+sight_range = 3
+can_attack_ground = false
+
+[node name="Sprite2D" parent="." index="2" unique_id=1061573362]
+region_rect = Rect2(504, 303, 96, 94)

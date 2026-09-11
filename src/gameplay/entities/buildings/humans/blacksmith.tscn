@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://d0rvybu8e47cf"]
+
+[ext_resource type="PackedScene" uid="uid://dbvpvnxbtn1su" path="res://src/gameplay/entities/buildings/production_building.tscn" id="1_c13ay"]
+[ext_resource type="Script" uid="uid://bvu4uvtn7lt6t" path="res://src/gameplay/entities/buildings/humans/blacksmith.gd" id="2_ctxdg"]
+[ext_resource type="Texture2D" uid="uid://ey685kvw3wnk" path="res://assets/art/ui/icons/Icon - Humans Blacksmith.tres" id="3_3t5ol"]
+[ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/art/race/humans/buildings/Humans - Human Buildings (Summer).png" id="4_xdg0i"]
+
+[node name="Blacksmith" unique_id=1889694065 instance=ExtResource("1_c13ay")]
+script = ExtResource("2_ctxdg")
+building_name = "Blacksmith"
+building_description = "Description Blacksmith"
+building_icon = ExtResource("3_3t5ol")
+building_spritesheet = ExtResource("4_xdg0i")
+region_under_construction = Rect2(547, 527, 48, 39)
+region_first_step_build = Rect2(539, 586, 61, 52)
+region_second_step_build = Rect2(4, 365, 96, 90)
+region_completed = Rect2(4, 264, 96, 96)
+build_time = 200.0
+max_health = 775
+sight_range = 3
+can_attack_ground = false
+
+[node name="Sprite2D" parent="." index="2" unique_id=1061573362]
+region_rect = Rect2(4, 264, 96, 96)

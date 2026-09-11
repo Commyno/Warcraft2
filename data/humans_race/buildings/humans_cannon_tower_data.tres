@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="BuildingData" format=3 uid="uid://d2k8386gmjxum"]
+
+[ext_resource type="PackedScene" uid="uid://c4agq33dqg6cx" path="res://src/gameplay/entities/buildings/humans/scout_tower.tscn" id="1_muj5x"]
+[ext_resource type="Texture2D" uid="uid://oxlskliiyk88" path="res://assets/art/ui/icons/Icon - Humans Cannon Tower.tres" id="2_muj5x"]
+[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/building_data.gd" id="3_0oq1c"]
+
+[resource]
+script = ExtResource("3_0oq1c")
+building_id = "humans_cannon_tower"
+building_name = "Cannon Tower"
+description = "Descrizione Cannon Tower"
+building_type = 2
+icon = ExtResource("2_muj5x")
+building_scene = ExtResource("1_muj5x")
+tile_size = Vector2i(2, 2)
+build_time = 190.0
+max_health = 160
+sight_range = 9
+can_attack = true
+basic_damage = 50
+attack_range = 7.0
+gold_cost = 1000
+wood_cost = 300
+metadata/_custom_type_script = "uid://cjdr3m81ncphw"

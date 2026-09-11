@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://dbvpvnxbtn1su" path="res://src/gameplay/entities/buildings/production_building.tscn" id="1_r3mtd"]
 [ext_resource type="Script" uid="uid://bdvowwie5sfrw" path="res://src/gameplay/entities/buildings/humans/town_hall.gd" id="2_fr43j"]
 [ext_resource type="Script" uid="uid://bwo8h3bftdqwy" path="res://src/resources/EntityData/unit_data.gd" id="3_glky6"]
-[ext_resource type="Texture2D" uid="uid://wioaljt1ijyh" path="res://assets/art/ui/icons/Icon - Humans TownHall.tres" id="4_ldwsq"]
+[ext_resource type="Texture2D" uid="uid://wioaljt1ijyh" path="res://assets/art/ui/icons/Icon - Humans Town Hall.tres" id="4_ldwsq"]
 [ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/art/race/humans/buildings/Humans - Human Buildings (Summer).png" id="5_u020x"]
 [ext_resource type="Texture2D" uid="uid://dhcgdbkobwyd5" path="res://assets/art/race/humans/buildings/Humans - TownHall - 01.tres" id="6_u020x"]
 
@@ -22,6 +22,7 @@ expand_margin_bottom = 1.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_31b85"]
 bg_color = Color(0.44979727, 0.7631216, 0, 1)
+
 
 [node name="TownHall" unique_id=1889694065 instance=ExtResource("1_r3mtd")]
 script = ExtResource("2_fr43j")

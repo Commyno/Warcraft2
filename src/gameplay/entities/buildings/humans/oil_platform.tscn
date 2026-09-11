@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://dbn42jiiapmix"]
+
+[ext_resource type="PackedScene" uid="uid://dte1tuljlbqt8" path="res://src/gameplay/entities/buildings/resource_building.tscn" id="1_74onh"]
+[ext_resource type="Script" uid="uid://dllbuioil741e" path="res://src/gameplay/entities/buildings/humans/oil_platform.gd" id="2_44lvx"]
+[ext_resource type="Texture2D" uid="uid://djb7phwbqyk1v" path="res://assets/art/ui/icons/Icon - Humans Oil Platform.tres" id="3_hchbt"]
+[ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/art/race/humans/buildings/Humans - Human Buildings (Summer).png" id="4_dt8ib"]
+
+[node name="Oil Platform" unique_id=1889694065 instance=ExtResource("1_74onh")]
+script = ExtResource("2_44lvx")
+resource_type = 3
+max_workers = 1
+resource_per_cycle = 10
+building_name = "Oil Platform"
+building_description = "Description Oil Platform"
+building_icon = ExtResource("3_hchbt")
+building_spritesheet = ExtResource("4_dt8ib")
+region_under_construction = Rect2(547, 527, 48, 39)
+region_first_step_build = Rect2(539, 586, 61, 52)
+region_second_step_build = Rect2(532, 102, 94, 92)
+region_completed = Rect2(532, 5, 94, 92)
+region_idle = Rect2(532, 5, 94, 92)
+region_active = Rect2(532, 200, 94, 92)
+tile_size = Vector2i(2, 2)
+build_time = 200.0
+max_health = 650
+sight_range = 3
+can_attack_ground = false
+
+[node name="Sprite2D" parent="." index="2" unique_id=1061573362]
+texture = ExtResource("4_dt8ib")
+region_rect = Rect2(532, 5, 94, 92)

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="BuildingData" format=3 uid="uid://pl3aewbw04ne"]
+
+[ext_resource type="PackedScene" uid="uid://b606i5f5ux76n" path="res://src/gameplay/entities/buildings/humans/gnomish_inventor.tscn" id="1_ho3vr"]
+[ext_resource type="Texture2D" uid="uid://b0fbn6eiva88b" path="res://assets/art/ui/icons/Icon - Humans Gnomish Inventor.tres" id="2_pwjuj"]
+[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/building_data.gd" id="3_1d6m5"]
+
+[resource]
+script = ExtResource("3_1d6m5")
+building_id = "humans_gnomish_inventor"
+building_name = "Gnomish Inventor"
+description = "Descrizione Gnomish Inventor"
+icon = ExtResource("2_pwjuj")
+building_scene = ExtResource("1_ho3vr")
+build_time = 150.0
+max_health = 500
+sight_range = 3
+can_attack_ground = false
+gold_cost = 1000
+wood_cost = 400
+metadata/_custom_type_script = "uid://cjdr3m81ncphw"

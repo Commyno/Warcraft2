@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://benxqno2mtlx7"]
+
+[ext_resource type="PackedScene" uid="uid://dbvpvnxbtn1su" path="res://src/gameplay/entities/buildings/production_building.tscn" id="1_15g26"]
+[ext_resource type="Script" uid="uid://c5crx77ba16ec" path="res://src/gameplay/entities/buildings/humans/oil_refinery.gd" id="2_mws4e"]
+[ext_resource type="Texture2D" uid="uid://ba82dsig7qhkr" path="res://assets/art/ui/icons/Icon - Humans Oil Refinery.tres" id="2_u3nk2"]
+[ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/art/race/humans/buildings/Humans - Human Buildings (Summer).png" id="3_kpao8"]
+
+[node name="Oil Refinery" unique_id=1889694065 instance=ExtResource("1_15g26")]
+script = ExtResource("2_mws4e")
+building_name = "Oil Refinery"
+building_description = "Descriptio Oil Refinery"
+building_icon = ExtResource("2_u3nk2")
+building_spritesheet = ExtResource("3_kpao8")
+region_under_construction = Rect2(547, 527, 48, 39)
+region_first_step_build = Rect2(539, 586, 61, 52)
+region_second_step_build = Rect2(204, 552, 96, 96)
+region_completed = Rect2(204, 456, 96, 96)
+build_time = 225.0
+max_health = 600
+sight_range = 3
+can_attack_ground = false
+
+[node name="Sprite2D" parent="." index="2" unique_id=1061573362]
+region_rect = Rect2(204, 456, 96, 96)

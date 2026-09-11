@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="BuildingData" format=3 uid="uid://hentlrvqilik"]
+
+[ext_resource type="PackedScene" uid="uid://benxqno2mtlx7" path="res://src/gameplay/entities/buildings/humans/oil_refinery.tscn" id="1_gvoug"]
+[ext_resource type="Texture2D" uid="uid://ba82dsig7qhkr" path="res://assets/art/ui/icons/Icon - Humans Oil Refinery.tres" id="2_dnc58"]
+[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/building_data.gd" id="3_0syqm"]
+
+[resource]
+script = ExtResource("3_0syqm")
+building_id = "humans_oil_rafinery"
+building_name = "Oil Rafinery"
+description = "Descrizione Oil Rafinery"
+building_type = 1
+icon = ExtResource("2_dnc58")
+building_scene = ExtResource("1_gvoug")
+build_time = 225.0
+max_health = 600
+sight_range = 3
+is_resource_dropoff = true
+accepts_oil = true
+can_attack_ground = false
+gold_cost = 800
+wood_cost = 350
+oil_cost = 200
+metadata/_custom_type_script = "uid://cjdr3m81ncphw"

@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://droglnhp6jdy0"]
+
+[ext_resource type="PackedScene" uid="uid://dbvpvnxbtn1su" path="res://src/gameplay/entities/buildings/production_building.tscn" id="1_wp1bw"]
+[ext_resource type="Texture2D" uid="uid://dhiqk0w11l3r2" path="res://assets/art/ui/icons/Icon - Humans Foundry.tres" id="2_k16fm"]
+[ext_resource type="Script" uid="uid://ba7et2i26vitb" path="res://src/gameplay/entities/buildings/humans/foundry.gd" id="2_vlelc"]
+[ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/art/race/humans/buildings/Humans - Human Buildings (Summer).png" id="3_wyy1u"]
+
+[node name="Foundry" unique_id=1889694065 instance=ExtResource("1_wp1bw")]
+script = ExtResource("2_vlelc")
+building_name = "Foundry"
+building_description = "Description Foundry"
+building_icon = ExtResource("2_k16fm")
+building_spritesheet = ExtResource("3_wyy1u")
+region_under_construction = Rect2(547, 527, 48, 39)
+region_first_step_build = Rect2(539, 586, 61, 52)
+region_second_step_build = Rect2(104, 552, 96, 96)
+region_completed = Rect2(104, 456, 96, 96)
+build_time = 175.0
+max_health = 750
+sight_range = 3
+can_attack_ground = false
+
+[node name="Sprite2D" parent="." index="2" unique_id=1061573362]
+region_rect = Rect2(104, 456, 96, 96)

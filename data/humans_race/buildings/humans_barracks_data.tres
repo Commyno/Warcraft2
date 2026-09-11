@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="BuildingData" format=3 uid="uid://b4lkt5hpyw301"]
+
+[ext_resource type="PackedScene" uid="uid://bnijeyu1u0sfl" path="res://src/gameplay/entities/buildings/humans/barracks.tscn" id="1_upgu4"]
+[ext_resource type="Texture2D" uid="uid://bbug80d1gurkj" path="res://assets/art/ui/icons/Icon - Humans Barracks.tres" id="2_ptnca"]
+[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/building_data.gd" id="3_a7838"]
+
+[resource]
+script = ExtResource("3_a7838")
+building_id = "humans_barracks"
+building_name = "Barracks"
+description = "Descrizione Barracks"
+icon = ExtResource("2_ptnca")
+building_scene = ExtResource("1_upgu4")
+build_time = 200.0
+sight_range = 3
+can_attack_ground = false
+gold_cost = 700
+wood_cost = 450
+metadata/_custom_type_script = "uid://cjdr3m81ncphw"
