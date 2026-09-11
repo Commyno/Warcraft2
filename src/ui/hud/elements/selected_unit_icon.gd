@@ -13,10 +13,7 @@ func _process(delta: float) -> void:
 	pass
 
 func setup(entity: Node2D) -> void:
-	if entity is BaseUnit:
-		texture.texture = entity.unit_icon
-	else:
-		texture.texture = entity.building_icon
+	texture.texture = entity.icon
 	texture.expand_mode = TextureRect.EXPAND_FIT_WIDTH
 	progress_bar.value = entity.current_health
 	

@@ -2,15 +2,15 @@
 
 [ext_resource type="PackedScene" uid="uid://bhd711s6umvr8" path="res://src/gameplay/entities/buildings/humans/mage_tower.tscn" id="1_qhf66"]
 [ext_resource type="Texture2D" uid="uid://bau44suw08ie7" path="res://assets/art/ui/icons/Icon - Humans Mage Tower.tres" id="2_6udpp"]
-[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/building_data.gd" id="3_8rf2s"]
+[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/data.gd" id="3_8rf2s"]
 
 [resource]
 script = ExtResource("3_8rf2s")
-building_id = "humans_mage_tower"
-building_name = "Mage Tower"
+id = "humans_mage_tower"
+name = "Mage Tower"
 description = "Descrizione Mage Tower"
 icon = ExtResource("2_6udpp")
-building_scene = ExtResource("1_qhf66")
+scene = ExtResource("1_qhf66")
 build_time = 125.0
 max_health = 500
 sight_range = 3

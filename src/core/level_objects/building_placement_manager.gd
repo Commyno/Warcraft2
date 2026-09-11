@@ -60,7 +60,7 @@ func start_placement(action: PlaceBuildingActionData, units: Array) -> void:
 	
 	_action = action
 	_units = units
-	building_scene_to_spawn = action.building_data.building_scene
+	building_scene_to_spawn = action.building_data.scene
 	_building_tile_size = action.building_data.tile_size
 	preview_building = building_scene_to_spawn.instantiate() as BaseBuilding
 

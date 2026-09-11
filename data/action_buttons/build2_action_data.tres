@@ -4,10 +4,18 @@
 [ext_resource type="Script" uid="uid://dxvkdxxr41niw" path="res://src/resources/ActionData/submenu_action_data.gd" id="2_fxh1n"]
 [ext_resource type="Script" uid="uid://b4yn7h2qqjq6g" path="res://src/resources/ActionData/action_data.gd" id="3_mfs3o"]
 [ext_resource type="Resource" uid="uid://cqfflgfjvvimi" path="res://data/action_buttons/cancel_action_data.tres" id="4_fxh1n"]
+[ext_resource type="Resource" uid="uid://74x73fqtn37n" path="res://data/action_buttons/place_shipyard_action_data.tres" id="4_tjcbo"]
+[ext_resource type="Resource" uid="uid://bkqdl2r2qukbd" path="res://data/action_buttons/place_foundry_action_data.tres" id="5_x16b1"]
+[ext_resource type="Resource" uid="uid://cep1qwt5ak7vf" path="res://data/action_buttons/place_oil_refinery_action_data.tres" id="6_il3ml"]
+[ext_resource type="Resource" uid="uid://dd6vudpylsp7l" path="res://data/action_buttons/place_gnomish_inventor_action_data.tres" id="7_5rjps"]
+[ext_resource type="Resource" uid="uid://ctqo82lc4m1m1" path="res://data/action_buttons/place_stable_action_data.tres" id="8_3er40"]
+[ext_resource type="Resource" uid="uid://dbk808q3b6ytb" path="res://data/action_buttons/place_church_action_data.tres" id="9_ucfhm"]
+[ext_resource type="Resource" uid="uid://dvsvcmsj32u0p" path="res://data/action_buttons/place_mage_tower_action_data.tres" id="10_b3y6v"]
+[ext_resource type="Resource" uid="uid://sio7pga331tl" path="res://data/action_buttons/place_gryphon_aviary_action_data.tres" id="11_dlgkn"]
 
 [resource]
 script = ExtResource("2_fxh1n")
-sub_actions = Array[ExtResource("3_mfs3o")]([null, null, null, null, null, null, null, null, ExtResource("4_fxh1n")])
+sub_actions = Array[ExtResource("3_mfs3o")]([ExtResource("4_tjcbo"), ExtResource("5_x16b1"), ExtResource("6_il3ml"), ExtResource("7_5rjps"), ExtResource("8_3er40"), ExtResource("9_ucfhm"), ExtResource("10_b3y6v"), ExtResource("11_dlgkn"), ExtResource("4_fxh1n")])
 id = "build2"
 title = "Build extended"
 description = "Description Build"

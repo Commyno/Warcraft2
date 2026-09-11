@@ -7,10 +7,10 @@
 
 [node name="Scout Tower" unique_id=1889694065 instance=ExtResource("1_0hojn")]
 script = ExtResource("2_u8tt1")
-building_name = "Scout Tower"
-building_description = "Description Scout Tower"
-building_icon = ExtResource("3_ool3j")
-building_spritesheet = ExtResource("4_w1dlg")
+name = "Scout Tower"
+description = "Description Scout Tower"
+icon = ExtResource("3_ool3j")
+spritesheet = ExtResource("4_w1dlg")
 region_under_construction = Rect2(547, 527, 48, 39)
 region_first_step_build = Rect2(539, 586, 61, 52)
 region_second_step_build = Rect2(469, 86, 57, 46)

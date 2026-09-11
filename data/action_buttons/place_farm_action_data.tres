@@ -7,9 +7,9 @@
 [resource]
 script = ExtResource("3_ytoib")
 building_data = ExtResource("1_kax22")
-id = "townhall"
-title = "Costruisci Town Hall"
-description = "Descrizione Town Hall"
+id = "humans_farm"
+title = "Costruisci Farm"
+description = "Descrizione Farm"
 icon = ExtResource("2_esxk6")
 action_type = 1
 target_mode = 1

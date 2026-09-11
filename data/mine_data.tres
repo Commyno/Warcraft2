@@ -1,7 +1,19 @@
 [gd_resource type="Resource" script_class="BuildingData" format=3 uid="uid://dh1x21s721dgh"]
 
+[ext_resource type="PackedScene" uid="uid://bkpxip1v5ofhn" path="res://src/gameplay/entities/buildings/neutral/gold_mine.tscn" id="1_8ach5"]
 [ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/building_data.gd" id="1_xkntl"]
+[ext_resource type="Texture2D" uid="uid://dnf55x07x3dob" path="res://assets/art/ui/icons/Icon - Gold Mine.tres" id="2_6qjep"]
 
 [resource]
 script = ExtResource("1_xkntl")
+id = "gold_mine"
+name = "Miniera"
+description = "Descrizione Miniera"
+faction = 2
+type = 1
+icon = ExtResource("2_6qjep")
+scene = ExtResource("1_8ach5")
+build_time = 0.0
+can_destroy = false
+can_attack_ground = false
 metadata/_custom_type_script = "uid://cjdr3m81ncphw"

@@ -1,16 +1,16 @@
 [gd_resource type="Resource" script_class="PlaceBuildingActionData" format=3 uid="uid://doq4bxd5m72g"]
 
 [ext_resource type="Resource" uid="uid://biao03okejj7o" path="res://data/humans_race/buildings/humans_townhall_data.tres" id="1_7osxs"]
-[ext_resource type="Texture2D" uid="uid://wioaljt1ijyh" path="res://assets/art/ui/icons/Icon - Humans Town Hall.tres" id="2_vbf6m"]
+[ext_resource type="Texture2D" uid="uid://djb7phwbqyk1v" path="res://assets/art/ui/icons/Icon - Humans Oil Platform.tres" id="2_7osxs"]
 [ext_resource type="Script" uid="uid://dcdhttu5o6dgd" path="res://src/resources/ActionData/place_building_action_data.gd" id="3_pcudx"]
 
 [resource]
 script = ExtResource("3_pcudx")
 building_data = ExtResource("1_7osxs")
-id = "townhall"
-title = "Costruisci Town Hall"
-description = "Descrizione Town Hall"
-icon = ExtResource("2_vbf6m")
+id = "humans_oil_platform"
+title = "Costruisci Oil Platform"
+description = "Descrizione Oil Platform"
+icon = ExtResource("2_7osxs")
 action_type = 1
 target_mode = 1
 metadata/_custom_type_script = "uid://dcdhttu5o6dgd"

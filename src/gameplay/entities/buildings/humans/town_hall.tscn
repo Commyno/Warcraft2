@@ -27,10 +27,10 @@ bg_color = Color(0.44979727, 0.7631216, 0, 1)
 [node name="TownHall" unique_id=1889694065 instance=ExtResource("1_r3mtd")]
 script = ExtResource("2_fr43j")
 trainable_units = Array[ExtResource("3_glky6")]([])
-building_name = "Town Hall"
-building_description = "Description Town Hall"
-building_icon = ExtResource("4_ldwsq")
-building_spritesheet = ExtResource("5_u020x")
+name = "Town Hall"
+description = "Description Town Hall"
+icon = ExtResource("4_ldwsq")
+spritesheet = ExtResource("5_u020x")
 region_under_construction = Rect2(547, 527, 48, 39)
 region_first_step_build = Rect2(539, 586, 61, 52)
 region_second_step_build = Rect2(266, 132, 128, 128)

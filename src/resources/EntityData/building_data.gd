@@ -8,13 +8,13 @@ enum BuildingType { PRODUCTION, ECONOMY, DEFENSE, TECH }
 # IDENTITÀ E GRAFICA
 # ==========================================
 @export_group("Identity")
-@export var building_id: String = ""         # es. "farm", "barracks", "town_hall"
-@export var building_name: String = ""       # es. "Barracks"
+@export var id: String = ""         # es. "farm", "barracks", "town_hall"
+@export var name: String = ""       # es. "Barracks"
 @export_multiline var description: String = ""
 @export var faction: Faction = Faction.ALLIANCE
-@export var building_type: BuildingType = BuildingType.PRODUCTION
+@export var type: BuildingType = BuildingType.PRODUCTION
 @export var icon: Texture2D                  # Icona per il menu di costruzione del Peon
-@export var building_scene: PackedScene      # Scena .tscn dell'edificio completo
+@export var scene: PackedScene      # Scena .tscn dell'edificio completo
 
 # ==========================================
 # GRIGLIA E POSIZIONAMENTO (TileMap / Grid)
@@ -34,7 +34,7 @@ enum BuildingType { PRODUCTION, ECONOMY, DEFENSE, TECH }
 # ==========================================
 @export_group("Attributes")
 @export var max_health: int = 800
-@export var base_armor: int = 20                 # Gli edifici in WC2 hanno armatura alta
+@export var basic_armor: int = 20                 # Gli edifici in WC2 hanno armatura alta
 @export var sight_range: int = 4                 # Raggio visivo (in tile)
 
 # ==========================================

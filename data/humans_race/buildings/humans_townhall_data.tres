@@ -6,11 +6,11 @@
 
 [resource]
 script = ExtResource("1_kgn74")
-building_id = "humans_townhall"
-building_name = "Town Hall"
+id = "humans_townhall"
+name = "Town Hall"
 description = "Descrizione Town Hall"
 icon = ExtResource("1_hedpo")
-building_scene = ExtResource("1_qkqp0")
+scene = ExtResource("1_qkqp0")
 build_time = 255.0
 max_health = 1200
 food_provided = 1

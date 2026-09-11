@@ -6,12 +6,12 @@
 
 [resource]
 script = ExtResource("3_4371x")
-building_id = "humans_blacksmith"
-building_name = "Blacksmith"
+id = "humans_blacksmith"
+name = "Blacksmith"
 description = "Descrizione Blacksmith"
-building_type = 3
+type = 3
 icon = ExtResource("2_dvphh")
-building_scene = ExtResource("1_2ync0")
+scene = ExtResource("1_2ync0")
 build_time = 200.0
 max_health = 775
 sight_range = 3

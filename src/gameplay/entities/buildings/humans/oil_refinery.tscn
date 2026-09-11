@@ -7,10 +7,10 @@
 
 [node name="Oil Refinery" unique_id=1889694065 instance=ExtResource("1_15g26")]
 script = ExtResource("2_mws4e")
-building_name = "Oil Refinery"
-building_description = "Descriptio Oil Refinery"
-building_icon = ExtResource("2_u3nk2")
-building_spritesheet = ExtResource("3_kpao8")
+name = "Oil Refinery"
+description = "Descriptio Oil Refinery"
+icon = ExtResource("2_u3nk2")
+spritesheet = ExtResource("3_kpao8")
 region_under_construction = Rect2(547, 527, 48, 39)
 region_first_step_build = Rect2(539, 586, 61, 52)
 region_second_step_build = Rect2(204, 552, 96, 96)

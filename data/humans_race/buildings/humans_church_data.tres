@@ -2,15 +2,15 @@
 
 [ext_resource type="PackedScene" uid="uid://p8m4xryf8sak" path="res://src/gameplay/entities/buildings/humans/church.tscn" id="1_so5ti"]
 [ext_resource type="Texture2D" uid="uid://droql54fd2ybw" path="res://assets/art/ui/icons/Icon - Humans Church.tres" id="2_t5gix"]
-[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/building_data.gd" id="3_4w7kq"]
+[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/data.gd" id="3_4w7kq"]
 
 [resource]
 script = ExtResource("3_4w7kq")
-building_id = "humans_church"
-building_name = "Church"
+id = "humans_church"
+name = "Church"
 description = "Descrizione Church"
 icon = ExtResource("2_t5gix")
-building_scene = ExtResource("1_so5ti")
+scene = ExtResource("1_so5ti")
 build_time = 175.0
 max_health = 700
 sight_range = 3

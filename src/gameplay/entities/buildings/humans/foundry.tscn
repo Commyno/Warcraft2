@@ -7,10 +7,10 @@
 
 [node name="Foundry" unique_id=1889694065 instance=ExtResource("1_wp1bw")]
 script = ExtResource("2_vlelc")
-building_name = "Foundry"
-building_description = "Description Foundry"
-building_icon = ExtResource("2_k16fm")
-building_spritesheet = ExtResource("3_wyy1u")
+name = "Foundry"
+description = "Description Foundry"
+icon = ExtResource("2_k16fm")
+spritesheet = ExtResource("3_wyy1u")
 region_under_construction = Rect2(547, 527, 48, 39)
 region_first_step_build = Rect2(539, 586, 61, 52)
 region_second_step_build = Rect2(104, 552, 96, 96)

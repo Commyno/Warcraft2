@@ -12,10 +12,9 @@
 
 [node name="Barracks" unique_id=1889694065 instance=ExtResource("1_h5eg8")]
 script = ExtResource("2_06s4m")
-building_name = "Barracks"
-building_description = "Description Barracks"
-building_icon = ExtResource("3_78dlq")
-building_spritesheet = ExtResource("4_bhclf")
+description = "Description Barracks"
+icon = ExtResource("3_78dlq")
+spritesheet = ExtResource("4_bhclf")
 available_actions = Array[ExtResource("5_jeefg")]([ExtResource("6_gfac7"), ExtResource("7_8j7kl"), ExtResource("8_06nxx"), ExtResource("9_csvf1")])
 region_under_construction = Rect2(547, 527, 48, 39)
 region_first_step_build = Rect2(539, 586, 61, 52)

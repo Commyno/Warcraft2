@@ -13,15 +13,15 @@ const FACTION_SPAWN_DATABASE: Dictionary = {
 		"gold_mine": preload("res://src/gameplay/entities/buildings/neutral/gold_mine.tscn"),
 		"town_hall": preload("res://src/gameplay/entities/buildings/humans/town_hall.tscn"),
 		"farm": preload("res://src/gameplay/entities/buildings/humans/farm.tscn"),
-		"peasant": preload("res://src/gameplay/entities/units/humans//peasant.tscn"),
-		"footman": preload("res://src/gameplay/entities/units/humans//footman.tscn")
+		"peasant": preload("res://src/gameplay/entities/units/humans/peasant.tscn"),
+		"footman": preload("res://src/gameplay/entities/units/humans/footman.tscn")
 	},
 	"Horde": {
 		"gold_mine": preload("res://src/gameplay/entities/buildings/neutral/gold_mine.tscn"),
 		"town_hall": preload("res://src/gameplay/entities/buildings/humans/town_hall.tscn"),
 		"farm": preload("res://src/gameplay/entities/buildings/humans/farm.tscn"),
-		"peon": preload("res://src/gameplay/entities/units/humans//peasant.tscn"),
-		"footman": preload("res://src/gameplay/entities/units/humans//footman.tscn")
+		"peon": preload("res://src/gameplay/entities/units/humans/peasant.tscn"),
+		"footman": preload("res://src/gameplay/entities/units/humans/footman.tscn")
 	},
 	"Neutral": {
 		"gold_mine": preload("res://src/gameplay/entities/buildings/neutral/gold_mine.tscn"),
@@ -29,12 +29,20 @@ const FACTION_SPAWN_DATABASE: Dictionary = {
 }
 
 # Mappatura dei Tile ID di "logic" / "group 0" verso le scene del gioco
-const TILE_MAP_ENTITIES: Dictionary = {
+const TILE_MAP_ENTITIES_old: Dictionary = {
 	381: {"faction_key": "Alliance",   "entity_key": "peasant"},
 	382: {"faction_key": "Horde",   "entity_key": "peon"},
 	421: {"faction_key": "Alliance",   "entity_key": "town_hall"},
 	422: {"faction_key": "Horde",   "entity_key": "town_hall"},
 	455: {"faction_key": "Neutral",   "entity_key": "gold_mine"}
+}
+
+const TILE_MAP_ENTITIES: Dictionary = {
+	381: preload("uid://bbklmd4sqie4g"),
+	382: preload("uid://bbklmd4sqie4g"),
+	421: preload("uid://biao03okejj7o"),
+	422: preload("uid://biao03okejj7o"),
+	455: preload("uid://dh1x21s721dgh")
 }
 
 # ==========================================
@@ -217,46 +225,46 @@ func _parse_group_layer(map_node: Node2D, layer_name: String, player: Player) ->
 		
 		# Recupera la classe relativa al tile individuato e lo spawna
 		if TILE_MAP_ENTITIES.has(tile_id):
-			var spawn_info: Dictionary = TILE_MAP_ENTITIES[tile_id]
+			var data: Resource = TILE_MAP_ENTITIES[tile_id]
 			var local_pos: Vector2 = entities_layer.map_to_local(cell_coords)
 			var global_pos: Vector2 = entities_layer.to_global(local_pos)
 			
 			# Spawna l'entità iniettando l'istanza target_player
-			spawn_entity_by_key(spawn_info["faction_key"], spawn_info["entity_key"], global_pos, player)
+#			spawn_entity_by_key(spawn_info["faction_key"], spawn_info["entity_key"], global_pos, player)
+			if data is BuildingData:
+				spawn_entity(data, global_pos, player)
+			elif data is UnitData:
+				spawn_entity(data, global_pos, player)
 	
 	# Nascondi il layer visivo dei tile logici a runtime
 	entities_layer.queue_free()
 
-## Risolve faction_key + entity_key nella scena corretta e istanzia l'entità.
-## Ritorna il nodo spawnato, oppure null in caso di errore (già loggato).
-func spawn_entity_by_key(faction_key: String, entity_key: String, global_pos: Vector2, player_owner: Player = null) -> Node:
+func spawn_entity(data: Resource, global_pos: Vector2, player_owner: Player = null) -> Node:
 	# --- Risoluzione della scena (doppio lookup con guardie) ---
-	if not FACTION_SPAWN_DATABASE.has(faction_key):
-		push_error("Fazione sconosciuta: '%s'" % faction_key)
+	if not is_instance_valid(data):
+		push_error("UnitData sconosciuto")
 		return null
-
-	var faction_entities: Dictionary = FACTION_SPAWN_DATABASE[faction_key]
-	if not faction_entities.has(entity_key):
-		push_error("Entità '%s' non definita per la fazione '%s'" % [entity_key, faction_key])
-		return null
-
-	var entity_scene: PackedScene = faction_entities[entity_key]
+	var entity_scene: PackedScene = data.scene
 	if entity_scene == null:
-		push_error("Scena nulla per '%s'/'%s'" % [faction_key, entity_key])
+		push_error("Scena nulla per '%s'" % data.name)
 		return null
-
+	
 	# --- Istanziazione ---
-	var entity: Node = entity_scene.instantiate()
+	var entity := entity_scene.instantiate()
 	if entity == null:
-		push_error("instantiate() fallita per '%s'/'%s'" % [faction_key, entity_key])
+		push_error("instantiate() fallita per '%s'" % data.name)
 		return null
-
+	
 	entities_root.add_child(entity)
 	entity.global_position = global_pos
+	
 	if entity is BaseBuilding:
 		var origin_tile: Vector2i = GridManager.get_tile_coords(global_pos)
 		GridManager.register_building_occupation(origin_tile, entity.tile_size, entity)
-
+	
+	if entity.has_method("setup"):
+		entity.setup(data)
+	
 	# Iniezione diretta dell'istanza Player
 	if is_instance_valid(player_owner):
 		if "player_owner" in entity:
@@ -281,16 +289,17 @@ func _parse_entities_layer(map_node: Node2D, layer_name: String) -> void:
 		
 		# Recupera la classe relativa al tile individuato e lo spawna
 		if TILE_MAP_ENTITIES.has(tile_id):
-			var spawn_info: Dictionary = TILE_MAP_ENTITIES[tile_id]
+			var data: Resource = TILE_MAP_ENTITIES[tile_id]
 			var local_pos: Vector2 = entities_layer.map_to_local(cell_coords)
 			var global_pos: Vector2 = entities_layer.to_global(local_pos)
 			
 			# Spawn neutrale (owner_player = null)
-			var spawned_entity = spawn_entity_by_key(spawn_info["faction_key"], spawn_info["entity_key"], global_pos, null)
+			var spawned_entity = spawn_entity(data, global_pos, null)
 			
 			# Controlliamo se l'entità è di tipo ResourceBuilding
 			if spawned_entity is ResourceBuilding:
 				if spawned_entity.has_method("setup"):
+					spawned_entity.setup(data)
 					var max_resource = 16000 * MatchData.map_resources
 					spawned_entity.set_resources(max_resource, max_resource)
 	

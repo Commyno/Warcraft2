@@ -167,8 +167,8 @@ func enter_mine(mine: GoldMine) -> void:
 	# 3. Movimento al centro e fade-out nella prima metà
 	var tween_fade = create_tween().set_parallel(true)
 	tween_fade.tween_property(self, "global_position", mine.global_position, total_duration)
-	if unit_sprite:
-		tween_fade.tween_property(unit_sprite, "modulate:a", 0.0, half_duration)
+	if sprite2d:
+		tween_fade.tween_property(sprite2d, "modulate:a", 0.0, half_duration)
 		
 	await tween_fade.finished
 	
@@ -181,8 +181,8 @@ func exit_mine(gold_amount: int) -> void:
 	set_process(true)
 	visible = true
 	
-	if unit_sprite:
-		unit_sprite.modulate.a = 0.0
+	if sprite2d:
+		sprite2d.modulate.a = 0.0
 
 	# 2. Calcoliamo la posizione di uscita[cite: 1]
 	var exit_position = global_position
@@ -215,10 +215,10 @@ func exit_mine(gold_amount: int) -> void:
 	var tween = create_tween()
 	tween.tween_property(self, "global_position", exit_position, total_duration)
 
-	if unit_sprite:
+	if sprite2d:
 		var tween_fade = create_tween()
 		tween_fade.tween_interval(half_duration)
-		tween_fade.tween_property(unit_sprite, "modulate:a", 1.0, half_duration)
+		tween_fade.tween_property(sprite2d, "modulate:a", 1.0, half_duration)
 
 	# ASPETTIAMO CHE IL MOVIMENTO DI USCITA SIA FINITO
 	await tween.finished
@@ -422,9 +422,9 @@ func update_animation() -> void:
 			animation_state = "Idle"
 	
 	if move_dir.x < -0.1:
-		unit_sprite.flip_h = true
+		sprite2d.flip_h = true
 	elif move_dir.x > 0.1:
-		unit_sprite.flip_h = false
+		sprite2d.flip_h = false
 		
 # Sovrascriviamo la funzione del padre per aggiungere le pulizie specifiche del contadino
 func clear_assignment() -> void:
@@ -437,11 +437,11 @@ func clear_assignment() -> void:
 	super()
 
 func _apply_team_color(color: Color) -> void:
-	if not unit_sprite:
+	if not sprite2d:
 		return
 		
 	if PEASANT_TEXTURES.has(color):
-		unit_sprite.texture = PEASANT_TEXTURES[color]
+		sprite2d.texture = PEASANT_TEXTURES[color]
 	else:
 		push_warning("Nessuna texture trovata per il colore: ", color)
 

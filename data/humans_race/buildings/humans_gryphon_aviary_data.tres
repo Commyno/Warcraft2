@@ -6,11 +6,11 @@
 
 [resource]
 script = ExtResource("3_sooid")
-building_id = "humans_rryphon_aviary"
-building_name = "Gryphon Aviary"
+id = "humans_rryphon_aviary"
+name = "Gryphon Aviary"
 description = "Descrizione Gryphon Aviary"
 icon = ExtResource("2_ct6cg")
-building_scene = ExtResource("1_rk470")
+scene = ExtResource("1_rk470")
 build_time = 150.0
 max_health = 500
 sight_range = 3

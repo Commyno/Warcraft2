@@ -19,11 +19,11 @@ func _execute_action(_source_entities: Array, _target_data = null) -> void:
 		push_warning("%s: target_tile non è un Vector2i" % id)
 		return
 
-	if building_data == null or building_data.building_scene == null:
+	if building_data == null or building_data.scene == null:
 		push_warning("%s: building_data o scena mancante" % id)
 		return
 	
-	if _source_entities.is_empty():
+	if _source_entities.size() == 0: # is_empty():˙
 		return
 	
 	var builder = _source_entities[0]
@@ -43,7 +43,7 @@ func _execute_action(_source_entities: Array, _target_data = null) -> void:
 	
 	# Istanzia sotto entities_root (non GridManager)
 	var world_pos: Vector2 = GridManager.get_tile_center_global(_target_data)
-	var building: BaseBuilding = building_data.building_scene.instantiate()
+	var building: BaseBuilding = building_data.scene.instantiate()
 	if building:
 		building.setup(building_data)
 

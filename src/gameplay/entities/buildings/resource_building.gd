@@ -71,13 +71,13 @@ func _on_depleted() -> void:
 	pass
 
 func spawn_depleted_ground() -> void:
-	if not sprite or not sprite.texture:
+	if not sprite2d or not sprite2d.texture:
 		return
 		
 	var rubble = Sprite2D.new()
-	rubble.texture = sprite.texture
-	rubble.region_enabled = sprite.region_enabled
-	rubble.region_rect = sprite.region_rect
+	rubble.texture = sprite2d.texture
+	rubble.region_enabled = sprite2d.region_enabled
+	rubble.region_rect = sprite2d.region_rect
 	rubble.global_position = global_position
 	rubble.modulate = Color(0.3, 0.3, 0.3, 0.6)
 	

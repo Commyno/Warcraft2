@@ -1,16 +1,16 @@
 [gd_resource type="Resource" script_class="PlaceBuildingActionData" format=3 uid="uid://dvsvcmsj32u0p"]
 
 [ext_resource type="Resource" uid="uid://biao03okejj7o" path="res://data/humans_race/buildings/humans_townhall_data.tres" id="1_7fkk5"]
-[ext_resource type="Texture2D" uid="uid://wioaljt1ijyh" path="res://assets/art/ui/icons/Icon - Humans Town Hall.tres" id="2_41nss"]
+[ext_resource type="Texture2D" uid="uid://bau44suw08ie7" path="res://assets/art/ui/icons/Icon - Humans Mage Tower.tres" id="2_7fkk5"]
 [ext_resource type="Script" uid="uid://dcdhttu5o6dgd" path="res://src/resources/ActionData/place_building_action_data.gd" id="3_6o0jf"]
 
 [resource]
 script = ExtResource("3_6o0jf")
 building_data = ExtResource("1_7fkk5")
-id = "townhall"
-title = "Costruisci Town Hall"
-description = "Descrizione Town Hall"
-icon = ExtResource("2_41nss")
+id = "humans_mage_tower"
+title = "Costruisci Mage Tower"
+description = "Descrizione Mage Tower"
+icon = ExtResource("2_7fkk5")
 action_type = 1
 target_mode = 1
 metadata/_custom_type_script = "uid://dcdhttu5o6dgd"

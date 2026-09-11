@@ -7,10 +7,10 @@
 
 [node name="Blacksmith" unique_id=1889694065 instance=ExtResource("1_c13ay")]
 script = ExtResource("2_ctxdg")
-building_name = "Blacksmith"
-building_description = "Description Blacksmith"
-building_icon = ExtResource("3_3t5ol")
-building_spritesheet = ExtResource("4_xdg0i")
+name = "Blacksmith"
+description = "Description Blacksmith"
+icon = ExtResource("3_3t5ol")
+spritesheet = ExtResource("4_xdg0i")
 region_under_construction = Rect2(547, 527, 48, 39)
 region_first_step_build = Rect2(539, 586, 61, 52)
 region_second_step_build = Rect2(4, 365, 96, 90)

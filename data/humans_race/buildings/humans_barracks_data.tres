@@ -6,11 +6,11 @@
 
 [resource]
 script = ExtResource("3_a7838")
-building_id = "humans_barracks"
-building_name = "Barracks"
+id = "humans_barracks"
+name = "Barracks"
 description = "Descrizione Barracks"
 icon = ExtResource("2_ptnca")
-building_scene = ExtResource("1_upgu4")
+scene = ExtResource("1_upgu4")
 build_time = 200.0
 sight_range = 3
 can_attack_ground = false

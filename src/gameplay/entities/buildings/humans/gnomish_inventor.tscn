@@ -7,10 +7,10 @@
 
 [node name="Gnomish Inventor" unique_id=1889694065 instance=ExtResource("1_82j1d")]
 script = ExtResource("2_samsk")
-building_name = "Gnomish Inventor"
-building_description = "Description Gnomish Inventor"
-building_icon = ExtResource("3_plvai")
-building_spritesheet = ExtResource("4_h72jp")
+name = "Gnomish Inventor"
+description = "Description Gnomish Inventor"
+icon = ExtResource("3_plvai")
+spritesheet = ExtResource("4_h72jp")
 region_under_construction = Rect2(547, 527, 48, 39)
 region_first_step_build = Rect2(539, 586, 61, 52)
 region_second_step_build = Rect2(404, 552, 96, 96)

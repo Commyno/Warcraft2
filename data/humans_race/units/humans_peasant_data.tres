@@ -6,15 +6,17 @@
 
 [resource]
 script = ExtResource("1_th673")
-unit_name = "Peasant"
-description = "Descrizione del peasant"
+id = "humans_peasant"
+name = "Peasant"
+description = "Descrizione Peasant"
 icon = ExtResource("1_mckyh")
-unit_scene = ExtResource("3_aomyu")
-gold_cost = 50
+scene = ExtResource("3_aomyu")
 training_time = 45.0
 max_health = 30
-base_armor = 0
+basic_armor = 0
 basic_damage = 3
 piercing_damage = 2
 attack_range = 1.0
+gold_cost = 400
+food_cost = 1
 metadata/_custom_type_script = "uid://bwo8h3bftdqwy"

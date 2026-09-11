@@ -1,16 +1,16 @@
 [gd_resource type="Resource" script_class="PlaceBuildingActionData" format=3 uid="uid://ctqo82lc4m1m1"]
 
 [ext_resource type="Resource" uid="uid://biao03okejj7o" path="res://data/humans_race/buildings/humans_townhall_data.tres" id="1_khf0x"]
-[ext_resource type="Texture2D" uid="uid://wioaljt1ijyh" path="res://assets/art/ui/icons/Icon - Humans Town Hall.tres" id="2_se4xh"]
+[ext_resource type="Texture2D" uid="uid://bqdfnt1f7qqfr" path="res://assets/art/ui/icons/Icon - Humans Stables.tres" id="2_khf0x"]
 [ext_resource type="Script" uid="uid://dcdhttu5o6dgd" path="res://src/resources/ActionData/place_building_action_data.gd" id="3_4gsuc"]
 
 [resource]
 script = ExtResource("3_4gsuc")
 building_data = ExtResource("1_khf0x")
-id = "townhall"
-title = "Costruisci Town Hall"
-description = "Descrizione Town Hall"
-icon = ExtResource("2_se4xh")
+id = "humas_stable"
+title = "Costruisci Stable"
+description = "Descrizione Stable"
+icon = ExtResource("2_khf0x")
 action_type = 1
 target_mode = 1
 metadata/_custom_type_script = "uid://dcdhttu5o6dgd"

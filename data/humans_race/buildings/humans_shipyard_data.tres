@@ -2,15 +2,15 @@
 
 [ext_resource type="PackedScene" uid="uid://d47ngl18maix" path="res://src/gameplay/entities/buildings/humans/shipyard.tscn" id="1_uiukk"]
 [ext_resource type="Texture2D" uid="uid://ct1vwlxl6soyw" path="res://assets/art/ui/icons/Icon - Humans Shipyard.tres" id="2_jmx6e"]
-[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/building_data.gd" id="3_jw0e0"]
+[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/data.gd" id="3_jw0e0"]
 
 [resource]
 script = ExtResource("3_jw0e0")
-building_id = "humans_shipyard"
-building_name = "Shipyard"
+id = "humans_shipyard"
+name = "Shipyard"
 description = "Descrizione Shipyard"
 icon = ExtResource("2_jmx6e")
-building_scene = ExtResource("1_uiukk")
+scene = ExtResource("1_uiukk")
 build_time = 200.0
 max_health = 1100
 sight_range = 3

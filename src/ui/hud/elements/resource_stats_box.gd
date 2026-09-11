@@ -20,9 +20,9 @@ func setup(entity: Node2D) -> void:
 	
 	# Ora siamo sicuri che il nodo è in scena (perché add_child è stato fatto prima),
 	# quindi i nodi @onready esistono e possiamo aggiornare tutto subito!
-	portrait.texture = resource.building_icon
+	portrait.texture = resource.icon
 	progress_bar.value = resource.get_health_perc()
-	nome_unita.text = resource.building_name
+	nome_unita.text = resource.name
 	
 	if resource.resource_type == Globals.ResourceType.GOLD:
 		amount_label.text = "Gold Left: "

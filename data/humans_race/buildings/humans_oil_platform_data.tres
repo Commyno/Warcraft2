@@ -2,15 +2,15 @@
 
 [ext_resource type="PackedScene" uid="uid://dbn42jiiapmix" path="res://src/gameplay/entities/buildings/humans/oil_platform.tscn" id="1_ldbur"]
 [ext_resource type="Texture2D" uid="uid://djb7phwbqyk1v" path="res://assets/art/ui/icons/Icon - Humans Oil Platform.tres" id="2_nuf0i"]
-[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/building_data.gd" id="3_c1djg"]
+[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/data.gd" id="3_c1djg"]
 
 [resource]
 script = ExtResource("3_c1djg")
-building_id = "humans_oil_platform"
-building_name = "Oil Platform"
+id = "humans_oil_platform"
+name = "Oil Platform"
 description = "Descrizione Oil Platform"
 icon = ExtResource("2_nuf0i")
-building_scene = ExtResource("1_ldbur")
+scene = ExtResource("1_ldbur")
 tile_size = Vector2i(2, 2)
 build_time = 200.0
 max_health = 700

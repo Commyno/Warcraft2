@@ -528,7 +528,6 @@ script = ExtResource("2_1q6u8")
 build_range = 40.0
 chop_speed = 1.0
 max_carry = 10
-unit_name = "Peasant"
 available_actions = Array[ExtResource("3_7qhc5")]([ExtResource("4_2blpd"), ExtResource("5_vq64i"), ExtResource("6_qhgxn"), ExtResource("7_4b5el"), ExtResource("8_gii3i"), null, ExtResource("9_8ackg"), ExtResource("10_igboo"), null])
 
 [node name="Sprite2D" parent="." index="0" unique_id=1820984858]

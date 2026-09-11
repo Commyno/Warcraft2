@@ -1,16 +1,16 @@
 [gd_resource type="Resource" script_class="PlaceBuildingActionData" format=3 uid="uid://sio7pga331tl"]
 
 [ext_resource type="Resource" uid="uid://biao03okejj7o" path="res://data/humans_race/buildings/humans_townhall_data.tres" id="1_myl7w"]
-[ext_resource type="Texture2D" uid="uid://wioaljt1ijyh" path="res://assets/art/ui/icons/Icon - Humans Town Hall.tres" id="2_ni7ah"]
+[ext_resource type="Texture2D" uid="uid://c4scxd47c1n0s" path="res://assets/art/ui/icons/Icon - Humans Gryphon Aviary.tres" id="2_myl7w"]
 [ext_resource type="Script" uid="uid://dcdhttu5o6dgd" path="res://src/resources/ActionData/place_building_action_data.gd" id="3_p52fa"]
 
 [resource]
 script = ExtResource("3_p52fa")
 building_data = ExtResource("1_myl7w")
-id = "townhall"
-title = "Costruisci Town Hall"
-description = "Descrizione Town Hall"
-icon = ExtResource("2_ni7ah")
+id = "humans_gryphon_aviary"
+title = "Costruisci Gryphon Aviary"
+description = "Descrizione Gryphon Aviary"
+icon = ExtResource("2_myl7w")
 action_type = 1
 target_mode = 1
 metadata/_custom_type_script = "uid://dcdhttu5o6dgd"

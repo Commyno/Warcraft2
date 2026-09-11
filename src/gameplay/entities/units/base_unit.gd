@@ -2,8 +2,6 @@ class_name BaseUnit
 extends CharacterBody2D
 
 # --- ENUMERATORI PER TIPI DI DANNO E ARMATURA (Stile WC3) ---
-enum DamageType { NORMAL, PIERCING, SIEGE, MAGIC, HERO }
-enum ArmorType { UNARMORED, LIGHT, MEDIUM, HEAVY, FORTIFIED, HERO }
 enum AssignmentState { NONE, MOVE, ATTACK, PATROL, GATHER_GOLD, GATHER_WOOD, BUILD, REPAIR }
 enum UnitState { IDLE, MOVING, ATTACKING, PATROLING, BUILDING, REPARING, MINING, CHOPPING, RETURNING_RESOURCES }
 
@@ -11,8 +9,10 @@ enum UnitState { IDLE, MOVING, ATTACKING, PATROLING, BUILDING, REPARING, MINING,
 @export_group("Unità")
 @export var player_owner: Player # Assegnato allo spawn o tramite editor
 @export var player_color: Color = Color.BLUE : set = _set_player_color
-@export var unit_name:  String
-@export var unit_icon:  Texture = preload("uid://c0saq2cohbtd2")
+#@export var name:  String
+@export_multiline var description: String = ""
+@export var icon:  Texture
+@export var type: Globals.UnitType = Globals.UnitType.LAND
 
 @export_group("Azioni e Abilita")
 @export var available_actions: Array[ActionData] = []
@@ -21,20 +21,24 @@ enum UnitState { IDLE, MOVING, ATTACKING, PATROLING, BUILDING, REPARING, MINING,
 # --- STATISTICHE DI BASE ---
 @export_group("Vitalità")
 @export var max_health: float = 100.0
-@export var health_regen: float = 0.25 # Vita rigenerata al secondo
+@export var health_regen: float = 0.25      # Vita rigenerata al secondo
 @export var max_mana: float = 0.0
 @export var mana_regen: float = 0.0
+@export var sight_range: int = 4            # Raggio visivo (in tile o unità di misura)
 
 @export_group("Attacco")
-@export var base_damage: int = 12
-@export var damage_dice_sides: int = 4 # Danno finale: base_damage + randi_range(1, dice_sides)
+@export var basic_damage: int = 6
+@export var piercing_damage: int = 3        # Danno perforante (ignora l'Armor nemica)
+@export var damage_dice_sides: int = 4      # Danno finale: basic_damage + randi_range(1, dice_sides)
 @export var attack_range: float = 40.0
 @export var attack_cooldown: float = 1.35
-@export var damage_type: DamageType = DamageType.NORMAL
+@export var damage_type: Globals.DamageType = Globals.DamageType.NORMAL
+@export var can_attack_air: bool = false
+@export var can_attack_ground: bool = true
 
 @export_group("Difesa")
-@export var armor: float = 2.0
-@export var armor_type: ArmorType = ArmorType.MEDIUM
+@export var basic_armor: float = 2.0
+@export var armor_type: Globals.ArmorType = Globals.ArmorType.MEDIUM
 
 @export_group("Movimento e Costi")
 @export var move_speed: float = 150.0:
@@ -50,7 +54,7 @@ enum UnitState { IDLE, MOVING, ATTACKING, PATROLING, BUILDING, REPARING, MINING,
 #@onready var selection_ring: Node2D = $SelectionRing
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
-@onready var unit_sprite: Sprite2D = $Sprite2D
+@onready var sprite2d: Sprite2D = $Sprite2D
 @onready var animation_tree: AnimationTree = $AnimationTree
 @onready var health_bar: ProgressBar = $HealthBar
 @onready var selectable_component: SelectableComponent = $SelectableComponent
@@ -64,8 +68,16 @@ const INTERACT_DISTANCE: float = 40.0           # Quanto vicino deve essere per 
 
 # --- VARIABILI VITA ---
 var player_id: int = -1 : get = _get_player_id
-var current_health: float
-var current_mana: float
+var current_health: float = 0.0:
+	set(value):
+		current_health = value
+		if health_bar:
+			health_bar.value = value
+var current_mana: float = 0.0:
+	set(value):
+		current_mana = value
+		#if mana_bar:
+			#mana_bar.value = value
 var is_dead: bool = false
 
 # Dichiariamo state_machine senza @onready per inizializzarla in _ready() in sicurezza
@@ -110,11 +122,31 @@ func _ready() -> void:
 	# Imposta la UI della barra della vita
 	if health_bar:
 		health_bar.max_value = max_health
-		health_bar.value = current_health
+		#health_bar.value = current_health
 		
 	# Connetti il segnale della vita per aggiornare la UI in automatico
 	health_changed.connect(_on_health_changed)
-	
+
+func setup(data: Resource) -> void:
+	self.name = data.name
+	self.description = data.description
+	self.type = data.type
+	self.icon = data.icon
+	self.max_health = data.max_health
+	self.health_regen = data.health_regen
+	self.max_mana = data.max_mana
+	self.mana_regen = data.mana_regen
+	self.basic_armor = data.basic_armor
+	self.sight_range = data.sight_range
+	self.move_speed = data.move_speed
+	self.basic_damage = data.basic_damage
+	self.piercing_damage = data.piercing_damage
+	self.attack_range = data.attack_range
+	self.attack_cooldown = data.attack_cooldown
+	self.can_attack_air = data.can_attack_air
+	self.can_attack_ground = data.can_attack_ground
+	self.damage_type = data.damage_type
+
 func _process(delta: float) -> void:
 	_handle_regeneration(delta)
 
@@ -333,9 +365,9 @@ func update_animation() -> void:
 
 	# Gestione flip orizzontale
 	if move_dir.x < -0.1:
-		unit_sprite.flip_h = true
+		sprite2d.flip_h = true
 	elif move_dir.x > 0.1:
-		unit_sprite.flip_h = false
+		sprite2d.flip_h = false
 
 # --- SISTEMA VITA E COMBATTIMENTO ---
 
@@ -349,22 +381,22 @@ func _handle_regeneration(delta: float) -> void:
 # Calcolo del danno inflitto (con variazione causale)
 func get_calculated_damage() -> int:
 	var roll = randi_range(1, damage_dice_sides) if damage_dice_sides > 0 else 0
-	return base_damage + roll
+	return basic_damage + roll
 	
 # Ricezione del danno con riduzione tramite Armatura
-func take_damage(amount: float, source_damage_type: DamageType = DamageType.NORMAL) -> void:
+func take_damage(amount: float, source_damage_type: Globals.DamageType = Globals.DamageType.NORMAL) -> void:
 	if is_dead:
 		return # Non può subire danni se è già morta
 		
 	var type_multiplier = _get_damage_multiplier(source_damage_type, armor_type)
 	var damage_after_type = amount * type_multiplier
 	
-	# Formula di riduzione armatura classica di WC3: (armor * 0.06) / (1 + 0.06 * armor)
+	# Formula di riduzione armatura classica di WC3: (basic_armor * 0.06) / (1 + 0.06 * basic_armor)
 	var armor_reduction = 1.0
-	if armor >= 0:
-		armor_reduction = 1.0 - ((armor * 0.06) / (1.0 + 0.06 * armor))
+	if basic_armor >= 0:
+		armor_reduction = 1.0 - ((basic_armor * 0.06) / (1.0 + 0.06 * basic_armor))
 	else:
-		armor_reduction = 2.0 - pow(0.94, -armor) # Armatura negativa aumenta il danno
+		armor_reduction = 2.0 - pow(0.94, -basic_armor) # Armatura negativa aumenta il danno
 		
 	var final_damage = max(1.0, damage_after_type * armor_reduction)
 	current_health -= final_damage
@@ -378,18 +410,18 @@ func take_damage(amount: float, source_damage_type: DamageType = DamageType.NORM
 		die()
 
 # Matrice dei moltiplicatori tra Tipi Danno / Tipi Armatura
-func _get_damage_multiplier(dmg_t: DamageType, arm_t: ArmorType) -> float:
+func _get_damage_multiplier(dmg_t: Globals.DamageType, arm_t: Globals.ArmorType) -> float:
 	match dmg_t:
-		DamageType.PIERCING:
-			if arm_t == ArmorType.LIGHT: return 2.0  # Fanti leggeri / Volanti
-			if arm_t == ArmorType.HEAVY: return 1.0
-			if arm_t == ArmorType.FORTIFIED: return 0.35 # Edifici
-		DamageType.SIEGE:
-			if arm_t == ArmorType.FORTIFIED: return 1.5 # Edifici
-			if arm_t == ArmorType.MEDIUM: return 0.5
-		DamageType.NORMAL:
-			if arm_t == ArmorType.MEDIUM: return 1.5
-			if arm_t == ArmorType.FORTIFIED: return 0.7
+		Globals.DamageType.PIERCING:
+			if arm_t == Globals.ArmorType.LIGHT: return 2.0  # Fanti leggeri / Volanti
+			if arm_t == Globals.ArmorType.HEAVY: return 1.0
+			if arm_t == Globals.ArmorType.FORTIFIED: return 0.35 # Edifici
+		Globals.DamageType.SIEGE:
+			if arm_t == Globals.ArmorType.FORTIFIED: return 1.5 # Edifici
+			if arm_t == Globals.ArmorType.MEDIUM: return 0.5
+		Globals.DamageType.NORMAL:
+			if arm_t == Globals.ArmorType.MEDIUM: return 1.5
+			if arm_t == Globals.ArmorType.FORTIFIED: return 0.7
 	return 1.0 # Valore di default se non ci sono interazioni particolari
 
 func heal(amount: float) -> void:
@@ -441,11 +473,11 @@ func spawn_corpse() -> void:
 	var corpse = Sprite2D.new()
 		
 	# Copia le proprietà visive per renderlo identico all'ultimo frame dell'animazione
-	corpse.texture = unit_sprite.texture
-	corpse.hframes = unit_sprite.hframes
-	corpse.vframes = unit_sprite.vframes
-	corpse.frame = unit_sprite.frame
-	corpse.flip_h = unit_sprite.flip_h
+	corpse.texture = sprite2d.texture
+	corpse.hframes = sprite2d.hframes
+	corpse.vframes = sprite2d.vframes
+	corpse.frame = sprite2d.frame
+	corpse.flip_h = sprite2d.flip_h
 	
 	# Imposta la posizione esatta dell'unità
 	corpse.global_position = global_position

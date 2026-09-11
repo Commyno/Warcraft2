@@ -4,11 +4,16 @@
 [ext_resource type="Texture2D" uid="uid://bq21mbjhcwlq3" path="res://assets/art/ui/icons/Icon - Build.tres" id="1_flkxk"]
 [ext_resource type="Script" uid="uid://b4yn7h2qqjq6g" path="res://src/resources/ActionData/action_data.gd" id="2_flkxk"]
 [ext_resource type="Resource" uid="uid://bh000cwjtw0jc" path="res://data/action_buttons/place_townhall_action_data.tres" id="4_ppgtc"]
+[ext_resource type="Resource" uid="uid://ltn3yqdmywck" path="res://data/action_buttons/place_farm_action_data.tres" id="4_wl5mq"]
 [ext_resource type="Resource" uid="uid://cqfflgfjvvimi" path="res://data/action_buttons/cancel_action_data.tres" id="5_4mmxv"]
+[ext_resource type="Resource" uid="uid://didypjcehh5en" path="res://data/action_buttons/place_barracks_action_data.tres" id="5_eaf0w"]
+[ext_resource type="Resource" uid="uid://dqlu4tnly47h3" path="res://data/action_buttons/place_elven_lumber_mill_action_data.tres" id="7_ypa6r"]
+[ext_resource type="Resource" uid="uid://dy4cj8pjh3y7w" path="res://data/action_buttons/place_blacksmith_action_data.tres" id="8_gx3dj"]
+[ext_resource type="Resource" uid="uid://41xxhuqxus38" path="res://data/action_buttons/place_scout_tower_action_data.tres" id="9_gnq56"]
 
 [resource]
 script = ExtResource("1_8d6j7")
-sub_actions = Array[ExtResource("2_flkxk")]([ExtResource("4_ppgtc"), null, null, null, null, null, null, null, ExtResource("5_4mmxv")])
+sub_actions = Array[ExtResource("2_flkxk")]([ExtResource("4_wl5mq"), ExtResource("5_eaf0w"), ExtResource("4_ppgtc"), ExtResource("7_ypa6r"), ExtResource("8_gx3dj"), null, ExtResource("9_gnq56"), null, ExtResource("5_4mmxv")])
 id = "build1"
 title = "Build"
 description = "Description Build"

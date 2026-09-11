@@ -2,16 +2,16 @@
 
 [ext_resource type="PackedScene" uid="uid://droglnhp6jdy0" path="res://src/gameplay/entities/buildings/humans/foundry.tscn" id="1_xgmjm"]
 [ext_resource type="Texture2D" uid="uid://dhiqk0w11l3r2" path="res://assets/art/ui/icons/Icon - Humans Foundry.tres" id="2_k8jx7"]
-[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/building_data.gd" id="3_p63db"]
+[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/data.gd" id="3_p63db"]
 
 [resource]
 script = ExtResource("3_p63db")
-building_id = "humans_foundry"
-building_name = "Foundry"
+id = "humans_foundry"
+name = "Foundry"
 description = "Descrizione Foundry"
-building_type = 3
+type = 3
 icon = ExtResource("2_k8jx7")
-building_scene = ExtResource("1_xgmjm")
+scene = ExtResource("1_xgmjm")
 build_time = 175.0
 max_health = 750
 sight_range = 3

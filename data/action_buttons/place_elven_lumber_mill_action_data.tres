@@ -1,16 +1,16 @@
 [gd_resource type="Resource" script_class="PlaceBuildingActionData" format=3 uid="uid://dqlu4tnly47h3"]
 
 [ext_resource type="Resource" uid="uid://biao03okejj7o" path="res://data/humans_race/buildings/humans_townhall_data.tres" id="1_ymdto"]
-[ext_resource type="Texture2D" uid="uid://wioaljt1ijyh" path="res://assets/art/ui/icons/Icon - Humans Town Hall.tres" id="2_77y40"]
+[ext_resource type="Texture2D" uid="uid://bjcbxjca0oa0n" path="res://assets/art/ui/icons/Icon - Humans Elven Lumber Mill.tres" id="2_ymdto"]
 [ext_resource type="Script" uid="uid://dcdhttu5o6dgd" path="res://src/resources/ActionData/place_building_action_data.gd" id="3_n2ktb"]
 
 [resource]
 script = ExtResource("3_n2ktb")
 building_data = ExtResource("1_ymdto")
-id = "townhall"
-title = "Costruisci Town Hall"
-description = "Descrizione Town Hall"
-icon = ExtResource("2_77y40")
+id = "humans_elven_lumber_mill"
+title = "Costruisci Elven Lumber Mill"
+description = "Descrizione Elven Lumber Mill"
+icon = ExtResource("2_ymdto")
 action_type = 1
 target_mode = 1
 metadata/_custom_type_script = "uid://dcdhttu5o6dgd"

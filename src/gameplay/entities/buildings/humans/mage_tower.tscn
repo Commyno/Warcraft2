@@ -7,10 +7,10 @@
 
 [node name="Mage Tower" unique_id=1889694065 instance=ExtResource("1_aqu15")]
 script = ExtResource("2_ev041")
-building_name = "Mage Tower"
-building_description = "Description Mage Tower"
-building_icon = ExtResource("3_nwc4t")
-building_spritesheet = ExtResource("4_67twu")
+name = "Mage Tower"
+description = "Description Mage Tower"
+icon = ExtResource("3_nwc4t")
+spritesheet = ExtResource("4_67twu")
 region_under_construction = Rect2(547, 527, 48, 39)
 region_first_step_build = Rect2(539, 586, 61, 52)
 region_second_step_build = Rect2(404, 360, 96, 96)

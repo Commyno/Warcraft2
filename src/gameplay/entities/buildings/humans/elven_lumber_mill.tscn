@@ -7,10 +7,10 @@
 
 [node name="Elven Lumber Mill" unique_id=1889694065 instance=ExtResource("1_tda7d")]
 script = ExtResource("2_sntrf")
-building_name = "Elven Lumber Mill"
-building_description = "Description Elven Lumber Mill"
-building_icon = ExtResource("3_7gxbp")
-building_spritesheet = ExtResource("4_vjqfy")
+name = "Elven Lumber Mill"
+description = "Description Elven Lumber Mill"
+icon = ExtResource("3_7gxbp")
+spritesheet = ExtResource("4_vjqfy")
 region_under_construction = Rect2(547, 527, 48, 39)
 region_first_step_build = Rect2(539, 586, 61, 52)
 region_second_step_build = Rect2(104, 360, 96, 96)

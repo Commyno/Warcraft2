@@ -256,9 +256,9 @@ func register_building_lost(building_id: String, food_provided: int = 0) -> void
 # ==========================================
 # STATISTICS & SCORE TRACKING
 # ==========================================
-func register_unit_kill(unit_type: String) -> void:
+func register_unit_kill(type: String) -> void:
 	total_units_killed += 1
-	kills_details[unit_type] = kills_details.get(unit_type, 0) + 1
+	kills_details[type] = kills_details.get(type, 0) + 1
 
 func register_hero_kill(hero_type: String) -> void:
 	total_units_killed += 1

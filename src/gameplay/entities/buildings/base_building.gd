@@ -7,10 +7,10 @@ enum BuildingState { IDLE, ACTIVE, DEPLETED, DESTROYED, INACTIVE }
 @export_group("Edificio")
 @export var player_owner: Player # Assegnato allo spawn o tramite editor
 @export var player_color: Color = Color.BLUE : set = _set_player_color
-@export var building_name: String = "Edificio Base"
-@export_multiline var building_description: String = ""
-@export var building_icon:  Texture = preload("uid://dibevppt5yrf2")
-@export var building_spritesheet: Texture2D
+#@export var name: String = "Edificio Base"
+@export_multiline var description: String = ""
+@export var icon:  Texture = preload("uid://dibevppt5yrf2")
+@export var spritesheet: Texture2D
 
 @export_group("Azioni e Abilità")
 @export var available_actions: Array[ActionData] = []
@@ -44,7 +44,7 @@ enum BuildingState { IDLE, ACTIVE, DEPLETED, DESTROYED, INACTIVE }
 # ==========================================
 @export_group("Attributes")
 @export var max_health: int = 800
-@export var base_armor: int = 20                 # Gli edifici in WC2 hanno armatura alta
+@export var basic_armor: int = 20                 # Gli edifici in WC2 hanno armatura alta
 @export var sight_range: int = 4                 # Raggio visivo (in tile)
 
 # ==========================================
@@ -71,7 +71,7 @@ enum BuildingState { IDLE, ACTIVE, DEPLETED, DESTROYED, INACTIVE }
 @export var can_attack_ground: bool = true
 
 # --- RIFERIMENTI NODI ---
-@onready var sprite: Sprite2D = $Sprite2D
+@onready var sprite2d: Sprite2D = $Sprite2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var nav_obstacle: NavigationObstacle2D = $NavigationObstacle2D
 @onready var health_bar: ProgressBar = $HealthBar
@@ -90,7 +90,11 @@ var player_id: int = -1 : get = _get_player_id
 var is_depleted: bool = false
 var is_destroyed: bool = false
 var is_training: bool = false
-var current_health: int
+var current_health: int = 0:
+	set(value):
+		if health_bar:
+			health_bar.value = current_health
+
 var active_builders: Array[Node2D] = []
 var construction_progress_perc: float = 0.0 # Da 0.0 a 1.0
 var training_progress_perc: float = 0.0 # Da 0.0 a 1.0
@@ -100,9 +104,9 @@ func _ready() -> void:
 	if selectable_component:
 		selectable_component.deselect()
 	
-	if building_spritesheet and sprite:
-		sprite.texture = building_spritesheet
-		sprite.region_enabled = true
+	if spritesheet and sprite2d:
+		sprite2d.texture = spritesheet
+		sprite2d.region_enabled = true
 		
 	# Inizializza l'ostacolo per la navmesh
 	if nav_obstacle:
@@ -113,7 +117,7 @@ func _ready() -> void:
 	current_health = max_health
 	if health_bar:
 		health_bar.max_value = max_health
-		health_bar.value = current_health
+		#health_bar.value = current_health
 		
 	# Gestione dello stato iniziale (già costruito)
 	active_builders.clear()	
@@ -124,15 +128,15 @@ func _process(delta: float) -> void:
 		_advance_construction(delta)
 
 func setup(data: Resource) -> void:
-	self.building_name = data.building_name
-	self.building_description = data.description
-	self.building_icon = data.icon
+	self.name = data.name
+	self.description = data.description
+	self.icon = data.icon
 	self.tile_size = data.tile_size
 	self.requires_water = data.requires_water
 	self.build_time = data.build_time
 	self.max_health = data.max_health
-	current_health = max_health
-	self.base_armor = data.base_armor
+	self.current_health = max_health
+	self.basic_armor = data.basic_armor
 	self.sight_range = data.sight_range
 	self.food_provided = data.food_provided
 	self.is_resource_dropoff = data.is_resource_dropoff
@@ -188,7 +192,7 @@ func take_damage(amount: float) -> void:
 	current_health -= amount
 	health_changed.emit(current_health, max_health)
 	
-	print(building_name, " ha subito ", amount, " danni. Vita residua: ", current_health)
+	print(name, " ha subito ", amount, " danni. Vita residua: ", current_health)
 	
 	if current_health <= 0.0:
 		destroy_building()
@@ -212,7 +216,7 @@ func destroy_building() -> void:
 	if health_bar:
 		health_bar.visible = false
 		
-	print(building_name, " è stato distrutto!")
+	print(name, " è stato distrutto!")
 	
 	spawn_rubble()
 	queue_free()
@@ -240,17 +244,40 @@ func _disable_interactivity() -> void:
 	set_process(false)
 
 func spawn_rubble() -> void:
-	if not sprite or not sprite.texture:
+	if not sprite2d or not sprite2d.texture:
 		return
 		
 	var rubble = Sprite2D.new()
-	rubble.texture = sprite.texture
-	rubble.region_enabled = sprite.region_enabled
-	rubble.region_rect = sprite.region_rect # FONDAMENTALE PER NON MOSTRARE TUTTO L'ATLAS
+	rubble.texture = sprite2d.texture
+	rubble.region_enabled = sprite2d.region_enabled
+	rubble.region_rect = sprite2d.region_rect # FONDAMENTALE PER NON MOSTRARE TUTTO L'ATLAS
 	rubble.global_position = global_position
 	rubble.modulate = Color(0.2, 0.2, 0.2, 0.8)
 	
 	get_parent().add_child(rubble)
+
+func apply_upgrade(new_building_data: BuildingData) -> void:
+	# 1. Calcola la percentuale di vita attuale
+	var health_perc = float(current_health) / float(max_health)
+	
+	# 2. Sostituisce i dati base
+	self.building_data = new_building_data
+	
+	# 3. Aggiorna le statistiche dal nuovo BuildingData
+	self.max_health = new_building_data.max_health
+	self.current_health = roundi(max_health * health_perc) # Mantiene la % di vita
+	
+	# 4. Aggiorna la parte visiva e le azioni
+	if sprite2d:
+		sprite2d.texture = new_building_data.spritesheet
+		
+	# Sostituisce i bottoni dell'interfaccia (ora può addestrare nuove unità o fare nuove ricerche)
+	self.available_actions = new_building_data.available_actions
+	
+	# Aggiorna la UI (vita massima cambiata, ecc.)
+	if health_bar:
+		health_bar.max_value = max_health
+		health_bar.value = current_health
 
 # --- GESTIONE UI ---
 
@@ -276,7 +303,7 @@ func place_under_construction() -> void:
 	if health_bar:
 			health_bar.visible = true
 			health_bar.max_value = max_health
-			health_bar.value = current_health
+			#health_bar.value = current_health
 
 	_set_building_region(region_under_construction)
 
@@ -288,6 +315,7 @@ func _advance_construction(delta: float) -> void:
 	construction_progress_perc = clamp(construction_progress_perc, 0.0, 1.0)
 	
 	current_health = roundi(lerp(1.0, float(max_health), construction_progress_perc))
+
 	#construction_progress_updated.emit(current_health, max_health)
 	health_changed.emit(current_health, max_health) # Aggiorna l'UI durante la costruzione
 	
@@ -320,6 +348,6 @@ func complete_construction() -> void:
 	construction_completed.emit()
 	
 func _set_building_region(region: Rect2) -> void:
-	if sprite  and region != Rect2():
-		sprite.region_enabled = true
-		sprite.region_rect = region
+	if sprite2d  and region != Rect2():
+		sprite2d.region_enabled = true
+		sprite2d.region_rect = region

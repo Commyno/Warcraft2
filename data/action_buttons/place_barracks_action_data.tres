@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("3_ui1er")
 building_data = ExtResource("1_erlrv")
-id = "barracks"
+id = "humans_barracks"
 title = "Costruisci Barracks"
 description = "Descrizione Barracks"
 icon = ExtResource("2_erlrv")

@@ -2,16 +2,16 @@
 
 [ext_resource type="PackedScene" uid="uid://c4agq33dqg6cx" path="res://src/gameplay/entities/buildings/humans/scout_tower.tscn" id="1_qx54m"]
 [ext_resource type="Texture2D" uid="uid://bq374xr5lts4w" path="res://assets/art/ui/icons/Icon - Humans Scout Tower.tres" id="2_nr6v1"]
-[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/building_data.gd" id="3_su17j"]
+[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/data.gd" id="3_su17j"]
 
 [resource]
 script = ExtResource("3_su17j")
-building_id = "humans_scout_tower"
-building_name = "Scout Tower"
+id = "humans_scout_tower"
+name = "Scout Tower"
 description = "Descrizione Scout Tower"
-building_type = 2
+type = 2
 icon = ExtResource("2_nr6v1")
-building_scene = ExtResource("1_qx54m")
+scene = ExtResource("1_qx54m")
 tile_size = Vector2i(2, 2)
 build_time = 60.0
 max_health = 100

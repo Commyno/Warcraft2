@@ -7,10 +7,10 @@
 
 [node name="Stable" unique_id=1889694065 instance=ExtResource("1_y3nl2")]
 script = ExtResource("2_bikqj")
-building_name = "Stable"
-building_description = "Description Stable"
-building_icon = ExtResource("3_17w3n")
-building_spritesheet = ExtResource("4_ntniw")
+name = "Stable"
+description = "Description Stable"
+icon = ExtResource("3_17w3n")
+spritesheet = ExtResource("4_ntniw")
 region_under_construction = Rect2(547, 527, 48, 39)
 region_first_step_build = Rect2(539, 586, 61, 52)
 region_second_step_build = Rect2(204, 360, 96, 96)

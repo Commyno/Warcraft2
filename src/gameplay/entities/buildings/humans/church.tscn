@@ -7,10 +7,10 @@
 
 [node name="Church" unique_id=1889694065 instance=ExtResource("1_sk6jw")]
 script = ExtResource("2_t3kfs")
-building_name = "Church"
-building_description = "Description Church"
-building_icon = ExtResource("3_2lmgm")
-building_spritesheet = ExtResource("4_kfaun")
+name = "Church"
+description = "Description Church"
+icon = ExtResource("3_2lmgm")
+spritesheet = ExtResource("4_kfaun")
 region_under_construction = Rect2(547, 527, 48, 39)
 region_first_step_build = Rect2(539, 586, 61, 52)
 region_second_step_build = Rect2(304, 360, 96, 96)

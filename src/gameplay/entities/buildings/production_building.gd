@@ -63,10 +63,10 @@ func _complete_training(data: UnitData) -> void:
 	_spawn_unit(data)
 
 func _spawn_unit(data: UnitData) -> void:
-	if data.unit_scene == null:
+	if data.scene == null:
 		return
 
-	var unit_instance: Node2D = data.unit_scene.instantiate()
+	var unit_instance: Node2D = data.scene.instantiate()
 	get_parent().add_child(unit_instance)
 	unit_instance.global_position = global_position + spawn_offset
 	

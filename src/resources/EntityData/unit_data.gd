@@ -1,20 +1,17 @@
 class_name UnitData
 extends CostData
 
-enum Faction { ALLIANCE, HORDE, NEUTRAL }
-enum UnitType { LAND, AIR, SEA }
-
 # ==========================================
 # IDENTITÀ E GRAFICA
 # ==========================================
 @export_group("Identity")
-@export var unit_id: String = ""            # es. "footman", "grunt", "peon"
-@export var unit_name: String = ""          # es. "Footman"
+@export var id: String = ""            # es. "footman", "grunt", "peon"
+@export var name: String = ""          # es. "Footman"
 @export_multiline var description: String = ""
-@export var faction: Faction = Faction.ALLIANCE
-@export var unit_type: UnitType = UnitType.LAND
+@export var faction: Globals.FactionType = Globals.FactionType.ALLIANCE
+@export var type: Globals.UnitType = Globals.UnitType.LAND
 @export var icon: Texture2D
-@export var unit_scene: PackedScene         # Scena .tscn dell'unità sul campo
+@export var scene: PackedScene         # Scena .tscn dell'unità sul campo
 @export var shortcut_key: Key
 
 # ==========================================
@@ -28,8 +25,10 @@ enum UnitType { LAND, AIR, SEA }
 # ==========================================
 @export_group("Attributes")
 @export var max_health: int = 60
-@export var base_armor: int = 2
+@export var health_regen: float = 0.25      # Vita rigenerata al secondo
 @export var max_mana: int = 0               # 255 per Mage, Paladin, Death Knight, Ogre-Mage
+@export var mana_regen: float = 0.0         # Mana rigenerata al secondo
+@export var basic_armor: int = 2
 @export var sight_range: int = 4            # Raggio visivo (in tile o unità di misura)
 @export var move_speed: float = 100.0       # Velocità in pixel/sec (mappata dallo "Speed: 10" di WC2)
 
@@ -43,3 +42,4 @@ enum UnitType { LAND, AIR, SEA }
 @export var attack_cooldown: float = 1.2    # Secondi tra un fendente/freccia e l'altro
 @export var can_attack_air: bool = false
 @export var can_attack_ground: bool = true
+@export var damage_type: Globals.DamageType = Globals.DamageType.NORMAL

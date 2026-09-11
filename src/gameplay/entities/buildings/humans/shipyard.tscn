@@ -7,10 +7,10 @@
 
 [node name="Shipyard" unique_id=1889694065 instance=ExtResource("1_0v36i")]
 script = ExtResource("2_k4yhv")
-building_name = "Shipyard"
-building_description = "Description Shipyard"
-building_icon = ExtResource("3_6a3m1")
-building_spritesheet = ExtResource("4_30115")
+name = "Shipyard"
+description = "Description Shipyard"
+icon = ExtResource("3_6a3m1")
+spritesheet = ExtResource("4_30115")
 region_under_construction = Rect2(547, 527, 48, 39)
 region_first_step_build = Rect2(539, 586, 61, 52)
 region_second_step_build = Rect2(4, 552, 96, 96)

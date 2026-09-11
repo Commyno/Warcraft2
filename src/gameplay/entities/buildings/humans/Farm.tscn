@@ -10,10 +10,10 @@ radius = 32.0
 
 [node name="Farm" unique_id=1889694065 instance=ExtResource("1_enm2v")]
 script = ExtResource("2_7ui8n")
-building_name = "Farm"
-building_description = "Farm"
-building_icon = ExtResource("3_u7wd5")
-building_spritesheet = ExtResource("3_xhu21")
+name = "Farm"
+description = "Farm"
+icon = ExtResource("3_u7wd5")
+spritesheet = ExtResource("3_xhu21")
 region_under_construction = Rect2(547, 527, 48, 39)
 region_first_step_build = Rect2(539, 586, 61, 52)
 region_second_step_build = Rect2(398, 68, 64, 64)

@@ -7,10 +7,10 @@
 
 [node name="Gryphon Aviary" unique_id=1889694065 instance=ExtResource("1_ajda7")]
 script = ExtResource("2_hiww5")
-building_name = "Gryphon Aviary"
-building_description = "Descriptio Gryphon Aviary"
-building_icon = ExtResource("3_2bsfm")
-building_spritesheet = ExtResource("4_0rf0y")
+name = "Gryphon Aviary"
+description = "Descriptio Gryphon Aviary"
+icon = ExtResource("3_2bsfm")
+spritesheet = ExtResource("4_0rf0y")
 region_under_construction = Rect2(547, 527, 48, 39)
 region_first_step_build = Rect2(539, 586, 61, 52)
 region_second_step_build = Rect2(504, 400, 89, 93)
