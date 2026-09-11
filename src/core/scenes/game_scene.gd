@@ -78,7 +78,7 @@ func _ready() -> void:
 	_load_map()
 
 	# 3. Configuriamo HUD e Telecamera
-	_load_hud(HUD_ROOT_UID)
+	_load_hud()
 	_setup_level_camera()
 
 # ==========================================
@@ -300,15 +300,18 @@ func _parse_entities_layer(map_node: Node2D, layer_name: String) -> void:
 # ==========================================
 # UI & HUD MANAGEMENT
 # ==========================================
-func _load_hud(scene_path: String) -> void:
-	var hud_scene: PackedScene = ResourceLoader.load(scene_path) as PackedScene
+func _load_hud() -> void:
+	var hud_scene: PackedScene = ResourceLoader.load(HUD_ROOT_UID) as PackedScene
 	if hud_scene == null:
-		push_error("Could not load hud scene: " + scene_path)
+		push_error("Could not load hud scene: " + HUD_ROOT_UID)
 		return
 	
 	var hud_instance: Node = hud_scene.instantiate()
 	hud_instance.pause_menu.connect(self.on_show_pause_menu)
 	hud_root.add_child(hud_instance)
+	
+	#Setup della minimap
+	hud_instance.setup_minimap(game_camera)
 
 # ==========================================
 # PAUSE MENU

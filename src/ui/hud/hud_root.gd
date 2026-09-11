@@ -5,6 +5,7 @@ signal pause_menu(origin: String)
 @onready var single_selection_panel: PanelContainer = $PanelContainer/VContainer/SingleSelectionPanel
 @onready var multi_selection_panel: PanelContainer = $PanelContainer/VContainer/MultiSelectionPanel
 @onready var action_grid_mc: MarginContainer = $PanelContainer/VContainer/ActionGridMC
+@onready var minimap: Minimap = $PanelContainer/VContainer/MarginContainer/Minimap
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -45,3 +46,8 @@ func _on_selection_changed(selected_objects: Array[Node2D]) -> void:
 		single_selection_panel.hide()
 		multi_selection_panel.show()
 		# _update_multi_panel_ui(selected_objects)
+
+func setup_minimap(camera: Camera2D) -> void:
+	minimap.game_camera = camera
+	minimap.setup_minimap()
+	pass

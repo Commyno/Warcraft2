@@ -215,8 +215,8 @@ func _set_player_color(color: Color) -> void:
 func _apply_team_color(color: Color) -> void:
 	pass
 
-func get_health() -> float:
-	return current_health / max_health
+func get_health_perc() -> float:
+	return float(current_health) / float(max_health)
 
 func get_available_actions() -> Array[ActionData]:
 	return available_actions

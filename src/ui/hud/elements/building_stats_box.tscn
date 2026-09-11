@@ -4,6 +4,22 @@
 [ext_resource type="Texture2D" uid="uid://6steaegwtefg" path="res://assets/GameIcon.png" id="1_joegs"]
 [ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="2_6e0s0"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6e0s0"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4509804, 0.7647059, 0, 1)
+corner_detail = 2
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_we3ao"]
+bg_color = Color(0.44979727, 0.7631216, 0, 1)
+
 [node name="StatsBox" type="VBoxContainer" unique_id=1285141887]
 custom_minimum_size = Vector2(140, 102)
 offset_right = 140.0
@@ -25,11 +41,20 @@ layout_mode = 2
 texture = ExtResource("1_joegs")
 expand_mode = 2
 
-[node name="HealthProgressBar" type="ProgressBar" parent="HBoxContainer/ImageVBoxContainer" unique_id=1725364935]
+[node name="Control" type="Control" parent="HBoxContainer/ImageVBoxContainer" unique_id=1004984654]
+custom_minimum_size = Vector2(0, 2)
 layout_mode = 2
+
+[node name="HealthProgressBar" type="ProgressBar" parent="HBoxContainer/ImageVBoxContainer" unique_id=1725364935]
+custom_minimum_size = Vector2(38, 2)
+layout_mode = 2
+size_flags_horizontal = 4
 theme_override_fonts/font = ExtResource("2_6e0s0")
 theme_override_font_sizes/font_size = 6
+theme_override_styles/background = SubResource("StyleBoxFlat_6e0s0")
+theme_override_styles/fill = SubResource("StyleBoxFlat_we3ao")
 max_value = 1.0
+value = 0.5
 allow_lesser = true
 show_percentage = false
 
@@ -81,6 +106,110 @@ layout_mode = 2
 texture = ExtResource("1_joegs")
 expand_mode = 2
 
+[node name="StatsBoxContainer" type="HBoxContainer" parent="." unique_id=558669695]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="LabelVBoxContainer" type="VBoxContainer" parent="StatsBoxContainer" unique_id=681189300]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="ArmorLabel" type="Label" parent="StatsBoxContainer/LabelVBoxContainer" unique_id=1536105148]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_6e0s0")
+theme_override_font_sizes/font_size = 6
+text = "Armor: "
+horizontal_alignment = 2
+
+[node name="DamageLabel" type="Label" parent="StatsBoxContainer/LabelVBoxContainer" unique_id=1662778111]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_6e0s0")
+theme_override_font_sizes/font_size = 6
+text = "Damage: "
+horizontal_alignment = 2
+
+[node name="RangeLabel" type="Label" parent="StatsBoxContainer/LabelVBoxContainer" unique_id=516115598]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_6e0s0")
+theme_override_font_sizes/font_size = 6
+text = "Range: "
+horizontal_alignment = 2
+
+[node name="SightLabel" type="Label" parent="StatsBoxContainer/LabelVBoxContainer" unique_id=1455899878]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_6e0s0")
+theme_override_font_sizes/font_size = 6
+text = "Sight: "
+horizontal_alignment = 2
+
+[node name="ValueVBoxContainer" type="VBoxContainer" parent="StatsBoxContainer" unique_id=207880185]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="ArmorValue" type="Label" parent="StatsBoxContainer/ValueVBoxContainer" unique_id=1772047592]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_6e0s0")
+theme_override_font_sizes/font_size = 6
+text = "0"
+
+[node name="DamageValue" type="Label" parent="StatsBoxContainer/ValueVBoxContainer" unique_id=200539307]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_6e0s0")
+theme_override_font_sizes/font_size = 6
+text = "1-5"
+
+[node name="RangeValue" type="Label" parent="StatsBoxContainer/ValueVBoxContainer" unique_id=218512299]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_6e0s0")
+theme_override_font_sizes/font_size = 6
+text = "1"
+
+[node name="SightValue" type="Label" parent="StatsBoxContainer/ValueVBoxContainer" unique_id=564536644]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_6e0s0")
+theme_override_font_sizes/font_size = 6
+text = "4"
+
+[node name="SpeedValue" type="Label" parent="StatsBoxContainer/ValueVBoxContainer" unique_id=210617459]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_6e0s0")
+theme_override_font_sizes/font_size = 6
+text = "10"
+
 [node name="Control" type="Control" parent="." unique_id=307745930]
 layout_mode = 2
 size_flags_vertical = 3
@@ -89,5 +218,7 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_fonts/font = ExtResource("2_6e0s0")
-theme_override_font_sizes/font_size = 7
+theme_override_font_sizes/font_size = 6
+theme_override_styles/background = SubResource("StyleBoxFlat_6e0s0")
+theme_override_styles/fill = SubResource("StyleBoxFlat_we3ao")
 max_value = 1.0

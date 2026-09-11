@@ -4,6 +4,22 @@
 [ext_resource type="Script" uid="uid://1akmev0rti66" path="res://src/ui/hud/elements/resource_stats_box.gd" id="1_obtdh"]
 [ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="2_obtdh"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_obtdh"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4509804, 0.7647059, 0, 1)
+corner_detail = 2
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w3r6t"]
+bg_color = Color(0.44979727, 0.7631216, 0, 1)
+
 [node name="StatsBox" type="VBoxContainer" unique_id=1285141887]
 script = ExtResource("1_obtdh")
 
@@ -24,6 +40,9 @@ expand_mode = 2
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_obtdh")
 theme_override_font_sizes/font_size = 6
+theme_override_styles/background = SubResource("StyleBoxFlat_obtdh")
+theme_override_styles/fill = SubResource("StyleBoxFlat_w3r6t")
+max_value = 1.0
 allow_lesser = true
 show_percentage = false
 

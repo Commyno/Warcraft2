@@ -5,6 +5,23 @@
 [ext_resource type="Script" uid="uid://bwo8h3bftdqwy" path="res://src/resources/EntityData/unit_data.gd" id="3_glky6"]
 [ext_resource type="Texture2D" uid="uid://wioaljt1ijyh" path="res://assets/art/ui/icons/Icon - Humans TownHall.tres" id="4_ldwsq"]
 [ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/art/race/humans/buildings/Humans - Human Buildings (Summer).png" id="5_u020x"]
+[ext_resource type="Texture2D" uid="uid://dhcgdbkobwyd5" path="res://assets/art/race/humans/buildings/Humans - TownHall - 01.tres" id="6_u020x"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u020x"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4509804, 0.7647059, 0, 1)
+corner_detail = 2
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_31b85"]
+bg_color = Color(0.44979727, 0.7631216, 0, 1)
 
 [node name="TownHall" unique_id=1889694065 instance=ExtResource("1_r3mtd")]
 script = ExtResource("2_fr43j")
@@ -18,5 +35,15 @@ region_first_step_build = Rect2(539, 586, 61, 52)
 region_second_step_build = Rect2(266, 132, 128, 128)
 region_completed = Rect2(266, 4, 128, 128)
 
+[node name="Sprite2D" parent="." index="2" unique_id=1061573362]
+texture = ExtResource("6_u020x")
+region_enabled = false
+
 [node name="NavigationObstacle2D" parent="." index="4" unique_id=969329888]
 radius = 90.0
+
+[node name="HealthBar" parent="." index="5" unique_id=1652500946]
+offset_bottom = -60.0
+theme_override_styles/background = SubResource("StyleBoxFlat_u020x")
+theme_override_styles/fill = SubResource("StyleBoxFlat_31b85")
+value = 50.0

@@ -34,6 +34,7 @@ func construction_progress_updated(current_hp: float, max_hp: float) -> void:
 func update() -> void:
 	portrait.texture = building.building_icon
 	health_progress_bar.value = building.get_health_perc()
+	print(building.get_health_perc())
 	health_label.text = str(building.current_health) + "/" + str(building.max_health)
 
 	name_label.text = building.building_name

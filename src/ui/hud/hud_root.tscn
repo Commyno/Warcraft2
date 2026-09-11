@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://d4d5t3l18y0ea" path="res://assets/art/ui/buttons/UI - Menu Button 2 - 03.tres" id="3_adosw"]
 [ext_resource type="Texture2D" uid="uid://273ajucsnd77" path="res://assets/art/ui/buttons/UI - Menu Button 2 - 01.tres" id="4_yr8y3"]
 [ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="5_ejq7m"]
+[ext_resource type="PackedScene" uid="uid://di5f2clo85mcf" path="res://src/ui/hud/elements/minimap.tscn" id="6_1aevr"]
 [ext_resource type="Script" uid="uid://c8ahk4rkbe0n2" path="res://src/ui/hud/single_selection_panel.gd" id="6_yr8y3"]
 [ext_resource type="PackedScene" uid="uid://cidjmt5bpauh3" path="res://src/ui/hud/elements/unit_stats_box.tscn" id="7_v4x6o"]
 [ext_resource type="Script" uid="uid://bfie7qjoetlwc" path="res://src/ui/hud/multi_selection_panel.gd" id="8_ejq7m"]
@@ -127,6 +128,9 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 color = Color(0.096204735, 0.09620475, 0.096204735, 1)
+
+[node name="Minimap" parent="PanelContainer/VContainer/MarginContainer" unique_id=852637233 instance=ExtResource("6_1aevr")]
+layout_mode = 2
 
 [node name="SingleSelectionPanel" type="PanelContainer" parent="PanelContainer/VContainer" unique_id=1132322058]
 custom_minimum_size = Vector2(0, 102)

@@ -4,6 +4,22 @@
 [ext_resource type="Texture2D" uid="uid://6steaegwtefg" path="res://assets/GameIcon.png" id="1_nxvsf"]
 [ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="2_mywxw"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mywxw"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4509804, 0.7647059, 0, 1)
+corner_detail = 2
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lxthw"]
+bg_color = Color(0.44979727, 0.7631216, 0, 1)
+
 [node name="StatsBox" type="VBoxContainer" unique_id=1285141887]
 script = ExtResource("1_mywxw")
 
@@ -12,6 +28,7 @@ layout_mode = 2
 
 [node name="ImageVBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1292049867]
 layout_mode = 2
+theme_override_constants/separation = 0
 
 [node name="Portrait" type="TextureRect" parent="HBoxContainer/ImageVBoxContainer" unique_id=1284693393]
 custom_minimum_size = Vector2(40, 30)
@@ -19,11 +36,30 @@ layout_mode = 2
 texture = ExtResource("1_nxvsf")
 expand_mode = 2
 
+[node name="Control" type="Control" parent="HBoxContainer/ImageVBoxContainer" unique_id=1269531672]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+
 [node name="HealthProgressBar" type="ProgressBar" parent="HBoxContainer/ImageVBoxContainer" unique_id=1725364935]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_mywxw")
 theme_override_font_sizes/font_size = 6
+theme_override_styles/background = SubResource("StyleBoxFlat_mywxw")
+theme_override_styles/fill = SubResource("StyleBoxFlat_lxthw")
+max_value = 1.0
 allow_lesser = true
+show_percentage = false
+
+[node name="HealthLabel" type="Label" parent="HBoxContainer/ImageVBoxContainer" unique_id=1584074658]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("2_mywxw")
+theme_override_font_sizes/font_size = 4
+text = "1200/1200"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="NameVBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=887323535]
 layout_mode = 2

@@ -160,7 +160,7 @@ func _apply_team_color(color: Color) -> void:
 	pass
 
 func get_health_perc() -> float:
-	return current_health / max_health
+	return float(current_health) / float(max_health)
 
 func get_available_actions() -> Array[ActionData]:
 	return available_actions
@@ -288,7 +288,7 @@ func _advance_construction(delta: float) -> void:
 	construction_progress_perc = clamp(construction_progress_perc, 0.0, 1.0)
 	
 	current_health = roundi(lerp(1.0, float(max_health), construction_progress_perc))
-	construction_progress_updated.emit(current_health, max_health)
+	#construction_progress_updated.emit(current_health, max_health)
 	health_changed.emit(current_health, max_health) # Aggiorna l'UI durante la costruzione
 	
 	# Transizione alla fase "metà costruito"
