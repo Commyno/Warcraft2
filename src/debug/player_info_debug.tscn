@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dii1aas0smovk"]
 
-[ext_resource type="Script" uid="uid://wvt4ypwdlvv" path="res://src/debug/player_info_debug.gd" id="1_k5wtt"]
+[ext_resource type="Script" uid="uid://dwy6pomuxsp7t" path="res://src/debug/player_info_debug.gd" id="1_k5wtt"]
 
 [node name="PlayerInfoDebug" type="HBoxContainer" unique_id=1633085138]
 anchors_preset = 15

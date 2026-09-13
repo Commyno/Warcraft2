@@ -16,7 +16,7 @@ func _execute_action(source_entities: Array, target_data = null) -> void:
 	# 1. Paga le risorse
 	player.spend_resources(
 		target_building_data.gold_cost, 
-		target_building_data.wood_cost, 
+		target_building_data.lumber_cost, 
 		# ... ecc
 	)
 	

@@ -20,7 +20,7 @@ func has_cost() -> bool:
 func get_cost_string() -> String:
 	var parts: Array[String] = []
 	if upgrade_data.gold_cost > 0: parts.append("Oro: %d" % upgrade_data.gold_cost)
-	if upgrade_data.wood_cost > 0: parts.append("Legna: %d" % upgrade_data.wood_cost)
+	if upgrade_data.lumber_cost > 0: parts.append("Legna: %d" % upgrade_data.lumber_cost)
 	if upgrade_data.oil_cost > 0:  parts.append("Petrolio: %d" % upgrade_data.oil_cost)
 	if upgrade_data.food_cost > 0: parts.append("Cibo: %d" % upgrade_data.food_cost)
 	return " | ".join(parts)

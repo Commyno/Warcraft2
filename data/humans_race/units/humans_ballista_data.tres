@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="UnitData" format=3 uid="uid://ch1hkn1u4g2ma"]
+
+[ext_resource type="Texture2D" uid="uid://moh0clg1fnrr" path="res://assets/art/ui/icons/Icon - Humans Footman.tres" id="1_c78dd"]
+[ext_resource type="PackedScene" uid="uid://d3h8v4klfe4uq" path="res://src/gameplay/entities/units/humans/footman.tscn" id="2_gn0bl"]
+[ext_resource type="Script" uid="uid://bwo8h3bftdqwy" path="res://src/resources/EntityData/unit_data.gd" id="3_v55bm"]
+
+[resource]
+script = ExtResource("3_v55bm")
+id = "humans_ballista"
+name = "Ballista"
+description = "Descrizione Ballista"
+icon = ExtResource("1_c78dd")
+scene = ExtResource("2_gn0bl")
+training_time = 45.0
+max_health = 30
+basic_armor = 0
+basic_damage = 3
+piercing_damage = 2
+attack_range = 1.0
+gold_cost = 400
+food_cost = 1
+metadata/_custom_type_script = "uid://bwo8h3bftdqwy"

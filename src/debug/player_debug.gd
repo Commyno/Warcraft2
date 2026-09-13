@@ -27,4 +27,3 @@ func update(player_list: Array) -> void:
 		# Ora chiamiamo la funzione "update" che abbiamo scritto nel 
 		# passaggio precedente all'interno dello script della riga!
 		details.update(player)
-			

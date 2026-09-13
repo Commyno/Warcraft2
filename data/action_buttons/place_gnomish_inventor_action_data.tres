@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="PlaceBuildingActionData" format=3 uid="uid://dd6vudpylsp7l"]
 
-[ext_resource type="Resource" uid="uid://biao03okejj7o" path="res://data/humans_race/buildings/humans_townhall_data.tres" id="1_2koru"]
+[ext_resource type="Resource" uid="uid://pl3aewbw04ne" path="res://data/humans_race/buildings/humans_gnomish_inventor_data.tres" id="1_2koru"]
 [ext_resource type="Texture2D" uid="uid://b0fbn6eiva88b" path="res://assets/art/ui/icons/Icon - Humans Gnomish Inventor.tres" id="2_2koru"]
 [ext_resource type="Script" uid="uid://dcdhttu5o6dgd" path="res://src/resources/ActionData/place_building_action_data.gd" id="3_rcscs"]
 

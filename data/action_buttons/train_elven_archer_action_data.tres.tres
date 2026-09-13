@@ -2,9 +2,11 @@
 
 [ext_resource type="Script" uid="uid://8okhrhxbgfe4" path="res://src/resources/ActionData/train_unit_action_data.gd" id="1_tc0rc"]
 [ext_resource type="Texture2D" uid="uid://b7x82q1m6748c" path="res://assets/art/ui/icons/Icon - Humans Elven Archer.tres" id="1_xmgtx"]
+[ext_resource type="Resource" uid="uid://cvecbmcoom0nb" path="res://data/humans_race/units/humans_elven_archer_data.tres" id="3_jpkxa"]
 
 [resource]
 script = ExtResource("1_tc0rc")
+unit_data = ExtResource("3_jpkxa")
 id = "elven_archer"
 title = "Train Elven Archer"
 description = "Train Elven Archer"

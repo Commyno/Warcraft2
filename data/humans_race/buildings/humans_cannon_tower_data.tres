@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://c4agq33dqg6cx" path="res://src/gameplay/entities/buildings/humans/scout_tower.tscn" id="1_muj5x"]
 [ext_resource type="Texture2D" uid="uid://oxlskliiyk88" path="res://assets/art/ui/icons/Icon - Humans Cannon Tower.tres" id="2_muj5x"]
-[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/data.gd" id="3_0oq1c"]
+[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/building_data.gd" id="3_0oq1c"]
 
 [resource]
 script = ExtResource("3_0oq1c")

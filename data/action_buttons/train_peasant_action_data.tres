@@ -2,9 +2,11 @@
 
 [ext_resource type="Texture2D" uid="uid://qc8ae83bbqg" path="res://assets/art/ui/icons/Icon - Humans Peasant.tres" id="1_gdm5n"]
 [ext_resource type="Script" uid="uid://8okhrhxbgfe4" path="res://src/resources/ActionData/train_unit_action_data.gd" id="1_spibg"]
+[ext_resource type="Resource" uid="uid://bbklmd4sqie4g" path="res://data/humans_race/units/humans_peasant_data.tres" id="3_csmoh"]
 
 [resource]
 script = ExtResource("1_spibg")
+unit_data = ExtResource("3_csmoh")
 id = "peasant"
 title = "Train Peasant"
 description = "Train Peasant"

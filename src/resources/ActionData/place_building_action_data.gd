@@ -37,7 +37,7 @@ func _execute_action(_source_entities: Array, _target_data = null) -> void:
 	# Paga le risorse
 	if owner_player != null:
 		owner_player.spend_resources(
-			building_data.gold_cost, building_data.wood_cost,
+			building_data.gold_cost, building_data.lumber_cost,
 			building_data.oil_cost, building_data.food_cost
 		)
 	
@@ -75,7 +75,7 @@ func get_cost_string() -> String:
 		return ""
 	var parts: Array[String] = []
 	if building_data.gold_cost > 0: parts.append("Oro: %d" % building_data.gold_cost)
-	if building_data.wood_cost > 0: parts.append("Legna: %d" % building_data.wood_cost)
+	if building_data.lumber_cost > 0: parts.append("Legna: %d" % building_data.lumber_cost)
 	if building_data.oil_cost > 0:  parts.append("Petrolio: %d" % building_data.oil_cost)
 	if building_data.food_cost > 0: parts.append("Cibo: %d" % building_data.food_cost)
 	return " | ".join(parts)

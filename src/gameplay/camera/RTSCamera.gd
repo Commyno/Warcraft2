@@ -15,7 +15,7 @@ const CAMERA_LOOK_AMOUNT : float = 64
 
 # Larghezza in pixel dell'HUD sulla sinistra. 
 # Impedisce lo scroll se il mouse vi passa sopra e sposta il bordo di rilevamento.
-@export var hud_left_width: float = 140.0 
+@export var hud_left_width: float = 0.0  #140.0 
 
 # Limiti e sensibilità dello zoom
 @export var zoom_speed: float = 0.15

@@ -2,9 +2,11 @@
 
 [ext_resource type="Script" uid="uid://8okhrhxbgfe4" path="res://src/resources/ActionData/train_unit_action_data.gd" id="1_3kw8m"]
 [ext_resource type="Texture2D" uid="uid://cgfobxddmigeu" path="res://assets/art/ui/icons/Icon - Humans Ballista.tres" id="1_lxwpl"]
+[ext_resource type="Resource" uid="uid://ch1hkn1u4g2ma" path="res://data/humans_race/units/humans_ballista_data.tres" id="3_ojdug"]
 
 [resource]
 script = ExtResource("1_3kw8m")
+unit_data = ExtResource("3_ojdug")
 id = "ballista"
 title = "Train Ballista"
 description = "Train Ballista"

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://du81fow7urjxf"]
 
-[ext_resource type="Script" uid="uid://1hrm5q3yv2of" path="res://src/debug/debug_overlay.gd" id="1_wtwl3"]
+[ext_resource type="Script" uid="uid://1hrm5q3yv2of" path="res://src/debug/debug_overlay.gd" id="1_ggiji"]
 
 [node name="DebugTextOverlay" type="Control" unique_id=785115389]
 custom_minimum_size = Vector2(640, 320)
@@ -11,7 +11,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("1_wtwl3")
+script = ExtResource("1_ggiji")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1421946029]
 custom_minimum_size = Vector2(100, 0)

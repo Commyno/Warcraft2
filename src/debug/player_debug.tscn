@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://kpwsylemtds6"]
 
-[ext_resource type="Script" uid="uid://ccyixmpgyyqjs" path="res://src/debug/player_debug.gd" id="1_srdn3"]
+[ext_resource type="Script" uid="uid://cmu65aveixd0r" path="res://src/debug/player_debug.gd" id="1_srdn3"]
 
 [node name="PlayerDebug" type="Control" unique_id=608488699]
 layout_mode = 3
@@ -55,18 +55,18 @@ theme_override_font_sizes/font_size = 9
 text = "Race"
 horizontal_alignment = 1
 
-[node name="Gold" type="Label" parent="MarginContainer/VBoxContainer/HBoxTitle" unique_id=1497300476]
-custom_minimum_size = Vector2(40, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 9
-text = "Gold"
-horizontal_alignment = 1
-
 [node name="SpawnPosition" type="Label" parent="MarginContainer/VBoxContainer/HBoxTitle" unique_id=1735084892]
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 9
 text = "Spawn"
+horizontal_alignment = 1
+
+[node name="Gold" type="Label" parent="MarginContainer/VBoxContainer/HBoxTitle" unique_id=1497300476]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "Gold"
 horizontal_alignment = 1
 
 [node name="Lumber" type="Label" parent="MarginContainer/VBoxContainer/HBoxTitle" unique_id=1236041958]

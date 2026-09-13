@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="UnitData" format=3 uid="uid://dkox6ug280ej0"]
+
+[ext_resource type="Texture2D" uid="uid://moh0clg1fnrr" path="res://assets/art/ui/icons/Icon - Humans Footman.tres" id="1_t152j"]
+[ext_resource type="PackedScene" uid="uid://d3h8v4klfe4uq" path="res://src/gameplay/entities/units/humans/footman.tscn" id="2_amty0"]
+[ext_resource type="Script" uid="uid://bwo8h3bftdqwy" path="res://src/resources/EntityData/unit_data.gd" id="3_anv0k"]
+
+[resource]
+script = ExtResource("3_anv0k")
+id = "humans_kinght"
+name = "Knight"
+description = "Descrizione Knight"
+icon = ExtResource("1_t152j")
+scene = ExtResource("2_amty0")
+training_time = 45.0
+max_health = 30
+basic_armor = 0
+basic_damage = 3
+piercing_damage = 2
+attack_range = 1.0
+gold_cost = 400
+food_cost = 1
+metadata/_custom_type_script = "uid://bwo8h3bftdqwy"

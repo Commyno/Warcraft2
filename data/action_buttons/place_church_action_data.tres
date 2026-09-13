@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="PlaceBuildingActionData" format=3 uid="uid://dbk808q3b6ytb"]
 
-[ext_resource type="Resource" uid="uid://biao03okejj7o" path="res://data/humans_race/buildings/humans_townhall_data.tres" id="1_7gdba"]
+[ext_resource type="Resource" uid="uid://t2ivvc501fj3" path="res://data/humans_race/buildings/humans_church_data.tres" id="1_7gdba"]
 [ext_resource type="Texture2D" uid="uid://droql54fd2ybw" path="res://assets/art/ui/icons/Icon - Humans Church.tres" id="2_7gdba"]
 [ext_resource type="Script" uid="uid://dcdhttu5o6dgd" path="res://src/resources/ActionData/place_building_action_data.gd" id="3_sc2nb"]
 

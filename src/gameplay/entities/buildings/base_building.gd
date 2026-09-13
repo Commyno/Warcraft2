@@ -92,8 +92,9 @@ var is_destroyed: bool = false
 var is_training: bool = false
 var current_health: int = 0:
 	set(value):
+		current_health = value
 		if health_bar:
-			health_bar.value = current_health
+			health_bar.value = value
 
 var active_builders: Array[Node2D] = []
 var construction_progress_perc: float = 0.0 # Da 0.0 a 1.0

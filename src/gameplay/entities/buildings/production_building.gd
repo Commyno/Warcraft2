@@ -27,7 +27,7 @@ func enqueue_unit(data: UnitData) -> bool:
 		return false
 	if training_queue.size() >= max_queue_size:
 		return false
-	if not player_owner.can_afford(data.gold_cost, data.wood_cost, data.oil_cost, data.food_cost):
+	if not player_owner.can_afford(data.gold_cost, data.lumber_cost, data.oil_cost, data.food_cost):
 		return false
 		
 	player_owner.spend_for_unit(data)

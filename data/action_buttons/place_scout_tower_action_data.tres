@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="PlaceBuildingActionData" format=3 uid="uid://41xxhuqxus38"]
 
-[ext_resource type="Resource" uid="uid://biao03okejj7o" path="res://data/humans_race/buildings/humans_townhall_data.tres" id="1_5nnpx"]
+[ext_resource type="Resource" uid="uid://bgofcgxvh07kx" path="res://data/humans_race/buildings/humans_scout_tower_data.tres" id="1_5nnpx"]
 [ext_resource type="Texture2D" uid="uid://bq374xr5lts4w" path="res://assets/art/ui/icons/Icon - Humans Scout Tower.tres" id="2_5nnpx"]
 [ext_resource type="Script" uid="uid://dcdhttu5o6dgd" path="res://src/resources/ActionData/place_building_action_data.gd" id="3_l3nto"]
 

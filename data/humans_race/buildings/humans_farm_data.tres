@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="BuildingData" format=3 uid="uid://bmikcj4kx3kj4"]
 
-[ext_resource type="PackedScene" uid="uid://dy2al0y75sb1r" path="res://src/gameplay/entities/buildings/humans/farm.tscn" id="1_0khxe"]
+[ext_resource type="PackedScene" uid="uid://dy2al0y75sb1r" path="res://src/gameplay/entities/buildings/humans/Farm.tscn" id="1_0khxe"]
 [ext_resource type="Texture2D" uid="uid://c5campooo4uc3" path="res://assets/art/ui/icons/Icon - Humans Farm.tres" id="2_jbffl"]
-[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/data.gd" id="3_g2f4g"]
+[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/building_data.gd" id="3_g2f4g"]
 
 [resource]
 script = ExtResource("3_g2f4g")

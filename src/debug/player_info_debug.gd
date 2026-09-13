@@ -4,10 +4,10 @@ extends HBoxContainer
 @onready var human: Label = $Human
 @onready var color_rect: ColorRect = $Color
 @onready var gold: Label = $Gold
-@onready var race: Label = $Race
-@onready var spawn_position: Label = $SpawnPosition
 @onready var lumber: Label = $Lumber
 @onready var oil: Label = $Oil
+@onready var race: Label = $Race
+@onready var spawn_position: Label = $SpawnPosition
 @onready var units: Label = $Units
 @onready var buildings: Label = $Buildings
 
@@ -23,8 +23,8 @@ func update(player: Player) -> void:
 	else:
 		human.text = "IA"
 	color_rect.color = player.color
-	race.text = player.faction
-	
+	race.text = "Humans" if player.faction == Globals.RaceType.HUMANS else "Orcs"
+
 	# Risorse
 	gold.text = str(player.gold_counts)
 	lumber.text = str(player.lumber_counts)

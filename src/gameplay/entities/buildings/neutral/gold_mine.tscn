@@ -7,6 +7,8 @@
 
 [node name="GoldMine" unique_id=1889694065 instance=ExtResource("1_f7tvw")]
 script = ExtResource("1_f0tba")
+max_workers = 4
+resource_per_cycle = 10
 description = "Description Gold Mine"
 icon = ExtResource("3_f0tba")
 spritesheet = ExtResource("4_f0tba")
@@ -15,8 +17,6 @@ region_idle = Rect2(3, 8, 96, 89)
 region_active = Rect2(3, 104, 96, 89)
 region_depleted = Rect2(433, 8, 63, 59)
 can_destroy = false
-max_workers = 4
-resource_per_cycle = 10
 
 [node name="Sprite2D" parent="." index="2" unique_id=1061573362]
 region_rect = Rect2(3, 8, 96, 89)
