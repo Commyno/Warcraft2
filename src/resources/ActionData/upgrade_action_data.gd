@@ -11,7 +11,7 @@ func _init() -> void:
 func can_execute(_source_entities: Array, player: Player) -> bool:
 	if player == null or upgrade_data == null:
 		return false
-	return player.can_afford_unit(upgrade_data)
+	return player.has_enough_resources_unit(upgrade_data)
 
 func has_cost() -> bool:
 	return true

@@ -52,7 +52,7 @@ func start_placement(action: PlaceBuildingActionData, units: Array) -> void:
 	if is_placing:
 		cancel_placement()
 
-	if units.is_empty():
+	if units.is_empty() or action.building_data == null:
 		return
 	var owner_player: Player = units[0].player_owner
 	if owner_player == null or not action.building_data.is_affordable(owner_player):
@@ -60,8 +60,11 @@ func start_placement(action: PlaceBuildingActionData, units: Array) -> void:
 	
 	_action = action
 	_units = units
-	building_scene_to_spawn = action.building_data.scene
 	_building_tile_size = action.building_data.tile_size
+	building_scene_to_spawn = action.building_data.get_scene()
+	if building_scene_to_spawn == null:
+		return
+
 	preview_building = building_scene_to_spawn.instantiate() as BaseBuilding
 
 	# 1. Istanzia la griglia dalla PackedScene

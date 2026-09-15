@@ -1,16 +1,19 @@
 [gd_resource type="Resource" script_class="UnitData" format=3 uid="uid://ch1hkn1u4g2ma"]
 
-[ext_resource type="Texture2D" uid="uid://moh0clg1fnrr" path="res://assets/art/ui/icons/Icon - Humans Footman.tres" id="1_c78dd"]
-[ext_resource type="PackedScene" uid="uid://d3h8v4klfe4uq" path="res://src/gameplay/entities/units/humans/footman.tscn" id="2_gn0bl"]
+[ext_resource type="Texture2D" uid="uid://2om5ope4lk8r" path="res://assets/spritesheets/ui/UI - Icons.png" id="1_8hjpo"]
 [ext_resource type="Script" uid="uid://bwo8h3bftdqwy" path="res://src/resources/EntityData/unit_data.gd" id="3_v55bm"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c78dd"]
+atlas = ExtResource("1_8hjpo")
+region = Rect2(300, 46, 46, 38)
 
 [resource]
 script = ExtResource("3_v55bm")
 id = "humans_ballista"
 name = "Ballista"
 description = "Descrizione Ballista"
-icon = ExtResource("1_c78dd")
-scene = ExtResource("2_gn0bl")
+icon = SubResource("AtlasTexture_c78dd")
+scene_path = "uid://d3h8v4klfe4uq"
 training_time = 45.0
 max_health = 30
 basic_armor = 0

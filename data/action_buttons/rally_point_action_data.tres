@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="RallyPointActionData" format=3 uid="uid://3gnq3xakkpnn"]
+
+[ext_resource type="Texture2D" uid="uid://ba5ipjaaiqwch" path="res://assets/art/ui/icons/Icon - Rally point.tres" id="1_6vatc"]
+[ext_resource type="Script" uid="uid://ddaktlwo4cjud" path="res://src/resources/ActionData/rally_point_action_data.gd" id="1_irv3q"]
+[ext_resource type="Texture2D" uid="uid://bju2c0iqdtui5" path="res://assets/art/ui/cursors/Cursor-Cross-Creative-Concept.png" id="3_w6h1q"]
+
+[resource]
+script = ExtResource("1_irv3q")
+id = "rally_point"
+title = "Rally point"
+description = "Descrizione punto di raccolta"
+icon = ExtResource("1_6vatc")
+target_mode = 1
+shortcut_key = 82
+targeting_cursor = ExtResource("3_w6h1q")
+metadata/_custom_type_script = "uid://ddaktlwo4cjud"

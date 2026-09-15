@@ -21,7 +21,7 @@ func has_mana_cost() -> bool:
 func is_affordable(player: Player, source = null) -> bool:
 	# 1. Risorse globali del player
 	if has_resource_cost():
-		if player == null or not player.can_afford(gold_cost, lumber_cost, oil_cost, food_cost):
+		if player == null or player.can_afford(gold_cost, lumber_cost, oil_cost, food_cost) > 0:
 			return false
 
 	# 2. Mana dell'unità sorgente

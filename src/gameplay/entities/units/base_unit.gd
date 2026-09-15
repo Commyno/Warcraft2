@@ -123,9 +123,6 @@ func _ready() -> void:
 	if health_bar:
 		health_bar.max_value = max_health
 		#health_bar.value = current_health
-		
-	# Connetti il segnale della vita per aggiornare la UI in automatico
-	health_changed.connect(_on_health_changed)
 
 func setup(data: Resource) -> void:
 	self.name = data.name
@@ -402,7 +399,7 @@ func take_damage(amount: float, source_damage_type: Globals.DamageType = Globals
 	current_health -= final_damage
 	
 	# Emette il segnale per aggiornare eventuali barre della vita (UI)
-	health_changed.emit(current_health, max_health)
+	_on_health_changed()
 		
 	print(name, " ha subito ", amount, " danni! Vita attuale: ", current_health)
 	
@@ -430,7 +427,7 @@ func heal(amount: float) -> void:
 		
 	# Aumenta la vita, ma non oltre il massimo consentito
 	current_health = min(current_health + amount, max_health)
-	health_changed.emit(current_health, max_health)
+	_on_health_changed()
 
 func die() -> void:
 	if is_dead:
@@ -495,9 +492,11 @@ func spawn_corpse() -> void:
 
 # --- GESTIONE UI ---
 
-func _on_health_changed(new_health: float, _max: float) -> void:
+func _on_health_changed() -> void:
 	if health_bar:
-		health_bar.value = new_health
+		health_bar.value = current_health
+	
+	health_changed.emit(current_health, max_health)
 
 # --- GESTIONE IERAZIONI ---
 

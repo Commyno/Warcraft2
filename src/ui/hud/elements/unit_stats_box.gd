@@ -32,7 +32,6 @@ func on_health_changed(new_health: float, max_health: float) -> void:
 func update() -> void:
 	portrait.texture = unit.icon
 	health_progress_bar.value = unit.get_health_perc()
-	print(unit.get_health_perc())
 	health_label.text = str(unit.current_health) + "/" + str(unit.max_health)
 	name_label.text = unit.name
 

@@ -1,16 +1,19 @@
 [gd_resource type="Resource" script_class="UnitData" format=3 uid="uid://cvecbmcoom0nb"]
 
-[ext_resource type="Texture2D" uid="uid://moh0clg1fnrr" path="res://assets/art/ui/icons/Icon - Humans Footman.tres" id="1_rcol0"]
-[ext_resource type="PackedScene" uid="uid://d3h8v4klfe4uq" path="res://src/gameplay/entities/units/humans/footman.tscn" id="2_ky0vw"]
+[ext_resource type="Texture2D" uid="uid://2om5ope4lk8r" path="res://assets/spritesheets/ui/UI - Icons.png" id="1_cfrla"]
 [ext_resource type="Script" uid="uid://bwo8h3bftdqwy" path="res://src/resources/EntityData/unit_data.gd" id="3_urg6q"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rcol0"]
+atlas = ExtResource("1_cfrla")
+region = Rect2(202, 5, 46, 38)
 
 [resource]
 script = ExtResource("3_urg6q")
 id = "humans_elven_archer"
 name = "Elven Archer"
 description = "Descrizione Elven Archer"
-icon = ExtResource("1_rcol0")
-scene = ExtResource("2_ky0vw")
+icon = SubResource("AtlasTexture_rcol0")
+scene_path = "uid://d3h8v4klfe4uq"
 training_time = 45.0
 max_health = 30
 basic_armor = 0

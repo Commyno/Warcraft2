@@ -13,7 +13,7 @@ enum BuildingState { IDLE, ACTIVE, DEPLETED, DESTROYED, INACTIVE }
 @export var spritesheet: Texture2D
 
 @export_group("Azioni e Abilità")
-@export var available_actions: Array[ActionData] = []
+@export var available_actions: Array[ActionData]
 
 # --- PARAMETRI DI COSTRUZIONE ---
 @export_group("Costruzione")
@@ -101,6 +101,10 @@ var construction_progress_perc: float = 0.0 # Da 0.0 a 1.0
 var training_progress_perc: float = 0.0 # Da 0.0 a 1.0
 
 func _ready() -> void:
+	add_to_group("building")
+	
+	available_actions = available_actions.duplicate()
+	
 	# 1. Nascondi il cerchio di selezione all'avvio
 	if selectable_component:
 		selectable_component.deselect()
@@ -113,8 +117,6 @@ func _ready() -> void:
 	if nav_obstacle:
 		nav_obstacle.affect_navigation_mesh = false
 		
-	health_changed.connect(_on_health_changed)
-	
 	current_health = max_health
 	if health_bar:
 		health_bar.max_value = max_health
@@ -123,6 +125,8 @@ func _ready() -> void:
 	# Gestione dello stato iniziale (già costruito)
 	active_builders.clear()	
 	_set_building_region(region_completed)
+	
+	deselect()
 
 func _process(delta: float) -> void:
 	if is_under_construction and not active_builders.is_empty():
@@ -191,7 +195,7 @@ func take_damage(amount: float) -> void:
 		return
 		
 	current_health -= amount
-	health_changed.emit(current_health, max_health)
+	_on_health_changed()
 	
 	print(name, " ha subito ", amount, " danni. Vita residua: ", current_health)
 	
@@ -203,7 +207,7 @@ func heal(amount: float) -> void:
 		return
 		
 	current_health = min(current_health + amount, max_health)
-	health_changed.emit(current_health, max_health)
+	_on_health_changed()
 
 func destroy_building() -> void:
 	is_destroyed = true
@@ -282,9 +286,11 @@ func apply_upgrade(new_building_data: BuildingData) -> void:
 
 # --- GESTIONE UI ---
 
-func _on_health_changed(new_health: float, _max: float) -> void:
+func _on_health_changed() -> void:
 	if health_bar:
-		health_bar.value = new_health
+		health_bar.value = current_health
+	
+	health_changed.emit(current_health, max_health)
 
 # --- GESTIONE COSTRUZIONE ---
 
@@ -318,7 +324,7 @@ func _advance_construction(delta: float) -> void:
 	current_health = roundi(lerp(1.0, float(max_health), construction_progress_perc))
 
 	#construction_progress_updated.emit(current_health, max_health)
-	health_changed.emit(current_health, max_health) # Aggiorna l'UI durante la costruzione
+	_on_health_changed()
 	
 	# Transizione alla fase "metà costruito"
 	if construction_progress_perc >= 0.33 and construction_progress_perc < 0.66:
@@ -345,7 +351,7 @@ func complete_construction() -> void:
 		if is_instance_valid(builder):
 			builder.clear_assignment()
 
-	health_changed.emit(current_health, max_health)
+	_on_health_changed()
 	construction_completed.emit()
 	
 func _set_building_region(region: Rect2) -> void:

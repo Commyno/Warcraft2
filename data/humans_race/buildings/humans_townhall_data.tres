@@ -2,7 +2,6 @@
 
 [ext_resource type="Texture2D" uid="uid://wioaljt1ijyh" path="res://assets/art/ui/icons/Icon - Humans Town Hall.tres" id="1_hedpo"]
 [ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/building_data.gd" id="1_kgn74"]
-[ext_resource type="PackedScene" uid="uid://cdp0lbjingbod" path="res://src/gameplay/entities/buildings/humans/town_hall.tscn" id="1_qkqp0"]
 
 [resource]
 script = ExtResource("1_kgn74")
@@ -10,7 +9,7 @@ id = "humans_townhall"
 name = "Town Hall"
 description = "Descrizione Town Hall"
 icon = ExtResource("1_hedpo")
-scene = ExtResource("1_qkqp0")
+scene_path = "uid://cdp0lbjingbod"
 build_time = 255.0
 max_health = 1200
 food_provided = 1
@@ -19,5 +18,4 @@ accepts_gold = true
 accepts_wood = true
 can_attack_ground = false
 gold_cost = 1200
-wood_cost = 800
 metadata/_custom_type_script = "uid://cjdr3m81ncphw"

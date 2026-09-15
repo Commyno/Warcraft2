@@ -1,16 +1,19 @@
 [gd_resource type="Resource" script_class="UnitData" format=3 uid="uid://bbklmd4sqie4g"]
 
-[ext_resource type="Texture2D" uid="uid://qc8ae83bbqg" path="res://assets/art/ui/icons/Icon - Humans Peasant.tres" id="1_mckyh"]
 [ext_resource type="Script" uid="uid://bwo8h3bftdqwy" path="res://src/resources/EntityData/unit_data.gd" id="1_th673"]
-[ext_resource type="PackedScene" uid="uid://co67x1u0gnsv1" path="res://src/gameplay/entities/units/humans/peasant.tscn" id="3_aomyu"]
+[ext_resource type="Texture2D" uid="uid://2om5ope4lk8r" path="res://assets/spritesheets/ui/UI - Icons.png" id="1_xk0se"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hf5n3"]
+atlas = ExtResource("1_xk0se")
+region = Rect2(6, 5, 46, 38)
 
 [resource]
 script = ExtResource("1_th673")
 id = "humans_peasant"
 name = "Peasant"
 description = "Descrizione Peasant"
-icon = ExtResource("1_mckyh")
-scene = ExtResource("3_aomyu")
+icon = SubResource("AtlasTexture_hf5n3")
+scene_path = "uid://co67x1u0gnsv1"
 training_time = 45.0
 max_health = 30
 basic_armor = 0

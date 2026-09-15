@@ -1,16 +1,19 @@
 [gd_resource type="Resource" script_class="UnitData" format=3 uid="uid://bastv7u4m0yux"]
 
-[ext_resource type="Texture2D" uid="uid://moh0clg1fnrr" path="res://assets/art/ui/icons/Icon - Humans Footman.tres" id="1_ysumw"]
-[ext_resource type="PackedScene" uid="uid://d3h8v4klfe4uq" path="res://src/gameplay/entities/units/humans/footman.tscn" id="2_u3gji"]
+[ext_resource type="Texture2D" uid="uid://2om5ope4lk8r" path="res://assets/spritesheets/ui/UI - Icons.png" id="1_c5eln"]
 [ext_resource type="Script" uid="uid://bwo8h3bftdqwy" path="res://src/resources/EntityData/unit_data.gd" id="3_05jil"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ysumw"]
+atlas = ExtResource("1_c5eln")
+region = Rect2(104, 5, 46, 38)
 
 [resource]
 script = ExtResource("3_05jil")
 id = "humans_footman"
 name = "Footman"
 description = "Descrizione Footman"
-icon = ExtResource("1_ysumw")
-scene = ExtResource("2_u3gji")
+icon = SubResource("AtlasTexture_ysumw")
+scene_path = "uid://d3h8v4klfe4uq"
 training_time = 45.0
 max_health = 30
 basic_armor = 0

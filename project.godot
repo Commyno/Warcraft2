@@ -31,13 +31,14 @@ SceneLoader="*uid://xi23osnx5ph"
 GridManager="*uid://4jplu6jou6mk"
 PlayerManager="*uid://4kc5m8lgq68k"
 TargetingManager="*uid://chge0rqlgnv7k"
+SpawnManager="*uid://d4hv67mojc5yx"
 
 [display]
 
 window/size/viewport_width=640
 window/size/viewport_height=360
-window/size/window_width_override=1922
-window/size/window_height_override=1081
+window/size/window_width_override=1283
+window/size/window_height_override=722
 window/subwindows/embed_subwindows=false
 window/stretch/mode="canvas_items"
 window/stretch/scale_mode="integer"

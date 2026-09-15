@@ -14,7 +14,8 @@ enum BuildingType { PRODUCTION, ECONOMY, DEFENSE, TECH }
 @export var faction: Faction = Faction.ALLIANCE
 @export var type: BuildingType = BuildingType.PRODUCTION
 @export var icon: Texture2D                  # Icona per il menu di costruzione del Peon
-@export var scene: PackedScene      # Scena .tscn dell'edificio completo
+#@export var scene: PackedScene      # Scena .tscn dell'edificio completo
+@export_file("*.tscn") var scene_path: String
 
 # ==========================================
 # GRIGLIA E POSIZIONAMENTO (TileMap / Grid)
@@ -59,3 +60,9 @@ enum BuildingType { PRODUCTION, ECONOMY, DEFENSE, TECH }
 @export var attack_cooldown: float = 1.0
 @export var can_attack_air: bool = false
 @export var can_attack_ground: bool = true
+
+# Funzione helper comoda per quando devi effettivamente istanziare l'edificio
+func get_scene() -> PackedScene:
+	if scene_path.is_empty():
+		return null
+	return load(scene_path) as PackedScene

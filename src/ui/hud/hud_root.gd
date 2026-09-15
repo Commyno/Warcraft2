@@ -31,21 +31,25 @@ func _on_selection_changed(selected_objects: Array[Node2D]) -> void:
 	var count = selected_objects.size()
 	
 	if count == 0:
+		# Hide all 
 		single_selection_panel.hide()
 		multi_selection_panel.hide()
 		action_grid_mc.hide()
 	elif count == 1:
+		# Show DetailBox 
 		multi_selection_panel.hide()
 		single_selection_panel.show()
-		if selected_objects[0] as ResourceBuilding:
-			action_grid_mc.hide()
-		else:
+		# Show ActionGrid box
+		if action_grid_mc.can_show():
 			action_grid_mc.show()
-		# _update_single_panel_ui(selected_objects[0])
+		else:
+			action_grid_mc.hide()
 	else:
+		# Show UnitListBox 
 		single_selection_panel.hide()
 		multi_selection_panel.show()
-		# _update_multi_panel_ui(selected_objects)
+		# Hide ActionGrid box
+		action_grid_mc.hide()
 
 func setup_minimap(camera: Camera2D) -> void:
 	minimap.game_camera = camera

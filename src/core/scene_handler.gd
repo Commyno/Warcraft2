@@ -139,6 +139,20 @@ func load_new_custom_scenario() -> void:
 	
 	SceneLoader.scene_ready.connect(_on_level_ready, CONNECT_ONE_SHOT)
 	SceneLoader.load_scene(game_scene_path)
+	
+	# Recupera la lista delle chiavi da cancellare escludendo "main_menu"
+	var menus_to_remove: Array = []
+
+	for menu_name in _instantiated_menus.keys():
+		if menu_name != "MainMenu":
+			menus_to_remove.append(menu_name)
+
+	# Distrugge i nodi ed elimina la voce dal Dictionary
+	for menu_name in menus_to_remove:
+		var menu_node: Node = _instantiated_menus[menu_name]
+		if is_instance_valid(menu_node):
+			menu_node.queue_free()
+		_instantiated_menus.erase(menu_name)
 
 func on_restart_scenario() -> void:
 	get_tree().paused = false

@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" format=3 uid="uid://cbgjumonbucd2"]
+
+[ext_resource type="Texture2D" uid="uid://d13mh8yw7u0h6" path="res://assets/art/miscellaneous/spritesheet_flag_rallypoint.png" id="1_pojk1"]
+
+[resource]
+atlas = ExtResource("1_pojk1")
+region = Rect2(0, 0, 32, 32)

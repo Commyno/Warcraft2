@@ -25,6 +25,15 @@ func _ready() -> void:
 	if local_player == null:
 		_bind_local_player()
 
+func can_show() -> bool:
+	if current_selected_entity is ResourceBuilding:
+		return false
+	elif current_selected_entity is BaseBuilding:
+		return not current_selected_entity.is_under_construction
+	elif current_selected_entity is BaseUnit:
+		return true
+	return false
+
 func _bind_local_player() -> void:
 	var players = get_tree().get_nodes_in_group("players")
 	for p in players:

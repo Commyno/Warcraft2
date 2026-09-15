@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://86f3v34k8mpc"]
+
+[ext_resource type="Script" uid="uid://df1l2dylut8xn" path="res://src/gameplay/entities/buildings/rally_point.gd" id="1_d5bmq"]
+[ext_resource type="Texture2D" uid="uid://cbgjumonbucd2" path="res://assets/animations/rallypoint/rallypoint_01.tres" id="2_gs3fq"]
+[ext_resource type="Texture2D" uid="uid://ceya00gi68nlk" path="res://assets/animations/rallypoint/rallypoint_02.tres" id="3_dli5j"]
+[ext_resource type="Texture2D" uid="uid://b5p0wehhavs0x" path="res://assets/animations/rallypoint/rallypoint_03.tres" id="4_7mefu"]
+[ext_resource type="Texture2D" uid="uid://c0w0ql5mm0410" path="res://assets/animations/rallypoint/rallypoint_04.tres" id="5_51reu"]
+[ext_resource type="Texture2D" uid="uid://b1owdsdi0q5af" path="res://assets/animations/rallypoint/rallypoint_05.tres" id="6_nf8ri"]
+[ext_resource type="Texture2D" uid="uid://b4llyf23r0cmq" path="res://assets/animations/rallypoint/rallypoint_06.tres" id="7_m2bs4"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_degbt"]
+animations = [{
+"frames": [{
+"duration": 0.7,
+"texture": ExtResource("2_gs3fq")
+}, {
+"duration": 0.7,
+"texture": ExtResource("3_dli5j")
+}, {
+"duration": 0.7,
+"texture": ExtResource("4_7mefu")
+}, {
+"duration": 0.7,
+"texture": ExtResource("5_51reu")
+}, {
+"duration": 0.7,
+"texture": ExtResource("6_nf8ri")
+}, {
+"duration": 0.7,
+"texture": ExtResource("7_m2bs4")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="Node2D" type="Node2D" unique_id=30389573]
+script = ExtResource("1_d5bmq")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1855655778]
+sprite_frames = SubResource("SpriteFrames_degbt")
+animation = &"idle"
+frame_progress = 0.84276694
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=2093260889]
+visible = false

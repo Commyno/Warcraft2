@@ -55,32 +55,8 @@ func _process(delta: float) -> void:
 # --- GESTIONE INTERAZIONE E MINIERA ---
 
 func _start_interaction(target: Node2D) -> void:
-	# --- GESTIONE COSTRUZIONE E RIPARAZIONE ---
-	if target is BaseBuilding:
-		# Se l'edificio è in cantiere e il nostro ordine era BUILD
-		if target.is_under_construction and current_assignment == AssignmentState.BUILD:
-			unit_state = UnitState.BUILDING # Forza lo stato
-			#target_building = target
-			target.register_builder(self)
-			
-			# Si gira verso il centro dell'edificio
-			intended_dir = (target.global_position - global_position).normalized()
-			last_facing_dir = intended_dir
-			
-			# Aggiorna l'albero di animazione
-			update_animation()
-
-		# Gestione analoga se stiamo RIPARANDO un edificio danneggiato
-		elif target.is_damaged() and current_assignment == AssignmentState.REPAIR:
-			unit_state = UnitState.REPARING
-			#target_building = target
-			target.register_builder(self)
-			intended_dir = (target.global_position - global_position).normalized()
-			last_facing_dir = intended_dir
-			update_animation()
-	
-# --- 1. GESTIONE MINIERA ---
-	elif target is GoldMine:
+	# --- 1. GESTIONE MINIERA ---
+	if target is GoldMine:
 		target_resource_tile = Vector2i(-1, -1) # Dimentica la legna
 		action_timer = 0.0
 		
@@ -98,27 +74,61 @@ func _start_interaction(target: Node2D) -> void:
 			var success = target.register_worker(self)
 			if not success:
 				print("Miniera piena!")
-				clear_assignment() 
+				clear_assignment()
 	
-	# --- 2. GESTIONE DEPOSITO (Municipio / Lumber Mill) ---
-	elif target.is_in_group("town_hall") or target.is_in_group("lumber_mill"):
-		if current_resource != Globals.ResourceType.NONE and resource_amount > 0:
-			if current_resource == Globals.ResourceType.GOLD: player_owner.add_gold(resource_amount)
-			elif current_resource == Globals.ResourceType.WOOD: player_owner.add_lumber(resource_amount)
-			elif current_resource == Globals.ResourceType.OIL: player_owner.add_oil(resource_amount)
+	# --- 2. GESTIONE COSTRUZIONE E RIPARAZIONE ---
+	if target is ProductionBuilding:
+		# Se l'edificio è in cantiere e il nostro ordine era BUILD
+		if target.is_under_construction and current_assignment == AssignmentState.BUILD:
+			unit_state = UnitState.BUILDING # Forza lo stato
+			#target_building = target
+			target.register_builder(self)
+			
+			deselect()
+			
+			# Si gira verso il centro dell'edificio
+			intended_dir = (target.global_position - global_position).normalized()
+			last_facing_dir = intended_dir
+			
+			# Aggiorna l'albero di animazione
+			update_animation()
 
-			current_resource = Globals.ResourceType.NONE
-			resource_amount = 0
-			unit_state = UnitState.IDLE
+		# Gestione analoga se stiamo RIPARANDO un edificio danneggiato
+		elif target.is_damaged() and current_assignment == AssignmentState.REPAIR:
+			unit_state = UnitState.REPARING
+			#target_building = target
+			target.register_builder(self)
+						
+			deselect()
+			
+			# Si gira verso il centro dell'edificio
+			intended_dir = (target.global_position - global_position).normalized()
+			last_facing_dir = intended_dir
+			
+			# Aggiorna l'albero di animazione
 			update_animation()
 			
-			# LEGGE DALLA MEMORIA SICURA (target_mine e target_resource_tile)
-			if current_assignment == AssignmentState.GATHER_GOLD and target_mine != null:
-				interact_with(target_mine) 
-			elif current_assignment == AssignmentState.GATHER_WOOD and target_resource_tile != Vector2i(-1, -1):
-				_find_next_tree(target_resource_tile)
-			else:
-				clear_assignment()
+	# --- 3. GESTIONE DEPOSITO (Municipio / Lumber Mill) ---
+		elif target.is_in_group("town_hall") or target.is_in_group("lumber_mill"):
+			if current_resource != Globals.ResourceType.NONE and resource_amount > 0:
+				if current_resource == Globals.ResourceType.GOLD: player_owner.add_gold(resource_amount)
+				elif current_resource == Globals.ResourceType.WOOD: player_owner.add_lumber(resource_amount)
+				elif current_resource == Globals.ResourceType.OIL: player_owner.add_oil(resource_amount)
+
+				current_resource = Globals.ResourceType.NONE
+				resource_amount = 0
+				unit_state = UnitState.IDLE
+				update_animation()
+				
+				deselect()
+				
+				# LEGGE DALLA MEMORIA SICURA (target_mine e target_resource_tile)
+				if current_assignment == AssignmentState.GATHER_GOLD and target_mine != null:
+					interact_with(target_mine) 
+				elif current_assignment == AssignmentState.GATHER_WOOD and target_resource_tile != Vector2i(-1, -1):
+					_find_next_tree(target_resource_tile)
+				else:
+					clear_assignment()
 
 func enter_mine(mine: GoldMine) -> void:
 	if !is_instance_valid(current_target) or current_target.is_depleted:
@@ -321,6 +331,12 @@ func _start_tile_interaction(tile_coords: Vector2i) -> void:
 		if current_assignment == AssignmentState.GATHER_WOOD:
 			_find_next_tree(tile_coords)
 
+func is_valid_dropoff(entity: BaseBuilding) -> bool:
+	if entity != null and entity.has_method("accept_resources"):
+		return entity.accept_resources(current_resource)
+	
+	return false
+
 # Il colpo d'ascia effettivo (chiamato dal _process ogni secondo)
 func _perform_chop() -> void:
 	var obtained = GridManager.chop_tree(target_resource_tile, 5) # <- corretto
@@ -353,7 +369,10 @@ func _find_next_tree(start_tile: Vector2i) -> void:
 
 func assign_build_task(building: BaseBuilding) -> void:
 	clear_assignment() # Azzera ordini precedenti
-	current_assignment = AssignmentState.BUILD
+	if building.is_under_construction:
+		current_assignment = AssignmentState.BUILD
+	else:
+		current_assignment = AssignmentState.REPAIR
 	interact_with(building)
 
 # --- GESTIONE ANIMAZIONWI ---

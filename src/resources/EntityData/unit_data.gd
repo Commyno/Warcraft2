@@ -11,7 +11,8 @@ extends CostData
 @export var faction: Globals.FactionType = Globals.FactionType.ALLIANCE
 @export var type: Globals.UnitType = Globals.UnitType.LAND
 @export var icon: Texture2D
-@export var scene: PackedScene         # Scena .tscn dell'unità sul campo
+#@export var scene: PackedScene         # Scena .tscn dell'unità sul campo
+@export_file("*.tscn") var scene_path: String
 @export var shortcut_key: Key
 
 # ==========================================
@@ -43,3 +44,9 @@ extends CostData
 @export var can_attack_air: bool = false
 @export var can_attack_ground: bool = true
 @export var damage_type: Globals.DamageType = Globals.DamageType.NORMAL
+
+# Funzione helper comoda per quando devi effettivamente istanziare l'edificio
+func get_scene() -> PackedScene:
+	if scene_path.is_empty():
+		return null
+	return load(scene_path) as PackedScene

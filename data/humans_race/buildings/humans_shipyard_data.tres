@@ -1,8 +1,7 @@
 [gd_resource type="Resource" script_class="BuildingData" format=3 uid="uid://ltxdp4e0wwho"]
 
-[ext_resource type="PackedScene" uid="uid://d47ngl18maix" path="res://src/gameplay/entities/buildings/humans/shipyard.tscn" id="1_uiukk"]
 [ext_resource type="Texture2D" uid="uid://ct1vwlxl6soyw" path="res://assets/art/ui/icons/Icon - Humans Shipyard.tres" id="2_jmx6e"]
-[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/data.gd" id="3_jw0e0"]
+[ext_resource type="Script" uid="uid://cjdr3m81ncphw" path="res://src/resources/EntityData/building_data.gd" id="3_jw0e0"]
 
 [resource]
 script = ExtResource("3_jw0e0")
@@ -10,7 +9,7 @@ id = "humans_shipyard"
 name = "Shipyard"
 description = "Descrizione Shipyard"
 icon = ExtResource("2_jmx6e")
-scene = ExtResource("1_uiukk")
+scene_path = "uid://d47ngl18maix"
 build_time = 200.0
 max_health = 1100
 sight_range = 3
@@ -18,5 +17,4 @@ is_resource_dropoff = true
 accepts_oil = true
 can_attack_ground = false
 gold_cost = 800
-wood_cost = 450
 metadata/_custom_type_script = "uid://cjdr3m81ncphw"

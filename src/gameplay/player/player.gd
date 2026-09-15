@@ -157,10 +157,21 @@ func setup(id: int, start_pos: Vector2i, config: Dictionary) -> void:
 # ==========================================
 # RESOURCE MANAGEMENT
 # ==========================================
-func can_afford(gold: int, lumber: int, oil: int, food: int = 0) -> bool:
-	var has_res = _gold_counts >= gold and _lumber_counts >= lumber and _oil_counts >= oil
-	var has_food = (_food_used + food) <= _food_max
-	return has_res and has_food
+#func has_enough_resources(gold: int, lumber: int, oil: int, food: int = 0) -> bool:
+	#var has_res = _gold_counts >= gold and _lumber_counts >= lumber and _oil_counts >= oil
+	#var has_food = (_food_used + food) <= _food_max
+	#return has_res and has_food
+
+func has_enough_resources(gold: int, lumber: int, oil: int, food: int = 0) -> int:
+	if _gold_counts < gold:
+		return 1
+	if _lumber_counts < lumber:
+		return 2
+	if _oil_counts < oil:
+		return 3
+	if (_food_used + food) > _food_max:
+		return 4
+	return 0
 
 func spend_resources(gold: int, lumber: int, oil: int, food: int) -> void:
 	_gold_counts -= gold

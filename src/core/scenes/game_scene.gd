@@ -79,16 +79,19 @@ var local_player   : Player = null      # Giocatore Locale Umano
 # INITIALIZATION
 # ==========================================
 func _ready() -> void:
-	# 1. Inizializziamo prima tutte le istanze Player da MatchData
+	# 1. Configuriamo lo SpawnManager
+	SpawnManager.register_units_container(entities_root, effects_root)
+	
+	# 2. Inizializziamo prima tutte le istanze Player da MatchData
 	_init_players()
 	
-	# 2. Carichiamo la mappa e spawniamo le entità agganciando i Player già creati
+	# 3. Carichiamo la mappa e spawniamo le entità agganciando i Player già creati
 	_load_map()
 
-	# 3. Configuriamo HUD e Telecamera
+	# 4. Configuriamo HUD e Telecamera
 	_load_hud()
 	_setup_level_camera()
-
+	
 # ==========================================
 # PLAYER SETUP
 # ==========================================
@@ -140,6 +143,8 @@ func _load_map() -> void:
 
 	# 3. Spawna entità neutrali / ambiente
 	_parse_entities_layer(map_instance, "environment")
+	
+	map_instance.queue_free()
 
 func _parse_spawn_points(map_node: Node2D) -> void:	
 	spawn_positions.clear()
@@ -234,17 +239,18 @@ func _parse_group_layer(map_node: Node2D, layer_name: String, player: Player) ->
 			if data is BuildingData:
 				spawn_entity(data, global_pos, player)
 			elif data is UnitData:
-				spawn_entity(data, global_pos, player)
+				SpawnManager.spawn_unit(data, global_pos, Vector2.ZERO, player)
+				#spawn_entity(data, global_pos, player)
 	
 	# Nascondi il layer visivo dei tile logici a runtime
 	entities_layer.queue_free()
 
 func spawn_entity(data: Resource, global_pos: Vector2, player_owner: Player = null) -> Node:
 	# --- Risoluzione della scena (doppio lookup con guardie) ---
-	if not is_instance_valid(data):
+	if not is_instance_valid(data) or data.scene_path.is_empty():
 		push_error("UnitData sconosciuto")
 		return null
-	var entity_scene: PackedScene = data.scene
+	var entity_scene : PackedScene = data.get_scene()
 	if entity_scene == null:
 		push_error("Scena nulla per '%s'" % data.name)
 		return null
