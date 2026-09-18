@@ -5,9 +5,12 @@
 [ext_resource type="Texture2D" uid="uid://bjcbxjca0oa0n" path="res://assets/art/ui/icons/Icon - Humans Elven Lumber Mill.tres" id="3_7gxbp"]
 [ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/art/race/humans/buildings/Humans - Human Buildings (Summer).png" id="4_vjqfy"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_7gxbp"]
+radius = 64.0
+
 [node name="Elven Lumber Mill" unique_id=1889694065 instance=ExtResource("1_tda7d")]
 script = ExtResource("2_sntrf")
-name = "Elven Lumber Mill"
+entity_name = "Elven Lumber Mill"
 description = "Description Elven Lumber Mill"
 icon = ExtResource("3_7gxbp")
 spritesheet = ExtResource("4_vjqfy")
@@ -22,3 +25,15 @@ can_attack_ground = false
 
 [node name="Sprite2D" parent="." index="2" unique_id=1061573362]
 region_rect = Rect2(104, 264, 96, 96)
+
+[node name="CollisionShape2D" parent="." index="3" unique_id=223898250]
+shape = SubResource("CircleShape2D_7gxbp")
+
+[node name="NavigationObstacle2D" parent="." index="4" unique_id=969329888]
+radius = 90.0
+
+[node name="HealthBar" parent="." index="5" unique_id=1652500946]
+offset_left = -48.0
+offset_top = -48.0
+offset_right = 48.0
+offset_bottom = -42.0

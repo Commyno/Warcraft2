@@ -27,41 +27,9 @@ func _execute_action(_source_entities: Array, _target_data = null) -> void:
 		return
 	
 	var builder = _source_entities[0]
-	var parent : Node2D = builder.get_parent()
 	var owner_player: Player = builder.player_owner   # il proprietario = quello del contadino
-	
-	# Rete di sicurezza: non costruire in debito
-	if owner_player == null or not building_data.is_affordable(owner_player):
-		return
-	
-	# Paga le risorse
-	if owner_player != null:
-		owner_player.spend_resources(
-			building_data.gold_cost, building_data.lumber_cost,
-			building_data.oil_cost, building_data.food_cost
-		)
-	
-	# Istanzia sotto entities_root (non GridManager)
-	var world_pos: Vector2 = GridManager.get_tile_center_global(_target_data)
-	var building: BaseBuilding = building_data.get_scene().instantiate()
-	if building:
-		building.setup(building_data)
-
-	if parent != null:
-		parent.add_child(building)
-	building.global_position = world_pos
-
-	var origin_tile: Vector2i = GridManager.get_tile_coords(world_pos)
-	GridManager.register_building_occupation(origin_tile, building_data.tile_size, building)
-	
-	# Proprietario (id + oggetto + colore), come nello spawn
-	if owner_player != null:
-		building.player_owner = owner_player
-		building.player_id = owner_player.player_id
-		if "player_color" in building:
-			building.player_color = owner_player.color
-	
-	building.place_under_construction()
+	var position : Vector2i = _target_data as Vector2i
+	var building = SpawnManager.spawn_building(building_data, position, true, owner_player)
 
 	# Manda il primo contadino selezionato a costruire.
 	#for unit in source_entities:   # Sostituire poi builder con unit

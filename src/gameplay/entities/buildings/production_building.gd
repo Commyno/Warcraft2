@@ -9,6 +9,9 @@ extends BaseBuilding
 @export var rally_marker_scene: PackedScene # Assegna una scena con Sprite2D (o creiamo un fallback)
 @export var rally_marker_texture: Texture2D  # In alternativa, passa solo la texture
 
+var is_training: bool = false :
+	get:
+		return training_queue.size() > 0
 var training_queue: Array[UnitData] = []
 var current_training_time: float = 0.0
 var _rally_marker_instance: Node2D = null
@@ -24,12 +27,13 @@ func _ready() -> void:
 	_create_rally_marker()
 
 func _process(delta: float) -> void:
+	super(delta)
 	# 1. Gestione Training
 	if training_queue.is_empty():
 		return
 	
 	var current_unit: UnitData = training_queue[0]
-	var total_time: float = max(current_unit.build_time, 0.1)
+	var total_time: float = max(current_unit.training_time, 0.2)
 	
 	# 1. Se il tempo non è ancora finito, fai avanzare la barra
 	if current_training_time < total_time:
@@ -60,10 +64,6 @@ func enqueue_unit(data: UnitData) -> bool:
 	if is_queue_full() or player_owner == null:
 		return false
 		
-	if player_owner.has_enough_resources(data.gold_cost, data.lumber_cost, data.oil_cost, data.food_cost) > 0:
-		return false
-		
-	player_owner.spend_for_unit(data)
 	training_queue.append(data)
 	queue_updated.emit(training_queue)
 	return true
@@ -188,3 +188,6 @@ func select() -> void:
 func deselect() -> void:
 	super()
 	_hide_rally_marker()
+
+func upgrade_complete() -> void:
+	pass

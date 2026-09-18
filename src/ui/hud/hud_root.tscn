@@ -6,10 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://273ajucsnd77" path="res://assets/art/ui/buttons/UI - Menu Button 2 - 01.tres" id="4_yr8y3"]
 [ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="5_ejq7m"]
 [ext_resource type="PackedScene" uid="uid://di5f2clo85mcf" path="res://src/ui/hud/elements/minimap.tscn" id="6_1aevr"]
-[ext_resource type="Script" uid="uid://c8ahk4rkbe0n2" path="res://src/ui/hud/single_selection_panel.gd" id="6_yr8y3"]
-[ext_resource type="PackedScene" uid="uid://cidjmt5bpauh3" path="res://src/ui/hud/elements/unit_stats_box.tscn" id="7_v4x6o"]
-[ext_resource type="Script" uid="uid://bfie7qjoetlwc" path="res://src/ui/hud/multi_selection_panel.gd" id="8_ejq7m"]
-[ext_resource type="PackedScene" uid="uid://brjing0k5xjv2" path="res://src/ui/hud/elements/selected_unit_icon.tscn" id="9_q4k46"]
+[ext_resource type="PackedScene" uid="uid://djop7stxh05i8" path="res://src/ui/hud/single_selection_panel.tscn" id="7_ih71g"]
+[ext_resource type="PackedScene" uid="uid://5tew44vet73m" path="res://src/ui/hud/multi_selection_panel.tscn" id="8_duka1"]
 [ext_resource type="PackedScene" uid="uid://cyhf3jgmwgh72" path="res://src/ui/hud/elements/action_grid_mc.tscn" id="10_duka1"]
 [ext_resource type="Script" uid="uid://bj57gb6453cai" path="res://src/ui/hud/top_bar_hud.gd" id="11_ih71g"]
 [ext_resource type="Texture2D" uid="uid://dibevppt5yrf2" path="res://assets/no-image.png" id="12_duka1"]
@@ -19,9 +17,6 @@ colors = PackedColorArray(0.2270734, 0.17571586, 0.0033405628, 1, 0.22745098, 0.
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_e33uh"]
 gradient = SubResource("Gradient_n8phu")
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e33uh"]
-bg_color = Color(0.34117648, 0.34117648, 0.34117648, 1)
 
 [node name="Hud" type="Control" unique_id=1048413231]
 layout_mode = 3
@@ -115,53 +110,29 @@ text = "Exit"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VContainer" unique_id=138453965]
+[node name="MinimapContainer" type="MarginContainer" parent="PanelContainer/VContainer" unique_id=138453965]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 4
 
-[node name="ColorRect" type="ColorRect" parent="PanelContainer/VContainer/MarginContainer" unique_id=594677750]
+[node name="ColorRect" type="ColorRect" parent="PanelContainer/VContainer/MinimapContainer" unique_id=594677750]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 color = Color(0.096204735, 0.09620475, 0.096204735, 1)
 
-[node name="Minimap" parent="PanelContainer/VContainer/MarginContainer" unique_id=852637233 instance=ExtResource("6_1aevr")]
+[node name="Minimap" parent="PanelContainer/VContainer/MinimapContainer" unique_id=852637233 instance=ExtResource("6_1aevr")]
 layout_mode = 2
 
-[node name="SingleSelectionPanel" type="PanelContainer" parent="PanelContainer/VContainer" unique_id=1132322058]
-custom_minimum_size = Vector2(0, 102)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_e33uh")
-script = ExtResource("6_yr8y3")
-
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VContainer/SingleSelectionPanel" unique_id=686607889]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 2
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 2
-
-[node name="StatsBox" parent="PanelContainer/VContainer/SingleSelectionPanel/MarginContainer" unique_id=1285141887 instance=ExtResource("7_v4x6o")]
-layout_mode = 2
-
-[node name="MultiSelectionPanel" type="PanelContainer" parent="PanelContainer/VContainer" unique_id=2018418323]
+[node name="SingleSelectionPanel" parent="PanelContainer/VContainer" unique_id=5953012 instance=ExtResource("7_ih71g")]
 visible = false
-custom_minimum_size = Vector2(0, 104)
 layout_mode = 2
-script = ExtResource("8_ejq7m")
+size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="PanelContainer/VContainer/MultiSelectionPanel" unique_id=543805198]
-layout_mode = 2
-columns = 4
-
-[node name="MarginContainer" parent="PanelContainer/VContainer/MultiSelectionPanel/GridContainer" unique_id=1187726273 instance=ExtResource("9_q4k46")]
-layout_mode = 2
-
-[node name="Control" type="Control" parent="PanelContainer/VContainer" unique_id=320024987]
+[node name="MultiSelectionPanel" parent="PanelContainer/VContainer" unique_id=988015973 instance=ExtResource("8_duka1")]
 layout_mode = 2
 size_flags_vertical = 3
 

@@ -7,7 +7,6 @@
 
 [node name="Church" unique_id=1889694065 instance=ExtResource("1_sk6jw")]
 script = ExtResource("2_t3kfs")
-name = "Church"
 description = "Description Church"
 icon = ExtResource("3_2lmgm")
 spritesheet = ExtResource("4_kfaun")
@@ -22,3 +21,6 @@ can_attack_ground = false
 
 [node name="Sprite2D" parent="." index="2" unique_id=1061573362]
 region_rect = Rect2(304, 264, 96, 96)
+
+[node name="NavigationObstacle2D" parent="." index="4" unique_id=969329888]
+radius = 90.0

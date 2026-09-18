@@ -1,0 +1,73 @@
+[gd_scene format=3 uid="uid://bud4ulhsscapf"]
+
+[ext_resource type="Script" uid="uid://cfdedpxt0467v" path="res://src/ui/hud/elements/building_training_box.gd" id="1_n15np"]
+[ext_resource type="Texture2D" uid="uid://6steaegwtefg" path="res://assets/GameIcon.png" id="2_wt4ix"]
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="3_61s8b"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6e0s0"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4509804, 0.7647059, 0, 1)
+corner_detail = 2
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_we3ao"]
+bg_color = Color(0.44979727, 0.7631216, 0, 1)
+
+[node name="BuildingTrainingBox" type="VBoxContainer" unique_id=183992946]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+script = ExtResource("1_n15np")
+
+[node name="TrainingIconBoxContainer" type="HBoxContainer" parent="." unique_id=164080787]
+layout_mode = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="TrainingLabel" type="Label" parent="TrainingIconBoxContainer" unique_id=1323126532]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3_61s8b")
+theme_override_font_sizes/font_size = 8
+text = "Training:"
+horizontal_alignment = 2
+
+[node name="TrainingIcon" type="TextureRect" parent="TrainingIconBoxContainer" unique_id=549767480]
+custom_minimum_size = Vector2(40, 30)
+layout_mode = 2
+texture = ExtResource("2_wt4ix")
+expand_mode = 2
+
+[node name="Control" type="Control" parent="." unique_id=1493308336]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1477593454]
+layout_mode = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
+
+[node name="TrainingProgressBar" type="ProgressBar" parent="MarginContainer" unique_id=1683031029]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_fonts/font = ExtResource("3_61s8b")
+theme_override_font_sizes/font_size = 6
+theme_override_styles/background = SubResource("StyleBoxFlat_6e0s0")
+theme_override_styles/fill = SubResource("StyleBoxFlat_we3ao")
+max_value = 1.0

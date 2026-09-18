@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://r6jsukc2s40t"]
+
+[ext_resource type="Script" uid="uid://dty50j5hpu3lx" path="res://src/debug/grid_debug.gd" id="1_gv8ys"]
+
+[node name="GridDebug" type="Node2D" unique_id=786157863]
+script = ExtResource("1_gv8ys")
+grid_color = Color(0.30278748, 0.3116401, 0.21709102, 0.5019608)

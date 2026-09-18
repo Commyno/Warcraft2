@@ -5,9 +5,11 @@
 [ext_resource type="Texture2D" uid="uid://bq374xr5lts4w" path="res://assets/art/ui/icons/Icon - Humans Scout Tower.tres" id="3_ool3j"]
 [ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/art/race/humans/buildings/Humans - Human Buildings (Summer).png" id="4_w1dlg"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_u8tt1"]
+radius = 32.0
+
 [node name="Scout Tower" unique_id=1889694065 instance=ExtResource("1_0hojn")]
 script = ExtResource("2_u8tt1")
-name = "Scout Tower"
 description = "Description Scout Tower"
 icon = ExtResource("3_ool3j")
 spritesheet = ExtResource("4_w1dlg")
@@ -23,3 +25,9 @@ can_attack_ground = false
 
 [node name="Sprite2D" parent="." index="2" unique_id=1061573362]
 region_rect = Rect2(468, 5, 58, 63)
+
+[node name="CollisionShape2D" parent="." index="3" unique_id=223898250]
+shape = SubResource("CircleShape2D_u8tt1")
+
+[node name="NavigationObstacle2D" parent="." index="4" unique_id=969329888]
+radius = 58.0

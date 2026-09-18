@@ -48,3 +48,5 @@ func move_units_in_formation(units: Array, target_position: Vector2) -> void:
 		var final_slot_position = GridManager.get_available_destination(slot_position, unit, true)
 		
 		unit.move_to(final_slot_position)
+		var target_tile = GridManager.get_tile_coords(final_slot_position)
+		print("move to tile: (%d, %d) - Coord (%.1f, %.1f)" % [target_tile.x, target_tile.y, final_slot_position.x, final_slot_position.y])

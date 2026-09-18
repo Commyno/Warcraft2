@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://5tew44vet73m"]
+
+[ext_resource type="Script" uid="uid://bfie7qjoetlwc" path="res://src/ui/hud/multi_selection_panel.gd" id="1_tu4pg"]
+[ext_resource type="PackedScene" uid="uid://brjing0k5xjv2" path="res://src/ui/hud/elements/selected_unit_icon.tscn" id="2_mvymd"]
+
+[node name="MultiSelectionPanel" type="PanelContainer" unique_id=988015973]
+visible = false
+custom_minimum_size = Vector2(0, 104)
+script = ExtResource("1_tu4pg")
+
+[node name="GridContainer" type="GridContainer" parent="." unique_id=959294188]
+layout_mode = 2
+columns = 4
+
+[node name="MarginContainer" parent="GridContainer" unique_id=1187726273 instance=ExtResource("2_mvymd")]
+layout_mode = 2

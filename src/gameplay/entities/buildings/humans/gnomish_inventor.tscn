@@ -7,7 +7,6 @@
 
 [node name="Gnomish Inventor" unique_id=1889694065 instance=ExtResource("1_82j1d")]
 script = ExtResource("2_samsk")
-name = "Gnomish Inventor"
 description = "Description Gnomish Inventor"
 icon = ExtResource("3_plvai")
 spritesheet = ExtResource("4_h72jp")
@@ -22,3 +21,12 @@ can_attack_ground = false
 
 [node name="Sprite2D" parent="." index="2" unique_id=1061573362]
 region_rect = Rect2(404, 456, 96, 96)
+
+[node name="NavigationObstacle2D" parent="." index="4" unique_id=969329888]
+radius = 90.0
+
+[node name="HealthBar" parent="." index="5" unique_id=1652500946]
+offset_left = -48.0
+offset_top = -48.0
+offset_right = 48.0
+offset_bottom = -42.0

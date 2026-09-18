@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dk43yp5y68y7g"]
 
 [ext_resource type="Script" uid="uid://co2wsxlcixnf1" path="res://src/core/scenes/game_scene.gd" id="1_6ci8a"]
-[ext_resource type="Script" uid="uid://dty50j5hpu3lx" path="res://src/debug/GridDebug.gd" id="2_04vno"]
+[ext_resource type="Script" uid="uid://dty50j5hpu3lx" path="res://src/debug/grid_debug.gd" id="2_04vno"]
 [ext_resource type="PackedScene" uid="uid://c7tjgkp7hofeu" path="res://src/ui/pause_menu/confirm_end_menu.tscn" id="2_pne3y"]
 [ext_resource type="PackedScene" uid="uid://datkqsd5032nl" path="res://src/ui/transaction/end_game_screen.tscn" id="2_rul3w"]
 [ext_resource type="PackedScene" uid="uid://dwct7eo8yrrur" path="res://src/core/level_objects/building_placement_manager.tscn" id="3_ckpro"]
@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://d0a4dccu6h0bf" path="res://src/ui/pause_menu/pause_menu.tscn" id="12_337e0"]
 [ext_resource type="Resource" uid="uid://3gnq3xakkpnn" path="res://data/action_buttons/rally_point_action_data.tres" id="12_wfdp2"]
 [ext_resource type="Script" uid="uid://c5omt4lkh6711" path="res://src/core/scenes/debug_root.gd" id="13_620dx"]
+[ext_resource type="PackedScene" uid="uid://r6jsukc2s40t" path="res://src/debug/grid_debug.tscn" id="19_vbd6u"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_feqws"]
 parsed_geometry_type = 1
@@ -47,6 +48,9 @@ y_sort_enabled = true
 [node name="EffectsRoot" type="Node2D" parent="World/NavigationRegion2D" unique_id=554532313]
 z_index = 4
 
+[node name="GridDebug" parent="World/NavigationRegion2D/EffectsRoot" unique_id=786157863 instance=ExtResource("19_vbd6u")]
+z_index = 999
+
 [node name="Players" type="Node2D" parent="." unique_id=2111469624]
 
 [node name="Debugs" type="Node2D" parent="." unique_id=1969771342]
@@ -54,7 +58,6 @@ process_mode = 3
 
 [node name="GrigliaDebug" type="Node2D" parent="Debugs" unique_id=6476930]
 script = ExtResource("2_04vno")
-grid_size = 100
 grid_dimensions = Vector2i(32, 32)
 
 [node name="BuildingPlacementManager" parent="." unique_id=2018586043 instance=ExtResource("3_ckpro")]

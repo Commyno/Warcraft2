@@ -7,19 +7,20 @@ const SELECTED_UNIT_ICON : String = "uid://brjing0k5xjv2"
 func _ready() -> void:
 	hide() # All'avvio si nasconde da solo
 	
-	var manager = get_tree().get_first_node_in_group("selection_manager")
-	if manager:
-		manager.selection_changed.connect(_on_selection_changed)
+	#var manager = get_tree().get_first_node_in_group("selection_manager")
+	#if manager:
+		#manager.selection_changed.connect(_on_selection_changed)
 
-func _on_selection_changed(selected_objects: Array[Node2D]) -> void:
-	# Selezionate PIÙ di una unità? Mi mostro, altrimenti mi nascondo.
-	if selected_objects.size() > 1:
-		show()
-		_update_ui(selected_objects)
-	else:
-		hide()
+#func _on_selection_changed(selected_objects: Array[Node2D]) -> void:
+	## Selezionate PIÙ di una unità? Mi mostro, altrimenti mi nascondo.
+	#if selected_objects.size() > 1:
+		#show()
+		#_update_ui(selected_objects)
+	#else:
+		#hide()
+		#_update_ui(selected_objects)
 
-func _update_ui(entities: Array[Node2D]) -> void:
+func update_ui(entities: Array[Node2D]) -> void:
 	# 1. PULIZIA: Elimina tutti i vecchi nodi figli dal GridContainer
 	for child in grid_container.get_children():
 		child.queue_free()

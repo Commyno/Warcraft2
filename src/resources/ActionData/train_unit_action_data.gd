@@ -22,7 +22,7 @@ func can_execute(source_entities: Array, player: Player) -> bool:
 	
 	# 2. Verifica se il giocatore ha abbastanza risorse -> 0 altrimenti 1, 2 o 3
 	# 3. Verifica il limite di cibo (food / farm cap) -> 0 altrimenti 4
-	if player.has_enough_resources(unit_data.gold_cost, unit_data.lumber_cost, unit_data.oil_cost) > 0:
+	if player.has_enough_resources(unit_data.gold_cost, unit_data.lumber_cost, unit_data.oil_cost, 0) > 0:
 		return false
 	
 	return true
@@ -37,7 +37,7 @@ func _execute_action(source_entities: Array, _target_data = null) -> void:
 		return
 	
 	# 1. Scala le risorse per l'unità in produzione
-	player.spend_resources(unit_data.gold_cost, unit_data.lumber_cost, unit_data.oil_cost, unit_data.food_cost)
+	player.spend_resources(unit_data.gold_cost, unit_data.lumber_cost, unit_data.oil_cost, 0)
 	
 	# 2. Accoda l'unità nell'edificio di produzione
 	building.enqueue_unit(unit_data)

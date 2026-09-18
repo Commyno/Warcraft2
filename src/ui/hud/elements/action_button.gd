@@ -46,13 +46,13 @@ func _should_track_cooldown() -> bool:
 # --- SETUP / CLEAR ----------------------------------------------------------
 
 func setup(data: ActionData, player: Player) -> void:
-	action_data = data
-	current_player = player
-	_unit_caster = _resolve_caster()
-
 	if data == null:
 		clear_slot()
 		return
+
+	action_data = data
+	current_player = player
+	_unit_caster = _resolve_caster()
 
 	tooltip_text = _build_tooltip(data)
 	update_affordability()               # imposta disabled/modulate correttamente

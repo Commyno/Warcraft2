@@ -528,7 +528,7 @@ script = ExtResource("2_1q6u8")
 build_range = 40.0
 chop_speed = 1.0
 max_carry = 10
-available_actions = Array[ExtResource("3_7qhc5")]([ExtResource("4_2blpd"), ExtResource("5_vq64i"), ExtResource("6_qhgxn"), ExtResource("7_4b5el"), ExtResource("8_gii3i"), null, ExtResource("10_igboo"), null])
+available_actions = Array[ExtResource("3_7qhc5")]([ExtResource("4_2blpd"), ExtResource("5_vq64i"), ExtResource("6_qhgxn"), ExtResource("7_4b5el"), ExtResource("8_gii3i"), null, ExtResource("9_8ackg"), ExtResource("10_igboo"), null])
 
 [node name="Sprite2D" parent="." index="0" unique_id=1820984858]
 texture = ExtResource("3_uscwp")
@@ -537,12 +537,10 @@ region_rect = Rect2(330, 153, 29, 30)
 
 [node name="CollisionShape2D" parent="." index="3" unique_id=152319155]
 shape = SubResource("CircleShape2D_2jfo3")
-disabled = true
 
 [node name="NavigationAgent2D" parent="." index="4" unique_id=646343089]
 path_desired_distance = 32.0
 target_desired_distance = 16.0
-avoidance_enabled = false
 radius = 16.0
 debug_use_custom = true
 debug_path_custom_color = Color(1, 0.26666668, 1, 1)

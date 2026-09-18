@@ -7,7 +7,6 @@
 
 [node name="Shipyard" unique_id=1889694065 instance=ExtResource("1_0v36i")]
 script = ExtResource("2_k4yhv")
-name = "Shipyard"
 description = "Description Shipyard"
 icon = ExtResource("3_6a3m1")
 spritesheet = ExtResource("4_30115")
@@ -22,3 +21,6 @@ can_attack_ground = false
 
 [node name="Sprite2D" parent="." index="2" unique_id=1061573362]
 region_rect = Rect2(4, 456, 96, 96)
+
+[node name="NavigationObstacle2D" parent="." index="4" unique_id=969329888]
+radius = 90.0

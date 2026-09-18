@@ -5,12 +5,14 @@
 [ext_resource type="Texture2D" uid="uid://djb7phwbqyk1v" path="res://assets/art/ui/icons/Icon - Humans Oil Platform.tres" id="3_hchbt"]
 [ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/art/race/humans/buildings/Humans - Human Buildings (Summer).png" id="4_dt8ib"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_hchbt"]
+radius = 32.0
+
 [node name="Oil Platform" unique_id=1889694065 instance=ExtResource("1_74onh")]
 script = ExtResource("2_44lvx")
 resource_type = 3
 max_workers = 1
 resource_per_cycle = 10
-name = "Oil Platform"
 description = "Description Oil Platform"
 icon = ExtResource("3_hchbt")
 spritesheet = ExtResource("4_dt8ib")
@@ -29,3 +31,9 @@ can_attack_ground = false
 [node name="Sprite2D" parent="." index="2" unique_id=1061573362]
 texture = ExtResource("4_dt8ib")
 region_rect = Rect2(532, 5, 94, 92)
+
+[node name="CollisionShape2D" parent="." index="3" unique_id=223898250]
+shape = SubResource("CircleShape2D_hchbt")
+
+[node name="NavigationObstacle2D" parent="." index="4" unique_id=969329888]
+radius = 58.0

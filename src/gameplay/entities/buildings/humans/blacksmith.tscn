@@ -7,7 +7,6 @@
 
 [node name="Blacksmith" unique_id=1889694065 instance=ExtResource("1_c13ay")]
 script = ExtResource("2_ctxdg")
-name = "Blacksmith"
 description = "Description Blacksmith"
 icon = ExtResource("3_3t5ol")
 spritesheet = ExtResource("4_xdg0i")
@@ -22,3 +21,6 @@ can_attack_ground = false
 
 [node name="Sprite2D" parent="." index="2" unique_id=1061573362]
 region_rect = Rect2(4, 264, 96, 96)
+
+[node name="NavigationObstacle2D" parent="." index="4" unique_id=969329888]
+radius = 90.0

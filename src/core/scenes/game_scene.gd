@@ -91,7 +91,7 @@ func _ready() -> void:
 	# 4. Configuriamo HUD e Telecamera
 	_load_hud()
 	_setup_level_camera()
-	
+		
 # ==========================================
 # PLAYER SETUP
 # ==========================================
@@ -238,6 +238,7 @@ func _parse_group_layer(map_node: Node2D, layer_name: String, player: Player) ->
 #			spawn_entity_by_key(spawn_info["faction_key"], spawn_info["entity_key"], global_pos, player)
 			if data is BuildingData:
 				spawn_entity(data, global_pos, player)
+				#SpawnManager.spawn_building(data, global_pos, false, player)
 			elif data is UnitData:
 				SpawnManager.spawn_unit(data, global_pos, Vector2.ZERO, player)
 				#spawn_entity(data, global_pos, player)

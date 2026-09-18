@@ -5,9 +5,9 @@ enum BuildingState { IDLE, ACTIVE, DEPLETED, DESTROYED, INACTIVE }
 
 # --- PARAMETRI CONFIGURABILI ---
 @export_group("Edificio")
+@export var entity_name: String = "Edificio Base"
 @export var player_owner: Player # Assegnato allo spawn o tramite editor
 @export var player_color: Color = Color.BLUE : set = _set_player_color
-#@export var name: String = "Edificio Base"
 @export_multiline var description: String = ""
 @export var icon:  Texture = preload("uid://dibevppt5yrf2")
 @export var spritesheet: Texture2D
@@ -78,7 +78,8 @@ enum BuildingState { IDLE, ACTIVE, DEPLETED, DESTROYED, INACTIVE }
 @onready var selectable_component: SelectableComponent = get_node_or_null("SelectableComponent")
 
 # --- SEGNALI ---
-signal health_changed(new_health: float, max_health: float)
+signal health_changed(new_health: int, max_health: int)
+signal upgrade_completed(new_building_data: BuildingData)
 signal construction_completed
 signal construction_progress_updated(current_hp: float, max_hp: float)
 signal work_completed
@@ -86,10 +87,10 @@ signal depleted()
 signal destroyed()
 
 # --- VARIABILI INTERNE ---
+var entity_id: String
 var player_id: int = -1 : get = _get_player_id
 var is_depleted: bool = false
 var is_destroyed: bool = false
-var is_training: bool = false
 var current_health: int = 0:
 	set(value):
 		current_health = value
@@ -133,7 +134,8 @@ func _process(delta: float) -> void:
 		_advance_construction(delta)
 
 func setup(data: Resource) -> void:
-	self.name = data.name
+	self.entity_id = data.id
+	self.entity_name = data.name
 	self.description = data.description
 	self.icon = data.icon
 	self.tile_size = data.tile_size
@@ -210,6 +212,8 @@ func heal(amount: float) -> void:
 	_on_health_changed()
 
 func destroy_building() -> void:
+	player_owner.register_building_lost(entity_id, food_provided)
+	
 	is_destroyed = true
 	destroyed.emit()
 	
@@ -217,7 +221,6 @@ func destroy_building() -> void:
 		collision_shape.set_deferred("disabled", true)
 	if nav_obstacle:
 		nav_obstacle.affect_navigation_mesh = false
-		
 	if health_bar:
 		health_bar.visible = false
 		
@@ -283,6 +286,8 @@ func apply_upgrade(new_building_data: BuildingData) -> void:
 	if health_bar:
 		health_bar.max_value = max_health
 		health_bar.value = current_health
+	
+	upgrade_completed.emit(new_building_data)
 
 # --- GESTIONE UI ---
 
@@ -350,7 +355,9 @@ func complete_construction() -> void:
 	for builder in builders_to_release:
 		if is_instance_valid(builder):
 			builder.clear_assignment()
-
+	
+	player_owner.register_building_completed(entity_id, food_provided)
+	
 	_on_health_changed()
 	construction_completed.emit()
 	
@@ -358,3 +365,7 @@ func _set_building_region(region: Rect2) -> void:
 	if sprite2d  and region != Rect2():
 		sprite2d.region_enabled = true
 		sprite2d.region_rect = region
+
+func _get_selection_manager() -> Node:
+	var m := get_tree().get_nodes_in_group("selection_manager")
+	return m[0] if not m.is_empty() else null

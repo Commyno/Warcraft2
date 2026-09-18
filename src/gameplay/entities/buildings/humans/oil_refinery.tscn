@@ -7,7 +7,6 @@
 
 [node name="Oil Refinery" unique_id=1889694065 instance=ExtResource("1_15g26")]
 script = ExtResource("2_mws4e")
-name = "Oil Refinery"
 description = "Descriptio Oil Refinery"
 icon = ExtResource("2_u3nk2")
 spritesheet = ExtResource("3_kpao8")
@@ -22,3 +21,6 @@ can_attack_ground = false
 
 [node name="Sprite2D" parent="." index="2" unique_id=1061573362]
 region_rect = Rect2(204, 456, 96, 96)
+
+[node name="NavigationObstacle2D" parent="." index="4" unique_id=969329888]
+radius = 90.0

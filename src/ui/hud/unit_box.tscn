@@ -1,0 +1,96 @@
+[gd_scene format=3 uid="uid://dql7jibs1noyj"]
+
+[ext_resource type="Script" uid="uid://cuibngjhhf10x" path="res://src/ui/hud/unit_box.gd" id="1_uelax"]
+[ext_resource type="Texture2D" uid="uid://6steaegwtefg" path="res://assets/GameIcon.png" id="2_ku2qv"]
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="3_blnjj"]
+[ext_resource type="PackedScene" uid="uid://cidjmt5bpauh3" path="res://src/ui/hud/elements/unit_stats_box.tscn" id="4_ku2qv"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ydst5"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+corner_detail = 2
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nle1t"]
+bg_color = Color(0.44979727, 0.7631216, 0, 1)
+
+[node name="UnitBox" type="VBoxContainer" unique_id=1807296841]
+custom_minimum_size = Vector2(120, 0)
+script = ExtResource("1_uelax")
+
+[node name="UnitInfo" type="HBoxContainer" parent="." unique_id=1946229590]
+layout_mode = 2
+
+[node name="ImageVBoxContainer" type="VBoxContainer" parent="UnitInfo" unique_id=1821350177]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Portrait" type="TextureRect" parent="UnitInfo/ImageVBoxContainer" unique_id=566359504]
+custom_minimum_size = Vector2(40, 30)
+layout_mode = 2
+texture = ExtResource("2_ku2qv")
+expand_mode = 2
+
+[node name="Control" type="Control" parent="UnitInfo/ImageVBoxContainer" unique_id=822460197]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+
+[node name="HealthProgressBar" type="ProgressBar" parent="UnitInfo/ImageVBoxContainer" unique_id=1332354330]
+custom_minimum_size = Vector2(38, 2)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("3_blnjj")
+theme_override_font_sizes/font_size = 6
+theme_override_styles/background = SubResource("StyleBoxFlat_ydst5")
+theme_override_styles/fill = SubResource("StyleBoxFlat_nle1t")
+max_value = 1.0
+value = 0.02
+allow_lesser = true
+show_percentage = false
+
+[node name="HealthLabel" type="Label" parent="UnitInfo/ImageVBoxContainer" unique_id=913287378]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("3_blnjj")
+theme_override_font_sizes/font_size = 4
+text = "1200/1200"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NameVBoxContainer" type="VBoxContainer" parent="UnitInfo" unique_id=94673856]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="UnitInfo/NameVBoxContainer" unique_id=1294713674]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3_blnjj")
+theme_override_font_sizes/font_size = 10
+text = "Peasant"
+horizontal_alignment = 1
+
+[node name="Livello" type="Label" parent="UnitInfo/NameVBoxContainer" unique_id=1979742395]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3_blnjj")
+theme_override_font_sizes/font_size = 10
+text = "Livello 1"
+horizontal_alignment = 1
+
+[node name="UnitStatsBox" parent="." unique_id=221584717 instance=ExtResource("4_ku2qv")]
+layout_mode = 2

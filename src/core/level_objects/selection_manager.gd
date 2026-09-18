@@ -147,14 +147,41 @@ func _select_object(obj: Node2D) -> void:
 	currently_selected.append(obj)
 	if obj.has_method("select"):
 		obj.select()
+		# Connette il segnale per intercettare la distruzione del nodo
+		if not obj.tree_exiting.is_connected(_on_selected_object_exiting.bind(obj)):
+			obj.tree_exiting.connect(_on_selected_object_exiting.bind(obj))
+
+func _on_selected_object_exiting(obj: Node2D) -> void:
+	if currently_selected.has(obj):
+		currently_selected.erase(obj)
+		selection_changed.emit(currently_selected)
 
 func _clear_current_selection() -> void:
 	for obj in currently_selected:
 		if is_instance_valid(obj) and obj.has_method("deselect"):
 			obj.deselect()
+			# Disconnette il segnale per evitare chiamate accidentali
+			if obj.tree_exiting.is_connected(_on_selected_object_exiting.bind(obj)):
+				obj.tree_exiting.disconnect(_on_selected_object_exiting.bind(obj))
 	currently_selected.clear()
-	
-	# Funzione per trovare l'oggetto sotto il mouse
+
+func remove_from_selection(obj: Node2D) -> void:
+	if currently_selected.has(obj):
+		# 1. Chiama il deselect visivo/logico sull'oggetto
+		if obj.has_method("deselect"):
+			obj.deselect()
+			
+		# 2. Disconnette il segnale tree_exiting per evitare chiamate a vuoto future
+		if obj.tree_exiting.is_connected(_on_selected_object_exiting.bind(obj)):
+			obj.tree_exiting.disconnect(_on_selected_object_exiting.bind(obj))
+			
+		# 3. Lo rimuove dall'array
+		currently_selected.erase(obj)
+		
+		# 4. Notifica la UI (l'HUD) che la selezione è cambiata
+		selection_changed.emit(currently_selected)
+
+# Funzione per trovare l'oggetto sotto il mouse
 func _get_object_under_mouse(pos: Vector2) -> Node2D:
 	var space_state = get_world_2d().direct_space_state
 	var query = PhysicsPointQueryParameters2D.new()

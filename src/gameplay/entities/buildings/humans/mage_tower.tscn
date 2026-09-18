@@ -7,7 +7,6 @@
 
 [node name="Mage Tower" unique_id=1889694065 instance=ExtResource("1_aqu15")]
 script = ExtResource("2_ev041")
-name = "Mage Tower"
 description = "Description Mage Tower"
 icon = ExtResource("3_nwc4t")
 spritesheet = ExtResource("4_67twu")
@@ -22,3 +21,6 @@ can_attack_ground = false
 
 [node name="Sprite2D" parent="." index="2" unique_id=1061573362]
 region_rect = Rect2(404, 264, 96, 96)
+
+[node name="NavigationObstacle2D" parent="." index="4" unique_id=969329888]
+radius = 90.0

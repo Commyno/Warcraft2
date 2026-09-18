@@ -4,13 +4,12 @@
 [ext_resource type="Texture2D" uid="uid://bbigol2xir1tg" path="res://assets/art/race/humans/units/footman/Humans - Footman - Idle - downright - 00.tres" id="2_0xybu"]
 [ext_resource type="AnimationLibrary" uid="uid://bpuy2w1wp5d2u" path="res://assets/animations/units/Footman.res" id="3_tj522"]
 
-
 [sub_resource type="Animation" id="Animation_k12jx"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("UnitSprite:texture")
+tracks/0/path = NodePath("Sprite2D:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -280,11 +279,8 @@ graph_offset = Vector2(-142.41745, -95.234985)
 
 [node name="Footman" unique_id=330192060 instance=ExtResource("1_bmnxa")]
 
-[node name="UnitSprite" parent="." index="0" unique_id=1820984858]
+[node name="Sprite2D" parent="." index="0" unique_id=1820984858]
 texture = ExtResource("2_0xybu")
-offset = Vector2(0, 0)
-hframes = 1
-vframes = 1
 region_rect = Rect2(272, 142, 30, 44)
 
 [node name="AnimationPlayer" parent="." index="5" unique_id=1017868079]

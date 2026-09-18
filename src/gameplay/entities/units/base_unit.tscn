@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cpma8muug2wfn" path="res://src/gameplay/entities/units/base_unit.gd" id="1_1l5ov"]
 [ext_resource type="Script" uid="uid://3e5qiqyf3ev3" path="res://src/gameplay/entities/units/selection_ring.gd" id="3_lujnm"]
 [ext_resource type="Script" uid="uid://65xprcgadmde" path="res://src/gameplay/entities/selectable_component.gd" id="4_fm4u4"]
+[ext_resource type="Script" uid="uid://dlye5tmf11md3" path="res://src/gameplay/entities/units/rettangolo_debug.gd" id="4_ri0vt"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_omghk"]
 radius = 16.0
@@ -299,3 +300,6 @@ show_percentage = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1264182809]
 shape = SubResource("CircleShape2D_e33uh")
+
+[node name="RectangleDebug" type="Node2D" parent="." unique_id=1503078220]
+script = ExtResource("4_ri0vt")

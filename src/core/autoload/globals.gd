@@ -15,3 +15,6 @@ enum MapTilesetType { MAP_DEFAULT, RANDOM, FOREST }
 enum ColorType { RED, BLUE, GRAY, ORANGE, PINK, GREEN, WHITE, YELLOW }
 
 enum ResourceType { NONE, WOOD, GOLD, OIL }
+
+# Costante del bonus descritto dal manuale
+const ELVEN_MILL_WOOD_BONUS: int = 25

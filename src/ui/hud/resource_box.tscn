@@ -1,0 +1,130 @@
+[gd_scene format=3 uid="uid://bht82plvc3gou"]
+
+[ext_resource type="Script" uid="uid://chd43svaw6o2" path="res://src/ui/hud/resource_box.gd" id="1_trriy"]
+[ext_resource type="Texture2D" uid="uid://6steaegwtefg" path="res://assets/GameIcon.png" id="2_td18e"]
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="3_qlq4c"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_musuh"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+corner_detail = 2
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rm04a"]
+bg_color = Color(0.44979727, 0.7631216, 0, 1)
+
+[node name="ResourceBox" type="VBoxContainer" unique_id=851646842]
+custom_minimum_size = Vector2(120, 0)
+script = ExtResource("1_trriy")
+
+[node name="ResourceInfo" type="HBoxContainer" parent="." unique_id=491881525]
+layout_mode = 2
+
+[node name="ImageVBoxContainer" type="VBoxContainer" parent="ResourceInfo" unique_id=297035004]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Portrait" type="TextureRect" parent="ResourceInfo/ImageVBoxContainer" unique_id=121606772]
+custom_minimum_size = Vector2(40, 30)
+layout_mode = 2
+texture = ExtResource("2_td18e")
+expand_mode = 2
+
+[node name="Control" type="Control" parent="ResourceInfo/ImageVBoxContainer" unique_id=1855897494]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+
+[node name="HealthProgressBar" type="ProgressBar" parent="ResourceInfo/ImageVBoxContainer" unique_id=1474502752]
+custom_minimum_size = Vector2(38, 2)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("3_qlq4c")
+theme_override_font_sizes/font_size = 6
+theme_override_styles/background = SubResource("StyleBoxFlat_musuh")
+theme_override_styles/fill = SubResource("StyleBoxFlat_rm04a")
+max_value = 1.0
+value = 0.02
+allow_lesser = true
+show_percentage = false
+
+[node name="HealthLabel" type="Label" parent="ResourceInfo/ImageVBoxContainer" unique_id=1398452617]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("3_qlq4c")
+theme_override_font_sizes/font_size = 4
+text = "1200/1200"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NameVBoxContainer" type="VBoxContainer" parent="ResourceInfo" unique_id=2084207008]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="ResourceInfo/NameVBoxContainer" unique_id=2030362335]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3_qlq4c")
+theme_override_font_sizes/font_size = 10
+text = "Peasant"
+horizontal_alignment = 1
+
+[node name="Livello" type="Label" parent="ResourceInfo/NameVBoxContainer" unique_id=133135958]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3_qlq4c")
+theme_override_font_sizes/font_size = 10
+text = "Livello 1"
+horizontal_alignment = 1
+
+[node name="ResourceStats" type="HBoxContainer" parent="." unique_id=512194451]
+layout_mode = 2
+
+[node name="LabelVBoxContainer" type="VBoxContainer" parent="ResourceStats" unique_id=207087642]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="AmountLabel" type="Label" parent="ResourceStats/LabelVBoxContainer" unique_id=1812785876]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3_qlq4c")
+theme_override_font_sizes/font_size = 8
+text = "Gold Left: "
+horizontal_alignment = 2
+
+[node name="ValueVBoxContainer" type="VBoxContainer" parent="ResourceStats" unique_id=1529924889]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="AmountValue" type="Label" parent="ResourceStats/ValueVBoxContainer" unique_id=969796875]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3_qlq4c")
+theme_override_font_sizes/font_size = 8
+text = "0"

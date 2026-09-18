@@ -1,0 +1,120 @@
+[gd_scene format=3 uid="uid://c6jbiyb8naevj"]
+
+[ext_resource type="Script" uid="uid://dc0fp3wso5d7o" path="res://src/ui/hud/elements/building_production_box.gd" id="1_i4bf3"]
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="2_nmwb2"]
+
+[node name="BuildingProductionBox" type="VBoxContainer" unique_id=183992946]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+script = ExtResource("1_i4bf3")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=601982684]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="HBoxContainer" unique_id=1826660143]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_nmwb2")
+theme_override_font_sizes/font_size = 12
+text = "Production"
+horizontal_alignment = 1
+
+[node name="Control" type="Control" parent="HBoxContainer" unique_id=460417365]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GoldResource" type="HBoxContainer" parent="." unique_id=9189719]
+layout_mode = 2
+alignment = 1
+
+[node name="AmountLabel" type="Label" parent="GoldResource" unique_id=1607417831]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_nmwb2")
+theme_override_font_sizes/font_size = 10
+text = "Gold:"
+horizontal_alignment = 2
+
+[node name="AmountValue" type="Label" parent="GoldResource" unique_id=760603187]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_nmwb2")
+theme_override_font_sizes/font_size = 8
+text = "100"
+
+[node name="WoodResource" type="HBoxContainer" parent="." unique_id=1525521603]
+layout_mode = 2
+alignment = 1
+
+[node name="AmountLabel" type="Label" parent="WoodResource" unique_id=1647465999]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_nmwb2")
+theme_override_font_sizes/font_size = 10
+text = "Lumber:"
+horizontal_alignment = 2
+
+[node name="AmountValue" type="Label" parent="WoodResource" unique_id=1443316696]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_nmwb2")
+theme_override_font_sizes/font_size = 8
+text = "100"
+
+[node name="OilResource" type="HBoxContainer" parent="." unique_id=1487976887]
+layout_mode = 2
+alignment = 1
+
+[node name="AmountLabel" type="Label" parent="OilResource" unique_id=1754983237]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_nmwb2")
+theme_override_font_sizes/font_size = 10
+text = "Oil:"
+horizontal_alignment = 2
+
+[node name="AmountValue" type="Label" parent="OilResource" unique_id=1259436547]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_nmwb2")
+theme_override_font_sizes/font_size = 8
+text = "100"
+
+[node name="Control" type="Control" parent="." unique_id=1493308336]
+layout_mode = 2
+size_flags_vertical = 3

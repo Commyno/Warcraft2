@@ -1,0 +1,137 @@
+[gd_scene format=3 uid="uid://cbsktlxweb2sr"]
+
+[ext_resource type="Script" uid="uid://bhm358q7n7vak" path="res://src/ui/hud/building_box.gd" id="1_vcrbm"]
+[ext_resource type="Texture2D" uid="uid://6steaegwtefg" path="res://assets/GameIcon.png" id="2_hajic"]
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="3_6bxsb"]
+[ext_resource type="PackedScene" uid="uid://bud4ulhsscapf" path="res://src/ui/hud/elements/building_training_box.tscn" id="4_4ve7r"]
+[ext_resource type="PackedScene" uid="uid://l83peu7cjsl" path="res://src/ui/hud/elements/building_stats_box.tscn" id="5_7s165"]
+[ext_resource type="PackedScene" uid="uid://c6jbiyb8naevj" path="res://src/ui/hud/elements/building_production_box.tscn" id="6_ywlsy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7s165"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+corner_detail = 2
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ywlsy"]
+bg_color = Color(0.44979727, 0.7631216, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w8h8a"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4509804, 0.7647059, 0, 1)
+corner_detail = 2
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u15ge"]
+bg_color = Color(0.44979727, 0.7631216, 0, 1)
+
+[node name="BuildingBox" type="VBoxContainer" unique_id=1782490716]
+custom_minimum_size = Vector2(120, 100)
+script = ExtResource("1_vcrbm")
+
+[node name="BuildingInfo" type="HBoxContainer" parent="." unique_id=1815644186]
+layout_mode = 2
+
+[node name="ImageVBoxContainer" type="VBoxContainer" parent="BuildingInfo" unique_id=355772320]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Portrait" type="TextureRect" parent="BuildingInfo/ImageVBoxContainer" unique_id=1610848025]
+custom_minimum_size = Vector2(40, 30)
+layout_mode = 2
+texture = ExtResource("2_hajic")
+expand_mode = 2
+
+[node name="Control" type="Control" parent="BuildingInfo/ImageVBoxContainer" unique_id=772108025]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+
+[node name="HealthProgressBar" type="ProgressBar" parent="BuildingInfo/ImageVBoxContainer" unique_id=61757883]
+custom_minimum_size = Vector2(38, 2)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("3_6bxsb")
+theme_override_font_sizes/font_size = 6
+theme_override_styles/background = SubResource("StyleBoxFlat_7s165")
+theme_override_styles/fill = SubResource("StyleBoxFlat_ywlsy")
+max_value = 1.0
+value = 0.02
+allow_lesser = true
+show_percentage = false
+
+[node name="HealthLabel" type="Label" parent="BuildingInfo/ImageVBoxContainer" unique_id=1471701731]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("3_6bxsb")
+theme_override_font_sizes/font_size = 4
+text = "1200/1200"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NameVBoxContainer" type="VBoxContainer" parent="BuildingInfo" unique_id=1855453999]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="BuildingInfo/NameVBoxContainer" unique_id=265486980]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3_6bxsb")
+theme_override_font_sizes/font_size = 10
+text = "Peasant"
+horizontal_alignment = 1
+
+[node name="Livello" type="Label" parent="BuildingInfo/NameVBoxContainer" unique_id=1174188472]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3_6bxsb")
+theme_override_font_sizes/font_size = 10
+text = "Livello 1"
+horizontal_alignment = 1
+
+[node name="BuildingTrainingBox" parent="." unique_id=183992946 instance=ExtResource("4_4ve7r")]
+layout_mode = 2
+
+[node name="BuildingStatsBox" parent="." unique_id=558669695 instance=ExtResource("5_7s165")]
+layout_mode = 2
+
+[node name="BuildingProductionBox" parent="." unique_id=29025015 instance=ExtResource("6_ywlsy")]
+layout_mode = 2
+
+[node name="BuildingConstrucionBox" type="MarginContainer" parent="." unique_id=2046834147]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="BuildProgressBar" type="ProgressBar" parent="BuildingConstrucionBox" unique_id=2085416223]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_fonts/font = ExtResource("3_6bxsb")
+theme_override_font_sizes/font_size = 6
+theme_override_styles/background = SubResource("StyleBoxFlat_w8h8a")
+theme_override_styles/fill = SubResource("StyleBoxFlat_u15ge")
+max_value = 1.0

@@ -7,6 +7,7 @@ extends Node
 signal game_over(victorious: bool)
 signal resources_changed(gold: int, lumber: int, oil: int, food_used: int, food_max: int)
 signal upgrade_unlocked(upgrade_id: String, new_level: int)
+signal modifier_changed(resource: Globals.ResourceType)
 
 # ==========================================
 # CONSTANTS (PUNTEGGI)
@@ -68,6 +69,12 @@ const BTDP_HERO_EXCEPTIONS = {
 @export var is_human       : bool = false
 @export var is_ai          : bool = false
 @export var is_local_player: bool = false
+
+# Quantità di raccolta base
+@export var gold_gather_base: int = 100
+@export var wood_gather_base: int = 100
+@export var oil_gather_base: int = 100
+
 #var spawn_position         : Vector2i = Vector2i.ZERO
 var spawn_position         : Vector2
 var color                  : Color = Color.WHITE
@@ -75,7 +82,6 @@ var faction                : Globals.RaceType = Globals.RaceType.HUMANS #String 
 var team                   : int = 1
 var has_won                : bool = false
 var total_score            : int = 0
-
 
 # ==========================================
 # VARIABLES: RESOURCES
@@ -106,12 +112,24 @@ var unlocked_upgrades: Dictionary = {}
 # Mappa degli edifici attivi per tipo per controlli Tech-Tree (es. {"barracks": 2, "blacksmith": 1})
 var active_building_types: Dictionary = {}
 
+# Mappa dei modificatori che forniscono un bonus alla raccolta dell'oro (Chiave: ID sorgente, Valore: quantità bonus)
+var gold_modifiers: Dictionary = {}
+
+# Mappa dei modificatori che forniscono un bonus alla raccolta del legno (Chiave: ID sorgente, Valore: quantità bonus)
+var wood_modifiers: Dictionary = {}
+
+# Mappa dei modificatori che forniscono un bonus alla raccolta del petrolio (Chiave: ID sorgente, Valore: quantità bonus)
+var oil_modifiers: Dictionary = {}
 
 # ==========================================
 # VARIABLES: ENTITY COUNTERS
 # ==========================================
 var current_units_count     : int = 0
 var current_buildings_count : int = 0
+# Contatore per sapere quanti Town Hall possiede il giocatore
+var town_hall_count: int = 0
+# Contatore per sapere quanti Elven Lumber Mill possiede il giocatore
+var elven_lumber_mills_count: int = 0
 
 # ==========================================
 # VARIABLES: LIFETIME STATISTICS (TOTALS)
@@ -157,10 +175,6 @@ func setup(id: int, start_pos: Vector2i, config: Dictionary) -> void:
 # ==========================================
 # RESOURCE MANAGEMENT
 # ==========================================
-#func has_enough_resources(gold: int, lumber: int, oil: int, food: int = 0) -> bool:
-	#var has_res = _gold_counts >= gold and _lumber_counts >= lumber and _oil_counts >= oil
-	#var has_food = (_food_used + food) <= _food_max
-	#return has_res and has_food
 
 func has_enough_resources(gold: int, lumber: int, oil: int, food: int = 0) -> int:
 	if _gold_counts < gold:
@@ -173,7 +187,10 @@ func has_enough_resources(gold: int, lumber: int, oil: int, food: int = 0) -> in
 		return 4
 	return 0
 
-func spend_resources(gold: int, lumber: int, oil: int, food: int) -> void:
+func has_enough_food(food: int = 0) -> bool:
+	return (_food_used + food) <=_food_max
+
+func spend_resources(gold: int, lumber: int, oil: int, food: int = 0) -> void:
 	_gold_counts -= gold
 	_lumber_counts -= lumber
 	_oil_counts -= oil
@@ -217,6 +234,34 @@ func remove_food_capacity(amount: int) -> void:
 func _notify_resources_changed() -> void:
 	resources_changed.emit(_gold_counts, _lumber_counts, _oil_counts, _food_used, _food_max)
 
+# --- CALCOLO VALORI ---
+
+func get_gold_bonus() -> int:
+	var total_bonus: int = 0
+	for bonus_value in gold_modifiers.values():
+		total_bonus += bonus_value
+	return total_bonus
+
+func get_gold_total() -> int:
+	return gold_gather_base + get_gold_bonus()
+
+func get_wood_bonus() -> int:
+	var total_bonus: int = 0
+	for bonus_value in wood_modifiers.values():
+		total_bonus += bonus_value
+	return total_bonus
+
+func get_wood_total() -> int:
+	return wood_gather_base + get_wood_bonus()
+
+func get_oil_bonus() -> int:
+	var total_bonus: int = 0
+	for bonus_value in oil_modifiers.values():
+		total_bonus += bonus_value
+	return total_bonus
+
+func get_oil_total() -> int:
+	return oil_gather_base + get_oil_bonus()
 
 # ==========================================
 # UPGRADES & TECH TREE
@@ -231,6 +276,31 @@ func get_upgrade_level(upgrade_id: String) -> int:
 func has_building(building_id: String) -> bool:
 	return active_building_types.get(building_id, 0) > 0
 
+# --- GESTIONE MODIFICATORI RACCOLTA RISORSE ---
+
+func add_gold_modifier(source_id: String, amount: int) -> void:
+	gold_modifiers[source_id] = amount
+	modifier_changed.emit(Globals.ResourceType.GOLD)
+
+func remove_gold_modifier(source_id: String) -> void:
+	gold_modifiers.erase(source_id)
+	modifier_changed.emit(Globals.ResourceType.GOLD)
+
+func add_wood_modifier(source_id: String, amount: int) -> void:
+	wood_modifiers[source_id] = amount
+	modifier_changed.emit(Globals.ResourceType.WOOD)
+
+func remove_wood_modifier(source_id: String) -> void:
+	wood_modifiers.erase(source_id)
+	modifier_changed.emit(Globals.ResourceType.WOOD)
+
+func add_oil_modifier(source_id: String, amount: int) -> void:
+	oil_modifiers[source_id] = amount
+	modifier_changed.emit(Globals.ResourceType.OIL)
+
+func remove_oil_modifier(source_id: String) -> void:
+	oil_modifiers.erase(source_id)
+	modifier_changed.emit(Globals.ResourceType.OIL)
 
 # ==========================================
 # ENTITY REGISTRATION (TRACKING IN REAL TIME)
@@ -251,6 +321,13 @@ func register_building_completed(building_id: String, food_provided: int = 0) ->
 	
 	if food_provided > 0:
 		add_food_capacity(food_provided)
+	
+# --- GESTIONE BONUS PASSIVI ---
+	#TODO: Aggiornare l'id per gli orchi
+	if building_id == "humans_elven_lumber_mill" or building_id == "orc_elven_lumber_mill":
+		# add_lumber_modifier usa un dizionario, quindi chiamarlo più volte 
+		# sovrascrive semplicemente la chiave "elven_mill_passive" a 25, senza sommarla
+		add_wood_modifier("elven_mill_passive", Globals.ELVEN_MILL_WOOD_BONUS)
 
 func register_building_lost(building_id: String, food_provided: int = 0) -> void:
 	current_buildings_count = maxi(0, current_buildings_count - 1)
@@ -260,9 +337,15 @@ func register_building_lost(building_id: String, food_provided: int = 0) -> void
 		
 	if food_provided > 0:
 		remove_food_capacity(food_provided)
-		
+	
+	# --- RIMOZIONE BONUS PASSIVI ---
+	#TODO: Aggiornare l'id per gli orchi
+	if building_id == "humans_elven_lumber_mill" or building_id == "orc_elven_lumber_mill":
+		# Controlliamo se non abbiamo più segherie attive
+		if active_building_types.get(building_id, 0) == 0:
+			remove_wood_modifier("elven_mill_passive")
+	
 	check_defeat()
-
 
 # ==========================================
 # STATISTICS & SCORE TRACKING

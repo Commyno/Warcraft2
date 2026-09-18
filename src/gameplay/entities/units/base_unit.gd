@@ -7,9 +7,9 @@ enum UnitState { IDLE, MOVING, ATTACKING, PATROLING, BUILDING, REPARING, MINING,
 
 # --- PARAMETRI CONFIGURABILI DALL'INSPECTOR ---
 @export_group("Unità")
+@export var entity_name:  String = "Unita"
 @export var player_owner: Player # Assegnato allo spawn o tramite editor
 @export var player_color: Color = Color.BLUE : set = _set_player_color
-#@export var name:  String
 @export_multiline var description: String = ""
 @export var icon:  Texture
 @export var type: Globals.UnitType = Globals.UnitType.LAND
@@ -61,13 +61,14 @@ enum UnitState { IDLE, MOVING, ATTACKING, PATROLING, BUILDING, REPARING, MINING,
 
 # --- SEGNALI ---
 signal health_changed(new_health: float, max_health: float)
-signal died()
+signal destroyed()
 
 # Variabili di stato nello script dell'unità
 const INTERACT_DISTANCE: float = 40.0           # Quanto vicino deve essere per intereggire
 
-# --- VARIABILI VITA ---
+var entity_id: String = ""
 var player_id: int = -1 : get = _get_player_id
+# --- VARIABILI VITA ---
 var current_health: float = 0.0:
 	set(value):
 		current_health = value
@@ -125,7 +126,8 @@ func _ready() -> void:
 		#health_bar.value = current_health
 
 func setup(data: Resource) -> void:
-	self.name = data.name
+	self.entity_id = data.id
+	self.entity_name = data.name
 	self.description = data.description
 	self.type = data.type
 	self.icon = data.icon
@@ -150,76 +152,54 @@ func _process(delta: float) -> void:
 func _physics_process(_delta: float) -> void:
 	if is_dead:
 		return
-	
 	var current_position: Vector2 = global_position
-	var distance_to_target: float = 0
-	
+
 	if unit_state == UnitState.MOVING and nav_agent:
-		distance_to_target = global_position.distance_to(nav_agent.target_position)
-		
-		# 1. SIAMO FISICAMENTE VICINI AL BERSAGLIO?
-		if distance_to_target <= current_offset_target:
-			
-			# Tolleranza di scivolamento
-			if current_target == null and current_tile_target == Vector2i(-1, -1) and distance_to_target > 3.0:
-				var global_position_tmp = global_position.move_toward(nav_agent.target_position, move_speed * _delta)
-				global_position = global_position_tmp
-				if nav_agent.avoidance_enabled:
-					nav_agent.set_velocity(Vector2.ZERO)
-				return 
+
+		# 1. SE IL NAV AGENT HA FINITO
+		if nav_agent.is_navigation_finished():
+			var distance_to_target = global_position.distance_to(nav_agent.target_position)	
 			
 			unit_state = UnitState.IDLE
 			velocity = Vector2.ZERO
 			update_animation()
-
-			# --- STRADA 1: INTERAZIONE NODO ---
-			if current_target != null:
-				if nav_agent:
-					nav_agent.set_velocity(Vector2.ZERO) 
-					nav_agent.target_position = global_position
-					
-				var target_to_interact = current_target 
-				_start_interaction(target_to_interact)
-				
-			# --- STRADA 2: INTERAZIONE TILE ---
-			elif current_tile_target != Vector2i(-1, -1):
-				if nav_agent:
-					nav_agent.set_velocity(Vector2.ZERO)
-					nav_agent.target_position = global_position
-					
-				_start_tile_interaction(current_tile_target)
-				
-			# --- STRADA 3: MOVIMENTO NORMALE (Punto a terra) ---
-			else:
-				global_position = nav_agent.target_position 
-				# PRELAZIONE: Registriamo ufficialmente questo tile come occupato!
-				var current_tile = GridManager.get_tile_coords(global_position)
-				GridManager.try_reserve_tile(current_tile, self)
 			
-			return
-			
-		# 2. SE IL NAV AGENT HA FINITO MA SIAMO LONTANI (es. bloccati)
-		elif nav_agent.is_navigation_finished():
-			unit_state = UnitState.IDLE
-			velocity = Vector2.ZERO
-			update_animation()
-
-			if distance_to_target <= 50.0:
-				if nav_agent:
-					nav_agent.set_velocity(Vector2.ZERO)
-					nav_agent.target_position = global_position
-				
-				# Se era un Nodo (es. Miniera)
+			# BLOCCATI MA NON SIAMO LONTANI
+			if distance_to_target <= 22.0:
+				# --- STRADA 1: INTERAZIONE NODO ---
 				if current_target != null:
+					if nav_agent:
+						nav_agent.set_velocity(Vector2.ZERO)
+						nav_agent.target_position = global_position
+
 					var target_to_interact = current_target 
 					_start_interaction(target_to_interact)
-					
-				# Se era un Tile (es. Albero)
+
+				# --- STRADA 2: INTERAZIONE TILE ---
 				elif current_tile_target != Vector2i(-1, -1):
+					if nav_agent:
+						nav_agent.set_velocity(Vector2.ZERO)
+						nav_agent.target_position = global_position
+
 					_start_tile_interaction(current_tile_target)
+
+				# --- STRADA 3: MOVIMENTO NORMALE (Punto a terra) ---
+				else:
+					# Se siamo ancora a qualche pixel, scivola fluido invece di teletrasportare
+					if distance_to_target > 3.0:
+						global_position = global_position.move_toward(nav_agent.target_position, move_speed * _delta)
+						update_animation()
+						return   # non "arrivare" ancora, continua il prossimo frame
+
+					# PRELAZIONE: Registriamo ufficialmente questo tile come occupato!
+					global_position = nav_agent.target_position   # ← snap esatto sul punto
+					var current_tile = GridManager.get_tile_coords(global_position)
+					GridManager.try_reserve_tile(current_tile, self)
+			
+			# BLOCCATI MA SIAMO LONTANI, QUINDI FERMATI E BASTA
 			return
 
-		# 3. MOVIMENTO (Siamo ancora in viaggio)
+		# 2. MOVIMENTO (Siamo ancora in viaggio)
 		var next_path_position: Vector2 = nav_agent.get_next_path_position()
 		intended_dir = current_position.direction_to(next_path_position)
 		var intended_velocity: Vector2 = intended_dir * move_speed
@@ -434,7 +414,7 @@ func die() -> void:
 		return # Evita che la funzione venga chiamata più volte
 		
 	is_dead = true
-	died.emit()
+	destroyed.emit()
 	
 	# Nasconde la barra della vita
 	if health_bar:
@@ -515,7 +495,7 @@ func interact_with(target: Node2D) -> void:
 				break 
 		
 		var optimal_target_pos = target.global_position + (direction_to_unit * edge_offset)
-		move_to(optimal_target_pos, 5.0) 
+		move_to(optimal_target_pos, 5.0)
 	else:
 		move_to(target.global_position, 16.0)
 
@@ -533,3 +513,7 @@ func _start_interaction(target: Node2D) -> void:
 # Funzione virtuale che il Peasant sovrascriverà
 func _start_tile_interaction(tile_coords: Vector2i) -> void:
 	pass
+
+func _get_selection_manager() -> Node:
+	var m := get_tree().get_nodes_in_group("selection_manager")
+	return m[0] if not m.is_empty() else null

@@ -109,18 +109,20 @@ func _start_interaction(target: Node2D) -> void:
 			update_animation()
 			
 	# --- 3. GESTIONE DEPOSITO (Municipio / Lumber Mill) ---
-		elif target.is_in_group("town_hall") or target.is_in_group("lumber_mill"):
+		elif target.is_resource_dropoff:
 			if current_resource != Globals.ResourceType.NONE and resource_amount > 0:
 				if current_resource == Globals.ResourceType.GOLD: player_owner.add_gold(resource_amount)
 				elif current_resource == Globals.ResourceType.WOOD: player_owner.add_lumber(resource_amount)
 				elif current_resource == Globals.ResourceType.OIL: player_owner.add_oil(resource_amount)
-
+				
 				current_resource = Globals.ResourceType.NONE
 				resource_amount = 0
 				unit_state = UnitState.IDLE
 				update_animation()
 				
-				deselect()
+				var selection_manager = _get_selection_manager()
+				if is_instance_valid(selection_manager):
+					selection_manager.remove_from_selection(self)
 				
 				# LEGGE DALLA MEMORIA SICURA (target_mine e target_resource_tile)
 				if current_assignment == AssignmentState.GATHER_GOLD and target_mine != null:
@@ -134,11 +136,10 @@ func enter_mine(mine: GoldMine) -> void:
 	if !is_instance_valid(current_target) or current_target.is_depleted:
 		return
 	
-	#is_moving = false
 	unit_state = UnitState.MINING
 	
 	velocity = Vector2.ZERO
-	set_physics_process(false) # Spostato qui in alto!
+	set_physics_process(false)
 
 	# 1. Memorizziamo la direzione da cui è entrato rispetto al centro della miniera
 	enter_direction = (global_position - mine.global_position).normalized()
@@ -159,13 +160,9 @@ func enter_mine(mine: GoldMine) -> void:
 		if is_in_group("selectable_units"):
 			remove_from_group("selectable_units")
 	
-	deselect()
-	
-	# Sganciamo il Peasant dalla selezione attiva del giocatore
-	var sm = get_tree().get_first_node_in_group("selection_manager")
-	if sm and sm.currently_selected.has(self):
-		sm.currently_selected.erase(self)
-		sm.selection_changed.emit(sm.currently_selected)
+	var selection_manager = _get_selection_manager()
+	if is_instance_valid(selection_manager):
+		selection_manager.remove_from_selection(self)
 	
 	# --- NUOVO: Calcolo dinamico della durata basato su move_speed ---
 	var distance = global_position.distance_to(mine.global_position)
@@ -252,9 +249,11 @@ func exit_mine(gold_amount: int) -> void:
 	if has_node("SelectableComponent"):
 		if !is_in_group("selectable_units"):
 			add_to_group("selectable_units")
-			
-	deselect()
 	
+	var selection_manager = _get_selection_manager()
+	if is_instance_valid(selection_manager):
+		selection_manager.remove_from_selection(self)
+
 	# 3. PAUSA DI SINCRONIZZAZIONE: Diamo a Godot il tempo di capire le nuove coordinate
 	await get_tree().physics_frame
 	await get_tree().physics_frame
