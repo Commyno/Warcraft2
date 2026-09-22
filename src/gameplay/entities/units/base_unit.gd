@@ -7,11 +7,11 @@ enum UnitState { IDLE, MOVING, ATTACKING, PATROLING, BUILDING, REPARING, MINING,
 
 # --- PARAMETRI CONFIGURABILI DALL'INSPECTOR ---
 @export_group("Unità")
-@export var entity_name:  String = "Unita"
+#@export var entity_name:  String = "Unita"
 @export var player_owner: Player # Assegnato allo spawn o tramite editor
 @export var player_color: Color = Color.BLUE : set = _set_player_color
-@export_multiline var description: String = ""
-@export var icon:  Texture
+#@export_multiline var description: String = ""
+#@export var icon:  Texture
 @export var type: Globals.UnitType = Globals.UnitType.LAND
 
 @export_group("Azioni e Abilita")
@@ -127,10 +127,13 @@ func _ready() -> void:
 
 func setup(data: Resource) -> void:
 	self.entity_id = data.id
-	self.entity_name = data.name
-	self.description = data.description
+	#self.entity_name = data.name
+	#self.description = data.description
+	#self.icon = data.icon
+	if selectable_component:
+		selectable_component.setup(data.name, data.description, data.icon)
+	
 	self.type = data.type
-	self.icon = data.icon
 	self.max_health = data.max_health
 	self.health_regen = data.health_regen
 	self.max_mana = data.max_mana
@@ -244,6 +247,12 @@ func is_selected() -> bool:
 	if selectable_component:
 		return selectable_component.is_selected
 	return false
+	
+func remove_from_selection() -> void:
+	var selection_manager = _get_selection_manager()
+	if is_instance_valid(selection_manager):
+		selection_manager.remove_from_selection(self)
+
 
 # --- SISTEMA DI MOVIMENTO ---
 

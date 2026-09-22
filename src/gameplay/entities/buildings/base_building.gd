@@ -5,11 +5,11 @@ enum BuildingState { IDLE, ACTIVE, DEPLETED, DESTROYED, INACTIVE }
 
 # --- PARAMETRI CONFIGURABILI ---
 @export_group("Edificio")
-@export var entity_name: String = "Edificio Base"
+#@export var entity_name: String = "Edificio Base"
 @export var player_owner: Player # Assegnato allo spawn o tramite editor
 @export var player_color: Color = Color.BLUE : set = _set_player_color
-@export_multiline var description: String = ""
-@export var icon:  Texture = preload("uid://dibevppt5yrf2")
+#@export_multiline var description: String = ""
+#@export var icon:  Texture = preload("uid://dibevppt5yrf2")
 @export var spritesheet: Texture2D
 
 @export_group("Azioni e Abilità")
@@ -135,9 +135,12 @@ func _process(delta: float) -> void:
 
 func setup(data: Resource) -> void:
 	self.entity_id = data.id
-	self.entity_name = data.name
-	self.description = data.description
-	self.icon = data.icon
+	#self.entity_name = data.name
+	#self.description = data.description
+	#self.icon = data.icon
+	if selectable_component:
+		selectable_component.setup(data.name, data.description, data.icon)
+
 	self.tile_size = data.tile_size
 	self.requires_water = data.requires_water
 	self.build_time = data.build_time

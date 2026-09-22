@@ -13,7 +13,8 @@ func _process(delta: float) -> void:
 	pass
 
 func setup(entity: Node2D) -> void:
-	texture.texture = entity.icon
+	if entity.has_node("SelectableComponent"):
+		texture.texture = entity.selectable_component.icon
 	texture.expand_mode = TextureRect.EXPAND_FIT_WIDTH
 	progress_bar.value = entity.current_health
 	

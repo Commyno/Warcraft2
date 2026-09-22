@@ -36,10 +36,10 @@ func on_health_changed(new_health: float, max_health: float) -> void:
 	update()
 
 func update() -> void:
-	# UnitInfo
-	portrait.texture = unit.icon
+	if unit.has_node("SelectableComponent"):
+		portrait.texture = unit.selectable_component.icon
+		name_label.text = unit.selectable_component.display_name
 	health_progress_bar.value = unit.get_health_perc()
 	health_label.text = str(unit.current_health) + "/" + str(unit.max_health)
-	name_label.text = unit.entity_name
 	
 	unit_stats_box.update()

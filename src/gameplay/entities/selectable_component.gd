@@ -4,7 +4,7 @@ extends Node2D
 # --- PARAMETRI CONFIGURABILI DALL'INSPECTOR ---
 @export_group("Informazioni UI")
 @export var display_name: String = "Entità"
-@export var display_description: String = "Entità"
+@export_multiline var display_description: String = "Entità"
 @export var icon: Texture2D
 
 @export_group("Selezione")
@@ -32,3 +32,8 @@ func deselect() -> void:
 # Funzione comoda per risalire all'entità principale (BaseUnit o BaseBuilding)
 func get_owner_entity() -> Node2D:
 	return get_parent() as Node2D
+
+func setup(_name: String, _description: String, _icon: Texture) -> void:
+	display_name = _name
+	display_description = _description
+	icon = _icon

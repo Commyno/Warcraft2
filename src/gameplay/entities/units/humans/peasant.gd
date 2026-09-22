@@ -160,9 +160,7 @@ func enter_mine(mine: GoldMine) -> void:
 		if is_in_group("selectable_units"):
 			remove_from_group("selectable_units")
 	
-	var selection_manager = _get_selection_manager()
-	if is_instance_valid(selection_manager):
-		selection_manager.remove_from_selection(self)
+	remove_from_selection()
 	
 	# --- NUOVO: Calcolo dinamico della durata basato su move_speed ---
 	var distance = global_position.distance_to(mine.global_position)
@@ -250,10 +248,8 @@ func exit_mine(gold_amount: int) -> void:
 		if !is_in_group("selectable_units"):
 			add_to_group("selectable_units")
 	
-	var selection_manager = _get_selection_manager()
-	if is_instance_valid(selection_manager):
-		selection_manager.remove_from_selection(self)
-
+	remove_from_selection()
+	
 	# 3. PAUSA DI SINCRONIZZAZIONE: Diamo a Godot il tempo di capire le nuove coordinate
 	await get_tree().physics_frame
 	await get_tree().physics_frame

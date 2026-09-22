@@ -43,9 +43,10 @@ func on_data_changed() -> void:
 	update()
 
 func update() -> void:
-	portrait.texture = resource.icon
+	if resource.has_node("SelectableComponent"):
+		portrait.texture = resource.selectable_component.icon
+		name_label.text = resource.selectable_component.display_name
 	health_progress_bar.value = resource.get_health_perc()
 	health_label.text = str(resource.current_health) + "/" + str(resource.max_health)
-	name_label.text = resource.entity_name
 
 	amount_value.text = str(resource.current_resources)

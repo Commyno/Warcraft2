@@ -74,10 +74,12 @@ func on_data_changed() -> void:
 	update()
 
 func update() -> void:
-	portrait.texture = building.icon
+	if building.has_node("SelectableComponent"):
+		portrait.texture = building.selectable_component.icon
+		name_label.text = building.selectable_component.display_name
+
 	health_progress_bar.value = building.get_health_perc()
 	health_label.text = str(building.current_health) + "/" + str(building.max_health)
-	name_label.text = building.entity_name
 	
 	if building.is_under_construction:
 		building_construcion_box.show()

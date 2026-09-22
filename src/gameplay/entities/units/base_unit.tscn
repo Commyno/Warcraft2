@@ -272,7 +272,14 @@ selection_ring = NodePath("../SelectionRing")
 shape = SubResource("CircleShape2D_omghk")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=646343089]
+path_desired_distance = 1.0
+target_desired_distance = 1.0
 avoidance_enabled = true
+avoidance_mask = 0
+debug_enabled = true
+debug_use_custom = true
+debug_path_custom_color = Color(1, 0.19215687, 1, 1)
+debug_path_custom_line_width = 2.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1017868079]
 libraries/ = SubResource("AnimationLibrary_2jfo3")
