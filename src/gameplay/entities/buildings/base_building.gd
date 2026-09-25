@@ -5,11 +5,8 @@ enum BuildingState { IDLE, ACTIVE, DEPLETED, DESTROYED, INACTIVE }
 
 # --- PARAMETRI CONFIGURABILI ---
 @export_group("Edificio")
-#@export var entity_name: String = "Edificio Base"
 @export var player_owner: Player # Assegnato allo spawn o tramite editor
 @export var player_color: Color = Color.BLUE : set = _set_player_color
-#@export_multiline var description: String = ""
-#@export var icon:  Texture = preload("uid://dibevppt5yrf2")
 @export var spritesheet: Texture2D
 
 @export_group("Azioni e Abilità")
@@ -89,6 +86,22 @@ signal destroyed()
 # --- VARIABILI INTERNE ---
 var entity_id: String
 var player_id: int = -1 : get = _get_player_id
+var entity_name: String = "" :
+	get:
+		if  selectable_component:
+			return selectable_component.display_name
+		return ""
+var description: String = "" :
+	get:
+		if  selectable_component:
+			return selectable_component.display_description
+		return ""
+var icon:  Texture :
+	get:
+		if  selectable_component:
+			return selectable_component.icon
+		return Globals.NO_IMAGE
+
 var is_depleted: bool = false
 var is_destroyed: bool = false
 var current_health: int = 0:
@@ -102,7 +115,7 @@ var construction_progress_perc: float = 0.0 # Da 0.0 a 1.0
 var training_progress_perc: float = 0.0 # Da 0.0 a 1.0
 
 func _ready() -> void:
-	add_to_group("building")
+	add_to_group("buildings")
 	
 	available_actions = available_actions.duplicate()
 	
@@ -353,13 +366,13 @@ func complete_construction() -> void:
 
 	_set_building_region(region_completed)
 
-	var builders_to_release = active_builders.duplicate()
-	active_builders.clear()
-	for builder in builders_to_release:
-		if is_instance_valid(builder):
-			builder.clear_assignment()
+	#var builders_to_release = active_builders.duplicate()
+	#active_builders.clear()
+	#for builder in builders_to_release:
+		#if is_instance_valid(builder):
+			#builder.clear_assignment()
 	
-	player_owner.register_building_completed(entity_id, food_provided)
+	#player_owner.register_building_completed(entity_id, food_provided)
 	
 	_on_health_changed()
 	construction_completed.emit()
@@ -372,3 +385,19 @@ func _set_building_region(region: Rect2) -> void:
 func _get_selection_manager() -> Node:
 	var m := get_tree().get_nodes_in_group("selection_manager")
 	return m[0] if not m.is_empty() else null
+
+# Restituisce le coordinate griglia (Vector2i) del tile in alto a sinistra
+func get_first_tile() -> Vector2i:
+	if not GridManager.grid:
+		return Vector2i(-1, -1)
+		
+	var cell_size: Vector2 = GridManager.grid.cell_size
+	
+	# 1. Ricalcola l'offset visivo usato per centrare la posizione
+	var offset: Vector2 = (Vector2(tile_size) - Vector2.ONE) * (cell_size / 2.0)
+	
+	# 2. Sottrai l'offset per tornare al centro globale del tile di origine
+	var origin_center_world: Vector2 = global_position - offset
+	
+	# 3. Chiedi al GridManager di convertire il punto globale in coordinate logiche
+	return GridManager.get_tile_coords(origin_center_world)

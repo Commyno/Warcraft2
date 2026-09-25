@@ -23,12 +23,12 @@ boot_splash/minimum_display_time=1
 [autoload]
 
 Globals="*uid://dmji6vt1h161k"
-FormationManager="*uid://cqxbygf7gw8nt"
 PlayerData="*uid://blcnwaen60mui"
-SaveManager="*uid://h80jraw8rh06"
 MatchData="*uid://cd30cxotowox5"
+SaveManager="*uid://h80jraw8rh06"
 SceneLoader="*uid://xi23osnx5ph"
-GridManager="*uid://4jplu6jou6mk"
+GridManager="*uid://cwde3hggvnnun"
+FormationManager="*uid://cqxbygf7gw8nt"
 PlayerManager="*uid://4kc5m8lgq68k"
 TargetingManager="*uid://chge0rqlgnv7k"
 SpawnManager="*uid://d4hv67mojc5yx"

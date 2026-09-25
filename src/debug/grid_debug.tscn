@@ -4,4 +4,7 @@
 
 [node name="GridDebug" type="Node2D" unique_id=786157863]
 script = ExtResource("1_gv8ys")
+thickness = 2.0
+tile_size = 64
+grid_dimensions = Vector2i(105, 130)
 grid_color = Color(0.30278748, 0.3116401, 0.21709102, 0.5019608)

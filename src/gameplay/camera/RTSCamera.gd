@@ -15,7 +15,8 @@ const CAMERA_LOOK_AMOUNT : float = 64
 
 # Larghezza in pixel dell'HUD sulla sinistra. 
 # Impedisce lo scroll se il mouse vi passa sopra e sposta il bordo di rilevamento.
-@export var hud_left_width: float = 0.0  #140.0 
+@export var hud_left_width: float = 140.0 
+@export var hud_top_height: float = 18.0
 
 # Limiti e sensibilità dello zoom
 @export var zoom_speed: float = 0.15
@@ -77,17 +78,26 @@ func handle_movement(delta: float) -> void:
 		var viewport_size = get_viewport_rect().size
 
 		# Controlliamo che il mouse non sia sopra l'HUD a sinistra
-		if mouse_pos.x > hud_left_width:
-			
-			if mouse_pos.x >= viewport_size.x - edge_margin:
-				edge_dir.x += 1
-			elif mouse_pos.x <= hud_left_width + edge_margin:
-				edge_dir.x -= 1
+		#if mouse_pos.x > hud_left_width:
+			#
+			#if mouse_pos.x >= viewport_size.x - edge_margin:
+				#edge_dir.x += 1
+			#elif mouse_pos.x <= hud_left_width + edge_margin:
+				#edge_dir.x -= 1
+#
+			#if mouse_pos.y >= viewport_size.y - edge_margin:
+				#edge_dir.y += 1
+			#elif mouse_pos.y <= edge_margin:
+				#edge_dir.y -= 1
+		if mouse_pos.x >= viewport_size.x - edge_margin:
+			edge_dir.x += 1
+		elif mouse_pos.x <= edge_margin:
+			edge_dir.x -= 1
 
-			if mouse_pos.y >= viewport_size.y - edge_margin:
-				edge_dir.y += 1
-			elif mouse_pos.y <= edge_margin:
-				edge_dir.y -= 1
+		if mouse_pos.y >= viewport_size.y - edge_margin:
+			edge_dir.y += 1
+		elif mouse_pos.y <= edge_margin:
+			edge_dir.y -= 1
 
 	# Normalizzazione indipendente per evitare la velocità doppia in diagonale
 	if keyboard_dir.length() > 0:
@@ -111,12 +121,13 @@ func handle_movement(delta: float) -> void:
 	var half_height = visible_rect_size.y / 2.0
 	
 	var world_hud_width = hud_left_width / zoom.x
+	var world_top_height = hud_top_height / zoom.x
 	
 	# Usiamo le NOSTRE variabili al posto dei limiti nativi di Godot
 	var min_x = map_limit_left + half_width - world_hud_width
 	var max_x = max(min_x, map_limit_right - half_width)
 	
-	var min_y = map_limit_top + half_height
+	var min_y = map_limit_top + half_height - world_top_height
 	var max_y = max(min_y, map_limit_bottom - half_height)
 	
 	position.x = clamp(position.x, min_x, max_x)

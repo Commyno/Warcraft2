@@ -43,6 +43,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		KEY_4:
 			current_player.add_oil(1000)
 			print("Cheat: +1000 Petrolio aggiunto! (Totale: %d)" % current_player.oil_counts)
+		KEY_5:
+			current_player.add_food_capacity(10)
+			print("Cheat: +1000 Petrolio aggiunto! (Totale: %d)" % current_player.oil_counts)
 
 func _bind_local_player() -> Player:
 	var players = get_tree().get_nodes_in_group("players")

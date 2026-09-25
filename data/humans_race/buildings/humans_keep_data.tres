@@ -10,6 +10,7 @@ name = "Keep"
 description = "Descrizione Keep"
 icon = ExtResource("2_jmw00")
 scene_path = "uid://cdp0lbjingbod"
+tile_size = Vector2i(4, 4)
 build_time = 200.0
 max_health = 1400
 sight_range = 6

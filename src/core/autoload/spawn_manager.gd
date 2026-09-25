@@ -8,88 +8,82 @@ func register_units_container(_entity_container: Node2D, _effects_container: Nod
 	entity_container = _entity_container
 	effects_container = _effects_container
 
-func spawn_building(building_data: BuildingData, spawn_pos: Vector2, is_under_costruction: bool, owner_player: Player) -> BaseBuilding:
-	# Rete di sicurezza: non costruire in debito
-	if owner_player == null or not building_data.is_affordable(owner_player):
-		return
+func spawn_building(building_data: BuildingData, spawn_tile: Vector2, is_under_costruction: bool, owner_player: Player) -> BaseBuilding:
+	var world_pos: Vector2 = GridManager.get_tile_center_global(spawn_tile)
+	# 2. Calcola l'offset per centrare l'edificio fisicamente (stessa logica della preview)
+	var size: Vector2i = building_data.tile_size
+	var cell_size: Vector2 = GridManager.grid.cell_size
+	var offset: Vector2 = (Vector2(size) - Vector2.ONE) * (cell_size / 2.0)
+	var final_world_pos: Vector2 = world_pos + offset
 	
-	# Paga le risorse
-	if owner_player != null:
-		owner_player.spend_resources(
-			building_data.gold_cost, building_data.lumber_cost,
-			building_data.oil_cost, building_data.food_cost
-		)
-	
-	# Istanzia sotto entities_root (non GridManager)
-	var world_pos: Vector2 = GridManager.get_tile_center_global(spawn_pos)
 	var building: BaseBuilding = building_data.get_scene().instantiate()
-	if building:
+	
+	if building.has_method("setup"):
 		building.setup(building_data)
 
 	if entity_container != null:
 		entity_container.add_child(building)
-	building.global_position = world_pos
+	building.global_position = final_world_pos
 
-	var origin_tile: Vector2i = GridManager.get_tile_coords(world_pos)
-	GridManager.register_building_occupation(origin_tile, building_data.tile_size, building)
+	# --- NUOVA LOGICA: Registrazione Footprint Edificio ---
+	#var origin_tile: Vector2i = GridManager.get_tile_coords(final_world_pos)
+	var building_id: int = building.get_instance_id()
+	
+	# Assumendo che tile_size sia un Vector2i (es. 3x3), usiamo la X
+	var footprint = GridManager.footprint_cells(spawn_tile, building_data.tile_size)
+	
+	for cell in footprint:
+		GridManager.confirm_move(building_id, cell, cell)
+	GridManager.set_cells_solid(footprint, true)
+	# ------------------------------------------------------
 
-	# Proprietario (id + oggetto + colore), come nello spawn
-	if owner_player != null:
-		building.player_owner = owner_player
-		building.player_id = owner_player.player_id
+	if is_instance_valid(owner_player):
+		if "player_owner" in building:
+			building.player_owner = owner_player
+
 		if "player_color" in building:
 			building.player_color = owner_player.color
 	
-	building.place_under_construction()
+	if is_under_costruction:
+		building.place_under_construction()
+	else:
+		building.complete_construction()
 	
 	return building
 
-func spawn_unit(unit_data: UnitData, spawn_pos: Vector2, rally_point: Vector2, owner_player: Player) -> BaseUnit:
+func spawn_unit(unit_data: UnitData, building_center_pos: Vector2, rally_point: Vector2, owner_player: Player, building_size: Vector2i = Vector2i.MIN) -> BaseUnit:
 	if unit_data == null or unit_data.scene_path.is_empty():
 		push_error("SpawnManager: UnitData o scena non valida.")
 		return null
+		
 	var entity_scene = unit_data.get_scene()
-	if entity_scene == null:
-		push_error("SpawnManager: UnitData o scena non valida.")
-		return null
-
 	if entity_container == null:
-		push_error("SpawnManager: units_container non registrato! Assicurati di registrarlo in GameScene.")
+		push_error("SpawnManager: units_container non registrato!")
 		return null
 
-	# 1. Trova una posizione valida libera usando la griglia per evitare sovrapposizioni
-	var target_tile = GridManager.get_tile_coords(spawn_pos)
-	var final_spawn_pos = spawn_pos
+	# 1. Istanzia subito l'unità per registrarla nell'albero e ottenere l'ID univoco
+	var unit_instance : BaseUnit = entity_scene.instantiate() as BaseUnit
+	entity_container.add_child(unit_instance)
+	var unit_id: int = unit_instance.get_instance_id()
 
-	# Se hai una funzione di ricerca tile libero nel tuo GridManager:
-	if GridManager.has_method("find_nearest_walkable_tile"):
-		final_spawn_pos = GridManager.find_nearest_walkable_tile(spawn_pos)
-	
-	# 2. Istanziazione della scena dell'unità
-	var unit_instance = entity_scene.instantiate()
-	if unit_instance == null:
-		push_error("SpawnManager: Impossibile istanziare l'unità %s" % unit_data.name)
-		return null
+	# 2. Calcola la posizione di spawn consapevole del contesto (stile War2)
+	var final_spawn_pos = building_center_pos
+	 # Se lo spawn è da edificio, calcoliamo l'offset
+	if not building_size == Vector2i.MIN:
+		final_spawn_pos = GridManager.get_warcraft_spawn_position(building_center_pos, building_size, rally_point, unit_id)
 
-	# 3. Setup dei dati prima di aggiungerla all'albero
+	# 3. Setup dei dati dell'unità
+	unit_instance.global_position = final_spawn_pos
+	unit_instance.player_owner = owner_player
 	if unit_instance.has_method("setup"):
 		unit_instance.setup(unit_data)
 
-	unit_instance.player_owner = owner_player
-	unit_instance.global_position = final_spawn_pos
-
-	# 4. Inserimento nel mondo di gioco
-	entity_container.add_child(unit_instance)
-
-	# 5. Registrazione sulla griglia
-	var standing_tile = GridManager.get_tile_coords(final_spawn_pos)
-	if GridManager.has_method("try_reserve_tile"):
-		GridManager.try_reserve_tile(standing_tile, unit_instance)
-
-	# 6. Ordine di movimento verso il Rally Point (se diverso dalla posizione di spawn)
-	if rally_point != Vector2.ZERO and rally_point != final_spawn_pos:
+	# 4. Ordine di movimento verso il Rally Point
+	if rally_point != Vector2.INF and rally_point != final_spawn_pos:
 		if unit_instance.has_method("move_to"):
-			unit_instance.move_to(rally_point)
+			var current_cell = GridManager.get_tile_coords(final_spawn_pos)
+			var safe_target = GridManager.get_available_destination(rally_point, unit_id, current_cell, true)
+			unit_instance.move_to(safe_target)
 
 	return unit_instance
 

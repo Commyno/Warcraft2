@@ -135,6 +135,8 @@ func _load_map() -> void:
 		new_ground.reparent(level_root)
 		new_ground.position = Vector2.ZERO
 	
+	GridManager.build_from_tilemap_layer(new_ground)
+
 	# 1. Recupera i marker di spawn
 	_parse_spawn_points(map_instance)
 
@@ -235,52 +237,13 @@ func _parse_group_layer(map_node: Node2D, layer_name: String, player: Player) ->
 			var global_pos: Vector2 = entities_layer.to_global(local_pos)
 			
 			# Spawna l'entità iniettando l'istanza target_player
-#			spawn_entity_by_key(spawn_info["faction_key"], spawn_info["entity_key"], global_pos, player)
 			if data is BuildingData:
-				spawn_entity(data, global_pos, player)
-				#SpawnManager.spawn_building(data, global_pos, false, player)
+				SpawnManager.spawn_building(data, cell_coords, false, player)
 			elif data is UnitData:
 				SpawnManager.spawn_unit(data, global_pos, Vector2.ZERO, player)
-				#spawn_entity(data, global_pos, player)
 	
 	# Nascondi il layer visivo dei tile logici a runtime
 	entities_layer.queue_free()
-
-func spawn_entity(data: Resource, global_pos: Vector2, player_owner: Player = null) -> Node:
-	# --- Risoluzione della scena (doppio lookup con guardie) ---
-	if not is_instance_valid(data) or data.scene_path.is_empty():
-		push_error("UnitData sconosciuto")
-		return null
-	var entity_scene : PackedScene = data.get_scene()
-	if entity_scene == null:
-		push_error("Scena nulla per '%s'" % data.name)
-		return null
-	
-	# --- Istanziazione ---
-	var entity := entity_scene.instantiate()
-	if entity == null:
-		push_error("instantiate() fallita per '%s'" % data.name)
-		return null
-	
-	entities_root.add_child(entity)
-	entity.global_position = global_pos
-	
-	if entity is BaseBuilding:
-		var origin_tile: Vector2i = GridManager.get_tile_coords(global_pos)
-		GridManager.register_building_occupation(origin_tile, entity.tile_size, entity)
-	
-	if entity.has_method("setup"):
-		entity.setup(data)
-	
-	# Iniezione diretta dell'istanza Player
-	if is_instance_valid(player_owner):
-		if "player_owner" in entity:
-			entity.player_owner = player_owner
-		
-		if "player_color" in entity:
-			entity.player_color = player_owner.color
-
-	return entity
 
 func _parse_entities_layer(map_node: Node2D, layer_name: String) -> void:
 	
@@ -301,7 +264,12 @@ func _parse_entities_layer(map_node: Node2D, layer_name: String) -> void:
 			var global_pos: Vector2 = entities_layer.to_global(local_pos)
 			
 			# Spawn neutrale (owner_player = null)
-			var spawned_entity = spawn_entity(data, global_pos, null)
+			var spawned_entity: Node2D
+			if data is BuildingData:
+				spawned_entity = SpawnManager.spawn_building(data, cell_coords, false, null)
+			elif data is UnitData:
+				spawned_entity = SpawnManager.spawn_unit(data, global_pos, Vector2.ZERO, null)
+			#var spawned_entity = spawn_entity(data, global_pos, null)
 			
 			# Controlliamo se l'entità è di tipo ResourceBuilding
 			if spawned_entity is ResourceBuilding:

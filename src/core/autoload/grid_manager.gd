@@ -1,413 +1,566 @@
-#extends Node solo DEBUG
 extends Node2D
 
-const TREE_MAX_HEALTH: int = 50 # Quanta legna contiene un albero prima di crollare
-# ID del tuo tileset (di solito è 0 se ne hai caricato solo uno)
-const STUMP_SOURCE_ID: int = 0 
-# Le coordinate X,Y del ceppo all'interno della griglia del tileset
-const STUMP_ATLAS_COORDS: Vector2i = Vector2i(12, 6)
+# --- SIGNALS
+signal obstacles_changed(affected_cells: Array)
 
-# Riferimento al TileMapLayer principale della mappa di gioco
+# --- COSTANTI & STATO ---
+const TREE_MAX_HEALTH: int = 50
+const STUMP_SOURCE_ID: int = 0
+const STUMP_ATLAS_COORDS: Vector2i = Vector2i(12, 6)
+const EMPTY := 0
+
 var tile_map_layer: TileMapLayer = null
-# Dizionario delle prenotazioni: Chiave = Vector2i (coordinate tile), Valore = Node2D (unità)
-var tile_reservations: Dictionary = {}
-# Dizionario delle occupazioni stabili: Vector2i -> Node (Edificio, Risorsa, ecc.)
-var occupied_cells: Dictionary = {}
-# Dizionario per memorizzare la salute degli alberi. Chiave: Vector2i (coordinate tile)
+var grid: AStarGrid2D = null
+
+# Vector2i -> true (Memorizza gli ostacoli nativi della mappa come alberi e acqua)
+var _base_solid: Dictionary = {}
+
+# Vector2i -> int (Conta quanti oggetti stanno bloccando la cella in questo momento)
+var _blocker_counts: Dictionary = {}
+
+# Mappa delle celle occupate/prenotate: Vector2i -> agent_id
+var _owner_by_cell: Dictionary[Vector2i, int] = {}
+# Storico per annullare i movimenti (Undo)
+var _undo_stack: Array[Dictionary] = []
+
+# Dizionario per memorizzare la salute degli alberi
 var trees_health: Dictionary = {}
 
 func _ready() -> void:
-	# Forza il GridManager a disegnare SOPRA a tutto il resto (alberi compresi)
-	z_index = 150 
+	z_index = 150
 
-# --- 1. CONFIGURAZIONE E MAPPA ---
+# --- 1. INIZIALIZZAZIONE MAPPA E ASTAR ---
 
-func set_tile_map(map_layer: TileMapLayer) -> void:
-	tile_map_layer = map_layer
-	print("GridManager: TileMapLayer registrato con successo.")
+func build_from_tilemap_layer(tile_layer: TileMapLayer) -> void:
+	tile_map_layer = tile_layer
+	
+	var used_rect := tile_layer.get_used_rect()
+	var cell_size := tile_layer.tile_set.tile_size
 
-# --- 2. CONVERSIONI DI POSIZIONE (Tile <-> Globale) ---
+	grid = AStarGrid2D.new()
+	grid.region = used_rect
+	grid.cell_size = Vector2(cell_size)
+	grid.offset = Vector2(cell_size) / 2.0
+	grid.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER
+	grid.update()
 
-func get_tile_coords(global_pos: Vector2) -> Vector2i:
-	if not tile_map_layer:
-		return Vector2i.ZERO
-	var local_pos = tile_map_layer.to_local(global_pos)
-	return tile_map_layer.local_to_map(local_pos)
+	_base_solid.clear()
+	_blocker_counts.clear()
+	
+	for y in range(used_rect.position.y, used_rect.position.y + used_rect.size.y):
+		for x in range(used_rect.position.x, used_rect.position.x + used_rect.size.x):
+			var cell := Vector2i(x, y)
+			# Valuta la solidità tramite i metadati del TileMapLayer
+			var is_solid = not is_cell_buildable(cell) or is_tree(cell)
+			
+			if is_solid:
+				_base_solid[cell] = true
+			
+			grid.set_point_solid(cell, is_solid)
+						
+	print("GridManager: AStarGrid2D generato da TileMapLayer.")
 
-func get_tile_center_global(tile_coords: Vector2i) -> Vector2:
-	if not tile_map_layer:
-		return Vector2.ZERO
-	var local_pos : Vector2 = tile_map_layer.map_to_local(tile_coords)
-	return tile_map_layer.to_global(local_pos)
+# --- 2. GESTIONE PRENOTAZIONI E OCCUPAZIONE (Reservation Table) ---
 
-func snap_to_tile(global_pos: Vector2) -> Vector2:
-	if not tile_map_layer:
-		return global_pos
-	var coords = get_tile_coords(global_pos)
-	return get_tile_center_global(coords)
+func reserved_by(cell: Vector2i) -> int:
+	return int(_owner_by_cell.get(cell, EMPTY))
 
-# --- 3. GESTIONE PRENOTAZIONI E PRELAZIONE ---
+func _success(cell: Vector2i) -> Dictionary:
+	return {
+		"ok": true,
+		"code": "OK",
+		"at_cell": cell,
+		"reserved_by": reserved_by(cell),
+	}
 
-# Libera tutti i tile che erano stati prenotati da un'unità specifica (es. quando muore o cambia ordine)
-func release_unit_reservations(unit: Node2D) -> void:
-	var keys_to_remove = []
-	for tile in tile_reservations.keys():
-		if tile_reservations[tile] == unit:
-			keys_to_remove.append(tile)
-	for tile in keys_to_remove:
-		tile_reservations.erase(tile)
+func _failure(code: String, cell: Vector2i, owner := EMPTY) -> Dictionary:
+	return {
+		"ok": false,
+		"code": code,
+		"at_cell": cell,
+		"reserved_by": owner,
+	}
 
-# Tenta di prenotare un tile per un'unità
-func try_reserve_tile(tile_coords: Vector2i, unit: Node2D) -> bool:
-	if not tile_reservations.has(tile_coords):
-		tile_reservations[tile_coords] = unit
-		return true
-	if tile_reservations[tile_coords] == unit:
-		return true
-	return false # Tile occupato da un'altra unità!
+func _claim_blocker_cell(cell: Vector2i) -> void:
+	var next_count := blocker_count_at(cell) + 1
+	_blocker_counts[cell] = next_count
+	grid.set_point_solid(cell, true)
 
-# Restituisce la posizione globale corretta: se il tile desiderato è occupato, 
-# trova il primo tile libero disponibile nelle vicinanze o lungo il percorso.
-func get_available_destination(target_global_pos: Vector2, unit: Node2D = null, auto_reserve: bool = true) -> Vector2:
-	if not tile_map_layer:
+func _release_blocker_cell(cell: Vector2i) -> void:
+	var next_count := maxi(0, blocker_count_at(cell) - 1)
+	
+	if next_count == 0:
+		_blocker_counts.erase(cell)
+	else:
+		_blocker_counts[cell] = next_count
+		
+	# La cella rimane solida se ci sono ancora ostacoli sovrapposti, 
+	# oppure se era un ostacolo nativo del livello (es. muro/acqua).
+	var remains_solid := authored_solid_at(cell) or next_count > 0
+	grid.set_point_solid(cell, remains_solid)
+
+func blocker_count_at(cell: Vector2i) -> int:
+	return int(_blocker_counts.get(cell, 0))
+
+func authored_solid_at(cell: Vector2i) -> bool:
+	return bool(_base_solid.get(cell, false))
+
+func get_available_destination(target_global_pos: Vector2, agent_id: int, current_cell: Vector2i, auto_reserve: bool = true) -> Vector2:
+	if not grid:
 		return target_global_pos
 
-	var target_tile = get_tile_coords(target_global_pos)
+	var target_tile := get_tile_coords(target_global_pos)
+	var best_tile := target_tile
+	var found := false
 
-	# Controllo rapido: il tile primario è calpestabile e libero da altre unità?
-	if is_cell_walkable(target_tile):
-		if unit == null or not tile_reservations.has(target_tile) or tile_reservations[target_tile] == unit:
-			if unit and auto_reserve:
-				try_reserve_tile(target_tile, unit)
-			return get_tile_center_global(target_tile)
-
-	# PRELAZIONE: Se il tile è un albero, un edificio o è occupato da un'altra unità,
-	# cerchiamo il primo tile calpestabile e libero a spirale (raggio da 1 a 5)
-	for radius in range(1, 6):
-		for x in range(-radius, radius + 1):
-			for y in range(-radius, radius + 1):
-				# Controlliamo solo il perimetro esterno dell'anello corrente
-				if abs(x) != radius and abs(y) != radius:
-					continue
-					
-				var candidate_tile = target_tile + Vector2i(x, y)
+	# 1. Controllo rapido sul tile desiderato
+	if is_valid_cell(target_tile, agent_id, current_cell):
+		found = true
+	else:
+		# 2. NOVITÀ: Controllo di adiacenza prima di innescare la ricerca
+		var dist_x = abs(current_cell.x - target_tile.x)
+		var dist_y = abs(current_cell.y - target_tile.y)
+		
+		# Se l'unità è già adiacente (distanza di Chebyshev <= 1) o sul tile stesso, 
+		# non ha senso spostarsi lateralmente. Resta dove si trova.
+		if maxi(dist_x, dist_y) <= 1:
+			best_tile = current_cell
+			found = true
+		else:
+			# 3. PRELAZIONE: Ricerca a spirale (raggio da 1 a 5)
+			for radius in range(1, 6):
+				for x in range(-radius, radius + 1):
+					for y in range(-radius, radius + 1):
+						# Controlliamo solo il perimetro esterno dell'anello corrente
+						if abs(x) != radius and abs(y) != radius:
+							continue
 				
-				# Deve essere calpestabile E non prenotato da altri
-				if is_cell_walkable(candidate_tile):
-					if not tile_reservations.has(candidate_tile) or tile_reservations[candidate_tile] == unit:
-						if unit and auto_reserve:
-							try_reserve_tile(candidate_tile, unit)
-						return get_tile_center_global(candidate_tile)
+						var candidate_tile = target_tile + Vector2i(x, y)
 
-	# Fallback: se l'area è completamente sigillata, non muoverti
-	return unit.global_position if unit else target_global_pos
+						if is_valid_cell(candidate_tile, agent_id, current_cell):
+							best_tile = candidate_tile
+							found = true
+							break
+					if found: break
+				if found: break
 
-func get_adjacent_free_position(center_global_pos: Vector2, building_size: Vector2i, ideal_direction: Vector2, unit: Node2D = null) -> Vector2:
-	var center_tile = get_tile_coords(center_global_pos)
+	if found:
+		# Se richiesto, blocca subito la cella per l'unità
+		if auto_reserve:
+			confirm_move(agent_id, current_cell, best_tile)
+		return get_tile_center_global(best_tile)
+
+	# Fallback: l'area è completamente sigillata, restituisce la posizione attuale
+	return get_tile_center_global(current_cell)
+
+# Trova il punto di spawn in stile Warcraft II, basato su un Rally Point (es. la miniera d'oro)
+func get_warcraft_spawn_position(building_center_global: Vector2, building_size: Vector2i, rally_point_global: Vector2, agent_id: int) -> Vector2:
+	if not grid:
+		return building_center_global
+		
+	var cell_size: Vector2 = grid.cell_size
+	var offset: Vector2 = (Vector2(building_size) - Vector2.ONE) * (cell_size / 2.0)
+	var origin_center_world: Vector2 = building_center_global - offset
+	var origin_tile: Vector2i = get_tile_coords(origin_center_world)
 	
-	# 1. Calcoliamo il raggio in tile. 
-	# Con divisione intera (es: 3 / 2 = 1). Aggiungiamo 1 per stare sul bordo esterno.
-	# Risultato per 3x3: raggio 2.
-	var radius_x = (building_size.x / 2) + 1
-	var radius_y = (building_size.y / 2) + 1
+	var ideal_dir := Vector2.ZERO
+	if rally_point_global != Vector2.INF:
+		ideal_dir = building_center_global.direction_to(rally_point_global)
+	
+	# Espandiamo la ricerca fino a 5 anelli di distanza (puoi aumentare il limite se necessario)
+	var direction : Array[Vector2i] = [Vector2i.DOWN, Vector2i.RIGHT, Vector2i.UP, Vector2i.LEFT]
+	var w = building_size.x
+	var h = building_size.y
+	var last_tile_position = origin_tile
+	var perimeter_tiles: Array[Vector2i] = []
+
+	for radius in range(1, 6):
+		# Spostati a sinistra per iniziare il nuovo anello
+		last_tile_position += Vector2i.LEFT
+		# Fondamentale: aggiungi subito la posizione iniziale per non saltare il tile
+		perimeter_tiles.append(last_tile_position)
+		
+		# Calcola i passi esatti in base al bounding box espanso del raggio
+		var steps_down = h + (radius * 2) - 2
+		var steps_right = w + (radius * 2) - 1
+		var steps_up = h + (radius * 2) - 1
+		var steps_left = w + (radius * 2) - 1
+		
+		var side_dimension : Array[int] = [steps_down, steps_right, steps_up, steps_left]
+		
+		for count in range(4):
+			var dir = direction[count]
+			for step in range(side_dimension[count]):
+				last_tile_position += dir
+				perimeter_tiles.append(last_tile_position)
+		
+	# --- CASO SENZA RALLY POINT ---
+	if ideal_dir == Vector2.ZERO:
+		# Scorre l'anello in senso orario finché non trova un buco
+		for tile in perimeter_tiles:
+			if is_valid_cell(tile, agent_id, tile):
+				confirm_move(agent_id, tile, tile)
+				return get_tile_center_global(tile)
+
+	# --- CASO CON RALLY POINT ---
+	perimeter_tiles.sort_custom(func(a, b):
+		var pos_a = get_tile_center_global(a)
+		var pos_b = get_tile_center_global(b)
+		var dir_a = building_center_global.direction_to(pos_a)
+		var dir_b = building_center_global.direction_to(pos_b)
+		return dir_a.dot(ideal_dir) > dir_b.dot(ideal_dir)
+	)
+	
+	var primary_side: Array[Vector2i] = []
+	var opposite_side: Array[Vector2i] = []
+	
+	for tile in perimeter_tiles:
+		var pos = get_tile_center_global(tile)
+		var dir = building_center_global.direction_to(pos)
+		if dir.dot(ideal_dir) >= 0:
+			primary_side.append(tile)
+		else:
+			opposite_side.append(tile)
+			
+	for tile in primary_side:
+		if is_valid_cell(tile, agent_id, origin_tile): 
+			confirm_move(agent_id, origin_tile, tile) 
+			return get_tile_center_global(tile)
+			
+	for tile in opposite_side:
+		if is_valid_cell(tile, agent_id, origin_tile):
+			confirm_move(agent_id, origin_tile, tile)
+			return get_tile_center_global(tile)
+			
+	# Se sia il lato ideale che quello opposto dell'anello corrente sono bloccati, passa al prossimo 'radius'
+	return get_tile_center_global(origin_tile)
+
+		#var perimeter_tiles: Array[Vector2i] = []
+#
+		## --- GENERAZIONE DELL'ANELLO (Senso orario, angoli non duplicati) ---
+		## 1. Lato Superiore
+		#for x in range(-radius, building_size.x + radius):
+			#perimeter_tiles.append(origin_tile + Vector2i(x, -radius))
+			#
+		## 2. Lato Destro
+		#for y in range(-radius + 1, building_size.y + radius):
+			#perimeter_tiles.append(origin_tile + Vector2i(building_size.x + radius - 1, y))
+			#
+		## 3. Lato Inferiore
+		#for x in range(building_size.x + radius - 2, -radius - 1, -1):
+			#perimeter_tiles.append(origin_tile + Vector2i(x, building_size.y + radius - 1))
+			#
+		## 4. Lato Sinistro
+		#for y in range(building_size.y + radius - 2, -radius, -1):
+			#perimeter_tiles.append(origin_tile + Vector2i(-radius, y))
+			#
+		#
+		## --- CASO SENZA RALLY POINT ---
+		#if ideal_dir == Vector2.ZERO:
+			## Scorre l'anello in senso orario finché non trova un buco
+			#for tile in perimeter_tiles:
+				#if is_valid_cell(tile, agent_id, origin_tile):
+					#confirm_move(agent_id, origin_tile, tile)
+					#return get_tile_center_global(tile)
+			#
+			## Se l'anello è tutto pieno, il ciclo continua col 'radius' successivo
+			#continue
+			
+		## --- CASO CON RALLY POINT ---
+		#perimeter_tiles.sort_custom(func(a, b):
+			#var pos_a = get_tile_center_global(a)
+			#var pos_b = get_tile_center_global(b)
+			#var dir_a = building_center_global.direction_to(pos_a)
+			#var dir_b = building_center_global.direction_to(pos_b)
+			#return dir_a.dot(ideal_dir) > dir_b.dot(ideal_dir)
+		#)
+		#
+		#var primary_side: Array[Vector2i] = []
+		#var opposite_side: Array[Vector2i] = []
+		#
+		#for tile in perimeter_tiles:
+			#var pos = get_tile_center_global(tile)
+			#var dir = building_center_global.direction_to(pos)
+			#if dir.dot(ideal_dir) >= 0:
+				#primary_side.append(tile)
+			#else:
+				#opposite_side.append(tile)
+				#
+		#for tile in primary_side:
+			#if is_valid_cell(tile, agent_id, origin_tile): 
+				#confirm_move(agent_id, origin_tile, tile) 
+				#return get_tile_center_global(tile)
+				#
+		#for tile in opposite_side:
+			#if is_valid_cell(tile, agent_id, origin_tile):
+				#confirm_move(agent_id, origin_tile, tile)
+				#return get_tile_center_global(tile)
+				#
+		## Se sia il lato ideale che quello opposto dell'anello corrente sono bloccati, passa al prossimo 'radius'
+
+	# Fallback di emergenza: l'edificio è murato vivo per 5 tile di profondità in ogni direzione
+	return get_tile_center_global(origin_tile)
+
+# Controlla se una cella esiste, non ha ostacoli fissi e non è occupata da altre truppe
+func is_valid_cell(cell: Vector2i, agent_id: int, current_cell: Vector2i) -> bool:
+	if not grid.is_in_boundsv(cell) or grid.is_point_solid(cell):
+		return false
+
+	var check = preview_move(agent_id, current_cell, cell)
+	return bool(check["ok"])
+
+func get_adjacent_free_position(center_global_pos: Vector2, building_size: Vector2i, ideal_direction: Vector2, agent_id: int, auto_reserve: bool = true) -> Vector2:
+	var center_tile := get_tile_coords(center_global_pos)
+	
+	# 1. Calcoliamo il raggio in tile per determinare il perimetro dell'edificio
+	var radius_x := (building_size.x / 2) + 1
+	var radius_y := (building_size.y / 2) + 1
 	
 	var perimeter_tiles: Array[Vector2i] = []
 	
 	# 2. Generiamo tutti i tile del perimetro
-	# Lati orizzontali (sopra e sotto)
 	for x in range(-radius_x, radius_x + 1):
 		perimeter_tiles.append(center_tile + Vector2i(x, -radius_y))
 		perimeter_tiles.append(center_tile + Vector2i(x, radius_y))
 		
-	# Lati verticali (sinistra e destra, escludendo gli angoli già contati)
 	for y in range(-radius_y + 1, radius_y):
 		perimeter_tiles.append(center_tile + Vector2i(-radius_x, y))
 		perimeter_tiles.append(center_tile + Vector2i(radius_x, y))
 		
-	# 3. Calcoliamo il punto "ideale" galleggiante basato sulla direzione d'ingresso
-	var ideal_dir = ideal_direction.normalized()
-	# Se ideal_dir è (0,0), usiamo giù come default
+	# 3. Calcoliamo il punto "ideale" galleggiante
+	var ideal_dir := ideal_direction.normalized()
 	if ideal_dir == Vector2.ZERO: 
 		ideal_dir = Vector2.DOWN 
 		
-	var ideal_tile_float = Vector2(center_tile) + Vector2(ideal_dir.x * radius_x, ideal_dir.y * radius_y)
+	var ideal_tile_float := Vector2(center_tile) + Vector2(ideal_dir.x * radius_x, ideal_dir.y * radius_y)
 	
-	# 4. Ordiniamo i tile: dal più vicino al punto ideale al più lontano
+	# 4. Ordiniamo i tile dal più vicino al più lontano rispetto al punto ideale
 	perimeter_tiles.sort_custom(func(a, b):
 		var dist_a = Vector2(a).distance_squared_to(ideal_tile_float)
 		var dist_b = Vector2(b).distance_squared_to(ideal_tile_float)
 		return dist_a < dist_b
 	)
 	
-	# 5. Iteriamo i tile ordinati e troviamo il primo libero
+	# 5. Iteriamo i tile ordinati e troviamo il primo libero e valido
 	for tile in perimeter_tiles:
-		var global_pos = get_tile_center_global(tile)
-		
-		# Sfruttiamo la tua funzione esistente per controllare se la destinazione è calpestabile
-		var safe_pos = get_available_destination(global_pos, unit)
-		
-		# Se safe_pos è uguale al tile che stiamo testando, significa che è perfettamente libero!
-		# (Adatta questo if se la tua funzione is_tile_walkable restituisce un booleano invece del Vector2)
-		if safe_pos == global_pos:
-			return global_pos
+		# Controlla se il tile è fuori dai muri e libero da altre unità
+		# Usiamo center_tile come finta cella di partenza per bypassare i controlli su noi stessi
+		if is_valid_cell(tile, agent_id, center_tile):
+			if auto_reserve:
+				confirm_move(agent_id, center_tile, tile)
+			return get_tile_center_global(tile)
 			
-	# 6. Fallback di emergenza: se l'edificio è circondato da unità al 100%, 
-	# lo facciamo spawnare forzatamente nel punto ideale che avevamo calcolato
+	# 6. Fallback: restituisce il primo tile del perimetro anche se occupato
 	return get_tile_center_global(perimeter_tiles[0])
 
-# --- REGISTRAZIONE E RIMOZIONE OCCUPAZIONE EDIFICI ---
+# Anteprima di sola lettura
+func preview_move(agent_id: int, from_cell: Vector2i, to_cell: Vector2i) -> Dictionary:
+	if agent_id <= 0:
+		return _failure("INVALID_AGENT", from_cell)
 
-## Registra un'area rettangolare come occupata da un'entità
-func register_building_occupation(origin_tile: Vector2i, building_size: Vector2i, entity: Node) -> void:
-	for x in range(building_size.x):
-		for y in range(building_size.y):
-			var cell := origin_tile + Vector2i(x, y)
-			occupied_cells[cell] = entity
+	if reserved_by(from_cell) != agent_id and reserved_by(from_cell) != EMPTY: 
+		return _failure("INVALID_START", from_cell, reserved_by(from_cell))
 
-## Libera le celle quando un edificio viene distrutto o rimosso
-func unregister_building_occupation(origin_tile: Vector2i, building_size: Vector2i) -> void:
-	for x in range(building_size.x):
-		for y in range(building_size.y):
-			var cell := origin_tile + Vector2i(x, y)
-			if occupied_cells.get(cell) != null:
-				occupied_cells.erase(cell)
+	var target_owner := reserved_by(to_cell)
+	if target_owner != EMPTY and target_owner != agent_id:
+		return _failure("TARGET_OCCUPIED", to_cell, target_owner)
 
-# --- VERIFICA COSTRUIBILITÀ AREA ---
+	return {
+		"ok": true,
+		"code": "OK",
+		"from_cell": from_cell,
+		"to_cell": to_cell,
+		"reserved_by": target_owner,
+	}
 
-func is_area_buildable(origin_tile: Vector2i, tile_size: Vector2i) -> bool:
-	for x in range(tile_size.x):
-		for y in range(tile_size.y):
-			var cell := origin_tile + Vector2i(x, y)
-			
-			# 1. Controllo statico: il terreno della mappa è costruibile?
-			if not is_cell_buildable(cell):
-				return false
-			
-			# 2. Controllo dinamico: c'è già un albero non tagliato?
-			if is_tree(cell):
-				return false
-			
-			# 3. Controllo dinamico: la cella è già occupata da un altro edificio?
-			if is_cell_occupied(cell):
-				return false
-			
-			## 4. Controllo dinamico: ci sono unità mobili sopra la cella?
-			#if is_cell_blocked_by_unit(cell):
-				#return false
+# Transazione di conferma del movimento
+func confirm_move(agent_id: int, from_cell: Vector2i, to_cell: Vector2i) -> Dictionary:
+	var validation := preview_move(agent_id, from_cell, to_cell)
+	if not bool(validation["ok"]):
+		return validation
+
+	var before: Dictionary[Vector2i, int] = {}
+	before[from_cell] = reserved_by(from_cell)
+	before[to_cell] = reserved_by(to_cell)
+
+	_undo_stack.append({
+		"agent_id": agent_id,
+		"from_cell": from_cell,
+		"to_cell": to_cell,
+		"before": before,
+	})
+
+	if from_cell != to_cell:
+		_owner_by_cell.erase(from_cell)
+	_owner_by_cell[to_cell] = agent_id
+
+	return {
+		"ok": true,
+		"code": "OK",
+		"from_cell": from_cell,
+		"to_cell": to_cell,
+		"reserved_by": agent_id,
+	}
+
+# --- 3. GESTIONE FOOTPRINT EDIFICI ---
+
+# Calcola tutte le celle occupate dall'edificio
+func footprint_cells(anchor: Vector2i, size: Vector2i) -> Array[Vector2i]:
+	var cells: Array[Vector2i] = []
+	for y in range(size.y):
+		for x in range(size.x):
+			cells.append(anchor + Vector2i(x, y))
+	return cells
+
+# Imposta una serie di celle come solide
+func set_cells_solid(cells: Array, solid: bool) -> bool:
+	if grid.is_dirty() or not _all_cells_in_bounds(cells):
+		return false
 	
+	for cell: Vector2i in cells:
+		if solid:
+			_claim_blocker_cell(cell)
+		else:
+			_release_blocker_cell(cell)
+			
+	# Avvisa tutte le unità in ascolto che queste celle hanno cambiato stato
+	obstacles_changed.emit(cells)
 	return true
 
-func is_cell_occupied(cell: Vector2i) -> bool:
-	if occupied_cells.has(cell):
-		var occupier = occupied_cells[cell]
-		# Pulizia automatica se il nodo registrato è stato liberato (queue_free)
-		if is_instance_valid(occupier):
-			return true
-		else:
-			occupied_cells.erase(cell)
-	return false
+func _all_cells_in_bounds(cells: Array) -> bool:
+	for cell: Vector2i in cells:
+		if not grid.is_in_boundsv(cell):
+			return false
+	return true
 
-### Rileva se ci sono unità mobili sopra la cella usando un CircleShape o una Point Query 2D
-#func is_cell_blocked_by_unit(cell: Vector2i) -> bool:
-	## Controlla prima le prenotazioni logiche dei lavoratori
-	#if tile_reservations.has(cell) and is_instance_valid(tile_reservations[cell]):
-		#return true
-#
-	## Controllo fisico rapido tramite lo spazio 2D
-	#var world_center: Vector2 = get_tile_center_global(cell)
-	#var space_state = get_world_2d().direct_space_state
-	#
-	#var shape_param = PhysicsShapeQueryParameters2D.new()
-	#var circle = CircleShape2D.new()
-	#circle.radius = (TILE_SIZE.x / 2.0) * 0.75 # Leggermente più piccolo del tile
-	#shape_param.shape = circle
-	#shape_param.transform = Transform2D(0.0, world_center)
-	## Imposta la collision mask sul layer delle tue unità (es. layer 2 o 3)
-	#shape_param.collision_mask = 2 
-	#shape_param.collide_with_areas = false
-	#shape_param.collide_with_bodies = true
-#
-	#var hits = space_state.intersect_shape(shape_param, 1)
-	#return not hits.is_empty()
+# Controlla se un'intera area rettangolare è libera per piazzare un edificio
+func is_area_buildable(anchor: Vector2i, size: Vector2i) -> bool:
+	if not grid:
+		return false
+		
+	var cells = footprint_cells(anchor, size)
+	
+	for cell in cells:
+		# 1. Controlla se la cella è fuori dalla mappa o è fisicamente bloccata (muri, acqua, altri edifici)
+		if not grid.is_in_boundsv(cell) or grid.is_point_solid(cell):
+			return false
+			
+		# 2. Controlla se la cella è occupata logicamente da un'unità ferma o in transito
+		if reserved_by(cell) != EMPTY:
+			return false
+			
+	return true
 
-# --- GESTIONE FORESTA ---
+# Cerca il tile di legno più vicino partendo da un centro, espandendosi ad anelli
+func get_closest_tree_around(center_cell: Vector2i, max_radius: int) -> Vector2i:
+	# 1. Controlla prima il punto di partenza
+	if is_tree(center_cell):
+		return center_cell
+		
+	# 2. Ricerca a spirale (cerca anello per anello verso l'esterno)
+	for radius in range(1, max_radius + 1):
+		for x in range(-radius, radius + 1):
+			for y in range(-radius, radius + 1):
+				# Analizza solo il perimetro dell'anello corrente per ottimizzare
+				if abs(x) != radius and abs(y) != radius:
+					continue
+					
+				var candidate_cell = center_cell + Vector2i(x, y)
+				if is_tree(candidate_cell):
+					return candidate_cell
+					
+	# 3. Nessun albero trovato nel raggio specificato
+	return Vector2i(-1, -1)
 
-# Verifica se un tile specifico è un albero leggendo il Custom Data
+# Trova e prenota la migliore cella adiacente per tagliare un albero
+func get_best_chopping_position(tree_cell: Vector2i, unit_global_pos: Vector2, agent_id: int) -> Vector2:
+	var tree_global := get_tile_center_global(tree_cell)
+	
+	# Calcola da quale direzione sta arrivando il lavoratore
+	var approach_dir := unit_global_pos.direction_to(tree_global)
+	
+	# L'albero è considerato un ostacolo 1x1. 
+	# Il parametro 'true' finale chiama confirm_move() per bloccare atomicamente la cella per questo specifico agent_id
+	return get_adjacent_free_position(tree_global, Vector2i(1, 1), approach_dir, agent_id, true)
+
+# --- 4. RILASCIO AGENTI E RISORSE ---
+
+# Rilascia le celle quando un'unità lascia la mappa (o muore)
+func release_agent(agent_id: int) -> Dictionary:
+	if agent_id <= 0:
+		return _failure("INVALID_AGENT", Vector2i(-1, -1))
+
+	var freed_cells: Array[Vector2i] = []
+	for cell: Vector2i in _owner_by_cell.keys():
+		if reserved_by(cell) == agent_id:
+			_owner_by_cell.erase(cell)
+			_release_blocker_cell(cell) # <-- Usa il decremento invece di forzare a false
+			freed_cells.append(cell)
+	
+	var released_count = freed_cells.size()
+	
+	# Se l'agente possedeva effettivamente delle celle, avvisiamo i viandanti
+	if released_count > 0:
+		obstacles_changed.emit(freed_cells)
+	
+	return {
+		"ok": true,
+		"code": "OK" if released_count > 0 else "OK_EMPTY",
+		"agent_id": agent_id,
+		"released_cells": released_count,
+	}
+
+# --- 5. GESTIONE FORESTA E UTILITIES ---
+
 func is_tree(tile_coords: Vector2i) -> bool:
 	var tile_data: TileData = tile_map_layer.get_cell_tile_data(tile_coords)
-	
-	if tile_data != null:
-		# 1. Controlliamo se l'importatore di Tiled ha salvato la proprietà come Metadato
-		if tile_data.has_meta("is_wood"):
-			var is_wood = tile_data.get_meta("is_wood")
-			return is_wood == true
-			
-		# 2. (Opzionale) Manteniamo anche il vecchio controllo nel caso tu decida 
-		# di usare i Custom Data nativi di Godot in futuro
-		var custom_is_wood = tile_data.get_custom_data("is_wood")
-		if custom_is_wood != null:
-			return custom_is_wood == true
-			
+	if tile_data != null and tile_data.has_meta("is_wood"):
+		return tile_data.get_meta("is_wood") == true
 	return false
 
-# Funzione per tagliare l'albero. Restituisce la legna ottenuta.
 func chop_tree(tile_coords: Vector2i, damage: int) -> int:
 	if not is_tree(tile_coords):
 		return 0
 		
-	# Inizializza la vita dell'albero se è la prima volta che viene colpito
 	if not trees_health.has(tile_coords):
 		trees_health[tile_coords] = TREE_MAX_HEALTH
 		
 	trees_health[tile_coords] -= damage
 	var wood_yield = damage
 	
-	# Se l'albero è distrutto
 	if trees_health[tile_coords] <= 0:
-		wood_yield += trees_health[tile_coords] # Evita di dare più legna del dovuto se il danno sfora
+		wood_yield += trees_health[tile_coords]
 		trees_health.erase(tile_coords)
 		
-		# --- LA MAGIA DEL CEPPO ---
-		# Rimuove il quadrato verde di selezione (per evitare che rimanga sul ceppo)
-		remove_tile_highlight(tile_coords) # Solor DEBUG
-		
-		# Sostituisce il tile con il ceppo
 		tile_map_layer.set_cell(tile_coords, STUMP_SOURCE_ID, STUMP_ATLAS_COORDS)
+		
+		# Aggiorna il pathfinder a runtime senza rebuild
+		grid.set_point_solid(tile_coords, false)
 		
 	return max(0, wood_yield)
 
-# Ricerca a spirale: cerca il tile albero più vicino partendo da un centro
-func get_closest_tree_around(start_tile: Vector2i, max_radius: int = 5) -> Vector2i:
-	# Controlla prima il centro stesso (se per caso l'albero c'è ancora)
-	if is_tree(start_tile):
-		return start_tile
-		
-	# Espande la ricerca ad anelli concentrici
-	for r in range(1, max_radius + 1):
-		# Lati orizzontali
-		for x in range(-r, r + 1):
-			if is_tree(start_tile + Vector2i(x, -r)): return start_tile + Vector2i(x, -r)
-			if is_tree(start_tile + Vector2i(x, r)): return start_tile + Vector2i(x, r)
-		# Lati verticali
-		for y in range(-r + 1, r):
-			if is_tree(start_tile + Vector2i(-r, y)): return start_tile + Vector2i(-r, y)
-			if is_tree(start_tile + Vector2i(r, y)): return start_tile + Vector2i(r, y)
-			
-	return Vector2i(-1, -1) # Nessun albero trovato nel raggio
+func get_tile_coords(global_pos: Vector2) -> Vector2i:
+	var local_pos = tile_map_layer.to_local(global_pos)
+	return tile_map_layer.local_to_map(local_pos)
 
-
-# --- GESTIONE EVIDENZIAZIONE TILE (FEEDBACK VISIVO) --- SOLO DEBUG
-var targeted_tiles: Dictionary = {}
-const TILE_SIZE: Vector2 = Vector2(32, 32) # Cambialo se i tuoi tile sono 16x16 o 64x64!
-
-func add_tile_highlight(tile_coords: Vector2i) -> void:
-	if targeted_tiles.has(tile_coords):
-		targeted_tiles[tile_coords] += 1
-	else:
-		targeted_tiles[tile_coords] = 1
-	queue_redraw() # Richiede a Godot di aggiornare il disegno a schermo
-
-func remove_tile_highlight(tile_coords: Vector2i) -> void:
-	if targeted_tiles.has(tile_coords):
-		targeted_tiles[tile_coords] -= 1
-		if targeted_tiles[tile_coords] <= 0:
-			targeted_tiles.erase(tile_coords)
-	queue_redraw()
-
-# Verifica se un tile è fisicamente attraversabile/raggiungibile
-func is_cell_walkable(cell: Vector2i) -> bool:
-	if not tile_map_layer:
-		return false
-	
-	# 1. C'è un albero?
-	if is_tree(cell):
-		return false
-		
-	# 2. C'è un edificio?
-	if is_cell_occupied(cell):
-		return false
-		
-	# 3. Il tile esiste ed è valido nel TileMap?
-	var tile_data = tile_map_layer.get_cell_tile_data(cell)
-	if tile_data == null:
-		return false
-		
-	# Se usi metadati personalizzati per acqua/scogli, aggiungili qui:
-	# if tile_data.get_meta("is_water") == true: return false
-
-	return true
-
-# Questa funzione nativa di Godot disegna forme geometriche a schermo
-func _draw() -> void:
-	if not tile_map_layer: 
-		return
-		
-	for tile in targeted_tiles.keys():
-		# 1. Troviamo il centro del tile rispetto al TileMap
-		var local_center = tile_map_layer.map_to_local(tile)
-		
-		# 2. Lo convertiamo in coordinate globali assolute 
-		# (fondamentale se il TileMapLayer non si trova esattamente a 0,0)
-		var global_center = tile_map_layer.to_global(local_center)
-		
-		# 3. Calcoliamo l'angolo in alto a sinistra del rettangolo
-		var top_left = global_center - (TILE_SIZE / 2.0)
-		var rect = Rect2(top_left, TILE_SIZE)
-		
-		# Disegna il rettangolo (Colore Verde chiaro, NON riempito, spessore 2.0 pixel)
-		draw_rect(rect, Color(0.2, 0.9, 0.2, 0.8), false, 2.0)
-
-# Trova il centro del tile libero adiacente all'albero più vicino all'unità (comprese le diagonali)
-func get_best_chopping_position(tree_tile: Vector2i, unit_global_pos: Vector2) -> Vector2:
-	var best_pos: Vector2 = Vector2.ZERO
-	var min_dist: float = INF
-	var found_valid = false
-	
-	# Le 8 direzioni: Cardinali + Diagonali
-	var directions = [
-		Vector2i.UP,      # Nord (0, -1)
-		Vector2i.DOWN,    # Sud (0, 1)
-		Vector2i.LEFT,    # Ovest (-1, 0)
-		Vector2i.RIGHT,   # Est (1, 0)
-		Vector2i(1, -1),  # Nord-Est
-		Vector2i(1, 1),   # Sud-Est
-		Vector2i(-1, 1),  # Sud-Ovest
-		Vector2i(-1, -1)  # Nord-Ovest
-	]
-	
-	for dir in directions:
-		var neighbor_tile = tree_tile + dir
-		
-		# Controlla che il tile adiacente NON sia un altro albero 
-		# (Se hai altri ostacoli, es. acqua/muri, aggiungi qui il controllo)
-		if not is_tree(neighbor_tile):
-			var neighbor_global_center = get_tile_center_global(neighbor_tile)
-			var dist = neighbor_global_center.distance_squared_to(unit_global_pos)
-			
-			if dist < min_dist:
-				min_dist = dist
-				best_pos = neighbor_global_center
-				found_valid = true
-				
-	# Se trova un tile libero, restituisce il centro perfetto
-	if found_valid:
-		return best_pos
-		
-	# Fallback (se l'albero è completamente circondato, lo manda al centro dell'albero stesso)
-	return get_tile_center_global(tree_tile)
-
-## Building placemente
-#func is_area_buildable(origin_tile: Vector2i, tile_size: Vector2i) -> bool:
-	## TODO: Da ripristinare non appena aggiorno TileSet su mappa
-	#for x in range(tile_size.x):
-		#for y in range(tile_size.y):
-			#var cell := origin_tile + Vector2i(x, y)
-			#if not is_cell_buildable(cell):
-				#return false
-	#return true
+func get_tile_center_global(tile_coords: Vector2i) -> Vector2:
+	var local_pos : Vector2 = tile_map_layer.map_to_local(tile_coords)
+	return tile_map_layer.to_global(local_pos)
 
 func is_cell_buildable(cell: Vector2i) -> bool:
 	var data := tile_map_layer.get_cell_tile_data(cell)
 	if data == null:
-		return false   # cella vuota = non costruibile
+		return false
 	return data.get_meta("is_buildable") == true
+
+# Interroga l'AStarGrid2D usando le coordinate della griglia
+func get_path_for_unit(start_cell: Vector2i, goal_cell: Vector2i) -> Array[Vector2i]:
+	if grid.is_in_boundsv(start_cell) and grid.is_in_boundsv(goal_cell):
+		return grid.get_id_path(start_cell, goal_cell)
+	return []
+
+func snap_to_tile(global_pos: Vector2) -> Vector2:
+	if not tile_map_layer:
+		return global_pos
+	var coords = get_tile_coords(global_pos)
+	return get_tile_center_global(coords)

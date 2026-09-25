@@ -5,7 +5,7 @@ extends BaseBuilding
 @export var spawn_offset: Vector2 = Vector2(0, 32)
 
 @export_group("Rally Point")
-@export var rally_point: Vector2 = Vector2.ZERO
+@export var rally_point: Vector2 = Vector2.INF
 @export var rally_marker_scene: PackedScene # Assegna una scena con Sprite2D (o creiamo un fallback)
 @export var rally_marker_texture: Texture2D  # In alternativa, passa solo la texture
 
@@ -96,7 +96,7 @@ func _complete_training(data: UnitData) -> void:
 	queue_updated.emit(training_queue)
 
 	var spawn_pos: Vector2 = global_position + spawn_offset
-	SpawnManager.spawn_unit(data, spawn_pos, rally_point, player_owner)
+	SpawnManager.spawn_unit(data, spawn_pos, rally_point, player_owner, self.tile_size)
 
 func _spawn_unit(data: UnitData) -> void:
 	if data.scene_path.is_empty():
@@ -116,7 +116,7 @@ func _spawn_unit(data: UnitData) -> void:
 		unit_instance.player_owner = player_owner
 
 	# Movimento verso il Rally Point
-	if unit_instance.has_method("move_to") and rally_point != Vector2.ZERO:
+	if unit_instance.has_method("move_to") and rally_point != Vector2.INF:
 		unit_instance.move_to(rally_point)
 
 func accept_resources(resource: Globals.ResourceType) -> bool:
@@ -146,6 +146,8 @@ func _create_rally_marker() -> void:
 	_rally_marker_instance.visible = false
 	_rally_marker_instance.global_position = global_position
 
+	rally_point = Vector2.INF
+
 	# Inserisci il marker nel container degli effetti tramite SpawnManager (o nel genitore)
 	if SpawnManager.effects_container != null:
 		SpawnManager.effects_container.add_child(_rally_marker_instance)
@@ -158,7 +160,7 @@ func _exit_tree() -> void:
 		_rally_marker_instance.queue_free()
 
 func _show_rally_marker() -> void:
-	if rally_point == Vector2.ZERO:
+	if rally_point == Vector2.INF:
 		return
 		
 	if _rally_marker_instance == null:
@@ -178,6 +180,20 @@ func set_rally_point(new_pos: Vector2) -> void:
 	if is_instance_valid(_rally_marker_instance):
 		_rally_marker_instance.global_position = rally_point
 	_show_rally_marker()
+
+func complete_construction() -> void:
+	if health_bar:
+		health_bar.visible = false
+
+	var builders_to_release = active_builders.duplicate()
+	active_builders.clear()
+	for builder in builders_to_release:
+		if is_instance_valid(builder):
+			builder.clear_assignment()
+	
+	player_owner.register_building_completed(entity_id, food_provided)
+	
+	super()
 
 # --- METODI DI SELEZIONE ---
 

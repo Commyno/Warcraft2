@@ -10,6 +10,7 @@ name = "Castle"
 description = "Descrizione Castle"
 icon = ExtResource("2_h6bkj")
 scene_path = "uid://cdp0lbjingbod"
+tile_size = Vector2i(4, 4)
 build_time = 200.0
 max_health = 1600
 sight_range = 9

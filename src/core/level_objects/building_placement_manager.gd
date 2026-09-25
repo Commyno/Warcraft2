@@ -26,8 +26,20 @@ func _process(_delta: float) -> void:
 
 func show_preview_building() -> void:
 	var raw_mouse_pos = get_global_mouse_position()
+	
+	# 1. Calcola il tile in alto a sinistra (l'ancora)
 	var origin_tile: Vector2i = GridManager.get_tile_coords(raw_mouse_pos)
-	var snapped_pos: Vector2 = GridManager.get_tile_center_global(origin_tile)
+	var origin_center: Vector2 = GridManager.get_tile_center_global(origin_tile)
+
+	# 2. Recupera la dimensione dell'edificio (es. Vector2i(2, 2) o Vector2i(3, 3))
+	var size: Vector2i = preview_building.tile_size
+	
+	# 3. Calcola lo scarto necessario per centrare il footprint multi-tile
+	var cell_size: Vector2 = GridManager.grid.cell_size
+	var offset: Vector2 = (Vector2(size) - Vector2.ONE) * (cell_size / 2.0)
+	
+	# 4. Applica l'offset alla posizione finale
+	var snapped_pos: Vector2 = origin_center + offset
 
 	preview_building.global_position = snapped_pos
 
@@ -86,11 +98,13 @@ func start_placement(action: PlaceBuildingActionData, units: Array) -> void:
 func is_position_valid() -> bool:
 	if not preview_building:
 		return false
-	var origin_tile: Vector2i = GridManager.get_tile_coords(preview_building.global_position)
+	#var origin_tile: Vector2i = GridManager.get_tile_coords(preview_building.global_position)
+	var origin_tile: Vector2i = preview_building.get_first_tile()
 	return GridManager.is_area_buildable(origin_tile, _building_tile_size)
 
 func place_building() -> void:
-	var origin_tile: Vector2i = GridManager.get_tile_coords(preview_building.global_position)
+	#var origin_tile: Vector2i = GridManager.get_tile_coords(preview_building.global_position)
+	var origin_tile: Vector2i = preview_building.get_first_tile()
 	_action.execute(_units, origin_tile)
 	cancel_placement()
 

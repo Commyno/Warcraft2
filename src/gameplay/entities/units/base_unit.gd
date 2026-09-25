@@ -7,11 +7,8 @@ enum UnitState { IDLE, MOVING, ATTACKING, PATROLING, BUILDING, REPARING, MINING,
 
 # --- PARAMETRI CONFIGURABILI DALL'INSPECTOR ---
 @export_group("Unità")
-#@export var entity_name:  String = "Unita"
 @export var player_owner: Player # Assegnato allo spawn o tramite editor
 @export var player_color: Color = Color.BLUE : set = _set_player_color
-#@export_multiline var description: String = ""
-#@export var icon:  Texture
 @export var type: Globals.UnitType = Globals.UnitType.LAND
 
 @export_group("Azioni e Abilita")
@@ -44,15 +41,12 @@ enum UnitState { IDLE, MOVING, ATTACKING, PATROLING, BUILDING, REPARING, MINING,
 @export var move_speed: float = 150.0:
 	set(value):
 		move_speed = value
-		if nav_agent:
-			nav_agent.max_speed = move_speed
 
 @export var food_cost: int = 1
 @export var bounty_gold: int = 15
 
 # --- STATO INTERNO ---
 #@onready var selection_ring: Node2D = $SelectionRing
-@onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var sprite2d: Sprite2D = $Sprite2D
 @onready var animation_tree: AnimationTree = $AnimationTree
@@ -90,7 +84,10 @@ var current_target: Node2D = null
 var current_tile_target: Vector2i = Vector2i(-1, -1)
 
 var is_interacting: bool = false                # Per tracciare lo stato di interazione
-var current_offset_target: float = 15.0
+var is_processing_grid: bool = false # TRUE quando l'unità sta modificando la griglia intenzionalmente
+var current_path: Array[Vector2i] = []
+var current_step_target: Vector2 = Vector2.INF
+var final_target_global: Vector2 = Vector2.INF
 
 var animation_state: String = "Idle"
 var last_facing_dir: Vector2 = Vector2.DOWN     # Per tracciare lo sguardo relativo all'ultimo movimento
@@ -109,21 +106,18 @@ func _ready() -> void:
 	# 3. Impedisci all'unità di muoversi appena spawnata
 #	nav_agent.target_position = global_position
 	
-	# 4. Connetti il segnale di evitamento (RVO)
-	nav_agent.velocity_computed.connect(_on_velocity_computed)
-	
 	# Inizializza la vita al massimo
 	current_health = max_health
 	current_mana = max_mana
-	
-	# Riporta la velocità sulla navigation agent
-	if nav_agent:
-		nav_agent.max_speed = move_speed
 	
 	# Imposta la UI della barra della vita
 	if health_bar:
 		health_bar.max_value = max_health
 		#health_bar.value = current_health
+	
+	# Collega l'unità al bollettino sul traffico del GridManager
+	if not GridManager.obstacles_changed.is_connected(_on_obstacles_changed):
+		GridManager.obstacles_changed.connect(_on_obstacles_changed)
 
 func setup(data: Resource) -> void:
 	self.entity_id = data.id
@@ -152,68 +146,146 @@ func setup(data: Resource) -> void:
 func _process(delta: float) -> void:
 	_handle_regeneration(delta)
 
-func _physics_process(_delta: float) -> void:
-	if is_dead:
-		return
-	var current_position: Vector2 = global_position
-
-	if unit_state == UnitState.MOVING and nav_agent:
-
-		# 1. SE IL NAV AGENT HA FINITO
-		if nav_agent.is_navigation_finished():
-			var distance_to_target = global_position.distance_to(nav_agent.target_position)	
-			
-			unit_state = UnitState.IDLE
-			velocity = Vector2.ZERO
-			update_animation()
-			
-			# BLOCCATI MA NON SIAMO LONTANI
-			if distance_to_target <= 22.0:
-				# --- STRADA 1: INTERAZIONE NODO ---
-				if current_target != null:
-					if nav_agent:
-						nav_agent.set_velocity(Vector2.ZERO)
-						nav_agent.target_position = global_position
-
-					var target_to_interact = current_target 
-					_start_interaction(target_to_interact)
-
-				# --- STRADA 2: INTERAZIONE TILE ---
-				elif current_tile_target != Vector2i(-1, -1):
-					if nav_agent:
-						nav_agent.set_velocity(Vector2.ZERO)
-						nav_agent.target_position = global_position
-
-					_start_tile_interaction(current_tile_target)
-
-				# --- STRADA 3: MOVIMENTO NORMALE (Punto a terra) ---
-				else:
-					# Se siamo ancora a qualche pixel, scivola fluido invece di teletrasportare
-					if distance_to_target > 3.0:
-						global_position = global_position.move_toward(nav_agent.target_position, move_speed * _delta)
-						update_animation()
-						return   # non "arrivare" ancora, continua il prossimo frame
-
-					# PRELAZIONE: Registriamo ufficialmente questo tile come occupato!
-					global_position = nav_agent.target_position   # ← snap esatto sul punto
-					var current_tile = GridManager.get_tile_coords(global_position)
-					GridManager.try_reserve_tile(current_tile, self)
-			
-			# BLOCCATI MA SIAMO LONTANI, QUINDI FERMATI E BASTA
-			return
-
-		# 2. MOVIMENTO (Siamo ancora in viaggio)
-		var next_path_position: Vector2 = nav_agent.get_next_path_position()
-		intended_dir = current_position.direction_to(next_path_position)
-		var intended_velocity: Vector2 = intended_dir * move_speed
-		
-		unit_state = UnitState.MOVING
-		if nav_agent.avoidance_enabled:
-			nav_agent.set_velocity(intended_velocity)
-		else:
-			_on_velocity_computed(intended_velocity)
-	else:
+func _physics_process(delta: float) -> void:
+	if is_dead or unit_state != UnitState.MOVING:
 		update_animation()
+		return
+		
+	# Se non abbiamo un bersaglio locale in corso, abbiamo terminato l'intero percorso
+	if current_step_target == Vector2.INF:
+		_finish_movement()
+		return
+		
+	var dist = global_position.distance_to(current_step_target)
+	
+	if dist > 3.0: 
+		# Avanziamo linearmente verso il centro del tile
+		intended_dir = global_position.direction_to(current_step_target)
+		velocity = intended_dir * move_speed # Settiamo velocity solo per l'AnimationTree
+		global_position = global_position.move_toward(current_step_target, move_speed * delta)
+	else:
+		# Siamo arrivati esatti al centro della cella!
+		global_position = current_step_target
+		_prepare_next_step()
+		
+	update_animation()
+
+# Prepara e autorizza lo spostamento sulla singola cella successiva
+func _prepare_next_step() -> void:
+	if current_path.is_empty():
+		current_step_target = Vector2.INF
+		return
+		
+	var current_cell = GridManager.get_tile_coords(global_position)
+	var next_cell = current_path[0]
+	var agent_id = self.get_instance_id()
+	
+	is_processing_grid = true
+	var result = GridManager.confirm_move(agent_id, current_cell, next_cell)
+	is_processing_grid = false
+	
+	if result["ok"]:
+		current_path.pop_front()
+		current_step_target = GridManager.get_tile_center_global(next_cell)
+	else:
+		velocity = Vector2.ZERO
+		
+		# --- LA SOLUZIONE ---
+		# Controlliamo se la cella bloccata è esattamente la destinazione finale
+		var target_cell = GridManager.get_tile_coords(final_target_global)
+		
+		if next_cell == target_cell:
+			# Siamo arrivati davanti all'obiettivo e lo spazio finale è occupato.
+			# Ci fermiamo qui in modo pulito.
+			current_path.clear()
+			_finish_movement()
+		else:
+			# L'ostacolo è in mezzo al tragitto, cerchiamo di aggirarlo.
+			_repath_around_obstacle(next_cell)
+
+# Cerca una deviazione quando incontra un'altra unità a bloccare il passaggio
+func _repath_around_obstacle(blocked_cell: Vector2i) -> void:
+	# ALZA LO SCUDO: stiamo falsificando la mappa
+	is_processing_grid = true
+	
+	GridManager.grid.set_point_solid(blocked_cell, true)
+	
+	var start_cell = GridManager.get_tile_coords(global_position)
+	var target_cell = GridManager.get_tile_coords(final_target_global)
+	var detour_path = GridManager.grid.get_id_path(start_cell, target_cell)
+	
+	var remains_solid = GridManager.authored_solid_at(blocked_cell) or GridManager.blocker_count_at(blocked_cell) > 0
+	GridManager.grid.set_point_solid(blocked_cell, remains_solid)
+	
+	# ABBASSA LO SCUDO
+	is_processing_grid = false
+	
+	if not detour_path.is_empty():
+		if detour_path[0] == start_cell:
+			detour_path.pop_front()
+			
+		current_path = detour_path
+		# Assegniamo la nostra posizione attuale. Al prossimo _physics_process 
+		# la distanza sarà 0 e attiverà il _prepare_next_step() del nuovo path.
+		current_step_target = global_position
+	else:
+		current_path.clear()
+		current_step_target = Vector2.INF
+
+# Funzione separata in modo che possa essere chiamata dal segnale _on_obstacles_changed
+func _calculate_path() -> void:
+	var start_cell = GridManager.get_tile_coords(global_position)
+	var target_cell = GridManager.get_tile_coords(final_target_global)
+	
+	# ---> LA SOLUZIONE: Caso in cui clicchiamo sulla cella in cui ci troviamo <---
+	if start_cell == target_cell:
+		current_path.clear()
+		# Forziamo l'unità a raggiungere il centro esatto del tile
+		current_step_target = GridManager.get_tile_center_global(target_cell)
+		unit_state = UnitState.MOVING
+		return
+		
+	# Deleghiamo il calcolo alla griglia
+	current_path = GridManager.grid.get_id_path(start_cell, target_cell)
+	
+	if not current_path.is_empty():
+		# Se il percorso inizia con la cella in cui ci troviamo già, la rimuoviamo
+		if current_path[0] == start_cell:
+			current_path.pop_front()
+			
+		_prepare_next_step()
+		unit_state = UnitState.MOVING
+	else:
+		unit_state = UnitState.IDLE
+		velocity = Vector2.ZERO
+
+# Il "sensore" dell'unità che scatta quando un nemico costruisce un muro o cade un albero
+func _on_obstacles_changed(changed_cells: Array) -> void:
+	# 1. Se stiamo modificando noi la griglia, ignora il segnale
+	if is_processing_grid:
+		return
+		
+	# 2. Se non stiamo viaggiando o non abbiamo un percorso, ignora il segnale
+	if unit_state != UnitState.MOVING or current_path.is_empty():
+		return
+		
+	# 3. Controlla le deviazioni esterne
+	for cell in changed_cells:
+		if current_path.has(cell):
+			_calculate_path()
+			break
+
+func _finish_movement() -> void:
+	unit_state = UnitState.IDLE
+	velocity = Vector2.ZERO
+	current_step_target = Vector2.INF
+	update_animation()
+	
+	# Innesca le interazioni (attacco, raccolta legno, ecc.) ora che siamo arrivati
+	if current_target != null:
+		_start_interaction(current_target)
+	elif current_tile_target != Vector2i(-1, -1):
+		_start_tile_interaction(current_tile_target)
 
 func _get_player_id() -> int:
 	if is_instance_valid(player_owner):
@@ -256,19 +328,17 @@ func remove_from_selection() -> void:
 
 # --- SISTEMA DI MOVIMENTO ---
 
-func move_to(target_pos: Vector2, arrival_offset: float = 16.0) -> void:
-	# Nessuna pulizia qui! Solo movimento.
-	current_offset_target = arrival_offset
-	nav_agent.target_position = target_pos
-	nav_agent.get_current_navigation_path()
-	var next_path_pos = nav_agent.get_next_path_position()
-	intended_dir = global_position.direction_to(next_path_pos)
+func move_to(target_pos: Vector2) -> void:
+	# Salviamo la destinazione finale per eventuali ricalcoli futuri (repathing)
+	final_target_global = target_pos
 	
-	unit_state = UnitState.MOVING
+	# Invochiamo il calcolo del percorso
+	_calculate_path()
+	
+	# Aggiorniamo subito l'animazione per un feedback visivo istantaneo
 	update_animation()
 
 func clear_assignment() -> void:
-	# 1. DEREGISTRAZIONE DI SICUREZZA (Basata sul Macro-Incarico)
 	match current_assignment:
 		AssignmentState.GATHER_GOLD:
 			if current_target != null and current_target.has_method("unregister_worker"):
@@ -277,21 +347,23 @@ func clear_assignment() -> void:
 			if current_target != null and current_target.has_method("unregister_builder"):
 					current_target.unregister_builder(self)
 	
-	# 2. SVUOTA LA MEMORIA (Reset dei Target)
 	current_target = null
 	current_tile_target = Vector2i(-1, -1)
 	current_assignment = AssignmentState.NONE
 	
-	# 3. FERMA IL CORPO
 	unit_state = UnitState.IDLE
 	velocity = Vector2.ZERO
-	if nav_agent:
-		nav_agent.target_position = global_position # Resetta la destinazione a dove si trova ora
 	
-	# 4. PULIZIA GRID E ANIMAZIONE
-	GridManager.release_unit_reservations(self)
+	# ALZA LO SCUDO
+	is_processing_grid = true 
+	
+	var unit_id : int = self.get_instance_id()
 	var standing_tile = GridManager.get_tile_coords(global_position)
-	GridManager.try_reserve_tile(standing_tile, self)
+	GridManager.release_agent(unit_id)
+	GridManager.confirm_move(unit_id, standing_tile, standing_tile)
+	
+	# ABBASSA LO SCUDO
+	is_processing_grid = false 
 
 	update_animation()
 
@@ -299,19 +371,6 @@ func stop() -> void:
 	# Il comando Stop del giocatore cancella ogni incarico, ferma l'agente 
 	# di navigazione e prenota automaticamente il tile sotto i piedi dell'unità!
 	clear_assignment()
-
-func _on_velocity_computed(safe_velocity: Vector2) -> void:
-	# 2. FILTRO ANTI-BUG: Se il calcolo è corrotto (NaN sulla x o y) o spropositato, lo annulliamo
-	if is_nan(safe_velocity.x) or is_nan(safe_velocity.y) or safe_velocity.length() > move_speed * 3.0:
-		velocity = Vector2.ZERO
-	else:
-		velocity = safe_velocity
-		
-	# Muoviamo FISICAMENTE l'unità
-	move_and_slide()
-	
-	# Chiamiamo l'aggiornamento dell'animazione DOPO esserci mossi
-	update_animation()
 
 # --- GESTIONE ANIMAZIONI ---
 
@@ -449,7 +508,7 @@ func die() -> void:
 	# 6. LIBERA LA GRIGLIA
 	# Poiché clear_assignment() ha riprenotato il tile sotto ai suoi piedi per fermarsi,
 	# ora che è definitivamente morto (e c'è solo un cadavere calpestabile), lo liberiamo.
-	GridManager.release_unit_reservations(self)
+	GridManager.release_agent(self.get_instance_id())
 	
 	# 7. ELIMINA L'UNITÀ
 	queue_free()
@@ -504,16 +563,16 @@ func interact_with(target: Node2D) -> void:
 				break 
 		
 		var optimal_target_pos = target.global_position + (direction_to_unit * edge_offset)
-		move_to(optimal_target_pos, 5.0)
+		move_to(optimal_target_pos)
 	else:
-		move_to(target.global_position, 16.0)
+		move_to(target.global_position)
 
 # Funzione per mandare l'unità verso un tile di risorse (es. albero)
 func interact_with_tile(tile_coords: Vector2i, safe_destination: Vector2) -> void:
 	# Nessuna pulizia qui!
 	current_tile_target = tile_coords
 	current_target = null
-	move_to(safe_destination, 3.0)
+	move_to(safe_destination)
 
 #Funzione virtuale: sovrascrivila nelle classi figlie!
 func _start_interaction(target: Node2D) -> void:

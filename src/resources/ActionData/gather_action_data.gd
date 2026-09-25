@@ -28,5 +28,8 @@ func _execute_action(_source_entities: Array, _target_data = null) -> void:
 		# Albero: target è il tile (Vector2i)
 		elif _target_data is Vector2i:
 			if worker.has_method("interact_with_tile"):
-				var safe_destination = GridManager.get_best_chopping_position(_target_data, worker.global_position)
+
+				var agent_id = worker.get_instance_id()
+				# Il GridManager fa tutto il lavoro matematico e di prenotazione sicura
+				var safe_destination = GridManager.get_best_chopping_position(_target_data, worker.global_position, agent_id)
 				worker.interact_with_tile(_target_data, safe_destination)

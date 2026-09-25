@@ -10,6 +10,7 @@ name = "Town Hall"
 description = "Descrizione Town Hall"
 icon = ExtResource("1_hedpo")
 scene_path = "uid://cdp0lbjingbod"
+tile_size = Vector2i(4, 4)
 build_time = 255.0
 max_health = 1200
 food_provided = 1

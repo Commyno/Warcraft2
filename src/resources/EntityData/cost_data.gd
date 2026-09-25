@@ -33,11 +33,14 @@ func is_affordable(player: Player, source = null) -> bool:
 
 	return true
 
-func pay(player: Player, source = null) -> void:
+func pay(player: Player, source = null) -> bool:
 	if has_resource_cost() and player != null:
 		player.spend_resources(gold_cost, lumber_cost, oil_cost, food_cost)
+		return true
 	if has_mana_cost() and source != null and "current_mana" in source:
 		source.current_mana -= mana_cost
+		return true
+	return false
 
 ## Stringa dei costi pronta per i tooltip — un solo posto, riusata da tutti.
 func get_cost_string() -> String:

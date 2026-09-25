@@ -18,3 +18,5 @@ enum ResourceType { NONE, WOOD, GOLD, OIL }
 
 # Costante del bonus descritto dal manuale
 const ELVEN_MILL_WOOD_BONUS: int = 25
+# Costande della texture NoImage
+const NO_IMAGE = preload("uid://dibevppt5yrf2")

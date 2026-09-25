@@ -27,13 +27,8 @@ var is_building: bool = false
 var target_mine: GoldMine = null
 var target_resource_tile: Vector2i = Vector2i(-1, -1):
 	set(value):
-		if target_resource_tile != Vector2i(-1, -1) and GridManager:
-			GridManager.remove_tile_highlight(target_resource_tile)
-			
 		target_resource_tile = value
 		
-		if target_resource_tile != Vector2i(-1, -1) and GridManager:
-			GridManager.add_tile_highlight(target_resource_tile)
 var current_resource: Globals.ResourceType = Globals.ResourceType.NONE
 var resource_amount: int = 0
 var action_timer: float = 0.0
@@ -150,9 +145,6 @@ func enter_mine(mine: GoldMine) -> void:
 	if has_node("CollisionShape2D"):
 		collision_shape.set_deferred("disabled", true)
 	
-	if has_node("NavigationAgent2D"):
-		nav_agent.avoidance_enabled = false
-
 	if has_node("HealthBar"):
 		health_bar.visible = false
 	
@@ -182,26 +174,44 @@ func enter_mine(mine: GoldMine) -> void:
 	set_physics_process(false)
 
 func exit_mine(gold_amount: int) -> void:
-	# 1. Riattiviamo il process normale e rendiamo visibile il nodo[cite: 1]
+	var ideal_target : Vector2 = Vector2.INF
+
+	# 1. Riattiviamo il process normale e rendiamo visibile il nodo
 	set_process(true)
 	visible = true
+
+	current_resource = Globals.ResourceType.GOLD
 	
 	if sprite2d:
 		sprite2d.modulate.a = 0.0
 
-	# 2. Calcoliamo la posizione di uscita[cite: 1]
+	# 2. Calcoliamo la posizione di uscita
 	var exit_position = global_position
 	
 	if current_target and is_instance_valid(current_target) and GridManager.tile_map_layer:
-		# Passiamo la posizione della miniera, la sua dimensione in tile (3x3), 
-		# la direzione di entrata e il peasant stesso per i controlli di collisione
-		exit_position = GridManager.get_adjacent_free_position(current_target.global_position, Vector2i(3, 3), enter_direction, self)
+		var agent_id = self.get_instance_id()
+		
+		# Cerca la destinazione per sapere da quale lato uscire
+		var closest_dropoff = _get_closest_dropoff()
+		ideal_target = global_position 
+		
+		if closest_dropoff:
+			ideal_target = closest_dropoff.global_position
+		else:
+			# Fallback se non ci sono Town Hall: esce da dove è entrato
+			ideal_target = current_target.global_position + (enter_direction * 64.0)
+		
+		# Passiamo la miniera, la dimensione (3x3), e il Town Hall come calamita
+		exit_position = GridManager.get_warcraft_spawn_position(
+			current_target.global_position, 
+			Vector2i(3, 3), 
+			ideal_target, 
+			agent_id
+		)
 	else:
-		# Fallback se manca il target
 		exit_position = global_position + (enter_direction * 32.0)
-
-	# 2. Impostiamo la direzione verso cui è rivolto mentre esce[cite: 1]
-	# Calcolo dinamico della durata basato su move_speed ---
+	
+	# 3. Impostiamo la direzione verso cui è rivolto mentre esce
 	var distance = global_position.distance_to(exit_position)
 	var speed = max(move_speed, 1.0) # Evita divisioni per zero
 	var total_duration: float = distance / speed
@@ -212,11 +222,11 @@ func exit_mine(gold_amount: int) -> void:
 		intended_dir = exit_direction
 		last_facing_dir = exit_direction
 
-	# 3. Forziamo l'animazione di camminata ("Walk") durante l'uscita[cite: 1]
+	# 4. Forziamo l'animazione di camminata ("Walk") durante l'uscita
 	unit_state = UnitState.MOVING
 	update_animation()
 
-	# 4. Tween di movimento e dissolvenza[cite: 1]
+	# 5. Tween di movimento e dissolvenza
 	var tween = create_tween()
 	tween.tween_property(self, "global_position", exit_position, total_duration)
 
@@ -228,19 +238,14 @@ func exit_mine(gold_amount: int) -> void:
 	# ASPETTIAMO CHE IL MOVIMENTO DI USCITA SIA FINITO
 	await tween.finished
 
-	# 5. Fine movimento: fermiamo l'animazione di camminata[cite: 1]
+	# 6. Fine movimento: fermiamo l'animazione di camminata
 	unit_state = UnitState.IDLE
 	update_animation()
 
-	# 6. Riattivazione collisioni e avoidance[cite: 6]
+	# 7. Riattivazione collisioni e avoidance
 	if has_node("CollisionShape2D"):
 		collision_shape.set_deferred("disabled", false)
 	
-	if has_node("NavigationAgent2D"):
-		nav_agent.avoidance_enabled = true
-		nav_agent.set_velocity(Vector2.ZERO) # Pulisce la memoria in uscita
-		nav_agent.target_position = global_position
-		
 	if has_node("HealthBar"):
 		health_bar.visible = true
 	
@@ -250,15 +255,15 @@ func exit_mine(gold_amount: int) -> void:
 	
 	remove_from_selection()
 	
-	# 3. PAUSA DI SINCRONIZZAZIONE: Diamo a Godot il tempo di capire le nuove coordinate
+	# 8. PAUSA DI SINCRONIZZAZIONE: Diamo a Godot il tempo di capire le nuove coordinate
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 	
 	# SOLO ORA riattiviamo la fisica
 	set_physics_process(true)
 	
-	# 7. Gestione oro / prossimo obiettivo[cite: 6]
-	if gold_amount > 0:
+	# 9. Gestione oro / prossimo obiettivo
+	if gold_amount > 0 and not ideal_target == Vector2.INF:
 		current_resource = Globals.ResourceType.GOLD
 		resource_amount = gold_amount
 		print("Uscito dalla miniera con ", gold_amount, " di oro.")
@@ -267,37 +272,45 @@ func exit_mine(gold_amount: int) -> void:
 		unit_state = UnitState.IDLE
 		current_target = null
 
-func _go_to_town_hall():
+func _get_closest_dropoff() -> Node2D:
 	var valid_buildings = []
 	
-	# Recupera gli edifici dalla scena tramite i gruppi assegnati
-	var town_halls = get_tree().get_nodes_in_group("town_hall")
-	var lumber_mills = get_tree().get_nodes_in_group("lumber_mill")
+	# Recupera tutti gli edifici tramite un gruppo generico. 
+	# Assicurati che i tuoi ProductionBuilding abbiano questo gruppo assegnato nella scena!
+	var all_buildings = get_tree().get_nodes_in_group("buildings")
 	
-	# Di base, consideriamo sempre le TownHall come potenziali destinazioni
-	var potential_targets = town_halls.duplicate()
-	
-	# 1) Se il contadino porta legno, aggiungiamo anche i Lumber Mill alle opzioni
-	if current_resource == Globals.ResourceType.WOOD:
-		potential_targets.append_array(lumber_mills)
-		
-	# 2) Filtriamo i risultati in base al player_id
-	for building in potential_targets:
-		if building.player_id == self.player_id:
-			valid_buildings.append(building)
+	for building in all_buildings:
+		# Controlla che sia un ProductionBuilding alleato e abilitato al deposito
+		if building is ProductionBuilding and building.player_id == self.player_id and building.is_resource_dropoff:
+			var accepts_current = false
 			
-	# 3) Troviamo l'edificio valido più vicino
+			# Verifica se l'edificio accetta la risorsa che il contadino sta trasportando
+			match current_resource:
+				Globals.ResourceType.GOLD:
+					accepts_current = building.accepts_gold
+				Globals.ResourceType.WOOD:
+					accepts_current = building.accepts_wood
+				Globals.ResourceType.OIL:
+					accepts_current = building.accepts_oil
+					
+			if accepts_current:
+				valid_buildings.append(building)
+				
+	# Trova l'edificio valido più vicino
 	var closest_building = null
-	var min_distance = INF # Inizializziamo a infinito per il primo confronto
+	var min_distance = INF
+	
 	for building in valid_buildings:
-		# Usiamo distance_squared_to per evitare il calcolo della radice quadrata, ottimizzando le performance
 		var dist = global_position.distance_squared_to(building.global_position)
-
 		if dist < min_distance:
 			min_distance = dist
 			closest_building = building
 			
-	# Assegniamo la destinazione finale al NavigationAgent2D
+	return closest_building
+
+func _go_to_town_hall():
+	var closest_building = _get_closest_dropoff()
+	
 	if closest_building:
 		interact_with(closest_building)
 	else:
@@ -351,8 +364,15 @@ func _find_next_tree(start_tile: Vector2i) -> void:
 	var next_tree = GridManager.get_closest_tree_around(start_tile, 5)
 	
 	if next_tree != Vector2i(-1, -1):
+		var agent_id = self.get_instance_id()
 		var tree_global = GridManager.get_tile_center_global(next_tree)
-		var safe_pos = GridManager.get_adjacent_free_position(tree_global, Vector2i(1, 1), Vector2.DOWN, self)
+		
+		# Calcola la direzione dal contadino verso l'albero per fermarsi sul lato più vicino
+		var approach_dir = self.global_position.direction_to(tree_global)
+		
+		# L'albero occupa 1x1. auto_reserve = true prenota la cella di lavoro
+		var safe_pos = GridManager.get_adjacent_free_position(tree_global, Vector2i(1, 1), approach_dir, agent_id, true)
+		
 		interact_with_tile(next_tree, safe_pos) 
 	else:
 		if resource_amount > 0:
@@ -464,9 +484,9 @@ func die() -> void:
 	clear_assignment() # <- Usa la funzione del padre
 	super()
 
-func move_to(target_pos: Vector2, arrival_offset: float = 16.0) -> void:
+func move_to(target_pos: Vector2) -> void:
 	if unit_state == UnitState.MINING: return
-	super(target_pos, arrival_offset)
+	super(target_pos)
 
 func interact_with(target: Node2D) -> void:
 	if unit_state == UnitState.MINING: return
