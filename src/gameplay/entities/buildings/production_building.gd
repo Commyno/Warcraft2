@@ -182,9 +182,6 @@ func set_rally_point(new_pos: Vector2) -> void:
 	_show_rally_marker()
 
 func complete_construction() -> void:
-	if health_bar:
-		health_bar.visible = false
-
 	var builders_to_release = active_builders.duplicate()
 	active_builders.clear()
 	for builder in builders_to_release:
