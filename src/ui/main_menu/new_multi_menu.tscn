@@ -109,6 +109,7 @@ vertical_alignment = 1
 [node name="StartButton" type="TextureButton" parent="VBoxContainer/MarginContainer2/HBoxContainer" unique_id=1512714669]
 custom_minimum_size = Vector2(125, 23)
 layout_mode = 2
+disabled = true
 texture_normal = ExtResource("4_30v6j")
 texture_pressed = ExtResource("5_256r2")
 texture_hover = ExtResource("6_7xhj2")
@@ -129,7 +130,7 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 2
 theme_override_fonts/font = ExtResource("3_qnolc")
 theme_override_font_sizes/font_size = 10
-text = "Start Game"
+text = "Coming soon..."
 horizontal_alignment = 1
 vertical_alignment = 1
 

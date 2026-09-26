@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://dsm022vy7iigk"]
+
+[ext_resource type="Script" uid="uid://dfswhv6v47jm1" path="res://src/gameplay/entities/components/health_component.gd" id="1_wrivc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c3r7g"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x52c8"]
+bg_color = Color(0.0643078, 0.66110694, 1.1551381e-06, 1)
+
+[node name="HealthComponent" type="Node" unique_id=1132978403]
+script = ExtResource("1_wrivc")
+
+[node name="HealthBar" type="ProgressBar" parent="." unique_id=580638321]
+offset_left = -18.0
+offset_top = -40.0
+offset_right = 22.0
+offset_bottom = -34.0
+theme_override_styles/background = SubResource("StyleBoxFlat_c3r7g")
+theme_override_styles/fill = SubResource("StyleBoxFlat_x52c8")
+max_value = 1.0
+value = 1.0
+show_percentage = false

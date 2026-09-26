@@ -17,10 +17,6 @@ enum UnitState { IDLE, MOVING, ATTACKING, PATROLING, BUILDING, REPARING, MINING,
 
 # --- STATISTICHE DI BASE ---
 @export_group("Vitalità")
-@export var max_health: float = 100.0
-@export var health_regen: float = 0.25      # Vita rigenerata al secondo
-@export var max_mana: float = 0.0
-@export var mana_regen: float = 0.0
 @export var sight_range: int = 4            # Raggio visivo (in tile o unità di misura)
 
 @export_group("Attacco")
@@ -50,11 +46,13 @@ enum UnitState { IDLE, MOVING, ATTACKING, PATROLING, BUILDING, REPARING, MINING,
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var sprite2d: Sprite2D = $Sprite2D
 @onready var animation_tree: AnimationTree = $AnimationTree
-@onready var health_bar: ProgressBar = $HealthBar
 @onready var selectable_component: SelectableComponent = $SelectableComponent
 
+# --- COMPONENTS ---
+@onready var health_component: HealthComponent = $HealthComponent
+@onready var mana_component: ManaComponent = $ManaComponent
+
 # --- SEGNALI ---
-signal health_changed(new_health: float, max_health: float)
 signal destroyed()
 
 # Variabili di stato nello script dell'unità
@@ -62,17 +60,21 @@ const INTERACT_DISTANCE: float = 40.0           # Quanto vicino deve essere per 
 
 var entity_id: String = ""
 var player_id: int = -1 : get = _get_player_id
+
 # --- VARIABILI VITA ---
-var current_health: float = 0.0:
-	set(value):
-		current_health = value
-		if health_bar:
-			health_bar.value = value
-var current_mana: float = 0.0:
-	set(value):
-		current_mana = value
-		#if mana_bar:
-			#mana_bar.value = value
+var current_health: int:
+	get():
+		if health_component:
+			return int(health_component.health)
+		return 0
+
+# --- VARIABILI MANA ---
+var current_mana: int:
+	get():
+		if mana_component:
+			return int(mana_component.mana)
+		return 0
+
 var is_dead: bool = false
 
 # Dichiariamo state_machine senza @onready per inizializzarla in _ready() in sicurezza
@@ -103,35 +105,22 @@ func _ready() -> void:
 		animation_tree.active = true
 		state_machine = animation_tree.get("parameters/playback")
 	
-	# 3. Impedisci all'unità di muoversi appena spawnata
-#	nav_agent.target_position = global_position
-	
-	# Inizializza la vita al massimo
-	current_health = max_health
-	current_mana = max_mana
-	
-	# Imposta la UI della barra della vita
-	if health_bar:
-		health_bar.max_value = max_health
-		#health_bar.value = current_health
-	
 	# Collega l'unità al bollettino sul traffico del GridManager
 	if not GridManager.obstacles_changed.is_connected(_on_obstacles_changed):
 		GridManager.obstacles_changed.connect(_on_obstacles_changed)
 
 func setup(data: Resource) -> void:
 	self.entity_id = data.id
-	#self.entity_name = data.name
-	#self.description = data.description
-	#self.icon = data.icon
+
+	# Set components
 	if selectable_component:
 		selectable_component.setup(data.name, data.description, data.icon)
+	if health_component:
+		health_component.setup(data.max_health, data.health_regen)
+	if mana_component:
+		mana_component.setup(data.max_mana, data.mana_regen)
 	
 	self.type = data.type
-	self.max_health = data.max_health
-	self.health_regen = data.health_regen
-	self.max_mana = data.max_mana
-	self.mana_regen = data.mana_regen
 	self.basic_armor = data.basic_armor
 	self.sight_range = data.sight_range
 	self.move_speed = data.move_speed
@@ -143,8 +132,8 @@ func setup(data: Resource) -> void:
 	self.can_attack_ground = data.can_attack_ground
 	self.damage_type = data.damage_type
 
-func _process(delta: float) -> void:
-	_handle_regeneration(delta)
+#func _process(delta: float) -> void:
+	#pass
 
 func _physics_process(delta: float) -> void:
 	if is_dead or unit_state != UnitState.MOVING:
@@ -299,13 +288,17 @@ func _set_player_color(color: Color) -> void:
 func _apply_team_color(color: Color) -> void:
 	pass
 
-func get_health_perc() -> float:
-	return float(current_health) / float(max_health)
+# FUNCTION COMPONENT
 
-func get_available_actions() -> Array[ActionData]:
-	return available_actions
+func get_health_percentage() -> float:
+	if health_component:
+		return health_component.get_health_percentage()
+	return 0
 
-# --- SISTEMA DI SELEZIONE ---
+func get_mana_percentage() -> float:
+	if mana_component:
+		return mana_component.get_mana_percentage()
+	return 0
 
 func select() -> void:
 	if selectable_component:
@@ -319,7 +312,12 @@ func is_selected() -> bool:
 	if selectable_component:
 		return selectable_component.is_selected
 	return false
-	
+
+# --- OTHER FUNCTION
+
+func get_available_actions() -> Array[ActionData]:
+	return available_actions
+
 func remove_from_selection() -> void:
 	var selection_manager = _get_selection_manager()
 	if is_instance_valid(selection_manager):
@@ -416,17 +414,10 @@ func update_animation() -> void:
 
 # --- SISTEMA VITA E COMBATTIMENTO ---
 
-# Rigenerazione passiva di vita e mana
-func _handle_regeneration(delta: float) -> void:
-	if current_health < max_health and current_health > 0:
-		current_health = min(current_health + health_regen * delta, max_health)
-	if max_mana > 0 and current_mana < max_mana:
-		current_mana = min(current_mana + mana_regen * delta, max_mana)
-	
 # Calcolo del danno inflitto (con variazione causale)
-func get_calculated_damage() -> int:
-	var roll = randi_range(1, damage_dice_sides) if damage_dice_sides > 0 else 0
-	return basic_damage + roll
+#func get_calculated_damage() -> int:
+	#var roll = randi_range(1, damage_dice_sides) if damage_dice_sides > 0 else 0
+	#return basic_damage + roll
 	
 # Ricezione del danno con riduzione tramite Armatura
 func take_damage(amount: float, source_damage_type: Globals.DamageType = Globals.DamageType.NORMAL) -> void:
@@ -444,15 +435,9 @@ func take_damage(amount: float, source_damage_type: Globals.DamageType = Globals
 		armor_reduction = 2.0 - pow(0.94, -basic_armor) # Armatura negativa aumenta il danno
 		
 	var final_damage = max(1.0, damage_after_type * armor_reduction)
-	current_health -= final_damage
-	
-	# Emette il segnale per aggiornare eventuali barre della vita (UI)
-	_on_health_changed()
-		
-	print(name, " ha subito ", amount, " danni! Vita attuale: ", current_health)
-	
-	if current_health <= 0.0:
-		die()
+	if health_component:
+		health_component.damage(final_damage)
+		print(name, " ha subito ", amount, " danni! Vita attuale: ", health_component.health)
 
 # Matrice dei moltiplicatori tra Tipi Danno / Tipi Armatura
 func _get_damage_multiplier(dmg_t: Globals.DamageType, arm_t: Globals.ArmorType) -> float:
@@ -474,8 +459,8 @@ func heal(amount: float) -> void:
 		return
 		
 	# Aumenta la vita, ma non oltre il massimo consentito
-	current_health = min(current_health + amount, max_health)
-	_on_health_changed()
+	if health_component:
+		health_component.restore(amount)
 
 func die() -> void:
 	if is_dead:
@@ -485,8 +470,8 @@ func die() -> void:
 	destroyed.emit()
 	
 	# Nasconde la barra della vita
-	if health_bar:
-		health_bar.visible = false
+	if health_component:
+		health_component.hide_health_bar()
 	
 	# 1. PULIZIA TOTALE: Ferma il movimento e avvisa miniere/edifici che il lavoratore è morto!
 	clear_assignment() 
@@ -539,12 +524,6 @@ func spawn_corpse() -> void:
 	despawn_timer.timeout.connect(corpse.queue_free)
 
 # --- GESTIONE UI ---
-
-func _on_health_changed() -> void:
-	if health_bar:
-		health_bar.value = current_health
-	
-	health_changed.emit(current_health, max_health)
 
 # --- GESTIONE IERAZIONI ---
 

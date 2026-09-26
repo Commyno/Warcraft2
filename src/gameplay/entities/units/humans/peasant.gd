@@ -38,7 +38,7 @@ func _ready() -> void:
 	_apply_team_color(Color.BLUE)
 
 func _process(delta: float) -> void:
-	super(delta)
+	#super(delta)
 	
 	# --- CICLO DI TAGLIO LEGNA ---
 	if unit_state == UnitState.CHOPPING:

@@ -17,10 +17,14 @@ func setup(entity: Node2D) -> void:
 	update()
 	
 	# Connettiamo il signal per gli aggiornamenti futuri delle risorse
-	if not unit.health_changed.is_connected(on_health_changed):
-		unit.health_changed.connect(on_health_changed)
+	#if unit.health_component:
+		#if not unit.health_component.health_changed.is_connected(on_health_changed):
+			#unit.health_component.health_changed.connect(on_health_changed)
 
-func on_health_changed(new_health: float, max_health: float) -> void:
+#func on_health_changed(new_health: float, max_health: float) -> void:
+	#update()
+
+func on_stats_changed() -> void:
 	update()
 
 func update() -> void:
@@ -30,7 +34,8 @@ func update() -> void:
 	sight_value.text = str(unit.sight_range) + "+" + str(unit.sight_range)
 	speed_value.text = str(unit.move_speed / 10)
 
-func _on_tree_exited() -> void:
+#func _on_tree_exited() -> void:
 	# Disconnettere i signal quando la UI viene rimossa
-	if unit and unit.resources_changed.is_connected(update):
-		unit.resources_changed.disconnect(update)
+	#if unit and unit.health_component:
+		#if unit.health_component.health_changed.is_connected(on_health_changed):
+			#unit.health_component.health_changed.disconnect(on_health_changed)

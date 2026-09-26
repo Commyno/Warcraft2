@@ -1,5 +1,5 @@
 class_name SelectableComponent
-extends Node2D
+extends Node
 
 # --- PARAMETRI CONFIGURABILI DALL'INSPECTOR ---
 @export_group("Informazioni UI")

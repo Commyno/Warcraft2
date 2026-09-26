@@ -24,22 +24,32 @@ func setup(entity: Node2D) -> void:
 	update()
 	
 	# Connettiamo il signal per gli aggiornamenti futuri delle risorse
-	if not unit.health_changed.is_connected(on_health_changed):
-		unit.health_changed.connect(on_health_changed)
+	if unit.health_component:
+		if not unit.health_component.health_changed.is_connected(on_health_changed):
+			unit.health_component.health_changed.connect(on_health_changed)
 	
 func _on_tree_exited() -> void:
 	# Disconnettere i signal quando la UI viene rimossa
-	if unit and unit.resources_changed.is_connected(on_health_changed):
-		unit.resources_changed.disconnect(on_health_changed)
+	if unit and unit.health_component:
+		if unit.health_component.health_changed.is_connected(on_health_changed):
+			unit.health_component.health_changed.disconnect(on_health_changed)
 
 func on_health_changed(new_health: float, max_health: float) -> void:
 	update()
+
+func on_stats_changed() -> void:
+	unit_stats_box.update()
 
 func update() -> void:
 	if unit.has_node("SelectableComponent"):
 		portrait.texture = unit.selectable_component.icon
 		name_label.text = unit.selectable_component.display_name
-	health_progress_bar.value = unit.get_health_perc()
-	health_label.text = str(unit.current_health) + "/" + str(unit.max_health)
+	health_progress_bar.value = 0
+	health_label.text = str(0) + "/" + str(0)
+	if unit.has_node("HealthComponent"):
+		var health = unit.health_component.health
+		var max_health = unit.health_component.max_health
+		health_progress_bar.value = health / max_health
+		health_label.text = str(int(health)) + "/" + str(int(max_health))
 	
 	unit_stats_box.update()

@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://jqdhe6ikh8vi"]
+
+[ext_resource type="Script" uid="uid://thbnpm16lty" path="res://src/gameplay/entities/components/mana_component.gd" id="1_bttuf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c3r7g"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x52c8"]
+bg_color = Color(0, 0.23921569, 0.75686276, 1)
+
+[node name="ManaComponent" type="Node" unique_id=1132978403]
+script = ExtResource("1_bttuf")
+
+[node name="ManaBar" type="ProgressBar" parent="." unique_id=580638321]
+offset_left = -18.0
+offset_top = -40.0
+offset_right = 22.0
+offset_bottom = -34.0
+theme_override_styles/background = SubResource("StyleBoxFlat_c3r7g")
+theme_override_styles/fill = SubResource("StyleBoxFlat_x52c8")
+max_value = 1.0
+value = 1.0
+show_percentage = false

@@ -2,34 +2,47 @@
 
 [ext_resource type="Script" uid="uid://dtv6btrhvydlp" path="res://src/gameplay/entities/buildings/base_building.gd" id="1_tpccr"]
 [ext_resource type="Texture2D" uid="uid://cc8ig65686hyk" path="res://assets/art/race/humans/buildings/Humans - Human Buildings (Summer).png" id="2_p3hth"]
-[ext_resource type="Script" uid="uid://3e5qiqyf3ev3" path="res://src/gameplay/entities/units/selection_ring.gd" id="3_a17aa"]
-[ext_resource type="Script" uid="uid://65xprcgadmde" path="res://src/gameplay/entities/selectable_component.gd" id="4_wmeqw"]
-[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="5_p3hth"]
+[ext_resource type="Script" uid="uid://3e5qiqyf3ev3" path="res://src/gameplay/entities/components/selection_ring.gd" id="3_a17aa"]
+[ext_resource type="Script" uid="uid://dfswhv6v47jm1" path="res://src/gameplay/entities/components/health_component.gd" id="4_a17aa"]
+[ext_resource type="Script" uid="uid://65xprcgadmde" path="res://src/gameplay/entities/components/selectable_component.gd" id="4_wmeqw"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_tpccr"]
 radius = 64.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6e0s0"]
-bg_color = Color(0, 0, 0, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.4509804, 0.7647059, 0, 1)
-corner_detail = 2
-expand_margin_left = 1.0
-expand_margin_top = 1.0
-expand_margin_right = 1.0
-expand_margin_bottom = 1.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_we3ao"]
-bg_color = Color(0.44979727, 0.7631216, 0, 1)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_p3hth"]
 radius = 128.0
 
 [node name="BaseBuilding" type="StaticBody2D" unique_id=1889694065 groups=["buildings", "selectable_units"]]
 script = ExtResource("1_tpccr")
+player_color = null
+available_actions = null
+is_under_construction = null
+region_under_construction = null
+region_first_step_build = null
+region_second_step_build = null
+region_completed = null
+region_idle = null
+region_active = null
+region_depleted = null
+tile_size = null
+requires_water = null
+build_time = null
+max_health = null
+basic_armor = null
+sight_range = null
+food_provided = null
+is_resource_dropoff = null
+accepts_gold = null
+accepts_wood = null
+accepts_oil = null
+can_attack = null
+can_destroy = null
+basic_damage = null
+piercing_damage = null
+attack_range = null
+attack_cooldown = null
+can_attack_air = null
+can_attack_ground = null
 
 [node name="SelectionRing" type="Node2D" parent="." unique_id=523229799]
 z_index = -1
@@ -39,6 +52,10 @@ radius = 96.0
 [node name="SelectableComponent" type="Node2D" parent="." unique_id=1665141408 node_paths=PackedStringArray("selection_ring")]
 script = ExtResource("4_wmeqw")
 selection_ring = NodePath("../SelectionRing")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=133308684]
+script = ExtResource("4_a17aa")
+metadata/_custom_type_script = "uid://dfswhv6v47jm1"
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1061573362]
 texture = ExtResource("2_p3hth")
@@ -52,19 +69,6 @@ shape = SubResource("CircleShape2D_tpccr")
 radius = 70.0
 affect_navigation_mesh = true
 avoidance_layers = 2
-
-[node name="HealthBar" type="ProgressBar" parent="." unique_id=1652500946]
-offset_left = -64.0
-offset_top = -64.0
-offset_right = 64.0
-offset_bottom = -58.0
-theme_override_fonts/font = ExtResource("5_p3hth")
-theme_override_font_sizes/font_size = 6
-theme_override_styles/background = SubResource("StyleBoxFlat_6e0s0")
-theme_override_styles/fill = SubResource("StyleBoxFlat_we3ao")
-step = 1.0
-value = 100.0
-show_percentage = false
 
 [node name="PlacementArea" type="Area2D" parent="." unique_id=735967493]
 

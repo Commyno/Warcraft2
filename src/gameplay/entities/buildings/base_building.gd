@@ -40,7 +40,6 @@ enum BuildingState { IDLE, ACTIVE, DEPLETED, DESTROYED, INACTIVE }
 # STATISTICHE DIFENSIVE E VISIVE
 # ==========================================
 @export_group("Attributes")
-@export var max_health: int = 800
 @export var basic_armor: int = 20                 # Gli edifici in WC2 hanno armatura alta
 @export var sight_range: int = 4                 # Raggio visivo (in tile)
 
@@ -71,11 +70,12 @@ enum BuildingState { IDLE, ACTIVE, DEPLETED, DESTROYED, INACTIVE }
 @onready var sprite2d: Sprite2D = $Sprite2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var nav_obstacle: NavigationObstacle2D = $NavigationObstacle2D
-@onready var health_bar: ProgressBar = $HealthBar
+
+# --- COMPONENTS ---
 @onready var selectable_component: SelectableComponent = get_node_or_null("SelectableComponent")
+@onready var health_component: HealthComponent = $HealthComponent
 
 # --- SEGNALI ---
-signal health_changed(new_health: int, max_health: int)
 signal upgrade_completed(new_building_data: BuildingData)
 signal construction_completed
 signal construction_progress_updated(current_hp: float, max_hp: float)
@@ -104,11 +104,11 @@ var icon:  Texture :
 
 var is_depleted: bool = false
 var is_destroyed: bool = false
-var current_health: int = 0:
-	set(value):
-		current_health = value
-		if health_bar:
-			health_bar.value = value
+var current_health: int:
+	get():
+		if health_component:
+			return int(health_component.health)
+		return 0
 
 var active_builders: Array[Node2D] = []
 var construction_progress_perc: float = 0.0 # Da 0.0 a 1.0
@@ -130,12 +130,7 @@ func _ready() -> void:
 	# Inizializza l'ostacolo per la navmesh
 	if nav_obstacle:
 		nav_obstacle.affect_navigation_mesh = false
-		
-	current_health = max_health
-	if health_bar:
-		health_bar.max_value = max_health
-		#health_bar.value = current_health
-		
+	
 	# Gestione dello stato iniziale (già costruito)
 	active_builders.clear()	
 	_set_building_region(region_completed)
@@ -148,17 +143,16 @@ func _process(delta: float) -> void:
 
 func setup(data: Resource) -> void:
 	self.entity_id = data.id
-	#self.entity_name = data.name
-	#self.description = data.description
-	#self.icon = data.icon
+
+	# Components
 	if selectable_component:
 		selectable_component.setup(data.name, data.description, data.icon)
+	if health_component:
+		health_component.setup(data.max_health, 0) #data.health_regen)
 
 	self.tile_size = data.tile_size
 	self.requires_water = data.requires_water
 	self.build_time = data.build_time
-	self.max_health = data.max_health
-	self.current_health = max_health
 	self.basic_armor = data.basic_armor
 	self.sight_range = data.sight_range
 	self.food_provided = data.food_provided
@@ -187,13 +181,17 @@ func _apply_team_color(color: Color) -> void:
 	pass
 
 func get_health_perc() -> float:
-	return float(current_health) / float(max_health)
+	if health_component:
+		return health_component.get_health_percentage()
+	return 0
 
 func get_available_actions() -> Array[ActionData]:
 	return available_actions
 
 func is_damaged() -> bool:
-	return current_health < max_health and not is_under_construction
+	if health_component:
+		return health_component.is_damaged() and not is_under_construction
+	return false
 
 # --- SISTEMA DI SELEZIONE ---
 
@@ -212,20 +210,21 @@ func take_damage(amount: float) -> void:
 	if is_destroyed:
 		return
 		
-	current_health -= amount
-	_on_health_changed()
-	
-	print(name, " ha subito ", amount, " danni. Vita residua: ", current_health)
-	
-	if current_health <= 0.0:
-		destroy_building()
+	if health_component:
+		health_component.damage(amount)
+		print(name, " ha subito ", amount, " danni! Vita attuale: ", health_component.health)
+
+# TODO: Passare la funzione di morte al component
+func die() -> void:
+	destroy_building()
 
 func heal(amount: float) -> void:
 	if is_destroyed:
 		return
 		
-	current_health = min(current_health + amount, max_health)
-	_on_health_changed()
+	# Aumenta la vita, ma non oltre il massimo consentito
+	if health_component:
+		health_component.restore(amount)
 
 func destroy_building() -> void:
 	player_owner.register_building_lost(entity_id, food_provided)
@@ -237,8 +236,9 @@ func destroy_building() -> void:
 		collision_shape.set_deferred("disabled", true)
 	if nav_obstacle:
 		nav_obstacle.affect_navigation_mesh = false
-	if health_bar:
-		health_bar.visible = false
+	# Nasconde la barra della vita
+	if health_component:
+		health_component.hide_health_bar()
 		
 	print(name, " è stato distrutto!")
 	
@@ -252,8 +252,9 @@ func _disable_interactivity() -> void:
 		collision_shape.set_deferred("disabled", true)
 	if nav_obstacle:
 		nav_obstacle.affect_navigation_mesh = false
-	if health_bar:
-		health_bar.visible = false
+	# Nasconde la barra della vita
+	if health_component:
+		health_component.hide_health_bar()
 	if selectable_component:
 		selectable_component.deselect()
 
@@ -282,36 +283,27 @@ func spawn_rubble() -> void:
 
 func apply_upgrade(new_building_data: BuildingData) -> void:
 	# 1. Calcola la percentuale di vita attuale
-	var health_perc = float(current_health) / float(max_health)
+
 	
-	# 2. Sostituisce i dati base
+	# 1. Sostituisce i dati base
 	self.building_data = new_building_data
 	
-	# 3. Aggiorna le statistiche dal nuovo BuildingData
-	self.max_health = new_building_data.max_health
-	self.current_health = roundi(max_health * health_perc) # Mantiene la % di vita
+	# 2. Aggiorna le statistiche dal nuovo BuildingData
+	if health_component:
+		var health_perc = health_component.get_health_percentage()
+		health_component.setup(new_building_data.max_health, 0, health_perc) #new_building_data.health_regen)
 	
-	# 4. Aggiorna la parte visiva e le azioni
+	# 3. Aggiorna la parte visiva e le azioni
 	if sprite2d:
 		sprite2d.texture = new_building_data.spritesheet
 		
 	# Sostituisce i bottoni dell'interfaccia (ora può addestrare nuove unità o fare nuove ricerche)
 	self.available_actions = new_building_data.available_actions
 	
-	# Aggiorna la UI (vita massima cambiata, ecc.)
-	if health_bar:
-		health_bar.max_value = max_health
-		health_bar.value = current_health
-	
 	upgrade_completed.emit(new_building_data)
 
 # --- GESTIONE UI ---
 
-func _on_health_changed() -> void:
-	if health_bar:
-		health_bar.value = current_health
-	
-	health_changed.emit(current_health, max_health)
 
 # --- GESTIONE COSTRUZIONE ---
 
@@ -328,10 +320,8 @@ func place_under_construction() -> void:
 	construction_progress_perc = 0.0
 	current_health = 1.0 # Parte con pochissima vita
 
-	if health_bar:
-			health_bar.visible = true
-			health_bar.max_value = max_health
-			#health_bar.value = current_health
+	if health_component:
+		health_component.show_health_bar()
 
 	_set_building_region(region_under_construction)
 
@@ -342,11 +332,10 @@ func _advance_construction(delta: float) -> void:
 	construction_progress_perc += (delta / build_time) * speed_multiplier
 	construction_progress_perc = clamp(construction_progress_perc, 0.0, 1.0)
 	
-	current_health = roundi(lerp(1.0, float(max_health), construction_progress_perc))
+	if health_component:
+		var new_health = roundi(lerp(1.0, float(health_component.max_health), construction_progress_perc))
+		health_component.set_health(new_health)
 
-	#construction_progress_updated.emit(current_health, max_health)
-	_on_health_changed()
-	
 	# Transizione alla fase "metà costruito"
 	if construction_progress_perc >= 0.33 and construction_progress_perc < 0.66:
 		_set_building_region(region_first_step_build)
@@ -359,22 +348,12 @@ func _advance_construction(delta: float) -> void:
 
 func complete_construction() -> void:
 	is_under_construction = false
-	current_health = max_health
-	
-	if health_bar:
-		health_bar.visible = false
+	if health_component:
+		health_component.set_health(health_component.max_health)
+		health_component.hide_health_bar()
 
 	_set_building_region(region_completed)
 
-	#var builders_to_release = active_builders.duplicate()
-	#active_builders.clear()
-	#for builder in builders_to_release:
-		#if is_instance_valid(builder):
-			#builder.clear_assignment()
-	
-	#player_owner.register_building_completed(entity_id, food_provided)
-	
-	_on_health_changed()
 	construction_completed.emit()
 	
 func _set_building_region(region: Rect2) -> void:
