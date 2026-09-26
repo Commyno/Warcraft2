@@ -28,7 +28,8 @@ func _ready() -> void:
 	resource_type  = Globals.ResourceType.GOLD
 	_set_building_region(region_idle)
 	
-	health_bar.visible = false
+	if health_component:
+		health_component.hide_health_bar()
 		
 func change_state(new_state: BuildingState) -> void:
 	if current_state == new_state:

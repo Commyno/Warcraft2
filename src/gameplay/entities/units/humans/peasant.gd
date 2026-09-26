@@ -145,8 +145,8 @@ func enter_mine(mine: GoldMine) -> void:
 	if has_node("CollisionShape2D"):
 		collision_shape.set_deferred("disabled", true)
 	
-	if has_node("HealthBar"):
-		health_bar.visible = false
+	if health_component:
+		health_component.hide_health_bar()
 	
 	if has_node("SelectableComponent"):
 		if is_in_group("selectable_units"):
@@ -246,8 +246,8 @@ func exit_mine(gold_amount: int) -> void:
 	if has_node("CollisionShape2D"):
 		collision_shape.set_deferred("disabled", false)
 	
-	if has_node("HealthBar"):
-		health_bar.visible = true
+	if health_component:
+		health_component.hide_health_bar()
 	
 	if has_node("SelectableComponent"):
 		if !is_in_group("selectable_units"):

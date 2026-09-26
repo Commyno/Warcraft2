@@ -283,10 +283,10 @@ graph_offset = Vector2(-142.41745, -95.234985)
 texture = ExtResource("2_0xybu")
 region_rect = Rect2(272, 142, 30, 44)
 
-[node name="AnimationPlayer" parent="." index="5" unique_id=1017868079]
+[node name="AnimationPlayer" parent="." index="7" unique_id=1017868079]
 libraries/ = SubResource("AnimationLibrary_xrcm3")
 libraries/Footman = ExtResource("3_tj522")
 
-[node name="AnimationTree" parent="." index="6" unique_id=1411396235]
+[node name="AnimationTree" parent="." index="8" unique_id=1411396235]
 active = false
 tree_root = SubResource("AnimationNodeStateMachine_t2o4m")
