@@ -23,7 +23,7 @@ func _is_valid_target(source_entities: Array, target: Node2D) -> bool:
 		return false
 
 	# 4. Deve essere effettivamente danneggiato
-	if target.current_health >= target.max_health:
+	if not target.is_damaged():
 		return false
 
 	return true

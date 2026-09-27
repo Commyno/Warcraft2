@@ -18,12 +18,12 @@ func spawn_building(building_data: BuildingData, spawn_tile: Vector2, is_under_c
 	
 	var building: BaseBuilding = building_data.get_scene().instantiate()
 	
-	if building.has_method("setup"):
-		building.setup(building_data)
-
 	if entity_container != null:
 		entity_container.add_child(building)
 	building.global_position = final_world_pos
+
+	if building.has_method("setup"):
+		building.setup(building_data)
 
 	# --- NUOVA LOGICA: Registrazione Footprint Edificio ---
 	#var origin_tile: Vector2i = GridManager.get_tile_coords(final_world_pos)
@@ -79,12 +79,14 @@ func spawn_unit(unit_data: UnitData, building_center_pos: Vector2, rally_point: 
 		unit_instance.setup(unit_data)
 
 	# 4. Ordine di movimento verso il Rally Point
+	var current_cell = GridManager.get_tile_coords(final_spawn_pos)
 	if rally_point != Vector2.INF and rally_point != final_spawn_pos:
 		if unit_instance.has_method("move_to"):
-			var current_cell = GridManager.get_tile_coords(final_spawn_pos)
 			var safe_target = GridManager.get_available_destination(rally_point, unit_id, current_cell, true)
 			unit_instance.move_to(safe_target)
-
+	else:
+		GridManager.confirm_move(unit_id, current_cell, current_cell)
+	
 	return unit_instance
 
 func spawn_effect(effect_scene: PackedScene, spawn_pos: Vector2, auto_free_delay: float = 0.0) -> Node2D:

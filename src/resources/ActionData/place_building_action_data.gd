@@ -32,10 +32,6 @@ func _execute_action(_source_entities: Array, _target_data = null) -> void:
 	if owner_player == null or not building_data.is_affordable(owner_player):
 		return
 	building_data.pay(owner_player)
-	#owner_player.spend_resources(
-		#building_data.gold_cost, building_data.lumber_cost,
-		#building_data.oil_cost, building_data.food_cost
-	#)
 	
 	var position : Vector2i = _target_data as Vector2i
 	var building = SpawnManager.spawn_building(building_data, position, true, owner_player)

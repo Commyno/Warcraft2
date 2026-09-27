@@ -235,7 +235,7 @@ func _calculate_path() -> void:
 		return
 		
 	# Deleghiamo il calcolo alla griglia
-	current_path = GridManager.grid.get_id_path(start_cell, target_cell)
+	current_path = GridManager.grid.get_id_path(start_cell, Vector2i(79, 7), true) # target_cell, true)
 	
 	if not current_path.is_empty():
 		# Se il percorso inizia con la cella in cui ci troviamo già, la rimuoviamo
@@ -532,19 +532,7 @@ func interact_with(target: Node2D) -> void:
 	current_target = target
 	current_tile_target = Vector2i(-1, -1)
 	
-	if target.is_in_group("interactable"):
-		var direction_to_unit = (global_position - target.global_position).normalized()
-		var edge_offset: float = 5.0 
-		
-		for child in target.get_children():
-			if child is NavigationObstacle2D:
-				edge_offset = child.radius - 18 
-				break 
-		
-		var optimal_target_pos = target.global_position + (direction_to_unit * edge_offset)
-		move_to(optimal_target_pos)
-	else:
-		move_to(target.global_position)
+	move_to(target.global_position)
 
 # Funzione per mandare l'unità verso un tile di risorse (es. albero)
 func interact_with_tile(tile_coords: Vector2i, safe_destination: Vector2) -> void:

@@ -46,7 +46,7 @@ func update() -> void:
 	if resource.has_node("SelectableComponent"):
 		portrait.texture = resource.selectable_component.icon
 		name_label.text = resource.selectable_component.display_name
-	health_progress_bar.value = resource.get_health_perc()
-	health_label.text = str(resource.current_health) + "/" + str(resource.max_health)
+	health_progress_bar.value = 1
+	health_label.text = ""
 
 	amount_value.text = str(resource.current_resources)

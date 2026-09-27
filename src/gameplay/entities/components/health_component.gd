@@ -48,7 +48,7 @@ func damage(attack_damage: float) -> void:
 	_on_health_changed()
 
 func set_health(_health: float) -> void:
-	if health < max_health and health > 0:
+	if _health > 0 and health > 0: #Altrimenti è morto e non posso aumentare la salute
 		health = min(_health, max_health)
 		
 		# Emette il segnale per aggiornare eventuali barre della vita (UI)

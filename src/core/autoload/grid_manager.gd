@@ -41,7 +41,13 @@ func build_from_tilemap_layer(tile_layer: TileMapLayer) -> void:
 	grid.region = used_rect
 	grid.cell_size = Vector2(cell_size)
 	grid.offset = Vector2(cell_size) / 2.0
-	grid.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER
+	# Non consente il movimento in diagonale
+	#grid.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER
+	# Consente sempre il movimento in diagonale
+	grid.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_ALWAYS
+	# Alternativa: consente la diagonale solo se l'unità non "taglia" l'angolo tra due muri adiacenti
+	# grid.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_AT_LEAST_ONE_WALKABLE
+
 	grid.update()
 
 	_base_solid.clear()
@@ -155,6 +161,51 @@ func get_available_destination(target_global_pos: Vector2, agent_id: int, curren
 
 # Trova il punto di spawn in stile Warcraft II, basato su un Rally Point (es. la miniera d'oro)
 func get_warcraft_spawn_position(building_center_global: Vector2, building_size: Vector2i, rally_point_global: Vector2, agent_id: int) -> Vector2:
+	#if not grid:
+		#return building_center_global
+		#
+	#var cell_size: Vector2 = grid.cell_size
+	#var offset: Vector2 = (Vector2(building_size) - Vector2.ONE) * (cell_size / 2.0)
+	##if rally_point_global != Vector2.INF:
+		##se rally_point_global è a sinistra rispetto al building_center_global:
+			##offset *= Vector2i(-1, -1)
+		##se rally_point_global è a destra rispetto al building_center_global:
+			##offset *= Vector2i(1, 1)
+	#var origin_center_world: Vector2 = building_center_global - offset
+	#var origin_tile: Vector2i = get_tile_coords(origin_center_world)
+	#
+	#var ideal_dir := Vector2.ZERO
+	#if rally_point_global != Vector2.INF:
+		#ideal_dir = building_center_global.direction_to(rally_point_global)
+	#
+	## Espandiamo la ricerca fino a 5 anelli di distanza (puoi aumentare il limite se necessario)
+	#var direction : Array[Vector2i] = [Vector2i.DOWN, Vector2i.RIGHT, Vector2i.UP, Vector2i.LEFT]
+	#var w = building_size.x
+	#var h = building_size.y
+	#var last_tile_position = origin_tile
+	#var perimeter_tiles: Array[Vector2i] = []
+#
+	#for radius in range(1, 6):
+		## Spostati a sinistra per iniziare il nuovo anello
+		#last_tile_position += Vector2i.LEFT
+		## Fondamentale: aggiungi subito la posizione iniziale per non saltare il tile
+		#perimeter_tiles.append(last_tile_position)
+		#
+		## Calcola i passi esatti in base al bounding box espanso del raggio
+		#var steps_down = h + (radius * 2) - 2
+		#var steps_right = w + (radius * 2) - 1
+		#var steps_up = h + (radius * 2) - 1
+		#var steps_left = w + (radius * 2) - 1
+		#
+		#var side_dimension : Array[int] = [steps_down, steps_right, steps_up, steps_left]
+		#
+		#for count in range(4):
+			#var dir = direction[count]
+			#for step in range(side_dimension[count]):
+				#last_tile_position += dir
+				#perimeter_tiles.append(last_tile_position)
+
+# --- GEMINI LOGIC ------------------
 	if not grid:
 		return building_center_global
 		
@@ -166,70 +217,74 @@ func get_warcraft_spawn_position(building_center_global: Vector2, building_size:
 	var ideal_dir := Vector2.ZERO
 	if rally_point_global != Vector2.INF:
 		ideal_dir = building_center_global.direction_to(rally_point_global)
-	
-	# Espandiamo la ricerca fino a 5 anelli di distanza (puoi aumentare il limite se necessario)
-	var direction : Array[Vector2i] = [Vector2i.DOWN, Vector2i.RIGHT, Vector2i.UP, Vector2i.LEFT]
+		
 	var w = building_size.x
 	var h = building_size.y
-	var last_tile_position = origin_tile
+
+	# 1. Determina l'orientamento principale del rally point
+	var side_index: int = 0 # Default: LEFT
+	if ideal_dir != Vector2.ZERO:
+		if abs(ideal_dir.x) > abs(ideal_dir.y):
+			side_index = 2 if ideal_dir.x > 0 else 0 # Destra o Sinistra
+		else:
+			side_index = 1 if ideal_dir.y > 0 else 3 # Basso o Alto
+
+	# 2. Configura il punto di partenza, la spinta iniziale e l'ordine dei movimenti
+	var start_corner: Vector2i
+	var shift_dir: Vector2i
+	var direction_sequence: Array[Vector2i] = []
+	var base_dims: Array[int] = []
+
+	match side_index:
+		0: # LEFT (Base: in alto a sinistra. Va verso il basso)
+			start_corner = origin_tile
+			shift_dir = Vector2i.LEFT
+			direction_sequence = [Vector2i.DOWN, Vector2i.RIGHT, Vector2i.UP, Vector2i.LEFT]
+			base_dims = [h, w, h, w]
+		1: # BOTTOM (Base: in basso a sinistra. Va verso destra)
+			start_corner = origin_tile + Vector2i(0, h - 1)
+			shift_dir = Vector2i.DOWN
+			direction_sequence = [Vector2i.RIGHT, Vector2i.UP, Vector2i.LEFT, Vector2i.DOWN]
+			base_dims = [w, h, w, h]
+		2: # RIGHT (Base: in basso a destra. Va verso l'alto)
+			start_corner = origin_tile + Vector2i(w - 1, h - 1)
+			shift_dir = Vector2i.RIGHT
+			direction_sequence = [Vector2i.UP, Vector2i.LEFT, Vector2i.DOWN, Vector2i.RIGHT]
+			base_dims = [h, w, h, w]
+		3: # TOP (Base: in alto a destra. Va verso sinistra)
+			start_corner = origin_tile + Vector2i(w - 1, 0)
+			shift_dir = Vector2i.UP
+			direction_sequence = [Vector2i.LEFT, Vector2i.DOWN, Vector2i.RIGHT, Vector2i.UP]
+			base_dims = [w, h, w, h]
+
+	var last_tile_position = start_corner
 	var perimeter_tiles: Array[Vector2i] = []
 
+	# 3. Sviluppa gli anelli
 	for radius in range(1, 6):
-		# Spostati a sinistra per iniziare il nuovo anello
-		last_tile_position += Vector2i.LEFT
-		# Fondamentale: aggiungi subito la posizione iniziale per non saltare il tile
+		# Spostati per iniziare il nuovo anello verso la direzione di partenza
+		last_tile_position += shift_dir
 		perimeter_tiles.append(last_tile_position)
 		
-		# Calcola i passi esatti in base al bounding box espanso del raggio
-		var steps_down = h + (radius * 2) - 2
-		var steps_right = w + (radius * 2) - 1
-		var steps_up = h + (radius * 2) - 1
-		var steps_left = w + (radius * 2) - 1
-		
-		var side_dimension : Array[int] = [steps_down, steps_right, steps_up, steps_left]
+		# I passi si adattano automaticamente. Il primo lato è sempre -2 perché 
+		# il comando `shift_dir` ha già "consumato" il primo tile utile della linea.
+		var side_steps: Array[int] = [
+			base_dims[0] + (radius * 2) - 2,
+			base_dims[1] + (radius * 2) - 1,
+			base_dims[2] + (radius * 2) - 1,
+			base_dims[3] + (radius * 2) - 1
+		]
 		
 		for count in range(4):
-			var dir = direction[count]
-			for step in range(side_dimension[count]):
+			var dir = direction_sequence[count]
+			for step in range(side_steps[count]):
 				last_tile_position += dir
 				perimeter_tiles.append(last_tile_position)
-		
-	# --- CASO SENZA RALLY POINT ---
-	if ideal_dir == Vector2.ZERO:
-		# Scorre l'anello in senso orario finché non trova un buco
-		for tile in perimeter_tiles:
-			if is_valid_cell(tile, agent_id, tile):
-				confirm_move(agent_id, tile, tile)
-				return get_tile_center_global(tile)
 
-	# --- CASO CON RALLY POINT ---
-	perimeter_tiles.sort_custom(func(a, b):
-		var pos_a = get_tile_center_global(a)
-		var pos_b = get_tile_center_global(b)
-		var dir_a = building_center_global.direction_to(pos_a)
-		var dir_b = building_center_global.direction_to(pos_b)
-		return dir_a.dot(ideal_dir) > dir_b.dot(ideal_dir)
-	)
-	
-	var primary_side: Array[Vector2i] = []
-	var opposite_side: Array[Vector2i] = []
-	
+	# Scorre l'anello in senso orario finché non trova un buco
 	for tile in perimeter_tiles:
-		var pos = get_tile_center_global(tile)
-		var dir = building_center_global.direction_to(pos)
-		if dir.dot(ideal_dir) >= 0:
-			primary_side.append(tile)
-		else:
-			opposite_side.append(tile)
-			
-	for tile in primary_side:
-		if is_valid_cell(tile, agent_id, origin_tile): 
-			confirm_move(agent_id, origin_tile, tile) 
-			return get_tile_center_global(tile)
-			
-	for tile in opposite_side:
-		if is_valid_cell(tile, agent_id, origin_tile):
-			confirm_move(agent_id, origin_tile, tile)
+		if is_valid_cell(tile, agent_id, tile):
+			confirm_move(agent_id, tile, tile)
 			return get_tile_center_global(tile)
 			
 	# Se sia il lato ideale che quello opposto dell'anello corrente sono bloccati, passa al prossimo 'radius'

@@ -53,16 +53,20 @@ func setup(entity: Node2D) -> void:
 	update()
 	
 	# Connettiamo il signal per gli aggiornamenti futuri delle risorse
-	if building and not building.health_changed.is_connected(on_health_changed):
-		building.health_changed.connect(on_health_changed)
+	if building and building.health_component:
+		if not building.health_component.health_changed.is_connected(on_health_changed):
+			building.health_component.health_changed.connect(on_health_changed)
 	# Connettiamo il signal per gli aggiornamenti sulla lista di produzione
 	if building and not building.queue_updated.is_connected(on_queue_updated):
 		building.queue_updated.connect(on_queue_updated)
 
 func _on_tree_exited() -> void:
 	# Disconnettere i signal quando la UI viene rimossa
-	if building and building.health_changed.is_connected(on_health_changed):
-		building.health_changed.disconnect(on_health_changed)
+	if building and building.health_component:
+		if building.health_component.health_changed.is_connected(on_health_changed):
+			building.health_component.health_changed.disconnect(on_health_changed)
+	if building and building.queue_updated.is_connected(on_queue_updated):
+		building.queue_updated.disconnect(on_queue_updated)
 
 func on_health_changed(new_health: int, max_health: int) -> void:
 	update()
@@ -78,8 +82,13 @@ func update() -> void:
 		portrait.texture = building.selectable_component.icon
 		name_label.text = building.selectable_component.display_name
 
-	health_progress_bar.value = building.get_health_perc()
-	health_label.text = str(building.current_health) + "/" + str(building.max_health)
+	health_progress_bar.value = 0
+	health_label.text = str(0) + "/" + str(0)
+	if building.has_node("HealthComponent"):
+		var health = building.health_component.health
+		var max_health = building.health_component.max_health
+		health_progress_bar.value = health / max_health
+		health_label.text = str(int(health)) + "/" + str(int(max_health))
 	
 	if building.is_under_construction:
 		building_construcion_box.show()

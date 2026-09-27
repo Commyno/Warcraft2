@@ -5,7 +5,6 @@ extends HBoxContainer
 @onready var damage_value: Label = $ValueVBoxContainer/DamageValue
 @onready var range_value: Label = $ValueVBoxContainer/RangeValue
 @onready var sight_value: Label = $ValueVBoxContainer/SightValue
-@onready var speed_value: Label = $ValueVBoxContainer/SpeedValue
 
 var building: BaseBuilding
 
@@ -28,7 +27,6 @@ func update() -> void:
 	damage_value.text = str(building.basic_damage) + "+" + str(building.basic_damage)
 	range_value.text = str(building.attack_range) + "+" + str(building.attack_range)
 	sight_value.text = str(building.sight_range) + "+" + str(building.sight_range)
-	speed_value.text = str(building.move_speed / 10)
 
 func _on_tree_exited() -> void:
 	# Disconnettere i signal quando la UI viene rimossa

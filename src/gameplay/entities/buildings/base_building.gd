@@ -123,6 +123,9 @@ func _ready() -> void:
 	if selectable_component:
 		selectable_component.deselect()
 	
+	if health_component:
+		health_component.process_mode = Node.PROCESS_MODE_DISABLED
+	
 	if spritesheet and sprite2d:
 		sprite2d.texture = spritesheet
 		sprite2d.region_enabled = true
@@ -318,9 +321,9 @@ func unregister_builder(builder: Node2D) -> void:
 func place_under_construction() -> void:
 	is_under_construction = true
 	construction_progress_perc = 0.0
-	current_health = 1.0 # Parte con pochissima vita
 
 	if health_component:
+		health_component.set_health(1.0)
 		health_component.show_health_bar()
 
 	_set_building_region(region_under_construction)
@@ -332,25 +335,33 @@ func _advance_construction(delta: float) -> void:
 	construction_progress_perc += (delta / build_time) * speed_multiplier
 	construction_progress_perc = clamp(construction_progress_perc, 0.0, 1.0)
 	
+		# Completamento
+	if construction_progress_perc >= 1.0:
+		complete_construction()
+
 	if health_component:
-		var new_health = roundi(lerp(1.0, float(health_component.max_health), construction_progress_perc))
+		var max_health = health_component.max_health
+		var new_health = roundi(lerp(1.0, float(max_health), construction_progress_perc))
+		# Imposta la nuova salute e fa scattare il signal
 		health_component.set_health(new_health)
+		# Imposta la nuova percentuale e fa scattare il signal
+		construction_progress_updated.emit(new_health, max_health)
 
 	# Transizione alla fase "metà costruito"
 	if construction_progress_perc >= 0.33 and construction_progress_perc < 0.66:
 		_set_building_region(region_first_step_build)
 	if construction_progress_perc >= 0.66 and construction_progress_perc < 1.0:
 		_set_building_region(region_second_step_build)
-	
-	# Completamento
-	if construction_progress_perc >= 1.0:
-		complete_construction()
 
 func complete_construction() -> void:
 	is_under_construction = false
 	if health_component:
-		health_component.set_health(health_component.max_health)
+		health_component.process_mode = Node.PROCESS_MODE_PAUSABLE
 		health_component.hide_health_bar()
+		# Imposta la nuova salute e fa scattare il signal
+		health_component.set_health(health_component.max_health)
+		# Imposta la nuova percentuale e fa scattare il signal
+		construction_progress_updated.emit(health_component.health, health_component.max_health)
 
 	_set_building_region(region_completed)
 

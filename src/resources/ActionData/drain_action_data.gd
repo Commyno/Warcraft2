@@ -22,7 +22,7 @@ func _execute_action(_source_entities: Array, _target_data = null) -> void:
 
 	for worker in _source_entities:
 		# Miniera: target è la GoldMine (entità)
-		if _target_data != null:
-			if _target_data.is_in_group("town_hall") or _target_data.is_in_group("lumber_mill"):
+		if _target_data != null and _target_data is ProductionBuilding:
+			if _target_data.is_resource_dropoff:
 				if worker.has_method("interact_with"):
 					worker.interact_with(_target_data)

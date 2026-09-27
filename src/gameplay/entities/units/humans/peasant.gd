@@ -204,7 +204,7 @@ func exit_mine(gold_amount: int) -> void:
 		# Passiamo la miniera, la dimensione (3x3), e il Town Hall come calamita
 		exit_position = GridManager.get_warcraft_spawn_position(
 			current_target.global_position, 
-			Vector2i(3, 3), 
+			current_target.tile_size,
 			ideal_target, 
 			agent_id
 		)

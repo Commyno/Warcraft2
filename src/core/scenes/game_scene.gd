@@ -240,7 +240,7 @@ func _parse_group_layer(map_node: Node2D, layer_name: String, player: Player) ->
 			if data is BuildingData:
 				SpawnManager.spawn_building(data, cell_coords, false, player)
 			elif data is UnitData:
-				SpawnManager.spawn_unit(data, global_pos, Vector2.ZERO, player)
+				SpawnManager.spawn_unit(data, global_pos, Vector2.INF, player)
 	
 	# Nascondi il layer visivo dei tile logici a runtime
 	entities_layer.queue_free()
