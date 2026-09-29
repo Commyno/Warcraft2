@@ -29,6 +29,7 @@ var target_resource_tile: Vector2i = Vector2i(-1, -1):
 	set(value):
 		target_resource_tile = value
 		
+var enter_tile_position: Vector2i = Vector2i.MIN
 var current_resource: Globals.ResourceType = Globals.ResourceType.NONE
 var resource_amount: int = 0
 var action_timer: float = 0.0
@@ -132,6 +133,7 @@ func enter_mine(mine: GoldMine) -> void:
 		return
 	
 	unit_state = UnitState.MINING
+	enter_tile_position = GridManager.get_tile_coords(global_position)
 	
 	velocity = Vector2.ZERO
 	set_physics_process(false)
@@ -201,13 +203,16 @@ func exit_mine(gold_amount: int) -> void:
 			# Fallback se non ci sono Town Hall: esce da dove è entrato
 			ideal_target = current_target.global_position + (enter_direction * 64.0)
 		
-		# Passiamo la miniera, la dimensione (3x3), e il Town Hall come calamita
-		exit_position = GridManager.get_warcraft_spawn_position(
-			current_target.global_position, 
-			current_target.tile_size,
-			ideal_target, 
-			agent_id
-		)
+		if GridManager.is_valid_cell(enter_tile_position, agent_id, enter_tile_position):
+			exit_position = GridManager.get_tile_center_global(enter_tile_position)
+		else:
+			# Passiamo la miniera, la dimensione (3x3), e il Town Hall come calamita
+			exit_position = GridManager.get_warcraft_spawn_position(
+				current_target.global_position, 
+				current_target.tile_size,
+				ideal_target, 
+				agent_id
+			)
 	else:
 		exit_position = global_position + (enter_direction * 32.0)
 	

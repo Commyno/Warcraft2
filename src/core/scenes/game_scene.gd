@@ -60,10 +60,10 @@ var local_player   : Player = null      # Giocatore Locale Umano
 # ==========================================
 # ONREADY: GAME WORLD NODES
 # ==========================================
-@onready var nav_region        : NavigationRegion2D = $World/NavigationRegion2D
-@onready var level_root        : Node2D       = $World/NavigationRegion2D/LevelRoot
-@onready var entities_root     : Node2D       = $World/NavigationRegion2D/EntitiesRoot
-@onready var effects_root      : Node2D       = $World/NavigationRegion2D/EffectsRoot
+#@onready var nav_region        : NavigationRegion2D = $World/NavigationRegion2D
+@onready var level_root        : Node2D       = $World/LevelRoot
+@onready var entities_root     : Node2D       = $World/EntitiesRoot
+@onready var effects_root      : Node2D       = $World/EffectsRoot
 @onready var players_node      : Node2D       = $Players
 @onready var game_camera       : Camera2D     = $Camera2D 
 

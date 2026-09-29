@@ -168,6 +168,25 @@ func _prepare_next_step() -> void:
 	var current_cell = GridManager.get_tile_coords(global_position)
 	var next_cell = current_path[0]
 	var agent_id = self.get_instance_id()
+
+	# Controllo di adiacenza dinamico se l'obiettivo è un edificio multi-tile
+	if is_instance_valid(current_target) and current_target.has_method("get_first_tile"):
+		var origin: Vector2i = current_target.get_first_tile()
+		var size: Vector2i = current_target.tile_size
+		
+		# Definiamo i confini dell'anello perimetrale espanso (incluse le diagonali)
+		# Un edificio 2x2 allargherà il controllo a una zona di 4x4 celle[cite: 6].
+		var min_x = origin.x - 1
+		var max_x = origin.x + size.x
+		var min_y = origin.y - 1
+		var max_y = origin.y + size.y
+
+		# Se la cella corrente dell'unità si trova dentro questo confine, siamo arrivati!
+		if current_cell.x >= min_x and current_cell.x <= max_x and current_cell.y >= min_y and current_cell.y <= max_y:
+			# Siamo arrivati davanti all'obiettivo e lo spazio finale è occupato.
+			# Ci fermiamo qui in modo pulito.
+			current_path.clear()
+			_finish_movement()
 	
 	is_processing_grid = true
 	var result = GridManager.confirm_move(agent_id, current_cell, next_cell)
@@ -181,9 +200,8 @@ func _prepare_next_step() -> void:
 		
 		# --- LA SOLUZIONE ---
 		# Controlliamo se la cella bloccata è esattamente la destinazione finale
-		var target_cell = GridManager.get_tile_coords(final_target_global)
-		
-		if next_cell == target_cell:
+		var target_cell = GridManager.get_tile_coords(final_target_global)		
+		if (next_cell == target_cell):
 			# Siamo arrivati davanti all'obiettivo e lo spazio finale è occupato.
 			# Ci fermiamo qui in modo pulito.
 			current_path.clear()
@@ -201,7 +219,7 @@ func _repath_around_obstacle(blocked_cell: Vector2i) -> void:
 	
 	var start_cell = GridManager.get_tile_coords(global_position)
 	var target_cell = GridManager.get_tile_coords(final_target_global)
-	var detour_path = GridManager.grid.get_id_path(start_cell, target_cell)
+	var detour_path = GridManager.grid.get_id_path(start_cell, target_cell, true)
 	
 	var remains_solid = GridManager.authored_solid_at(blocked_cell) or GridManager.blocker_count_at(blocked_cell) > 0
 	GridManager.grid.set_point_solid(blocked_cell, remains_solid)
@@ -235,7 +253,7 @@ func _calculate_path() -> void:
 		return
 		
 	# Deleghiamo il calcolo alla griglia
-	current_path = GridManager.grid.get_id_path(start_cell, Vector2i(79, 7), true) # target_cell, true)
+	current_path = GridManager.grid.get_id_path(start_cell, target_cell, true)
 	
 	if not current_path.is_empty():
 		# Se il percorso inizia con la cella in cui ci troviamo già, la rimuoviamo

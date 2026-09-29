@@ -161,51 +161,6 @@ func get_available_destination(target_global_pos: Vector2, agent_id: int, curren
 
 # Trova il punto di spawn in stile Warcraft II, basato su un Rally Point (es. la miniera d'oro)
 func get_warcraft_spawn_position(building_center_global: Vector2, building_size: Vector2i, rally_point_global: Vector2, agent_id: int) -> Vector2:
-	#if not grid:
-		#return building_center_global
-		#
-	#var cell_size: Vector2 = grid.cell_size
-	#var offset: Vector2 = (Vector2(building_size) - Vector2.ONE) * (cell_size / 2.0)
-	##if rally_point_global != Vector2.INF:
-		##se rally_point_global è a sinistra rispetto al building_center_global:
-			##offset *= Vector2i(-1, -1)
-		##se rally_point_global è a destra rispetto al building_center_global:
-			##offset *= Vector2i(1, 1)
-	#var origin_center_world: Vector2 = building_center_global - offset
-	#var origin_tile: Vector2i = get_tile_coords(origin_center_world)
-	#
-	#var ideal_dir := Vector2.ZERO
-	#if rally_point_global != Vector2.INF:
-		#ideal_dir = building_center_global.direction_to(rally_point_global)
-	#
-	## Espandiamo la ricerca fino a 5 anelli di distanza (puoi aumentare il limite se necessario)
-	#var direction : Array[Vector2i] = [Vector2i.DOWN, Vector2i.RIGHT, Vector2i.UP, Vector2i.LEFT]
-	#var w = building_size.x
-	#var h = building_size.y
-	#var last_tile_position = origin_tile
-	#var perimeter_tiles: Array[Vector2i] = []
-#
-	#for radius in range(1, 6):
-		## Spostati a sinistra per iniziare il nuovo anello
-		#last_tile_position += Vector2i.LEFT
-		## Fondamentale: aggiungi subito la posizione iniziale per non saltare il tile
-		#perimeter_tiles.append(last_tile_position)
-		#
-		## Calcola i passi esatti in base al bounding box espanso del raggio
-		#var steps_down = h + (radius * 2) - 2
-		#var steps_right = w + (radius * 2) - 1
-		#var steps_up = h + (radius * 2) - 1
-		#var steps_left = w + (radius * 2) - 1
-		#
-		#var side_dimension : Array[int] = [steps_down, steps_right, steps_up, steps_left]
-		#
-		#for count in range(4):
-			#var dir = direction[count]
-			#for step in range(side_dimension[count]):
-				#last_tile_position += dir
-				#perimeter_tiles.append(last_tile_position)
-
-# --- GEMINI LOGIC ------------------
 	if not grid:
 		return building_center_global
 		
@@ -288,72 +243,6 @@ func get_warcraft_spawn_position(building_center_global: Vector2, building_size:
 			return get_tile_center_global(tile)
 			
 	# Se sia il lato ideale che quello opposto dell'anello corrente sono bloccati, passa al prossimo 'radius'
-	return get_tile_center_global(origin_tile)
-
-		#var perimeter_tiles: Array[Vector2i] = []
-#
-		## --- GENERAZIONE DELL'ANELLO (Senso orario, angoli non duplicati) ---
-		## 1. Lato Superiore
-		#for x in range(-radius, building_size.x + radius):
-			#perimeter_tiles.append(origin_tile + Vector2i(x, -radius))
-			#
-		## 2. Lato Destro
-		#for y in range(-radius + 1, building_size.y + radius):
-			#perimeter_tiles.append(origin_tile + Vector2i(building_size.x + radius - 1, y))
-			#
-		## 3. Lato Inferiore
-		#for x in range(building_size.x + radius - 2, -radius - 1, -1):
-			#perimeter_tiles.append(origin_tile + Vector2i(x, building_size.y + radius - 1))
-			#
-		## 4. Lato Sinistro
-		#for y in range(building_size.y + radius - 2, -radius, -1):
-			#perimeter_tiles.append(origin_tile + Vector2i(-radius, y))
-			#
-		#
-		## --- CASO SENZA RALLY POINT ---
-		#if ideal_dir == Vector2.ZERO:
-			## Scorre l'anello in senso orario finché non trova un buco
-			#for tile in perimeter_tiles:
-				#if is_valid_cell(tile, agent_id, origin_tile):
-					#confirm_move(agent_id, origin_tile, tile)
-					#return get_tile_center_global(tile)
-			#
-			## Se l'anello è tutto pieno, il ciclo continua col 'radius' successivo
-			#continue
-			
-		## --- CASO CON RALLY POINT ---
-		#perimeter_tiles.sort_custom(func(a, b):
-			#var pos_a = get_tile_center_global(a)
-			#var pos_b = get_tile_center_global(b)
-			#var dir_a = building_center_global.direction_to(pos_a)
-			#var dir_b = building_center_global.direction_to(pos_b)
-			#return dir_a.dot(ideal_dir) > dir_b.dot(ideal_dir)
-		#)
-		#
-		#var primary_side: Array[Vector2i] = []
-		#var opposite_side: Array[Vector2i] = []
-		#
-		#for tile in perimeter_tiles:
-			#var pos = get_tile_center_global(tile)
-			#var dir = building_center_global.direction_to(pos)
-			#if dir.dot(ideal_dir) >= 0:
-				#primary_side.append(tile)
-			#else:
-				#opposite_side.append(tile)
-				#
-		#for tile in primary_side:
-			#if is_valid_cell(tile, agent_id, origin_tile): 
-				#confirm_move(agent_id, origin_tile, tile) 
-				#return get_tile_center_global(tile)
-				#
-		#for tile in opposite_side:
-			#if is_valid_cell(tile, agent_id, origin_tile):
-				#confirm_move(agent_id, origin_tile, tile)
-				#return get_tile_center_global(tile)
-				#
-		## Se sia il lato ideale che quello opposto dell'anello corrente sono bloccati, passa al prossimo 'radius'
-
-	# Fallback di emergenza: l'edificio è murato vivo per 5 tile di profondità in ogni direzione
 	return get_tile_center_global(origin_tile)
 
 # Controlla se una cella esiste, non ha ostacoli fissi e non è occupata da altre truppe
