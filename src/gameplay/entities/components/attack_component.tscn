@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cwvlnjmaty746"]
+
+[ext_resource type="Script" uid="uid://wleo22gywfd1" path="res://src/gameplay/entities/components/attack_component.gd" id="1_syyog"]
+
+[node name="AttackComponent" type="Node" unique_id=1306256968]
+script = ExtResource("1_syyog")

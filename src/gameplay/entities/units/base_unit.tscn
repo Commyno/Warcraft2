@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dsm022vy7iigk" path="res://src/gameplay/entities/components/health_component.tscn" id="4_wb035"]
 [ext_resource type="PackedScene" uid="uid://b445o3jwmpknl" path="res://src/gameplay/entities/components/hitbox_component.tscn" id="5_majp5"]
 [ext_resource type="Script" uid="uid://thbnpm16lty" path="res://src/gameplay/entities/components/mana_component.gd" id="5_mvrlu"]
+[ext_resource type="Script" uid="uid://wleo22gywfd1" path="res://src/gameplay/entities/components/attack_component.gd" id="7_45lcm"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_omghk"]
 radius = 16.0
@@ -273,6 +274,10 @@ script = ExtResource("5_mvrlu")
 metadata/_custom_type_script = "uid://thbnpm16lty"
 
 [node name="HitboxComponent" parent="." unique_id=1814346716 instance=ExtResource("5_majp5")]
+
+[node name="AttackComponent" type="Node" parent="." unique_id=85028586]
+script = ExtResource("7_45lcm")
+metadata/_custom_type_script = "uid://wleo22gywfd1"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=152319155]
 shape = SubResource("CircleShape2D_omghk")

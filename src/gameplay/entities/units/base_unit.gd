@@ -19,16 +19,6 @@ enum UnitState { IDLE, MOVING, ATTACKING, PATROLING, BUILDING, REPARING, MINING,
 @export_group("Vitalità")
 @export var sight_range: int = 4            # Raggio visivo (in tile o unità di misura)
 
-@export_group("Attacco")
-@export var basic_damage: int = 6
-@export var piercing_damage: int = 3        # Danno perforante (ignora l'Armor nemica)
-@export var damage_dice_sides: int = 4      # Danno finale: basic_damage + randi_range(1, dice_sides)
-@export var attack_range: float = 40.0
-@export var attack_cooldown: float = 1.35
-@export var damage_type: Globals.DamageType = Globals.DamageType.NORMAL
-@export var can_attack_air: bool = false
-@export var can_attack_ground: bool = true
-
 @export_group("Difesa")
 @export var basic_armor: float = 2.0
 @export var armor_type: Globals.ArmorType = Globals.ArmorType.MEDIUM
@@ -51,6 +41,7 @@ enum UnitState { IDLE, MOVING, ATTACKING, PATROLING, BUILDING, REPARING, MINING,
 # --- COMPONENTS ---
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var mana_component: ManaComponent = $ManaComponent
+@onready var attack_component: AttackComponent = $AttackComponent
 
 # --- SEGNALI ---
 signal destroyed()
@@ -119,18 +110,13 @@ func setup(data: Resource) -> void:
 		health_component.setup(data.max_health, data.health_regen)
 	if mana_component:
 		mana_component.setup(data.max_mana, data.mana_regen)
+	if attack_component:
+		attack_component.setup(data.basic_damage, data.piercing_damage, data.attack_range, data.attack_cooldown, self.damage_type, data.can_attack_ground, data.can_attack_air)
 	
 	self.type = data.type
 	self.basic_armor = data.basic_armor
 	self.sight_range = data.sight_range
 	self.move_speed = data.move_speed
-	self.basic_damage = data.basic_damage
-	self.piercing_damage = data.piercing_damage
-	self.attack_range = data.attack_range
-	self.attack_cooldown = data.attack_cooldown
-	self.can_attack_air = data.can_attack_air
-	self.can_attack_ground = data.can_attack_ground
-	self.damage_type = data.damage_type
 
 #func _process(delta: float) -> void:
 	#pass
@@ -170,7 +156,7 @@ func _prepare_next_step() -> void:
 	var agent_id = self.get_instance_id()
 
 	# Controllo di adiacenza dinamico se l'obiettivo è un edificio multi-tile
-	if is_instance_valid(current_target) and current_target.has_method("get_first_tile"):
+	if is_instance_valid(current_target) and current_target is BaseBuilding:
 		var origin: Vector2i = current_target.get_first_tile()
 		var size: Vector2i = current_target.tile_size
 		
@@ -187,6 +173,7 @@ func _prepare_next_step() -> void:
 			# Ci fermiamo qui in modo pulito.
 			current_path.clear()
 			_finish_movement()
+			return
 	
 	is_processing_grid = true
 	var result = GridManager.confirm_move(agent_id, current_cell, next_cell)
@@ -432,11 +419,6 @@ func update_animation() -> void:
 
 # --- SISTEMA VITA E COMBATTIMENTO ---
 
-# Calcolo del danno inflitto (con variazione causale)
-#func get_calculated_damage() -> int:
-	#var roll = randi_range(1, damage_dice_sides) if damage_dice_sides > 0 else 0
-	#return basic_damage + roll
-	
 # Ricezione del danno con riduzione tramite Armatura
 func take_damage(amount: float, source_damage_type: Globals.DamageType = Globals.DamageType.NORMAL) -> void:
 	if is_dead:
