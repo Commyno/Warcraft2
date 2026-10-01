@@ -26,11 +26,11 @@ func _process(delta: float) -> void:
 		if health < max_health and health > 0:
 			restore(health_regen * delta)
 
-func setup(_max_health: float, _health_regen: float, _start_health_percentage: float = 1) -> void:
-	max_health = _max_health
-	health = _max_health * _start_health_percentage
-	health_regen = _health_regen
-	is_health_regen = _health_regen > 0
+func setup(data: Resource, _start_health_percentage: float = 1.0) -> void:
+	max_health = data.max_health
+	health = data.max_health * _start_health_percentage
+	health_regen = data.health_regen
+	is_health_regen = data.health_regen > 0
 
 func get_health_percentage() -> float:
 	return health / max_health

@@ -33,7 +33,7 @@ func deselect() -> void:
 func get_owner_entity() -> Node2D:
 	return get_parent() as Node2D
 
-func setup(_name: String, _description: String, _icon: Texture) -> void:
-	display_name = _name
-	display_description = _description
-	icon = _icon
+func setup(data: Resource) -> void:
+	display_name = data.name
+	display_description = data.description
+	icon = data.icon

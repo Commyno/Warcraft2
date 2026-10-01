@@ -28,10 +28,16 @@ func on_stats_changed() -> void:
 	update()
 
 func update() -> void:
-	armor_value.text = str(unit.basic_armor) + "+" + str(unit.basic_armor)
-	damage_value.text = str(unit.basic_damage) + "+" + str(unit.basic_damage)
-	range_value.text = str(unit.attack_range) + "+" + str(unit.attack_range)
-	sight_value.text = str(unit.sight_range) + "+" + str(unit.sight_range)
+	var attack_component = unit.get_node_or_null("AttackComponent")
+	if attack_component != null:
+		range_value.text = str(attack_component.attack_range) + "+" + str(0)
+		damage_value.text = str(attack_component.basic_damage) + "+" + str(0)
+		
+	var vision_component = unit.get_node_or_null("VisionComponent")
+	if vision_component != null:
+		sight_value.text = str(vision_component.sight_range) + "+" + str(0)
+		
+	armor_value.text = str(unit.basic_armor) + "+" + str(0)
 	speed_value.text = str(unit.move_speed / 10)
 
 #func _on_tree_exited() -> void:

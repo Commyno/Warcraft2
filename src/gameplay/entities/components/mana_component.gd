@@ -26,11 +26,11 @@ func _process(delta: float) -> void:
 		if mana < max_mana and mana > 0:
 			mana = min(mana + mana_regen * delta, max_mana)
 
-func setup(_max_mana: float, _mana_regen: float) -> void:
-	max_mana = _max_mana
-	mana = _max_mana
-	mana_regen = _mana_regen
-	is_mana_regen = _mana_regen > 0
+func setup(data: Resource, _start_mana_percentage: float = 0.0) -> void:
+	max_mana = data.max_mana
+	mana = data.max_mana * _start_mana_percentage
+	mana_regen = data.mana_regen
+	is_mana_regen = data.mana_regen > 0
 
 func get_mama_percentage() -> float:
 	return mana / max_mana

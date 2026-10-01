@@ -32,6 +32,7 @@ FormationManager="*uid://cqxbygf7gw8nt"
 PlayerManager="*uid://4kc5m8lgq68k"
 TargetingManager="*uid://chge0rqlgnv7k"
 SpawnManager="*uid://d4hv67mojc5yx"
+FogManager="*uid://cor1gnohsfjf1"
 
 [display]
 

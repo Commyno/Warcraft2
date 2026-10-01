@@ -35,8 +35,12 @@ enum BuildingType { PRODUCTION, ECONOMY, DEFENSE, TECH }
 # ==========================================
 @export_group("Attributes")
 @export var max_health: int = 800
-@export var basic_armor: int = 20                 # Gli edifici in WC2 hanno armatura alta
-@export var sight_range: int = 4                 # Raggio visivo (in tile)
+@export var health_regen: float = 0.25      # Vita rigenerata al secondo
+@export var max_mana: int = 0               # 255 per Mage, Paladin, Death Knight, Ogre-Mage
+@export var mana_regen: float = 0.0         # Mana rigenerata al secondo
+@export var basic_armor: int = 20           # Gli edifici in WC2 hanno armatura alta
+@export var sight_range: int = 4            # Raggio visivo (in tile)
+@export var move_speed: float = 0.0         # Velocità in pixel/sec (mappata dallo "Speed: 10" di WC2)
 
 # ==========================================
 # CAPACITÀ SPECIALI / SUPPORTO

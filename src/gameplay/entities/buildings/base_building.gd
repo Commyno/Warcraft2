@@ -149,9 +149,9 @@ func setup(data: Resource) -> void:
 
 	# Components
 	if selectable_component:
-		selectable_component.setup(data.name, data.description, data.icon)
+		selectable_component.setup(data)
 	if health_component:
-		health_component.setup(data.max_health, 0) #data.health_regen)
+		health_component.setup(data)
 
 	self.tile_size = data.tile_size
 	self.requires_water = data.requires_water
@@ -294,7 +294,7 @@ func apply_upgrade(new_building_data: BuildingData) -> void:
 	# 2. Aggiorna le statistiche dal nuovo BuildingData
 	if health_component:
 		var health_perc = health_component.get_health_percentage()
-		health_component.setup(new_building_data.max_health, 0, health_perc) #new_building_data.health_regen)
+		health_component.setup(new_building_data, health_perc) #new_building_data.health_regen)
 	
 	# 3. Aggiorna la parte visiva e le azioni
 	if sprite2d:

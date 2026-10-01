@@ -17,7 +17,6 @@ enum UnitState { IDLE, MOVING, ATTACKING, PATROLING, BUILDING, REPARING, MINING,
 
 # --- STATISTICHE DI BASE ---
 @export_group("Vitalità")
-@export var sight_range: int = 4            # Raggio visivo (in tile o unità di misura)
 
 @export_group("Difesa")
 @export var basic_armor: float = 2.0
@@ -36,12 +35,14 @@ enum UnitState { IDLE, MOVING, ATTACKING, PATROLING, BUILDING, REPARING, MINING,
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var sprite2d: Sprite2D = $Sprite2D
 @onready var animation_tree: AnimationTree = $AnimationTree
-@onready var selectable_component: SelectableComponent = $SelectableComponent
 
 # --- COMPONENTS ---
+@onready var selectable_component: SelectableComponent = $SelectableComponent
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var mana_component: ManaComponent = $ManaComponent
 @onready var attack_component: AttackComponent = $AttackComponent
+@onready var visible_component: VisibleComponent = $VisibleComponent
+@onready var vision_component: VisionComponent = $VisionComponent
 
 # --- SEGNALI ---
 signal destroyed()
@@ -105,17 +106,18 @@ func setup(data: Resource) -> void:
 
 	# Set components
 	if selectable_component:
-		selectable_component.setup(data.name, data.description, data.icon)
+		selectable_component.setup(data)
 	if health_component:
-		health_component.setup(data.max_health, data.health_regen)
+		health_component.setup(data)
 	if mana_component:
-		mana_component.setup(data.max_mana, data.mana_regen)
+		mana_component.setup(data)
 	if attack_component:
-		attack_component.setup(data.basic_damage, data.piercing_damage, data.attack_range, data.attack_cooldown, self.damage_type, data.can_attack_ground, data.can_attack_air)
+		attack_component.setup(data)
+	if vision_component:
+		vision_component.setup(data)
 	
 	self.type = data.type
 	self.basic_armor = data.basic_armor
-	self.sight_range = data.sight_range
 	self.move_speed = data.move_speed
 
 #func _process(delta: float) -> void:

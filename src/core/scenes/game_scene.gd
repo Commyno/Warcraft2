@@ -137,6 +137,10 @@ func _load_map() -> void:
 	
 	GridManager.build_from_tilemap_layer(new_ground)
 
+	# Inizializza la Nebbia di Guerra <---
+	if local_player != null:
+		FogManager.initialize_fog(level_root, ground_layer, local_player.player_id)
+
 	# 1. Recupera i marker di spawn
 	_parse_spawn_points(map_instance)
 
