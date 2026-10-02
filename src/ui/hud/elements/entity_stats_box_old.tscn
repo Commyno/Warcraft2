@@ -1,22 +1,20 @@
-[gd_scene format=3 uid="uid://cidjmt5bpauh3"]
+[gd_scene format=3 uid="uid://b3k5wgbrvf8ws"]
 
-[ext_resource type="Script" uid="uid://om2qa4ce83of" path="res://src/ui/hud/elements/unit_stats_box.gd" id="1_mywxw"]
-[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="2_mywxw"]
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="2_x77do"]
 
-[node name="VBoxContainer" type="VBoxContainer" unique_id=221584717]
+[node name="EntityStatsBox" type="VBoxContainer" unique_id=221584717]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_mywxw")
 
-[node name="UnitStatsBoxContainer" type="HBoxContainer" parent="." unique_id=164080787]
+[node name="EntityStatsBoxContainer" type="HBoxContainer" parent="." unique_id=164080787]
 layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="LabelVBoxContainer" type="VBoxContainer" parent="UnitStatsBoxContainer" unique_id=673281293]
+[node name="LabelVBoxContainer" type="VBoxContainer" parent="EntityStatsBoxContainer" unique_id=673281293]
 custom_minimum_size = Vector2(35, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -24,62 +22,62 @@ size_flags_vertical = 4
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="ArmorLabel" type="Label" parent="UnitStatsBoxContainer/LabelVBoxContainer" unique_id=1323126532]
+[node name="ArmorLabel" type="Label" parent="EntityStatsBoxContainer/LabelVBoxContainer" unique_id=1323126532]
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(1, 1, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("2_mywxw")
+theme_override_fonts/font = ExtResource("2_x77do")
 theme_override_font_sizes/font_size = 6
 text = "Armor: "
 horizontal_alignment = 2
 
-[node name="DamageLabel" type="Label" parent="UnitStatsBoxContainer/LabelVBoxContainer" unique_id=1527119395]
+[node name="DamageLabel" type="Label" parent="EntityStatsBoxContainer/LabelVBoxContainer" unique_id=1527119395]
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(1, 1, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("2_mywxw")
+theme_override_fonts/font = ExtResource("2_x77do")
 theme_override_font_sizes/font_size = 6
 text = "Damage: "
 horizontal_alignment = 2
 
-[node name="RangeLabel" type="Label" parent="UnitStatsBoxContainer/LabelVBoxContainer" unique_id=437840471]
+[node name="RangeLabel" type="Label" parent="EntityStatsBoxContainer/LabelVBoxContainer" unique_id=437840471]
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(1, 1, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("2_mywxw")
+theme_override_fonts/font = ExtResource("2_x77do")
 theme_override_font_sizes/font_size = 6
 text = "Range: "
 horizontal_alignment = 2
 
-[node name="SightLabel" type="Label" parent="UnitStatsBoxContainer/LabelVBoxContainer" unique_id=868680720]
+[node name="SightLabel" type="Label" parent="EntityStatsBoxContainer/LabelVBoxContainer" unique_id=868680720]
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(1, 1, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("2_mywxw")
+theme_override_fonts/font = ExtResource("2_x77do")
 theme_override_font_sizes/font_size = 6
 text = "Sight: "
 horizontal_alignment = 2
 
-[node name="SpeedLabel" type="Label" parent="UnitStatsBoxContainer/LabelVBoxContainer" unique_id=1311201720]
+[node name="SpeedLabel" type="Label" parent="EntityStatsBoxContainer/LabelVBoxContainer" unique_id=1311201720]
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(1, 1, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("2_mywxw")
+theme_override_fonts/font = ExtResource("2_x77do")
 theme_override_font_sizes/font_size = 6
 text = "Speed: "
 horizontal_alignment = 2
 
-[node name="ValueVBoxContainer" type="VBoxContainer" parent="UnitStatsBoxContainer" unique_id=1851453993]
+[node name="ValueVBoxContainer" type="VBoxContainer" parent="EntityStatsBoxContainer" unique_id=1851453993]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -87,53 +85,53 @@ size_flags_vertical = 4
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="ArmorValue" type="Label" parent="UnitStatsBoxContainer/ValueVBoxContainer" unique_id=1631935579]
+[node name="ArmorValue" type="Label" parent="EntityStatsBoxContainer/ValueVBoxContainer" unique_id=1631935579]
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(1, 1, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("2_mywxw")
+theme_override_fonts/font = ExtResource("2_x77do")
 theme_override_font_sizes/font_size = 6
 text = "0"
 
-[node name="DamageValue" type="Label" parent="UnitStatsBoxContainer/ValueVBoxContainer" unique_id=1986159110]
+[node name="DamageValue" type="Label" parent="EntityStatsBoxContainer/ValueVBoxContainer" unique_id=1986159110]
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(1, 1, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("2_mywxw")
+theme_override_fonts/font = ExtResource("2_x77do")
 theme_override_font_sizes/font_size = 6
 text = "1-5"
 
-[node name="RangeValue" type="Label" parent="UnitStatsBoxContainer/ValueVBoxContainer" unique_id=1167524524]
+[node name="RangeValue" type="Label" parent="EntityStatsBoxContainer/ValueVBoxContainer" unique_id=1167524524]
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(1, 1, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("2_mywxw")
+theme_override_fonts/font = ExtResource("2_x77do")
 theme_override_font_sizes/font_size = 6
 text = "1"
 
-[node name="SightValue" type="Label" parent="UnitStatsBoxContainer/ValueVBoxContainer" unique_id=745732111]
+[node name="SightValue" type="Label" parent="EntityStatsBoxContainer/ValueVBoxContainer" unique_id=745732111]
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(1, 1, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("2_mywxw")
+theme_override_fonts/font = ExtResource("2_x77do")
 theme_override_font_sizes/font_size = 6
 text = "4"
 
-[node name="SpeedValue" type="Label" parent="UnitStatsBoxContainer/ValueVBoxContainer" unique_id=1047387188]
+[node name="SpeedValue" type="Label" parent="EntityStatsBoxContainer/ValueVBoxContainer" unique_id=1047387188]
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(1, 1, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("2_mywxw")
+theme_override_fonts/font = ExtResource("2_x77do")
 theme_override_font_sizes/font_size = 6
 text = "10"
 

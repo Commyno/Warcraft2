@@ -44,6 +44,7 @@ extends CostData
 @export var can_attack_air: bool = false
 @export var can_attack_ground: bool = true
 @export var damage_type: Globals.DamageType = Globals.DamageType.NORMAL
+@export var armor_type: Globals.ArmorType = Globals.ArmorType.UNARMORED
 
 # Funzione helper comoda per quando devi effettivamente istanziare l'edificio
 func get_scene() -> PackedScene:

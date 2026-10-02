@@ -5,9 +5,7 @@ extends PanelContainer
 # ==========================================
 
 @onready var panel_container: VBoxContainer = $MarginContainer/PanelContainer
-@onready var unit_box: UnitBox = $MarginContainer/PanelContainer/UnitBox
-@onready var building_box: BuildingBox = $MarginContainer/PanelContainer/BuildingBox
-@onready var resource_box: ResourceBox = $MarginContainer/PanelContainer/ResourceBox
+@onready var entity_box: EntityBox = $MarginContainer/PanelContainer/EntityBox
 
 func _ready() -> void:
 	hide() # All'avvio si nasconde da solo
@@ -27,12 +25,5 @@ func _on_selection_changed(selected_objects: Array[Node2D]) -> void:
 		child.hide()
 		
 	# 2. Aggiungiamo il nodo corretto
-	if selected_object is BaseUnit:
-		unit_box.show()
-		unit_box.setup(selected_object)
-	elif selected_object is ResourceBuilding:
-		resource_box.setup(selected_object)
-		resource_box.show()
-	elif selected_object is BaseBuilding:
-		building_box.setup(selected_object)
-		building_box.show()
+	entity_box.show()
+	entity_box.setup(selected_object)

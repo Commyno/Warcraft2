@@ -5,6 +5,8 @@
 [ext_resource type="Script" uid="uid://3e5qiqyf3ev3" path="res://src/gameplay/entities/components/selection_ring.gd" id="3_a17aa"]
 [ext_resource type="Script" uid="uid://dfswhv6v47jm1" path="res://src/gameplay/entities/components/health_component.gd" id="4_a17aa"]
 [ext_resource type="Script" uid="uid://65xprcgadmde" path="res://src/gameplay/entities/components/selectable_component.gd" id="4_wmeqw"]
+[ext_resource type="Script" uid="uid://rcn2lisr1672" path="res://src/gameplay/entities/components/vision_component.gd" id="5_wmeqw"]
+[ext_resource type="Script" uid="uid://cuicr8gv1c8yl" path="res://src/gameplay/entities/components/visible_component.gd" id="6_o5r7y"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_tpccr"]
 radius = 64.0
@@ -14,35 +16,6 @@ radius = 128.0
 
 [node name="BaseBuilding" type="StaticBody2D" unique_id=1889694065 groups=["buildings", "selectable_units"]]
 script = ExtResource("1_tpccr")
-player_color = null
-available_actions = null
-is_under_construction = null
-region_under_construction = null
-region_first_step_build = null
-region_second_step_build = null
-region_completed = null
-region_idle = null
-region_active = null
-region_depleted = null
-tile_size = null
-requires_water = null
-build_time = null
-max_health = null
-basic_armor = null
-sight_range = null
-food_provided = null
-is_resource_dropoff = null
-accepts_gold = null
-accepts_wood = null
-accepts_oil = null
-can_attack = null
-can_destroy = null
-basic_damage = null
-piercing_damage = null
-attack_range = null
-attack_cooldown = null
-can_attack_air = null
-can_attack_ground = null
 
 [node name="SelectionRing" type="Node2D" parent="." unique_id=523229799]
 z_index = -1
@@ -56,6 +29,14 @@ selection_ring = NodePath("../SelectionRing")
 [node name="HealthComponent" type="Node" parent="." unique_id=133308684]
 script = ExtResource("4_a17aa")
 metadata/_custom_type_script = "uid://dfswhv6v47jm1"
+
+[node name="VisionComponent" type="Node" parent="." unique_id=1089166790]
+script = ExtResource("5_wmeqw")
+metadata/_custom_type_script = "uid://rcn2lisr1672"
+
+[node name="VisibleComponent" type="Node" parent="." unique_id=1924045657]
+script = ExtResource("6_o5r7y")
+metadata/_custom_type_script = "uid://cuicr8gv1c8yl"
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1061573362]
 texture = ExtResource("2_p3hth")

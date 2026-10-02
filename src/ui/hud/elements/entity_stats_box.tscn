@@ -1,0 +1,142 @@
+[gd_scene format=3 uid="uid://lgqugriddkaa"]
+
+[ext_resource type="Script" uid="uid://0vw52wexwpbb" path="res://src/ui/hud/elements/entity_stats_box.gd" id="1_yl3vw"]
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="2_dqaxf"]
+
+[node name="EntityStatsBox" type="VBoxContainer" unique_id=1556937344]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_yl3vw")
+
+[node name="EntityStatsBoxContainer" type="HBoxContainer" parent="." unique_id=1961079988]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="LabelVBoxContainer" type="VBoxContainer" parent="EntityStatsBoxContainer" unique_id=741787725]
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="ArmorLabel" type="Label" parent="EntityStatsBoxContainer/LabelVBoxContainer" unique_id=383598652]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_dqaxf")
+theme_override_font_sizes/font_size = 6
+text = "Armor: "
+horizontal_alignment = 2
+
+[node name="DamageLabel" type="Label" parent="EntityStatsBoxContainer/LabelVBoxContainer" unique_id=20044155]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_dqaxf")
+theme_override_font_sizes/font_size = 6
+text = "Damage: "
+horizontal_alignment = 2
+
+[node name="RangeLabel" type="Label" parent="EntityStatsBoxContainer/LabelVBoxContainer" unique_id=1446465885]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_dqaxf")
+theme_override_font_sizes/font_size = 6
+text = "Range: "
+horizontal_alignment = 2
+
+[node name="SightLabel" type="Label" parent="EntityStatsBoxContainer/LabelVBoxContainer" unique_id=813301217]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_dqaxf")
+theme_override_font_sizes/font_size = 6
+text = "Sight: "
+horizontal_alignment = 2
+
+[node name="SpeedLabel" type="Label" parent="EntityStatsBoxContainer/LabelVBoxContainer" unique_id=1694658546]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_dqaxf")
+theme_override_font_sizes/font_size = 6
+text = "Speed: "
+horizontal_alignment = 2
+
+[node name="ValueVBoxContainer" type="VBoxContainer" parent="EntityStatsBoxContainer" unique_id=1769312886]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="ArmorValue" type="Label" parent="EntityStatsBoxContainer/ValueVBoxContainer" unique_id=265261498]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_dqaxf")
+theme_override_font_sizes/font_size = 6
+text = "0"
+
+[node name="DamageValue" type="Label" parent="EntityStatsBoxContainer/ValueVBoxContainer" unique_id=676114075]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_dqaxf")
+theme_override_font_sizes/font_size = 6
+text = "1-5"
+
+[node name="RangeValue" type="Label" parent="EntityStatsBoxContainer/ValueVBoxContainer" unique_id=819757618]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_dqaxf")
+theme_override_font_sizes/font_size = 6
+text = "1"
+
+[node name="SightValue" type="Label" parent="EntityStatsBoxContainer/ValueVBoxContainer" unique_id=1352824616]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_dqaxf")
+theme_override_font_sizes/font_size = 6
+text = "4"
+
+[node name="SpeedValue" type="Label" parent="EntityStatsBoxContainer/ValueVBoxContainer" unique_id=707199037]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_dqaxf")
+theme_override_font_sizes/font_size = 6
+text = "10"
+
+[node name="Control" type="Control" parent="." unique_id=687673720]
+layout_mode = 2
+size_flags_vertical = 3

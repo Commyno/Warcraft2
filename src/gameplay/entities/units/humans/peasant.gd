@@ -154,6 +154,10 @@ func enter_mine(mine: GoldMine) -> void:
 		if is_in_group("selectable_units"):
 			remove_from_group("selectable_units")
 	
+	var move_speed = 0
+	if movement_component:
+		move_speed = movement_component.move_speed
+	
 	remove_from_selection()
 	
 	# --- NUOVO: Calcolo dinamico della durata basato su move_speed ---
@@ -218,7 +222,9 @@ func exit_mine(gold_amount: int) -> void:
 	
 	# 3. Impostiamo la direzione verso cui è rivolto mentre esce
 	var distance = global_position.distance_to(exit_position)
-	var speed = max(move_speed, 1.0) # Evita divisioni per zero
+	var speed = 1.0
+	if movement_component:
+		speed = max(movement_component.move_speed, 1.0) # Evita divisioni per zero
 	var total_duration: float = distance / speed
 	var half_duration: float = total_duration * 0.5
 

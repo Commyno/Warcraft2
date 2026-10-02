@@ -103,7 +103,7 @@ var icon:  Texture :
 		return Globals.NO_IMAGE
 
 var is_depleted: bool = false
-var is_destroyed: bool = false
+var is_dead: bool = false
 var current_health: int:
 	get():
 		if health_component:
@@ -210,7 +210,7 @@ func is_selected() -> bool:
 # --- SISTEMA DI DANNO E DISTRUZIONE ---
 
 func take_damage(amount: float) -> void:
-	if is_destroyed:
+	if is_dead:
 		return
 		
 	if health_component:
@@ -222,7 +222,7 @@ func die() -> void:
 	destroy_building()
 
 func heal(amount: float) -> void:
-	if is_destroyed:
+	if is_dead:
 		return
 		
 	# Aumenta la vita, ma non oltre il massimo consentito
@@ -232,7 +232,7 @@ func heal(amount: float) -> void:
 func destroy_building() -> void:
 	player_owner.register_building_lost(entity_id, food_provided)
 	
-	is_destroyed = true
+	is_dead = true
 	destroyed.emit()
 	
 	if collision_shape:

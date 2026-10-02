@@ -64,6 +64,7 @@ enum BuildingType { PRODUCTION, ECONOMY, DEFENSE, TECH }
 @export var attack_cooldown: float = 1.0
 @export var can_attack_air: bool = false
 @export var can_attack_ground: bool = true
+@export var armor_type: Globals.ArmorType = Globals.ArmorType.UNARMORED
 
 # Funzione helper comoda per quando devi effettivamente istanziare l'edificio
 func get_scene() -> PackedScene:

@@ -1,9 +1,7 @@
 [gd_scene format=3 uid="uid://djop7stxh05i8"]
 
 [ext_resource type="Script" uid="uid://c8ahk4rkbe0n2" path="res://src/ui/hud/single_selection_panel.gd" id="1_inr66"]
-[ext_resource type="PackedScene" uid="uid://cbsktlxweb2sr" path="res://src/ui/hud/building_box.tscn" id="2_fmxf4"]
-[ext_resource type="PackedScene" uid="uid://dql7jibs1noyj" path="res://src/ui/hud/unit_box.tscn" id="2_jgext"]
-[ext_resource type="PackedScene" uid="uid://bht82plvc3gou" path="res://src/ui/hud/resource_box.tscn" id="3_jgext"]
+[ext_resource type="PackedScene" uid="uid://cbsktlxweb2sr" path="res://src/ui/hud/entity_box.tscn" id="2_fmxf4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e33uh"]
 bg_color = Color(0.34117648, 0.34117648, 0.34117648, 1)
@@ -30,11 +28,5 @@ theme_override_constants/margin_bottom = 2
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="UnitBox" parent="MarginContainer/PanelContainer" unique_id=1807296841 instance=ExtResource("2_jgext")]
-layout_mode = 2
-
-[node name="BuildingBox" parent="MarginContainer/PanelContainer" unique_id=924591808 instance=ExtResource("2_fmxf4")]
-layout_mode = 2
-
-[node name="ResourceBox" parent="MarginContainer/PanelContainer" unique_id=222595842 instance=ExtResource("3_jgext")]
+[node name="EntityBox" parent="MarginContainer/PanelContainer" unique_id=1782490716 instance=ExtResource("2_fmxf4")]
 layout_mode = 2

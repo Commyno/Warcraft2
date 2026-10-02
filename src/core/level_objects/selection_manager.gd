@@ -152,6 +152,8 @@ func _select_object(obj: Node2D) -> void:
 			obj.tree_exiting.connect(_on_selected_object_exiting.bind(obj))
 
 func _on_selected_object_exiting(obj: Node2D) -> void:
+	if get_tree() == null:
+		return
 	if currently_selected.has(obj):
 		currently_selected.erase(obj)
 		selection_changed.emit(currently_selected)
