@@ -32,13 +32,18 @@ func update() -> void:
 	if attack_component != null:
 		range_value.text = str(attack_component.attack_range) + "+" + str(0)
 		damage_value.text = str(attack_component.basic_damage) + "+" + str(0)
+
+	var defend_component = unit.get_node_or_null("DefendComponent")
+	if defend_component != null:
+		armor_value.text = str(defend_component.unit.basic_armor) + "+" + str(0)
 		
 	var vision_component = unit.get_node_or_null("VisionComponent")
 	if vision_component != null:
 		sight_value.text = str(vision_component.sight_range) + "+" + str(0)
 		
-	armor_value.text = str(unit.basic_armor) + "+" + str(0)
-	speed_value.text = str(unit.move_speed / 10)
+	var movement_component = unit.get_node_or_null("MovementComponent")
+	if movement_component != null:
+		speed_value.text = str(movement_component.move_speed / 10)
 
 #func _on_tree_exited() -> void:
 	# Disconnettere i signal quando la UI viene rimossa

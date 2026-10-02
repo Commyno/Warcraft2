@@ -4,3 +4,11 @@
 
 [node name="AttackComponent" type="Node" unique_id=1306256968]
 script = ExtResource("1_syyog")
+basic_damage = null
+piercing_damage = null
+damage_dice_sides = null
+attack_range = null
+attack_cooldown = null
+damage_type = null
+can_attack_air = null
+can_attack_ground = null

@@ -9,6 +9,8 @@
 [ext_resource type="Script" uid="uid://thbnpm16lty" path="res://src/gameplay/entities/components/mana_component.gd" id="5_mvrlu"]
 [ext_resource type="Script" uid="uid://wleo22gywfd1" path="res://src/gameplay/entities/components/attack_component.gd" id="7_45lcm"]
 [ext_resource type="Script" uid="uid://cuicr8gv1c8yl" path="res://src/gameplay/entities/components/visible_component.gd" id="8_y3ato"]
+[ext_resource type="Script" uid="uid://b22bafe8hx3og" path="res://src/gameplay/entities/components/defend_component.gd" id="9_eknfo"]
+[ext_resource type="Script" uid="uid://svinuftck72m" path="res://src/gameplay/entities/components/movement_component.gd" id="10_7mgqi"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_omghk"]
 radius = 16.0
@@ -268,6 +270,10 @@ script = ExtResource("3_lujnm")
 script = ExtResource("4_fm4u4")
 selection_ring = NodePath("../SelectionRing")
 
+[node name="MovementComponent" type="Node" parent="." unique_id=94055350]
+script = ExtResource("10_7mgqi")
+metadata/_custom_type_script = "uid://svinuftck72m"
+
 [node name="HealthComponent" parent="." unique_id=334056186 instance=ExtResource("4_wb035")]
 
 [node name="ManaComponent" type="Node" parent="." unique_id=334562651]
@@ -278,7 +284,19 @@ metadata/_custom_type_script = "uid://thbnpm16lty"
 
 [node name="AttackComponent" type="Node" parent="." unique_id=85028586]
 script = ExtResource("7_45lcm")
+basic_damage = null
+piercing_damage = null
+damage_dice_sides = null
+attack_range = null
+attack_cooldown = null
+damage_type = null
+can_attack_air = null
+can_attack_ground = null
 metadata/_custom_type_script = "uid://wleo22gywfd1"
+
+[node name="DefendComponent" type="Node" parent="." unique_id=1015546569]
+script = ExtResource("9_eknfo")
+metadata/_custom_type_script = "uid://b22bafe8hx3og"
 
 [node name="VisibleComponent" type="Node" parent="." unique_id=1476898953]
 script = ExtResource("8_y3ato")

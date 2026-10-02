@@ -16,17 +16,6 @@ enum UnitState { IDLE, MOVING, ATTACKING, PATROLING, BUILDING, REPARING, MINING,
 
 
 # --- STATISTICHE DI BASE ---
-@export_group("Vitalità")
-
-@export_group("Difesa")
-@export var basic_armor: float = 2.0
-@export var armor_type: Globals.ArmorType = Globals.ArmorType.MEDIUM
-
-@export_group("Movimento e Costi")
-@export var move_speed: float = 150.0:
-	set(value):
-		move_speed = value
-
 @export var food_cost: int = 1
 @export var bounty_gold: int = 15
 
@@ -38,9 +27,11 @@ enum UnitState { IDLE, MOVING, ATTACKING, PATROLING, BUILDING, REPARING, MINING,
 
 # --- COMPONENTS ---
 @onready var selectable_component: SelectableComponent = $SelectableComponent
+@onready var movement_component: MovementComponent = $MovementComponent
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var mana_component: ManaComponent = $ManaComponent
 @onready var attack_component: AttackComponent = $AttackComponent
+@onready var defend_component: DefendComponent = $DefendComponent
 @onready var visible_component: VisibleComponent = $VisibleComponent
 @onready var vision_component: VisionComponent = $VisionComponent
 
@@ -107,18 +98,20 @@ func setup(data: Resource) -> void:
 	# Set components
 	if selectable_component:
 		selectable_component.setup(data)
+	if movement_component:
+		movement_component.setup(data)
 	if health_component:
 		health_component.setup(data)
 	if mana_component:
 		mana_component.setup(data)
 	if attack_component:
 		attack_component.setup(data)
+	if defend_component:
+		defend_component.setup(data)
 	if vision_component:
 		vision_component.setup(data)
 	
 	self.type = data.type
-	self.basic_armor = data.basic_armor
-	self.move_speed = data.move_speed
 
 #func _process(delta: float) -> void:
 	#pass
@@ -126,6 +119,8 @@ func setup(data: Resource) -> void:
 func _physics_process(delta: float) -> void:
 	if is_dead or unit_state != UnitState.MOVING:
 		update_animation()
+		return
+	if movement_component == null:
 		return
 		
 	# Se non abbiamo un bersaglio locale in corso, abbiamo terminato l'intero percorso
@@ -138,8 +133,8 @@ func _physics_process(delta: float) -> void:
 	if dist > 3.0: 
 		# Avanziamo linearmente verso il centro del tile
 		intended_dir = global_position.direction_to(current_step_target)
-		velocity = intended_dir * move_speed # Settiamo velocity solo per l'AnimationTree
-		global_position = global_position.move_toward(current_step_target, move_speed * delta)
+		velocity = intended_dir * movement_component.move_speed # Settiamo velocity solo per l'AnimationTree
+		global_position = global_position.move_toward(current_step_target, movement_component.move_speed * delta)
 	else:
 		# Siamo arrivati esatti al centro della cella!
 		global_position = current_step_target
@@ -420,41 +415,6 @@ func update_animation() -> void:
 		sprite2d.flip_h = false
 
 # --- SISTEMA VITA E COMBATTIMENTO ---
-
-# Ricezione del danno con riduzione tramite Armatura
-func take_damage(amount: float, source_damage_type: Globals.DamageType = Globals.DamageType.NORMAL) -> void:
-	if is_dead:
-		return # Non può subire danni se è già morta
-		
-	var type_multiplier = _get_damage_multiplier(source_damage_type, armor_type)
-	var damage_after_type = amount * type_multiplier
-	
-	# Formula di riduzione armatura classica di WC3: (basic_armor * 0.06) / (1 + 0.06 * basic_armor)
-	var armor_reduction = 1.0
-	if basic_armor >= 0:
-		armor_reduction = 1.0 - ((basic_armor * 0.06) / (1.0 + 0.06 * basic_armor))
-	else:
-		armor_reduction = 2.0 - pow(0.94, -basic_armor) # Armatura negativa aumenta il danno
-		
-	var final_damage = max(1.0, damage_after_type * armor_reduction)
-	if health_component:
-		health_component.damage(final_damage)
-		print(name, " ha subito ", amount, " danni! Vita attuale: ", health_component.health)
-
-# Matrice dei moltiplicatori tra Tipi Danno / Tipi Armatura
-func _get_damage_multiplier(dmg_t: Globals.DamageType, arm_t: Globals.ArmorType) -> float:
-	match dmg_t:
-		Globals.DamageType.PIERCING:
-			if arm_t == Globals.ArmorType.LIGHT: return 2.0  # Fanti leggeri / Volanti
-			if arm_t == Globals.ArmorType.HEAVY: return 1.0
-			if arm_t == Globals.ArmorType.FORTIFIED: return 0.35 # Edifici
-		Globals.DamageType.SIEGE:
-			if arm_t == Globals.ArmorType.FORTIFIED: return 1.5 # Edifici
-			if arm_t == Globals.ArmorType.MEDIUM: return 0.5
-		Globals.DamageType.NORMAL:
-			if arm_t == Globals.ArmorType.MEDIUM: return 1.5
-			if arm_t == Globals.ArmorType.FORTIFIED: return 0.7
-	return 1.0 # Valore di default se non ci sono interazioni particolari
 
 func heal(amount: float) -> void:
 	if is_dead:
