@@ -18,7 +18,6 @@ func _process(delta: float) -> void:
 	pass
 
 func setup(data: Resource) -> void:
-	#self.is_resource_dropoff = data.is_resource_dropoff
 	self.accepts_gold = data.accepts_gold
 	self.accepts_wood = data.accepts_wood
 	self.accepts_oil = data.accepts_oil

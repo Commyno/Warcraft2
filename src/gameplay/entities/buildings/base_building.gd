@@ -48,10 +48,6 @@ enum BuildingState { IDLE, ACTIVE, DEPLETED, DESTROYED, INACTIVE }
 # ==========================================
 @export_group("Capabilities")
 @export var food_provided: int = 0               # es. +4 per Farm/Pig Farm, +1 per Town Hall/Great Hall
-#@export var is_resource_dropoff: bool = false    # True per Town Hall, Lumber Mill, Refinery
-#@export var accepts_gold: bool = false
-#@export var accepts_wood: bool = false
-#@export var accepts_oil: bool = false
 
 # ==========================================
 # COMBATTIMENTO (Torri difensive)

@@ -216,14 +216,9 @@ func get_closest_dropoff() -> Node2D:
 	var all_buildings = get_tree().get_nodes_in_group("buildings")
 	
 	for building in all_buildings:
-		if building is ProductionBuilding and building.player_id == unit.player_id and building.is_resource_dropoff:
-			var accepts = false
-			match current_resource:
-				Globals.ResourceType.GOLD: accepts = building.accepts_gold
-				Globals.ResourceType.WOOD: accepts = building.accepts_wood
-				Globals.ResourceType.OIL:  accepts = building.accepts_oil
-					
-			if accepts:
+		if building.player_id == unit.player_id:
+			var drain_component = building.get_node("DrainComponent")
+			if drain_component and drain_component.accept_resources(current_resource):
 				valid_buildings.append(building)
 				
 	var closest = null
@@ -241,3 +236,9 @@ func clear_gathering_target() -> void:
 	target_mine = null
 	target_resource_tile = Vector2i(-1, -1)
 	action_timer = 0.0
+
+func is_valid_dropoff(entity: BaseBuilding) -> bool:
+	if entity != null and entity.has_method("accept_resources"):
+		return entity.accept_resources(current_resource)
+	
+	return false

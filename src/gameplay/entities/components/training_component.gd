@@ -154,10 +154,10 @@ func _complete_training(data: UnitData) -> void:
 	progress_updated.emit(0.0)
 	queue_updated.emit(training_queue)
 	
-	var tile_size = get_parent().tile_size if get_parent().has_meta("tile_size") else Vector2i(1, 1)
+	var tile_size = get_parent().tile_size if "tile_size" in get_parent() else Vector2i(1, 1)
 	SpawnManager.spawn_unit_from_building(data, get_parent(), player_owner)
 
 func get_player_owner() -> Player:
-	if get_parent().has_meta("player_owner"):
+	if "player_owner" in get_parent():
 		return get_parent().player_owner
 	return null
