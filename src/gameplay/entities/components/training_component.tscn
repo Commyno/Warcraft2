@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://bi7o0i4lvnf20"]
+
+[ext_resource type="Script" uid="uid://dsfd7fv2qhfo5" path="res://src/gameplay/entities/components/training_component.gd" id="1_07lfh"]
+[ext_resource type="Script" uid="uid://b4yn7h2qqjq6g" path="res://src/resources/ActionData/action_data.gd" id="2_numln"]
+[ext_resource type="Resource" uid="uid://clcjfhuo2yn32" path="res://data/action_buttons/train_peasant_action_data.tres" id="3_n5r2t"]
+
+[node name="TrainingComponent" type="Node2D" unique_id=803024594]
+script = ExtResource("1_07lfh")
+available_training = Array[ExtResource("2_numln")]([ExtResource("3_n5r2t")])

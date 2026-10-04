@@ -13,11 +13,11 @@ func can_execute(source_entities: Array, player: Player) -> bool:
 		return false
 	
 	var building = source_entities[0] as ProductionBuilding
-	if building == null:
+	if building == null or not building.has_node("TrainingComponent"):
 		return false
 	
 	# 1. Verifica se la coda di produzione dell'edificio è piena
-	if building.is_queue_full():
+	if building.training_component.is_queue_full():
 		return false
 	
 	# 2. Verifica se il giocatore ha abbastanza risorse -> 0 altrimenti 1, 2 o 3
@@ -40,7 +40,8 @@ func _execute_action(source_entities: Array, _target_data = null) -> void:
 	player.spend_resources(unit_data.gold_cost, unit_data.lumber_cost, unit_data.oil_cost, 0)
 	
 	# 2. Accoda l'unità nell'edificio di produzione
-	building.enqueue_unit(unit_data)
+	if building.training_component:
+		building.training_component.enqueue_unit(unit_data)
 
 func has_cost() -> bool:
 	return true

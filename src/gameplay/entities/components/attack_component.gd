@@ -1,6 +1,9 @@
 class_name AttackComponent
 extends Node
 
+const ATTACK_ACTION_DATA = preload("uid://moq724rjihwe")
+const STOP_ACTION_DATA = preload("uid://bexvmhf4682mu")
+
 # --- SEGNALI ---
 signal attack_started(target: Node2D)
 signal target_out_of_range(target: Node2D)
@@ -30,6 +33,11 @@ func _ready() -> void:
 	cooldown_timer.wait_time = attack_cooldown
 	cooldown_timer.timeout.connect(_on_cooldown_finished)
 	add_child(cooldown_timer)
+
+	# Imposto le azioni relative al Component
+	get_parent().available_actions.resize(9)
+	get_parent().available_actions[1] = ATTACK_ACTION_DATA
+	get_parent().available_actions[2] = STOP_ACTION_DATA
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

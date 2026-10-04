@@ -9,13 +9,14 @@ enum BuildingType { PRODUCTION, ECONOMY, DEFENSE, TECH }
 # ==========================================
 @export_group("Identity")
 @export var id: String = ""         # es. "farm", "barracks", "town_hall"
-@export var name: String = ""       # es. "Barracks"
-@export_multiline var description: String = ""
 @export var faction: Faction = Faction.ALLIANCE
 @export var type: BuildingType = BuildingType.PRODUCTION
-@export var icon: Texture2D                  # Icona per il menu di costruzione del Peon
-#@export var scene: PackedScene      # Scena .tscn dell'edificio completo
 @export_file("*.tscn") var scene_path: String
+
+@export_group("SelectableComponent")
+@export var name: String = ""       # es. "Barracks"
+@export_multiline var description: String = ""
+@export var icon: Texture2D                  # Icona per il menu di costruzione del Peon
 
 # ==========================================
 # GRIGLIA E POSIZIONAMENTO (TileMap / Grid)
@@ -33,19 +34,21 @@ enum BuildingType { PRODUCTION, ECONOMY, DEFENSE, TECH }
 # ==========================================
 # STATISTICHE DIFENSIVE E VISIVE
 # ==========================================
-@export_group("Attributes")
+@export_group("HealthComponent")
 @export var max_health: int = 800
 @export var health_regen: float = 0.25      # Vita rigenerata al secondo
+
+@export_group("ManaComponent")
 @export var max_mana: int = 0               # 255 per Mage, Paladin, Death Knight, Ogre-Mage
 @export var mana_regen: float = 0.0         # Mana rigenerata al secondo
-@export var basic_armor: int = 20           # Gli edifici in WC2 hanno armatura alta
-@export var sight_range: int = 4            # Raggio visivo (in tile)
+
+@export_group("MovementComponent")
 @export var move_speed: float = 0.0         # Velocità in pixel/sec (mappata dallo "Speed: 10" di WC2)
 
 # ==========================================
 # CAPACITÀ SPECIALI / SUPPORTO
 # ==========================================
-@export_group("Capabilities")
+@export_group("DrainComponent")
 @export var food_provided: int = 0               # es. +4 per Farm/Pig Farm, +1 per Town Hall/Great Hall
 @export var is_resource_dropoff: bool = false    # True per Town Hall, Lumber Mill, Refinery
 @export var accepts_gold: bool = false
@@ -55,7 +58,7 @@ enum BuildingType { PRODUCTION, ECONOMY, DEFENSE, TECH }
 # ==========================================
 # COMBATTIMENTO (Torri difensive)
 # ==========================================
-@export_group("Combat (Defensive Towers)")
+@export_group("AttackComponent")
 @export var can_attack: bool = false             # True per Guard Tower, Cannon Tower
 @export var can_destroy: bool = true             # False per Mine
 @export var basic_damage: int = 0
@@ -64,7 +67,13 @@ enum BuildingType { PRODUCTION, ECONOMY, DEFENSE, TECH }
 @export var attack_cooldown: float = 1.0
 @export var can_attack_air: bool = false
 @export var can_attack_ground: bool = true
+
+@export_group("DefendComponent")
+@export var basic_armor: int = 20           # Gli edifici in WC2 hanno armatura alta
 @export var armor_type: Globals.ArmorType = Globals.ArmorType.UNARMORED
+
+@export_group("VisionComponent")
+@export var sight_range: int = 4            # Raggio visivo (in tile)
 
 # Funzione helper comoda per quando devi effettivamente istanziare l'edificio
 func get_scene() -> PackedScene:

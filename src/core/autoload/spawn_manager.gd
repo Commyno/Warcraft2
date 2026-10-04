@@ -51,7 +51,7 @@ func spawn_building(building_data: BuildingData, spawn_tile: Vector2, is_under_c
 	
 	return building
 
-func spawn_unit(unit_data: UnitData, building_center_pos: Vector2, rally_point: Vector2, owner_player: Player, building_size: Vector2i = Vector2i.MIN) -> BaseUnit:
+func spawn_unit(unit_data: UnitData, spawn_position: Vector2, owner_player: Player) -> BaseUnit:
 	if unit_data == null or unit_data.scene_path.is_empty():
 		push_error("SpawnManager: UnitData o scena non valida.")
 		return null
@@ -67,10 +67,36 @@ func spawn_unit(unit_data: UnitData, building_center_pos: Vector2, rally_point: 
 	var unit_id: int = unit_instance.get_instance_id()
 
 	# 2. Calcola la posizione di spawn consapevole del contesto (stile War2)
-	var final_spawn_pos = building_center_pos
-	 # Se lo spawn è da edificio, calcoliamo l'offset
-	if not building_size == Vector2i.MIN:
-		final_spawn_pos = GridManager.get_warcraft_spawn_position(building_center_pos, building_size, rally_point, unit_id)
+
+	# 3. Setup dei dati dell'unità
+	unit_instance.global_position = spawn_position
+	unit_instance.player_owner = owner_player
+	if unit_instance.has_method("setup"):
+		unit_instance.setup(unit_data)
+
+	# 4. Ordine di movimento verso il Rally Point
+	var current_cell = GridManager.get_tile_coords(spawn_position)
+	GridManager.confirm_move(unit_id, current_cell, current_cell)
+	
+	return unit_instance
+
+func spawn_unit_from_building(unit_data: UnitData, building: BaseBuilding, owner_player: Player) -> BaseUnit:
+	var entity_scene = unit_data.get_scene()
+	if unit_data == null or entity_scene == null or building == null:
+		push_error("SpawnManager: UnitData o scena non valida.")
+		return null
+		
+	if entity_container == null:
+		push_error("SpawnManager: units_container non registrato!")
+		return null
+
+	# 1. Istanzia subito l'unità per registrarla nell'albero e ottenere l'ID univoco
+	var unit_instance : BaseUnit = entity_scene.instantiate() as BaseUnit
+	entity_container.add_child(unit_instance)
+	var unit_id: int = unit_instance.get_instance_id()
+
+	# 2. Calcola la posizione di spawn consapevole del contesto (stile War2)
+	var final_spawn_pos = GridManager.get_warcraft_spawn_position(building, unit_id)
 
 	# 3. Setup dei dati dell'unità
 	unit_instance.global_position = final_spawn_pos
@@ -80,10 +106,12 @@ func spawn_unit(unit_data: UnitData, building_center_pos: Vector2, rally_point: 
 
 	# 4. Ordine di movimento verso il Rally Point
 	var current_cell = GridManager.get_tile_coords(final_spawn_pos)
-	if rally_point != Vector2.INF and rally_point != final_spawn_pos:
-		if unit_instance.has_method("move_to"):
-			var safe_target = GridManager.get_available_destination(rally_point, unit_id, current_cell, true)
-			unit_instance.move_to(safe_target)
+	if building.has_node("TrainingComponent") and building.training_component != null:
+		var rally_point_position = building.training_component.rally_point
+		if rally_point_position != Vector2.INF and rally_point_position != final_spawn_pos:
+			if unit_instance.has_method("move_to"):
+				var safe_target = GridManager.get_available_destination(rally_point_position, unit_id, current_cell, true)
+				unit_instance.move_to(safe_target)
 	else:
 		GridManager.confirm_move(unit_id, current_cell, current_cell)
 	

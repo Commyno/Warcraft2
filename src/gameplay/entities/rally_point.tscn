@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://86f3v34k8mpc"]
+
+[ext_resource type="Script" uid="uid://df1l2dylut8xn" path="res://src/gameplay/entities/rally_point.gd" id="1_d5bmq"]
+
+[node name="Node2D" type="Node2D" unique_id=30389573]
+script = ExtResource("1_d5bmq")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1855655778]
+animation = &""
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=2093260889]
+visible = false

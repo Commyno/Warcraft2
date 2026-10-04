@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://c16jrqo7auhk1"]
 
+[ext_resource type="Script" uid="uid://cpma8muug2wfn" path="res://src/gameplay/entities/units/base_unit.gd" id="1_cp51w"]
 [ext_resource type="Script" uid="uid://rcn2lisr1672" path="res://src/gameplay/entities/components/vision_component.gd" id="1_y3ato"]
-[ext_resource type="Script" uid="uid://3e5qiqyf3ev3" path="res://src/gameplay/entities/components/selection_ring.gd" id="3_lujnm"]
+[ext_resource type="Script" uid="uid://3e5qiqyf3ev3" path="res://src/gameplay/entities/selection_ring.gd" id="3_lujnm"]
 [ext_resource type="Script" uid="uid://65xprcgadmde" path="res://src/gameplay/entities/components/selectable_component.gd" id="4_fm4u4"]
 [ext_resource type="Script" uid="uid://dlye5tmf11md3" path="res://src/gameplay/entities/units/rettangolo_debug.gd" id="4_ri0vt"]
 [ext_resource type="PackedScene" uid="uid://dsm022vy7iigk" path="res://src/gameplay/entities/components/health_component.tscn" id="4_wb035"]
@@ -258,7 +259,7 @@ radius = 32.0
 
 [node name="BaseUnit" type="CharacterBody2D" unique_id=330192060 groups=["selectable_units", "units"]]
 texture_filter = 1
-script = ExtResource("1_y3ato")
+script = ExtResource("1_cp51w")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1820984858]
 

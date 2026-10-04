@@ -48,10 +48,10 @@ enum BuildingState { IDLE, ACTIVE, DEPLETED, DESTROYED, INACTIVE }
 # ==========================================
 @export_group("Capabilities")
 @export var food_provided: int = 0               # es. +4 per Farm/Pig Farm, +1 per Town Hall/Great Hall
-@export var is_resource_dropoff: bool = false    # True per Town Hall, Lumber Mill, Refinery
-@export var accepts_gold: bool = false
-@export var accepts_wood: bool = false
-@export var accepts_oil: bool = false
+#@export var is_resource_dropoff: bool = false    # True per Town Hall, Lumber Mill, Refinery
+#@export var accepts_gold: bool = false
+#@export var accepts_wood: bool = false
+#@export var accepts_oil: bool = false
 
 # ==========================================
 # COMBATTIMENTO (Torri difensive)
@@ -114,10 +114,14 @@ var active_builders: Array[Node2D] = []
 var construction_progress_perc: float = 0.0 # Da 0.0 a 1.0
 var training_progress_perc: float = 0.0 # Da 0.0 a 1.0
 
+var is_resource_dropoff: bool: 
+	get: return has_node("DrainComponent")
+
 func _ready() -> void:
 	add_to_group("buildings")
 	
-	available_actions = available_actions.duplicate()
+	#available_actions = available_actions.duplicate()
+	available_actions.resize(9)
 	
 	# 1. Nascondi il cerchio di selezione all'avvio
 	if selectable_component:
@@ -159,10 +163,6 @@ func setup(data: Resource) -> void:
 	self.basic_armor = data.basic_armor
 	self.sight_range = data.sight_range
 	self.food_provided = data.food_provided
-	self.is_resource_dropoff = data.is_resource_dropoff
-	self.accepts_gold = data.accepts_gold
-	self.accepts_wood = data.accepts_wood
-	self.accepts_oil = data.accepts_oil
 	self.can_attack = data.can_attack
 	self.basic_damage = data.basic_damage
 	self.piercing_damage = data.piercing_damage

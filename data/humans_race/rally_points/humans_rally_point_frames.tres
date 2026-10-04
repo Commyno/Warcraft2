@@ -1,0 +1,34 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://caae2oapswt7m"]
+
+[ext_resource type="Texture2D" uid="uid://cbgjumonbucd2" path="res://assets/animations/rallypoint/rallypoint_01.tres" id="1_lecpl"]
+[ext_resource type="Texture2D" uid="uid://ceya00gi68nlk" path="res://assets/animations/rallypoint/rallypoint_02.tres" id="2_y80k8"]
+[ext_resource type="Texture2D" uid="uid://b5p0wehhavs0x" path="res://assets/animations/rallypoint/rallypoint_03.tres" id="3_gue6k"]
+[ext_resource type="Texture2D" uid="uid://c0w0ql5mm0410" path="res://assets/animations/rallypoint/rallypoint_04.tres" id="4_aenxb"]
+[ext_resource type="Texture2D" uid="uid://b1owdsdi0q5af" path="res://assets/animations/rallypoint/rallypoint_05.tres" id="5_ff64r"]
+[ext_resource type="Texture2D" uid="uid://b4llyf23r0cmq" path="res://assets/animations/rallypoint/rallypoint_06.tres" id="6_r8502"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 0.7,
+"texture": ExtResource("1_lecpl")
+}, {
+"duration": 0.7,
+"texture": ExtResource("2_y80k8")
+}, {
+"duration": 0.7,
+"texture": ExtResource("3_gue6k")
+}, {
+"duration": 0.7,
+"texture": ExtResource("4_aenxb")
+}, {
+"duration": 0.7,
+"texture": ExtResource("5_ff64r")
+}, {
+"duration": 0.7,
+"texture": ExtResource("6_r8502")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}]

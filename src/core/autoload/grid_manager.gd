@@ -18,7 +18,7 @@ var _base_solid: Dictionary = {}
 # Vector2i -> int (Conta quanti oggetti stanno bloccando la cella in questo momento)
 var _blocker_counts: Dictionary = {}
 
-# Mappa delle celle occupate/prenotate: Vector2i -> agent_id
+# Mappa delle celle occupate/prenotate: Vector2i -> entity_id
 var _owner_by_cell: Dictionary[Vector2i, int] = {}
 # Storico per annullare i movimenti (Undo)
 var _undo_stack: Array[Dictionary] = []
@@ -111,7 +111,7 @@ func blocker_count_at(cell: Vector2i) -> int:
 func authored_solid_at(cell: Vector2i) -> bool:
 	return bool(_base_solid.get(cell, false))
 
-func get_available_destination(target_global_pos: Vector2, agent_id: int, current_cell: Vector2i, auto_reserve: bool = true) -> Vector2:
+func get_available_destination(target_global_pos: Vector2, entity_id: int, current_cell: Vector2i, auto_reserve: bool = true) -> Vector2:
 	if not grid:
 		return target_global_pos
 
@@ -120,7 +120,7 @@ func get_available_destination(target_global_pos: Vector2, agent_id: int, curren
 	var found := false
 
 	# 1. Controllo rapido sul tile desiderato
-	if is_valid_cell(target_tile, agent_id, current_cell):
+	if is_valid_cell(target_tile, entity_id, current_cell):
 		found = true
 	else:
 		# 2. NOVITÀ: Controllo di adiacenza prima di innescare la ricerca
@@ -143,7 +143,7 @@ func get_available_destination(target_global_pos: Vector2, agent_id: int, curren
 				
 						var candidate_tile = target_tile + Vector2i(x, y)
 
-						if is_valid_cell(candidate_tile, agent_id, current_cell):
+						if is_valid_cell(candidate_tile, entity_id, current_cell):
 							best_tile = candidate_tile
 							found = true
 							break
@@ -153,28 +153,32 @@ func get_available_destination(target_global_pos: Vector2, agent_id: int, curren
 	if found:
 		# Se richiesto, blocca subito la cella per l'unità
 		if auto_reserve:
-			confirm_move(agent_id, current_cell, best_tile)
+			confirm_move(entity_id, current_cell, best_tile)
 		return get_tile_center_global(best_tile)
 
 	# Fallback: l'area è completamente sigillata, restituisce la posizione attuale
 	return get_tile_center_global(current_cell)
 
 # Trova il punto di spawn in stile Warcraft II, basato su un Rally Point (es. la miniera d'oro)
-func get_warcraft_spawn_position(building_center_global: Vector2, building_size: Vector2i, rally_point_global: Vector2, agent_id: int) -> Vector2:
+func get_warcraft_spawn_position(building: BaseBuilding, entity_id: int, ideal_target: Vector2 = Vector2.INF) -> Vector2:
 	if not grid:
-		return building_center_global
+		return building.global_position
 		
 	var cell_size: Vector2 = grid.cell_size
-	var offset: Vector2 = (Vector2(building_size) - Vector2.ONE) * (cell_size / 2.0)
-	var origin_center_world: Vector2 = building_center_global - offset
+	var offset: Vector2 = (Vector2(building.tile_size) - Vector2.ONE) * (cell_size / 2.0)
+	var origin_center_world: Vector2 = building.global_position - offset
 	var origin_tile: Vector2i = get_tile_coords(origin_center_world)
 	
 	var ideal_dir := Vector2.ZERO
-	if rally_point_global != Vector2.INF:
-		ideal_dir = building_center_global.direction_to(rally_point_global)
+	if building.has_node("TrainingComponent") and building.training_component != null:
+		var rallypoint_position = building.training_component.rally_point
+		if rallypoint_position != Vector2.INF:
+			ideal_dir = building.global_position.direction_to(rallypoint_position)
+	elif ideal_target != Vector2.INF:
+		ideal_dir = building.global_position.direction_to(ideal_target)
 		
-	var w = building_size.x
-	var h = building_size.y
+	var w = building.tile_size.x
+	var h = building.tile_size.y
 
 	# 1. Determina l'orientamento principale del rally point
 	var side_index: int = 0 # Default: LEFT
@@ -238,22 +242,22 @@ func get_warcraft_spawn_position(building_center_global: Vector2, building_size:
 
 	# Scorre l'anello in senso orario finché non trova un buco
 	for tile in perimeter_tiles:
-		if is_valid_cell(tile, agent_id, tile):
-			confirm_move(agent_id, tile, tile)
+		if is_valid_cell(tile, entity_id, tile):
+			confirm_move(entity_id, tile, tile)
 			return get_tile_center_global(tile)
 			
 	# Se sia il lato ideale che quello opposto dell'anello corrente sono bloccati, passa al prossimo 'radius'
 	return get_tile_center_global(origin_tile)
 
 # Controlla se una cella esiste, non ha ostacoli fissi e non è occupata da altre truppe
-func is_valid_cell(cell: Vector2i, agent_id: int, current_cell: Vector2i) -> bool:
+func is_valid_cell(cell: Vector2i, entity_id: int, current_cell: Vector2i) -> bool:
 	if not grid.is_in_boundsv(cell) or grid.is_point_solid(cell):
 		return false
 
-	var check = preview_move(agent_id, current_cell, cell)
+	var check = preview_move(entity_id, current_cell, cell)
 	return bool(check["ok"])
 
-func get_adjacent_free_position(center_global_pos: Vector2, building_size: Vector2i, ideal_direction: Vector2, agent_id: int, auto_reserve: bool = true) -> Vector2:
+func get_adjacent_free_position(center_global_pos: Vector2, building_size: Vector2i, ideal_direction: Vector2, entity_id: int, auto_reserve: bool = true) -> Vector2:
 	var center_tile := get_tile_coords(center_global_pos)
 	
 	# 1. Calcoliamo il raggio in tile per determinare il perimetro dell'edificio
@@ -289,24 +293,24 @@ func get_adjacent_free_position(center_global_pos: Vector2, building_size: Vecto
 	for tile in perimeter_tiles:
 		# Controlla se il tile è fuori dai muri e libero da altre unità
 		# Usiamo center_tile come finta cella di partenza per bypassare i controlli su noi stessi
-		if is_valid_cell(tile, agent_id, center_tile):
+		if is_valid_cell(tile, entity_id, center_tile):
 			if auto_reserve:
-				confirm_move(agent_id, center_tile, tile)
+				confirm_move(entity_id, center_tile, tile)
 			return get_tile_center_global(tile)
 			
 	# 6. Fallback: restituisce il primo tile del perimetro anche se occupato
 	return get_tile_center_global(perimeter_tiles[0])
 
 # Anteprima di sola lettura
-func preview_move(agent_id: int, from_cell: Vector2i, to_cell: Vector2i) -> Dictionary:
-	if agent_id <= 0:
+func preview_move(entity_id: int, from_cell: Vector2i, to_cell: Vector2i) -> Dictionary:
+	if entity_id <= 0:
 		return _failure("INVALID_AGENT", from_cell)
 
-	if reserved_by(from_cell) != agent_id and reserved_by(from_cell) != EMPTY: 
+	if reserved_by(from_cell) != entity_id and reserved_by(from_cell) != EMPTY: 
 		return _failure("INVALID_START", from_cell, reserved_by(from_cell))
 
 	var target_owner := reserved_by(to_cell)
-	if target_owner != EMPTY and target_owner != agent_id:
+	if target_owner != EMPTY and target_owner != entity_id:
 		return _failure("TARGET_OCCUPIED", to_cell, target_owner)
 
 	return {
@@ -318,8 +322,8 @@ func preview_move(agent_id: int, from_cell: Vector2i, to_cell: Vector2i) -> Dict
 	}
 
 # Transazione di conferma del movimento
-func confirm_move(agent_id: int, from_cell: Vector2i, to_cell: Vector2i) -> Dictionary:
-	var validation := preview_move(agent_id, from_cell, to_cell)
+func confirm_move(entity_id: int, from_cell: Vector2i, to_cell: Vector2i) -> Dictionary:
+	var validation := preview_move(entity_id, from_cell, to_cell)
 	if not bool(validation["ok"]):
 		return validation
 
@@ -328,7 +332,7 @@ func confirm_move(agent_id: int, from_cell: Vector2i, to_cell: Vector2i) -> Dict
 	before[to_cell] = reserved_by(to_cell)
 
 	_undo_stack.append({
-		"agent_id": agent_id,
+		"entity_id": entity_id,
 		"from_cell": from_cell,
 		"to_cell": to_cell,
 		"before": before,
@@ -336,14 +340,14 @@ func confirm_move(agent_id: int, from_cell: Vector2i, to_cell: Vector2i) -> Dict
 
 	if from_cell != to_cell:
 		_owner_by_cell.erase(from_cell)
-	_owner_by_cell[to_cell] = agent_id
+	_owner_by_cell[to_cell] = entity_id
 
 	return {
 		"ok": true,
 		"code": "OK",
 		"from_cell": from_cell,
 		"to_cell": to_cell,
-		"reserved_by": agent_id,
+		"reserved_by": entity_id,
 	}
 
 # --- 3. GESTIONE FOOTPRINT EDIFICI ---
@@ -417,26 +421,26 @@ func get_closest_tree_around(center_cell: Vector2i, max_radius: int) -> Vector2i
 	return Vector2i(-1, -1)
 
 # Trova e prenota la migliore cella adiacente per tagliare un albero
-func get_best_chopping_position(tree_cell: Vector2i, unit_global_pos: Vector2, agent_id: int) -> Vector2:
+func get_best_chopping_position(tree_cell: Vector2i, unit_global_pos: Vector2, entity_id: int) -> Vector2:
 	var tree_global := get_tile_center_global(tree_cell)
 	
 	# Calcola da quale direzione sta arrivando il lavoratore
 	var approach_dir := unit_global_pos.direction_to(tree_global)
 	
 	# L'albero è considerato un ostacolo 1x1. 
-	# Il parametro 'true' finale chiama confirm_move() per bloccare atomicamente la cella per questo specifico agent_id
-	return get_adjacent_free_position(tree_global, Vector2i(1, 1), approach_dir, agent_id, true)
+	# Il parametro 'true' finale chiama confirm_move() per bloccare atomicamente la cella per questo specifico entity_id
+	return get_adjacent_free_position(tree_global, Vector2i(1, 1), approach_dir, entity_id, true)
 
 # --- 4. RILASCIO AGENTI E RISORSE ---
 
 # Rilascia le celle quando un'unità lascia la mappa (o muore)
-func release_agent(agent_id: int) -> Dictionary:
-	if agent_id <= 0:
+func release_agent(entity_id: int) -> Dictionary:
+	if entity_id <= 0:
 		return _failure("INVALID_AGENT", Vector2i(-1, -1))
 
 	var freed_cells: Array[Vector2i] = []
 	for cell: Vector2i in _owner_by_cell.keys():
-		if reserved_by(cell) == agent_id:
+		if reserved_by(cell) == entity_id:
 			_owner_by_cell.erase(cell)
 			_release_blocker_cell(cell) # <-- Usa il decremento invece di forzare a false
 			freed_cells.append(cell)
@@ -450,7 +454,7 @@ func release_agent(agent_id: int) -> Dictionary:
 	return {
 		"ok": true,
 		"code": "OK" if released_count > 0 else "OK_EMPTY",
-		"agent_id": agent_id,
+		"entity_id": entity_id,
 		"released_cells": released_count,
 	}
 

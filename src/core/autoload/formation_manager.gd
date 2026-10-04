@@ -15,19 +15,19 @@ func move_units_in_formation(units: Array, target_position: Vector2) -> void:
 	# 1. Prima di calcolare la formazione, liberiamo i tile posseduti da TUTTE le unità del gruppo.
 	# Questo evita che le unità si blocchino a vicenda se la nuova destinazione ricalca in parte quella vecchia.
 	for unit in movable_units:
-		var agent_id = unit.get_instance_id()
+		var entity_id = unit.get_instance_id()
 		if unit.has_method("clear_assignment"):
 			unit.clear_assignment()
 		else:
 			# Fallback di sicurezza usando l'ID corretto
-			GridManager.release_agent(agent_id) 
+			GridManager.release_agent(entity_id) 
 	
 	# --- CASO SPECIALE: 1 SOLA UNITÀ ---
 	if movable_units.size() == 1:
 		var unit = movable_units[0]
-		var agent_id = unit.get_instance_id()
+		var entity_id = unit.get_instance_id()
 		var current_cell = GridManager.get_tile_coords(unit.global_position)
-		var final_pos = GridManager.get_available_destination(target_position, agent_id, current_cell, true)
+		var final_pos = GridManager.get_available_destination(target_position, entity_id, current_cell, true)
 		unit.move_to(final_pos)
 		return
 
@@ -36,7 +36,7 @@ func move_units_in_formation(units: Array, target_position: Vector2) -> void:
 	# in modo che ogni unità blocchi la sua cella prima che scelga la successiva
 	for i in range(movable_units.size()):
 		var unit = movable_units[i]
-		var agent_id = unit.get_instance_id()
+		var entity_id = unit.get_instance_id()
 		var current_cell = GridManager.get_tile_coords(unit.global_position)
 		
 		# 2. Calcola dove "dovrebbe" stare questa unità nella formazione.
@@ -46,7 +46,7 @@ func move_units_in_formation(units: Array, target_position: Vector2) -> void:
 		
 		# 3. Trova la cella libera più vicina all'ideal_target e prenotala atomitcamente.
 		# Dato che auto_reserve = true, la cella viene bloccata e la prossima unità non vi si sovrapporrà.
-		var final_pos = GridManager.get_available_destination(ideal_target, agent_id, current_cell, true)
+		var final_pos = GridManager.get_available_destination(ideal_target, entity_id, current_cell, true)
 		unit.move_to(final_pos)
 
 ## Funzione di supporto per calcolare lo sfalsamento a griglia (modificabile a piacere)

@@ -4,13 +4,11 @@
 [ext_resource type="Script" uid="uid://b8n1u6n3uqoua" path="res://src/gameplay/entities/units/humans/peasant.gd" id="2_1q6u8"]
 [ext_resource type="Script" uid="uid://b4yn7h2qqjq6g" path="res://src/resources/ActionData/action_data.gd" id="3_7qhc5"]
 [ext_resource type="Texture2D" uid="uid://c05ctx6gflok6" path="res://assets/art/race/humans/units/peasant/Humans_Peasant_BLUE.png" id="3_uscwp"]
-[ext_resource type="Resource" uid="uid://3jln7kt6s6oa" path="res://data/action_buttons/move_action_data.tres" id="4_2blpd"]
 [ext_resource type="AnimationLibrary" uid="uid://2iqnwyo6ubgj" path="res://assets/animations/units/Humas_Peasant.tres" id="4_7qhc5"]
-[ext_resource type="Resource" uid="uid://bexvmhf4682mu" path="res://data/action_buttons/stop_action_data.tres" id="5_vq64i"]
-[ext_resource type="Resource" uid="uid://moq724rjihwe" path="res://data/action_buttons/attack_action_data.tres" id="6_qhgxn"]
 [ext_resource type="Resource" uid="uid://bm0sgywcw0ns4" path="res://data/action_buttons/repair_action_data.tres" id="7_4b5el"]
 [ext_resource type="Resource" uid="uid://duwyc6k56c1dp" path="res://data/action_buttons/gather_action_data.tres" id="8_gii3i"]
 [ext_resource type="Resource" uid="uid://25sba0lgjko5" path="res://data/action_buttons/menu_build_action_data.tres" id="9_8ackg"]
+[ext_resource type="Script" uid="uid://dqhlr8j2wc061" path="res://src/gameplay/entities/components/gathering_component.gd" id="9_mi00s"]
 [ext_resource type="Resource" uid="uid://5tvi7wxl3b3o" path="res://data/action_buttons/menu_advanced_build_action_data.tres" id="10_igboo"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2jfo3"]
@@ -526,29 +524,34 @@ graph_offset = Vector2(125.175064, -78.01023)
 [node name="Peasant" unique_id=330192060 instance=ExtResource("1_qa1gv")]
 script = ExtResource("2_1q6u8")
 build_range = 40.0
-chop_speed = 1.0
-max_carry = 10
-available_actions = Array[ExtResource("3_7qhc5")]([ExtResource("4_2blpd"), ExtResource("5_vq64i"), ExtResource("6_qhgxn"), ExtResource("7_4b5el"), ExtResource("8_gii3i"), null, ExtResource("9_8ackg"), ExtResource("10_igboo"), null])
+available_actions = Array[ExtResource("3_7qhc5")]([null, null, null, ExtResource("7_4b5el"), ExtResource("8_gii3i"), null, ExtResource("9_8ackg"), ExtResource("10_igboo"), null])
 
 [node name="Sprite2D" parent="." index="0" unique_id=1820984858]
 texture = ExtResource("3_uscwp")
 region_enabled = true
 region_rect = Rect2(330, 153, 29, 30)
 
-[node name="CollisionShape2D" parent="." index="3" unique_id=152319155]
+[node name="AttackComponent" parent="." index="7" unique_id=85028586]
+basic_damage = 6
+piercing_damage = 3
+damage_dice_sides = 4
+attack_range = 40.0
+attack_cooldown = 1.35
+damage_type = 0
+can_attack_air = false
+can_attack_ground = true
+
+[node name="GatheringComponent" type="Node" parent="." index="11" unique_id=1764505891]
+script = ExtResource("9_mi00s")
+metadata/_custom_type_script = "uid://dqhlr8j2wc061"
+
+[node name="CollisionShape2D" parent="." index="12" unique_id=152319155]
 shape = SubResource("CircleShape2D_2jfo3")
 
-[node name="NavigationAgent2D" parent="." index="4" unique_id=646343089]
-path_desired_distance = 32.0
-target_desired_distance = 16.0
-radius = 16.0
-debug_use_custom = true
-debug_path_custom_color = Color(1, 0.26666668, 1, 1)
-
-[node name="AnimationPlayer" parent="." index="5" unique_id=1017868079]
+[node name="AnimationPlayer" parent="." index="13" unique_id=1017868079]
 libraries/ = ExtResource("4_7qhc5")
 
-[node name="AnimationTree" parent="." index="6" unique_id=1411396235]
+[node name="AnimationTree" parent="." index="14" unique_id=1411396235]
 active = false
 tree_root = SubResource("AnimationNodeStateMachine_0lsul")
 parameters/Idle/ResourceState/current_state = "Normal"
@@ -564,11 +567,7 @@ parameters/Walk/Walk_Normal/blend_position = Vector2(0, 0)
 parameters/Walk/Walk_Gold/blend_position = Vector2(0, 0)
 parameters/Walk/Walk_Wood/blend_position = Vector2(0, 0)
 
-[node name="HealthBar" parent="." index="7" unique_id=1902205037]
-offset_top = -30.0
-offset_bottom = -24.0
-
-[node name="Area2D" parent="." index="8" unique_id=970586467]
+[node name="Area2D" parent="." index="15" unique_id=970586467]
 monitoring = false
 monitorable = false
 

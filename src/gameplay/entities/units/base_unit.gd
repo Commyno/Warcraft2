@@ -69,16 +69,18 @@ var current_target: Node2D = null
 var current_tile_target: Vector2i = Vector2i(-1, -1)
 
 var is_interacting: bool = false                # Per tracciare lo stato di interazione
-var is_processing_grid: bool = false # TRUE quando l'unità sta modificando la griglia intenzionalmente
-var current_path: Array[Vector2i] = []
-var current_step_target: Vector2 = Vector2.INF
-var final_target_global: Vector2 = Vector2.INF
+#var is_processing_grid: bool = false # TRUE quando l'unità sta modificando la griglia intenzionalmente
+#var current_path: Array[Vector2i] = []
+#var current_step_target: Vector2 = Vector2.INF
+#var final_target_global: Vector2 = Vector2.INF
 
 var animation_state: String = "Idle"
 var last_facing_dir: Vector2 = Vector2.DOWN     # Per tracciare lo sguardo relativo all'ultimo movimento
-var intended_dir: Vector2 = Vector2.DOWN
+#var intended_dir: Vector2 = Vector2.DOWN
 
 func _ready() -> void:
+	available_actions.resize(9)
+
 	# 1. Nascondi il cerchio di selezione all'avvio
 	if selectable_component:
 		selectable_component.deselect()
@@ -88,9 +90,9 @@ func _ready() -> void:
 		animation_tree.active = true
 		state_machine = animation_tree.get("parameters/playback")
 	
-	# Collega l'unità al bollettino sul traffico del GridManager
-	if not GridManager.obstacles_changed.is_connected(_on_obstacles_changed):
-		GridManager.obstacles_changed.connect(_on_obstacles_changed)
+	# Ci colleghiamo al segnale del componente invece che al GridManager
+	if movement_component:
+		movement_component.movement_finished.connect(_on_movement_finished)
 
 func setup(data: Resource) -> void:
 	self.entity_id = data.id
@@ -120,163 +122,148 @@ func _physics_process(delta: float) -> void:
 	if is_dead or unit_state != UnitState.MOVING:
 		update_animation()
 		return
-	if movement_component == null:
-		return
 		
-	# Se non abbiamo un bersaglio locale in corso, abbiamo terminato l'intero percorso
-	if current_step_target == Vector2.INF:
-		_finish_movement()
-		return
-		
-	var dist = global_position.distance_to(current_step_target)
-	
-	if dist > 3.0: 
-		# Avanziamo linearmente verso il centro del tile
-		intended_dir = global_position.direction_to(current_step_target)
-		velocity = intended_dir * movement_component.move_speed # Settiamo velocity solo per l'AnimationTree
-		global_position = global_position.move_toward(current_step_target, movement_component.move_speed * delta)
-	else:
-		# Siamo arrivati esatti al centro della cella!
-		global_position = current_step_target
-		_prepare_next_step()
+	# Deleghiamo il movimento fisico al componente se lo stato è MOVING
+	if unit_state == UnitState.MOVING and movement_component != null:
+		movement_component.process_movement(delta)
 		
 	update_animation()
 
-# Prepara e autorizza lo spostamento sulla singola cella successiva
-func _prepare_next_step() -> void:
-	if current_path.is_empty():
-		current_step_target = Vector2.INF
-		return
-		
-	var current_cell = GridManager.get_tile_coords(global_position)
-	var next_cell = current_path[0]
-	var agent_id = self.get_instance_id()
-
-	# Controllo di adiacenza dinamico se l'obiettivo è un edificio multi-tile
-	if is_instance_valid(current_target) and current_target is BaseBuilding:
-		var origin: Vector2i = current_target.get_first_tile()
-		var size: Vector2i = current_target.tile_size
-		
-		# Definiamo i confini dell'anello perimetrale espanso (incluse le diagonali)
-		# Un edificio 2x2 allargherà il controllo a una zona di 4x4 celle[cite: 6].
-		var min_x = origin.x - 1
-		var max_x = origin.x + size.x
-		var min_y = origin.y - 1
-		var max_y = origin.y + size.y
-
-		# Se la cella corrente dell'unità si trova dentro questo confine, siamo arrivati!
-		if current_cell.x >= min_x and current_cell.x <= max_x and current_cell.y >= min_y and current_cell.y <= max_y:
-			# Siamo arrivati davanti all'obiettivo e lo spazio finale è occupato.
-			# Ci fermiamo qui in modo pulito.
-			current_path.clear()
-			_finish_movement()
-			return
-	
-	is_processing_grid = true
-	var result = GridManager.confirm_move(agent_id, current_cell, next_cell)
-	is_processing_grid = false
-	
-	if result["ok"]:
-		current_path.pop_front()
-		current_step_target = GridManager.get_tile_center_global(next_cell)
-	else:
-		velocity = Vector2.ZERO
-		
-		# --- LA SOLUZIONE ---
-		# Controlliamo se la cella bloccata è esattamente la destinazione finale
-		var target_cell = GridManager.get_tile_coords(final_target_global)		
-		if (next_cell == target_cell):
-			# Siamo arrivati davanti all'obiettivo e lo spazio finale è occupato.
-			# Ci fermiamo qui in modo pulito.
-			current_path.clear()
-			_finish_movement()
-		else:
-			# L'ostacolo è in mezzo al tragitto, cerchiamo di aggirarlo.
-			_repath_around_obstacle(next_cell)
-
-# Cerca una deviazione quando incontra un'altra unità a bloccare il passaggio
-func _repath_around_obstacle(blocked_cell: Vector2i) -> void:
-	# ALZA LO SCUDO: stiamo falsificando la mappa
-	is_processing_grid = true
-	
-	GridManager.grid.set_point_solid(blocked_cell, true)
-	
-	var start_cell = GridManager.get_tile_coords(global_position)
-	var target_cell = GridManager.get_tile_coords(final_target_global)
-	var detour_path = GridManager.grid.get_id_path(start_cell, target_cell, true)
-	
-	var remains_solid = GridManager.authored_solid_at(blocked_cell) or GridManager.blocker_count_at(blocked_cell) > 0
-	GridManager.grid.set_point_solid(blocked_cell, remains_solid)
-	
-	# ABBASSA LO SCUDO
-	is_processing_grid = false
-	
-	if not detour_path.is_empty():
-		if detour_path[0] == start_cell:
-			detour_path.pop_front()
-			
-		current_path = detour_path
-		# Assegniamo la nostra posizione attuale. Al prossimo _physics_process 
-		# la distanza sarà 0 e attiverà il _prepare_next_step() del nuovo path.
-		current_step_target = global_position
-	else:
-		current_path.clear()
-		current_step_target = Vector2.INF
-
-# Funzione separata in modo che possa essere chiamata dal segnale _on_obstacles_changed
-func _calculate_path() -> void:
-	var start_cell = GridManager.get_tile_coords(global_position)
-	var target_cell = GridManager.get_tile_coords(final_target_global)
-	
-	# ---> LA SOLUZIONE: Caso in cui clicchiamo sulla cella in cui ci troviamo <---
-	if start_cell == target_cell:
-		current_path.clear()
-		# Forziamo l'unità a raggiungere il centro esatto del tile
-		current_step_target = GridManager.get_tile_center_global(target_cell)
-		unit_state = UnitState.MOVING
-		return
-		
-	# Deleghiamo il calcolo alla griglia
-	current_path = GridManager.grid.get_id_path(start_cell, target_cell, true)
-	
-	if not current_path.is_empty():
-		# Se il percorso inizia con la cella in cui ci troviamo già, la rimuoviamo
-		if current_path[0] == start_cell:
-			current_path.pop_front()
-			
-		_prepare_next_step()
-		unit_state = UnitState.MOVING
-	else:
-		unit_state = UnitState.IDLE
-		velocity = Vector2.ZERO
-
-# Il "sensore" dell'unità che scatta quando un nemico costruisce un muro o cade un albero
-func _on_obstacles_changed(changed_cells: Array) -> void:
-	# 1. Se stiamo modificando noi la griglia, ignora il segnale
-	if is_processing_grid:
-		return
-		
-	# 2. Se non stiamo viaggiando o non abbiamo un percorso, ignora il segnale
-	if unit_state != UnitState.MOVING or current_path.is_empty():
-		return
-		
-	# 3. Controlla le deviazioni esterne
-	for cell in changed_cells:
-		if current_path.has(cell):
-			_calculate_path()
-			break
-
-func _finish_movement() -> void:
-	unit_state = UnitState.IDLE
-	velocity = Vector2.ZERO
-	current_step_target = Vector2.INF
-	update_animation()
-	
-	# Innesca le interazioni (attacco, raccolta legno, ecc.) ora che siamo arrivati
-	if current_target != null:
-		_start_interaction(current_target)
-	elif current_tile_target != Vector2i(-1, -1):
-		_start_tile_interaction(current_tile_target)
+## Prepara e autorizza lo spostamento sulla singola cella successiva
+#func _prepare_next_step() -> void:
+	#if current_path.is_empty():
+		#current_step_target = Vector2.INF
+		#return
+		#
+	#var current_cell = GridManager.get_tile_coords(global_position)
+	#var next_cell = current_path[0]
+	#var entity_id = self.get_instance_id()
+#
+	## Controllo di adiacenza dinamico se l'obiettivo è un edificio multi-tile
+	#if is_instance_valid(current_target) and current_target is BaseBuilding:
+		#var origin: Vector2i = current_target.get_first_tile()
+		#var size: Vector2i = current_target.tile_size
+		#
+		## Definiamo i confini dell'anello perimetrale espanso (incluse le diagonali)
+		## Un edificio 2x2 allargherà il controllo a una zona di 4x4 celle[cite: 6].
+		#var min_x = origin.x - 1
+		#var max_x = origin.x + size.x
+		#var min_y = origin.y - 1
+		#var max_y = origin.y + size.y
+#
+		## Se la cella corrente dell'unità si trova dentro questo confine, siamo arrivati!
+		#if current_cell.x >= min_x and current_cell.x <= max_x and current_cell.y >= min_y and current_cell.y <= max_y:
+			## Siamo arrivati davanti all'obiettivo e lo spazio finale è occupato.
+			## Ci fermiamo qui in modo pulito.
+			#current_path.clear()
+			#_finish_movement()
+			#return
+	#
+	#is_processing_grid = true
+	#var result = GridManager.confirm_move(entity_id, current_cell, next_cell)
+	#is_processing_grid = false
+	#
+	#if result["ok"]:
+		#current_path.pop_front()
+		#current_step_target = GridManager.get_tile_center_global(next_cell)
+	#else:
+		#velocity = Vector2.ZERO
+		#
+		## --- LA SOLUZIONE ---
+		## Controlliamo se la cella bloccata è esattamente la destinazione finale
+		#var target_cell = GridManager.get_tile_coords(final_target_global)		
+		#if (next_cell == target_cell):
+			## Siamo arrivati davanti all'obiettivo e lo spazio finale è occupato.
+			## Ci fermiamo qui in modo pulito.
+			#current_path.clear()
+			#_finish_movement()
+		#else:
+			## L'ostacolo è in mezzo al tragitto, cerchiamo di aggirarlo.
+			#_repath_around_obstacle(next_cell)
+#
+## Cerca una deviazione quando incontra un'altra unità a bloccare il passaggio
+#func _repath_around_obstacle(blocked_cell: Vector2i) -> void:
+	## ALZA LO SCUDO: stiamo falsificando la mappa
+	#is_processing_grid = true
+	#
+	#GridManager.grid.set_point_solid(blocked_cell, true)
+	#
+	#var start_cell = GridManager.get_tile_coords(global_position)
+	#var target_cell = GridManager.get_tile_coords(final_target_global)
+	#var detour_path = GridManager.grid.get_id_path(start_cell, target_cell, true)
+	#
+	#var remains_solid = GridManager.authored_solid_at(blocked_cell) or GridManager.blocker_count_at(blocked_cell) > 0
+	#GridManager.grid.set_point_solid(blocked_cell, remains_solid)
+	#
+	## ABBASSA LO SCUDO
+	#is_processing_grid = false
+	#
+	#if not detour_path.is_empty():
+		#if detour_path[0] == start_cell:
+			#detour_path.pop_front()
+			#
+		#current_path = detour_path
+		## Assegniamo la nostra posizione attuale. Al prossimo _physics_process 
+		## la distanza sarà 0 e attiverà il _prepare_next_step() del nuovo path.
+		#current_step_target = global_position
+	#else:
+		#current_path.clear()
+		#current_step_target = Vector2.INF
+#
+## Funzione separata in modo che possa essere chiamata dal segnale _on_obstacles_changed
+#func _calculate_path() -> void:
+	#var start_cell = GridManager.get_tile_coords(global_position)
+	#var target_cell = GridManager.get_tile_coords(final_target_global)
+	#
+	## ---> LA SOLUZIONE: Caso in cui clicchiamo sulla cella in cui ci troviamo <---
+	#if start_cell == target_cell:
+		#current_path.clear()
+		## Forziamo l'unità a raggiungere il centro esatto del tile
+		#current_step_target = GridManager.get_tile_center_global(target_cell)
+		#unit_state = UnitState.MOVING
+		#return
+		#
+	## Deleghiamo il calcolo alla griglia
+	#current_path = GridManager.grid.get_id_path(start_cell, target_cell, true)
+	#
+	#if not current_path.is_empty():
+		## Se il percorso inizia con la cella in cui ci troviamo già, la rimuoviamo
+		#if current_path[0] == start_cell:
+			#current_path.pop_front()
+			#
+		#_prepare_next_step()
+		#unit_state = UnitState.MOVING
+	#else:
+		#unit_state = UnitState.IDLE
+		#velocity = Vector2.ZERO
+#
+## Il "sensore" dell'unità che scatta quando un nemico costruisce un muro o cade un albero
+#func _on_obstacles_changed(changed_cells: Array) -> void:
+	## 1. Se stiamo modificando noi la griglia, ignora il segnale
+	#if is_processing_grid:
+		#return
+		#
+	## 2. Se non stiamo viaggiando o non abbiamo un percorso, ignora il segnale
+	#if unit_state != UnitState.MOVING or current_path.is_empty():
+		#return
+		#
+	## 3. Controlla le deviazioni esterne
+	#for cell in changed_cells:
+		#if current_path.has(cell):
+			#_calculate_path()
+			#break
+#
+#func _finish_movement() -> void:
+	#unit_state = UnitState.IDLE
+	#velocity = Vector2.ZERO
+	#current_step_target = Vector2.INF
+	#update_animation()
+	#
+	## Innesca le interazioni (attacco, raccolta legno, ecc.) ora che siamo arrivati
+	#if current_target != null:
+		#_start_interaction(current_target)
+	#elif current_tile_target != Vector2i(-1, -1):
+		#_start_tile_interaction(current_tile_target)
 
 func _get_player_id() -> int:
 	if is_instance_valid(player_owner):
@@ -329,14 +316,29 @@ func remove_from_selection() -> void:
 # --- SISTEMA DI MOVIMENTO ---
 
 func move_to(target_pos: Vector2) -> void:
-	# Salviamo la destinazione finale per eventuali ricalcoli futuri (repathing)
-	final_target_global = target_pos
-	
-	# Invochiamo il calcolo del percorso
-	_calculate_path()
-	
-	# Aggiorniamo subito l'animazione per un feedback visivo istantaneo
+	unit_state = UnitState.MOVING
+	movement_component.move_to(target_pos)
 	update_animation()
+
+func _on_movement_finished() -> void:
+	unit_state = UnitState.IDLE
+	update_animation()
+	
+	# Innesca le interazioni ora che siamo arrivati
+	if current_target != null:
+		_start_interaction(current_target)
+	elif current_tile_target != Vector2i(-1, -1):
+		_start_tile_interaction(current_tile_target)
+
+#func move_to(target_pos: Vector2) -> void:
+	## Salviamo la destinazione finale per eventuali ricalcoli futuri (repathing)
+	#final_target_global = target_pos
+	#
+	## Invochiamo il calcolo del percorso
+	#_calculate_path()
+	#
+	## Aggiorniamo subito l'animazione per un feedback visivo istantaneo
+	#update_animation()
 
 func clear_assignment() -> void:
 	match current_assignment:
@@ -350,21 +352,23 @@ func clear_assignment() -> void:
 	current_target = null
 	current_tile_target = Vector2i(-1, -1)
 	current_assignment = AssignmentState.NONE
-	
 	unit_state = UnitState.IDLE
-	velocity = Vector2.ZERO
 	
-	# ALZA LO SCUDO
-	is_processing_grid = true 
+	# Il rilascio sulla griglia ora lo gestisce il componente
+	if movement_component:
+		movement_component.stop_movement()	
 	
-	var unit_id : int = self.get_instance_id()
-	var standing_tile = GridManager.get_tile_coords(global_position)
-	GridManager.release_agent(unit_id)
-	GridManager.confirm_move(unit_id, standing_tile, standing_tile)
+	## ALZA LO SCUDO
+	#is_processing_grid = true 
+	#
+	#var unit_id : int = self.get_instance_id()
+	#var standing_tile = GridManager.get_tile_coords(global_position)
+	#GridManager.release_agent(unit_id)
+	#GridManager.confirm_move(unit_id, standing_tile, standing_tile)
+	#
+	## ABBASSA LO SCUDO
+	#is_processing_grid = false 
 	
-	# ABBASSA LO SCUDO
-	is_processing_grid = false 
-
 	update_animation()
 
 func stop() -> void:
@@ -373,21 +377,20 @@ func stop() -> void:
 	clear_assignment()
 
 # --- GESTIONE ANIMAZIONI ---
-
+	
 func update_animation() -> void:
 	if not animation_tree or not state_machine:
 		return
 	
 	var actual_speed: float = velocity.length()
-	
 	# Direzione di movimento basata sulla velocità attuale dell'Avoidance
-	var move_dir: Vector2 = intended_dir
-	
+	var move_dir: Vector2 = movement_component.intended_dir if movement_component else last_facing_dir
+
 	# Fallback se l'avoidance ci rallenta o ferma un secondo
 	if move_dir == Vector2.ZERO:
 		move_dir = last_facing_dir
 		
-	if(is_dead):
+	if is_dead:
 		animation_tree.set("parameters/Death/blend_position", move_dir)
 		state_machine.travel("Death")
 		animation_state = "Death"
@@ -395,7 +398,6 @@ func update_animation() -> void:
 		#if is_moving = true and actual_speed > 10.0:
 		if unit_state == UnitState.MOVING and actual_speed > 10.0:
 			last_facing_dir = move_dir
-			
 			# Aggiorna BlendSpace e Stato Walk
 			animation_tree.set("parameters/Walk/blend_position", move_dir)
 			state_machine.travel("Walk")
@@ -406,8 +408,7 @@ func update_animation() -> void:
 			animation_tree.set("parameters/Idle/blend_position", move_dir)
 			state_machine.travel("Idle")
 			animation_state = "Idle"
-	
-
+		
 	# Gestione flip orizzontale
 	if move_dir.x < -0.1:
 		sprite2d.flip_h = true

@@ -14,7 +14,6 @@ extends Node
 # --- SEGNALI ---
 signal selection_changed(is_selected: bool)
 
-#var is_selected: bool = false
 var is_selected: bool = false
 
 func select() -> void:

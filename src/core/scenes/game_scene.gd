@@ -244,7 +244,7 @@ func _parse_group_layer(map_node: Node2D, layer_name: String, player: Player) ->
 			if data is BuildingData:
 				SpawnManager.spawn_building(data, cell_coords, false, player)
 			elif data is UnitData:
-				SpawnManager.spawn_unit(data, global_pos, Vector2.INF, player)
+				SpawnManager.spawn_unit(data, global_pos, player)
 	
 	# Nascondi il layer visivo dei tile logici a runtime
 	entities_layer.queue_free()
@@ -272,7 +272,7 @@ func _parse_entities_layer(map_node: Node2D, layer_name: String) -> void:
 			if data is BuildingData:
 				spawned_entity = SpawnManager.spawn_building(data, cell_coords, false, null)
 			elif data is UnitData:
-				spawned_entity = SpawnManager.spawn_unit(data, global_pos, Vector2.ZERO, null)
+				spawned_entity = SpawnManager.spawn_unit(data, global_pos, null)
 			#var spawned_entity = spawn_entity(data, global_pos, null)
 			
 			# Controlliamo se l'entità è di tipo ResourceBuilding

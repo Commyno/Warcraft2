@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://cbrbcd36ibhxf"]
+
+[ext_resource type="PackedScene" uid="uid://86f3v34k8mpc" path="res://src/gameplay/entities/rally_point.tscn" id="1_kueon"]
+
+[node name="Node2D" unique_id=30389573 instance=ExtResource("1_kueon")]

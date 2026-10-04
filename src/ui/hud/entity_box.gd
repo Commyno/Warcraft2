@@ -48,16 +48,6 @@ func setup(_entity: Node2D) -> void:
 	entity_stats_box.hide()
 	resource_stats_box.hide()
 
-	if entity is ProductionBuilding:
-		if entity.is_training:
-			entity_training_box.show()
-			entity_training_box.setup(entity)
-		elif entity.is_resource_dropoff:
-			entity_production_box.show()
-			entity_production_box.setup(entity)
-		# Connettiamo il signal per gli aggiornamenti sulla lista di produzione
-		if not entity.queue_updated.is_connected(on_queue_updated):
-			entity.queue_updated.connect(on_queue_updated)
 	if entity is ResourceBuilding:
 		if entity.resource_type == Globals.ResourceType.GOLD:
 			amount_label.text = "Gold Left: "
@@ -65,16 +55,35 @@ func setup(_entity: Node2D) -> void:
 			amount_label.text = "Oil Left: "
 		resource_stats_box.show()
 		resource_stats_box.setup(entity)
+
 		# Connettiamo il signal per gli aggiornamenti futuri delle risorse
 		if not entity.resources_changed.is_connected(on_resources_changed):
 			entity.resources_changed.connect(on_resources_changed)
+
 	elif entity is BaseBuilding:
+
 		if entity.is_under_construction:
 			entity_construcion_box.show()
 			build_progress_bar.value = 0
+		
+		elif entity.has_node("TrainingComponent"):
+			var training_component = entity.training_component
+			if training_component.is_training:
+				entity_training_box.show()
+				entity_training_box.setup(entity)
+
+			# Connettiamo il signal per gli aggiornamenti sulla lista di produzione
+			if not training_component.queue_updated.is_connected(on_queue_updated):
+				training_component.queue_updated.connect(on_queue_updated)
+
+		elif entity.is_resource_dropoff:
+			entity_production_box.show()
+			entity_production_box.setup(entity)
+
 		else:
 			entity_stats_box.show()
 			entity_stats_box.setup(entity)
+
 	elif entity is BaseUnit:
 		entity_stats_box.show()
 		entity_stats_box.setup(entity)
@@ -126,25 +135,31 @@ func update() -> void:
 		entity_stats_box.hide()
 		resource_stats_box.hide()
 	
-	if entity is ProductionBuilding:
-		if entity.is_training:
-			entity_training_box.show()
-			entity_training_box.update()
-		elif entity.is_resource_dropoff:
-			entity_production_box.show()
-			entity_production_box.update()
-	elif entity is ResourceBuilding:
+	if entity is ResourceBuilding:
 		resource_stats_box.show()
 		health_progress_bar.value = 1
 		health_label.text = ""
 		amount_value.text = str(entity.current_resources)
+		
 	elif entity is BaseBuilding:
 		if entity.is_under_construction:
 			entity_construcion_box.show()
 			build_progress_bar.value = entity.get_health_perc()
+
+		elif entity.has_node("TrainingComponent"):
+			var training_component = entity.training_component
+			if training_component.is_training:
+				entity_training_box.show()
+				entity_training_box.update()
+
+		elif entity.is_resource_dropoff:
+			entity_production_box.show()
+			entity_production_box.update()
+
 		else:
 			entity_stats_box.show()
 			entity_stats_box.update()
+			
 	elif entity is BaseUnit:
 		entity_stats_box.show()
 		entity_stats_box.update()
