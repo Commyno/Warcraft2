@@ -77,18 +77,6 @@ func handle_movement(delta: float) -> void:
 		var mouse_pos = get_viewport().get_mouse_position()
 		var viewport_size = get_viewport_rect().size
 
-		# Controlliamo che il mouse non sia sopra l'HUD a sinistra
-		#if mouse_pos.x > hud_left_width:
-			#
-			#if mouse_pos.x >= viewport_size.x - edge_margin:
-				#edge_dir.x += 1
-			#elif mouse_pos.x <= hud_left_width + edge_margin:
-				#edge_dir.x -= 1
-#
-			#if mouse_pos.y >= viewport_size.y - edge_margin:
-				#edge_dir.y += 1
-			#elif mouse_pos.y <= edge_margin:
-				#edge_dir.y -= 1
 		if mouse_pos.x >= viewport_size.x - edge_margin:
 			edge_dir.x += 1
 		elif mouse_pos.x <= edge_margin:
@@ -163,3 +151,11 @@ func set_initial_zoom(zoom_value: float) -> void:
 func handle_zoom(delta: float) -> void:
 	# Transizione fluida verso lo zoom desiderato
 	zoom = zoom.lerp(target_zoom, zoom_smoothness * delta)
+
+# --- NUOVA FUNZIONE PER IMPOSTARE I LIMITI ---
+func set_map_limits(world_bounds: Rect2) -> void:
+	map_limit_left = world_bounds.position.x
+	map_limit_top = world_bounds.position.y
+	# .end restituisce position + size, ovvero il limite in basso a destra
+	map_limit_right = world_bounds.end.x
+	map_limit_bottom = world_bounds.end.y

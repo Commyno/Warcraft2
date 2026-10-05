@@ -77,11 +77,23 @@ func handle_input(event: InputEvent) -> void:
 		return
 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		_resolve_and_execute(event)
+		var world_pos: Vector2 = _get_world_mouse_position()
+		_resolve_and_execute_at_position(world_pos)
 
-func _resolve_and_execute(_event: InputEventMouseButton) -> void:
-	var world_pos: Vector2 = _get_world_mouse_position()
+## Chiamato direttamente dalla Minimappa quando si è in targeting mode.
+func handle_map_click(world_pos: Vector2) -> void:
+	if not _active:
+		return
 
+	# Se si è in modalità costruzione e clicco sulla mappa non fare nulla.
+	if _action is PlaceBuildingActionData:
+		return
+
+	# Gestione delle azioni standard (muovi, attacca, raccogli, ecc.)
+	_resolve_and_execute_at_position(world_pos)
+
+# Nuova funzione di supporto condivisa
+func _resolve_and_execute_at_position(world_pos: Vector2) -> void:
 	# --- LA REGOLA D'ORO: Ordine del giocatore ---
 	for unit in _units:
 		if unit.has_method("clear_assignment"):
@@ -101,6 +113,29 @@ func _resolve_and_execute(_event: InputEventMouseButton) -> void:
 			_action.execute(_units, tile)
 
 	cancel()
+
+#func _resolve_and_execute(_event: InputEventMouseButton) -> void:
+	#var world_pos: Vector2 = _get_world_mouse_position()
+#
+	## --- LA REGOLA D'ORO: Ordine del giocatore ---
+	#for unit in _units:
+		#if unit.has_method("clear_assignment"):
+			#unit.clear_assignment()
+#
+	#match _action.action_type:
+		#ActionData.ActionType.TARGET_POSITION:
+			#_get_selection_manager().show_click_marker(world_pos)
+			#_action.execute(_units, world_pos)
+		#ActionData.ActionType.TARGET_ENTITY:
+			#var target := _pick_entity_at(world_pos)
+			#if target == null:
+				#return
+			#_action.execute(_units, target)
+		#ActionData.ActionType.TARGET_GRID_TILE:
+			#var tile: Vector2i = GridManager.get_tile_coords(world_pos)
+			#_action.execute(_units, tile)
+#
+	#cancel()
 
 func _get_world_mouse_position() -> Vector2:
 	var cam := _get_game_camera()

@@ -170,10 +170,10 @@ func get_warcraft_spawn_position(building: BaseBuilding, entity_id: int, ideal_t
 	var origin_tile: Vector2i = get_tile_coords(origin_center_world)
 	
 	var ideal_dir := Vector2.ZERO
-	if building.has_node("TrainingComponent") and building.training_component != null:
-		var rallypoint_position = building.training_component.rally_point
-		if rallypoint_position != Vector2.INF:
-			ideal_dir = building.global_position.direction_to(rallypoint_position)
+	var rallypoint_component = building.get_node_or_null("RallypointComponent")
+	if rallypoint_component != null:
+		if rallypoint_component.rallypoint_position != Vector2.INF:
+			ideal_dir = building.global_position.direction_to(rallypoint_component.rallypoint_position)
 	elif ideal_target != Vector2.INF:
 		ideal_dir = building.global_position.direction_to(ideal_target)
 		

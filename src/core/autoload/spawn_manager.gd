@@ -106,11 +106,11 @@ func spawn_unit_from_building(unit_data: UnitData, building: BaseBuilding, owner
 
 	# 4. Ordine di movimento verso il Rally Point
 	var current_cell = GridManager.get_tile_coords(final_spawn_pos)
-	if building.has_node("TrainingComponent") and building.training_component != null:
-		var rally_point_position = building.training_component.rally_point
-		if rally_point_position != Vector2.INF and rally_point_position != final_spawn_pos:
+	var rallypoint_component = building.get_node("RallypointComponent")
+	if rallypoint_component:
+		if rallypoint_component.rallypoint_position != Vector2.INF and rallypoint_component.rallypoint_position != final_spawn_pos:
 			if unit_instance.has_method("move_to"):
-				var safe_target = GridManager.get_available_destination(rally_point_position, unit_id, current_cell, true)
+				var safe_target = GridManager.get_available_destination(rallypoint_component.rallypoint_positiontion, unit_id, current_cell, true)
 				unit_instance.move_to(safe_target)
 	else:
 		GridManager.confirm_move(unit_id, current_cell, current_cell)

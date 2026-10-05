@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dp52f0c3lmfnk"]
+
+[ext_resource type="Script" uid="uid://carff5gvve3vv" path="res://src/gameplay/entities/components/rallypoint_component.gd" id="1_epnms"]
+
+[node name="RallypointComponent" type="Node2D" unique_id=1713158959]
+script = ExtResource("1_epnms")

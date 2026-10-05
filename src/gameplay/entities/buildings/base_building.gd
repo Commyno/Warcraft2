@@ -108,7 +108,6 @@ var current_health: int:
 
 var active_builders: Array[Node2D] = []
 var construction_progress_perc: float = 0.0 # Da 0.0 a 1.0
-var training_progress_perc: float = 0.0 # Da 0.0 a 1.0
 
 var is_resource_dropoff: bool: 
 	get: return has_node("DrainComponent")
@@ -351,6 +350,19 @@ func _advance_construction(delta: float) -> void:
 
 func complete_construction() -> void:
 	is_under_construction = false
+
+	# Se erano associati dei lavoratori, li libero
+	if active_builders.size() > 0:
+		var builders_to_release = active_builders.duplicate()
+		active_builders.clear()
+		for builder in builders_to_release:
+			if is_instance_valid(builder):
+				builder.clear_assignment()
+	
+	# Se è associto un player, gli segnalo il completamento
+	if player_owner:
+		player_owner.register_building_completed(entity_id, food_provided)
+
 	if health_component:
 		health_component.process_mode = Node.PROCESS_MODE_PAUSABLE
 		health_component.hide_health_bar()

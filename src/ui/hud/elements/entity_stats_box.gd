@@ -9,9 +9,6 @@ class_name EntityStatsBox
 
 var node: Node2D
 
-func _ready() -> void:
-	print("ok")
-
 func setup(entity: Node2D) -> void:
 	node = entity
 	if node == null:

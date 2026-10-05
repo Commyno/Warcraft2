@@ -29,5 +29,5 @@ func _execute_action(_source_entities: Array, _target_data = null) -> void:
 
 # I figli sovrascrivono questo per aggiungere comportamento oltre al movimento.
 func _apply_to_unit(_entity: Node, _target_position: Vector2) -> void:
-	if _entity.has_method("set_rally_point"):
-		_entity.set_rally_point(_target_position)
+	if _entity.get_node_or_null("RallypointComponent") != null:
+		_entity.get_node("RallypointComponent").set_rally_point(_target_position)

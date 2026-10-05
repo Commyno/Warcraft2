@@ -17,13 +17,20 @@ func setup(entity: Node2D) -> void:
 	update()
 	
 	# Connettiamo il signal per gli aggiornamenti sullo stato di avanzamento
-	if building and not building.progress_updated.is_connected(on_progress_updated):
-		building.progress_updated.connect(on_progress_updated)
+	var training_component = building.get_node_or_null("TrainingComponent")
+	if training_component:
+		if not training_component.progress_updated.is_connected(on_progress_updated):
+			training_component.progress_updated.connect(on_progress_updated)
 
 func _on_tree_exited() -> void:
+	if building == null:
+		return
+
 	# Disconnettere i signal quando la UI viene rimossa
-	if building and building.progress_updated.is_connected(on_progress_updated):
-		building.progress_updated.disconnect(on_progress_updated)
+	var training_component = building.get_node_or_null("TrainingComponent")
+	if training_component:
+		if building.progress_updated.is_connected(on_progress_updated):
+			building.progress_updated.disconnect(on_progress_updated)
 
 func on_progress_updated(progress_percent: float) -> void:
 	_progress_percent = progress_percent

@@ -174,7 +174,8 @@ func _parse_spawn_points(map_node: Node2D) -> void:
 func _parse_players(map_node: Node2D) -> void:
 	# Recuperiamo il numero di slot totali supportati dalla mappa 
 	var max_slots: int = MatchData.selected_map_data.get("max_players", 2)
-	
+	var players_without_slot = []
+
 	# Creiamo un array con gli slot disponibili (es. per 4 max_players avremo [0, 1, 2, 3])
 	var available_slots: Array[int] = []
 	for i in range(max_slots):
@@ -187,20 +188,25 @@ func _parse_players(map_node: Node2D) -> void:
 	for current_player in PlayerManager.players:
 		if available_slots.is_empty():
 			push_error("Ci sono più giocatori attivi che slot di partenza sulla mappa!")
+			players_without_slot.append(current_player)
 			break
 		
-		var assigned_slot = available_slots.pop_front()
-		var group_layer_name = "group " + str(1 + assigned_slot)
+		var assigned_slot = available_slots.pop_front() + 1
+		var group_layer_name = "group " + str(assigned_slot)
 		
 		# Assegna la spawn position definitiva all'istanza Player
 		if spawn_positions.has(assigned_slot):
-			current_player.spawn_position = Vector2i(spawn_positions[1 + assigned_slot])
+			current_player.spawn_position = Vector2(spawn_positions[assigned_slot])
 			#current_player.spawn_position = GridManager.get_tile_coords(spawn_positions[assigned_slot])
 		
 		print("Assegnato ", current_player.name, " al ", group_layer_name, " con colore: ", current_player.color)
 		
 		# Passa direttamente l'istanza Player
 		_parse_group_layer(map_node, group_layer_name, current_player)
+	
+	# Per i player entrati in gioco ma senza slot, sono eliminati
+	for p in players_without_slot:
+		PlayerManager.players.erase(p)
 	
 	# Rimuove i layer dei gruppi non utilizzati
 	for slot_id in available_slots:
@@ -360,17 +366,14 @@ func _setup_level_camera() -> void:
 	
 	
 	# Presumiamo che la mappa inizi alle coordinate (0,0) e finisca a world_size_px
-	game_camera.limit_left = 0
-	game_camera.limit_top = 0
-	game_camera.limit_right = int(world_size_px.x)
-	game_camera.limit_bottom = int(world_size_px.y)
+	#var world_bounds = Rect2(0, 0, int(world_size_px.x), int(world_size_px.y))
+	var world_bounds = Rect2(0, 0, int(world_size_px.x), int(world_size_px.y))
+	game_camera.set_map_limits(world_bounds)
+	#game_camera.limit_left = -420
+	#game_camera.limit_top = -30
+	#game_camera.limit_right = int(world_size_px.x)
+	#game_camera.limit_bottom = int(world_size_px.y)
 
-	# Disattiviamo i limiti nativi di rendering per permettere all'HUD 
-	# di "sconfinare" in coordinate negative
-	game_camera.limit_left = -2000
-	game_camera.limit_top = -2000
-	game_camera.limit_right = 50000
-	game_camera.limit_bottom = 50000
 
 # ==========================================
 # END GAME & SYSTEM

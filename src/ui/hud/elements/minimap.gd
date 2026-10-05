@@ -12,6 +12,10 @@ var scale_factor: Vector2
 
 var bg_texture: Texture2D
 
+# Stato della minimappa
+var targeting_mode: bool = false
+var is_dragging: bool = false
+
 func _ready() -> void:
 	minimap_size = size
 	clip_contents = true
@@ -75,21 +79,25 @@ func _draw() -> void:
 		
 # 3. Rettangolo della Telecamera compensato
 	if game_camera != null:
-		var hud_left_width: float = 300.0 # <--- INSERISCI QUI LA LARGHEZZA DEL TUO HUD
+		var hud_left_width: float = game_camera.hud_left_width
+		var hud_top_height: float = game_camera.hud_top_height
 		
 		# Ottiene la dimensione reale compensando lo zoom
 		var viewport_size = get_viewport_rect().size / game_camera.zoom
-		var hud_offset = hud_left_width / game_camera.zoom.x
+		var hud_offset_x = hud_left_width / game_camera.zoom.x
+		var hud_offset_y = hud_top_height / game_camera.zoom.y
 		
 		# 1. Riduciamo la larghezza visibile togliendo l'HUD
-		viewport_size.x -= hud_offset
+		viewport_size.x -= hud_offset_x
+		viewport_size.y -= hud_offset_y
 		
 		# 2. Calcoliamo la dimensione del rettangolo sulla minimappa
 		var cam_rect_size = viewport_size * scale_factor
 		
 		# 3. Spostiamo il centro della camera "più a destra" per compensare il taglio a sinistra
 		var cam_center_world = game_camera.get_screen_center_position()
-		cam_center_world.x += (hud_offset / 2.0)
+		cam_center_world.x += (hud_offset_x / 2.0)
+		cam_center_world.y += (hud_offset_y / 2.0)
 		
 		var cam_pos_minimap = cam_center_world * scale_factor
 		
@@ -102,24 +110,39 @@ func _gui_input(event: InputEvent) -> void:
 	if game_camera == null:
 		return
 		
-	if event is InputEventMouseButton or event is InputEventMouseMotion:
-		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-			# 1. Definizione offset HUD (DEVE ESSERE IDENTICO A QUELLO IN _draw)
-			var hud_left_width: float = 300.0 
-			var hud_offset = hud_left_width / game_camera.zoom.x
-			
-			# 2. Posizione cliccata (limitata ai bordi)
-			var click_pos = event.position
-			click_pos.x = clamp(click_pos.x, 0, minimap_size.x)
-			click_pos.y = clamp(click_pos.y, 0, minimap_size.y)
-			
-			# 3. Calcolo del punto del mondo desiderato
-			var world_target = click_pos / scale_factor
-			
-			# 4. COMPENSAZIONE INVERSA: 
-			# Spostiamo il vero centro della telecamera a sinistra,
-			# così l'area visibile cadrà esattamente al centro del click!
-			world_target.x -= (hud_offset / 2.0)
-			
-			# 5. Assegnazione finale
-			game_camera.global_position = world_target
+	# Gestione del click del mouse
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				if targeting_mode:
+					# Se siamo in Targeting Mode, delega al TargetingManager[cite: 1]
+					var world_pos = local_to_world_position(event.position)
+					TargetingManager.handle_map_click(world_pos)
+				else:
+					# Spostamento istantaneo e attivazione del trascinamento continuo
+					is_dragging = true
+					update_camera_position(event.position)
+			else:
+				# Rilasciando il tasto, disattiva il trascinamento
+				is_dragging = false
+	
+	# Gestione del movimento del mouse durante il trascinamento
+	elif event is InputEventMouseMotion and is_dragging:
+		if not targeting_mode:
+			update_camera_position(event.position)
+
+# Converte una posizione locale della minimappa (pixel) in coordinate del mondo di gioco
+func local_to_world_position(local_pos: Vector2) -> Vector2:
+	if scale_factor == Vector2.ZERO:
+		return Vector2.ZERO
+	return local_pos / scale_factor
+
+# Sposta la telecamera in base al punto cliccato/trascinato sulla minimappa
+func update_camera_position(local_pos: Vector2) -> void:
+	var world_pos = local_to_world_position(local_pos)
+	
+	# Teniamo conto dell'offset dell'HUD della camera per centrarla correttamente
+	var hud_offset_x = game_camera.hud_left_width / game_camera.zoom.x
+	var hud_offset_y = game_camera.hud_top_height / game_camera.zoom.y
+	
+	game_camera.global_position = world_pos - Vector2(hud_offset_x / 2.0, hud_offset_y / 2.0)
