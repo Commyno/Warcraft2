@@ -13,7 +13,6 @@ var scale_factor: Vector2
 var bg_texture: Texture2D
 
 # Stato della minimappa
-var targeting_mode: bool = false
 var is_dragging: bool = false
 
 func _ready() -> void:
@@ -114,7 +113,7 @@ func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
-				if targeting_mode:
+				if TargetingManager.is_targeting():
 					# Se siamo in Targeting Mode, delega al TargetingManager[cite: 1]
 					var world_pos = local_to_world_position(event.position)
 					TargetingManager.handle_map_click(world_pos)
@@ -125,10 +124,15 @@ func _gui_input(event: InputEvent) -> void:
 			else:
 				# Rilasciando il tasto, disattiva il trascinamento
 				is_dragging = false
-	
+		elif event.button_index == MOUSE_BUTTON_RIGHT:
+			if not TargetingManager.is_targeting():
+				var world_pos = local_to_world_position(event.position)
+				var _local_player : Player = PlayerManager.get_local_player()
+				TargetingManager.resolve_smart_command_to_selection(world_pos, _local_player)
+
 	# Gestione del movimento del mouse durante il trascinamento
 	elif event is InputEventMouseMotion and is_dragging:
-		if not targeting_mode:
+		if not TargetingManager.is_targeting():
 			update_camera_position(event.position)
 
 # Converte una posizione locale della minimappa (pixel) in coordinate del mondo di gioco

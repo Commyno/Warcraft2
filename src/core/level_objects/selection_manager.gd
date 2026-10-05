@@ -1,9 +1,6 @@
 class_name SelectionManager
 extends Node2D
 
-# Smart actions
-@export var smart_actions: Array[ActionData] = []
-
 # --- PROPRIETÀ E STATO ---
 var is_dragging: bool = false
 var start_pos: Vector2 = Vector2.ZERO
@@ -48,15 +45,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	# --- 3. GESTIONE CLICK DESTRO (Ordine di Movimento in Formazione) ---
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
 		if event.pressed:
-
 			if currently_selected.size() > 0:
 				var target_position = get_global_mouse_position()
-				var actions := _get_smart_actions()   # le azioni contestuali dell'unità
 				var _local_player : Player = PlayerManager.get_local_player()
-				TargetingManager.resolve_smart_command(target_position, actions, currently_selected, _local_player)
-
-func _get_smart_actions() -> Array[ActionData]:
-	return smart_actions
+				TargetingManager.resolve_smart_command(target_position, currently_selected, _local_player)
 
 func _draw():
 	if is_dragging:

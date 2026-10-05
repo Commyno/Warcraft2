@@ -1,6 +1,16 @@
 # targeting_manager.gd — Autoload "TargetingManager"
 extends Node
 
+# Smart actions
+const ATTACK_ACTION_DATA = preload("uid://moq724rjihwe")
+const REPAIR_ACTION_DATA = preload("uid://bm0sgywcw0ns4")
+const DRAIN_ACTION_DATA = preload("uid://0v0jpe6uto00")
+const GATHER_ACTION_DATA = preload("uid://duwyc6k56c1dp")
+const RALLYPOINT_ACTION_DATA = preload("uid://3gnq3xakkpnn")
+const MOVE_ACTION_DATA = preload("uid://3jln7kt6s6oa")
+
+var smart_actions: Array[ActionData] = [ATTACK_ACTION_DATA, REPAIR_ACTION_DATA, DRAIN_ACTION_DATA, GATHER_ACTION_DATA, RALLYPOINT_ACTION_DATA, MOVE_ACTION_DATA]
+
 var _active: bool = false
 var _action: ActionData = null
 var _units: Array = []
@@ -37,11 +47,11 @@ func cancel() -> void:
 func is_targeting() -> bool:
 	return _active
 
-func resolve_smart_command(world_pos: Vector2, actions: Array, units: Array, player: Player) -> void:
+func resolve_smart_command(world_pos: Vector2, units: Array, player: Player) -> void:
 	var entity: Node2D = _get_object_under_mouse(world_pos)
 	var tile: Vector2i = GridManager.get_tile_coords(world_pos)
 	
-	for action in actions:
+	for action in smart_actions:
 		if action.accepts(entity, tile, world_pos, units, player):
 			
 			# --- LA REGOLA D'ORO: Ordine del giocatore ---
@@ -52,7 +62,13 @@ func resolve_smart_command(world_pos: Vector2, actions: Array, units: Array, pla
 			action.execute(units, entity if entity != null else tile)
 			return
 
-## Chiamato dal SelectionManager quando è in targeting mode.
+func resolve_smart_command_to_selection(world_pos: Vector2, player: Player) -> void:
+	var selection_manager = _get_selection_manager()
+	if selection_manager == null:
+		return
+	resolve_smart_command(world_pos, selection_manager.currently_selected, player)
+
+# Chiamato dal SelectionManager quando è in targeting mode.
 func handle_input(event: InputEvent) -> void:
 	if not _active:
 		return
@@ -113,29 +129,6 @@ func _resolve_and_execute_at_position(world_pos: Vector2) -> void:
 			_action.execute(_units, tile)
 
 	cancel()
-
-#func _resolve_and_execute(_event: InputEventMouseButton) -> void:
-	#var world_pos: Vector2 = _get_world_mouse_position()
-#
-	## --- LA REGOLA D'ORO: Ordine del giocatore ---
-	#for unit in _units:
-		#if unit.has_method("clear_assignment"):
-			#unit.clear_assignment()
-#
-	#match _action.action_type:
-		#ActionData.ActionType.TARGET_POSITION:
-			#_get_selection_manager().show_click_marker(world_pos)
-			#_action.execute(_units, world_pos)
-		#ActionData.ActionType.TARGET_ENTITY:
-			#var target := _pick_entity_at(world_pos)
-			#if target == null:
-				#return
-			#_action.execute(_units, target)
-		#ActionData.ActionType.TARGET_GRID_TILE:
-			#var tile: Vector2i = GridManager.get_tile_coords(world_pos)
-			#_action.execute(_units, tile)
-#
-	#cancel()
 
 func _get_world_mouse_position() -> Vector2:
 	var cam := _get_game_camera()
