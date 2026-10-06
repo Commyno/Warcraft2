@@ -23,7 +23,7 @@ func _is_valid_target(source_entities: Array, target: Node2D) -> bool:
 		return false
 
 	# 4. Deve essere effettivamente danneggiato
-	if not target.is_damaged():
+	if target.is_damaged():
 		return false
 
 	return true
@@ -34,8 +34,8 @@ func _execute_action(_source_entities: Array, _target_data = null) -> void:
 
 	for worker in _source_entities:
 		# Repair non è "attacca": serve un comportamento dedicato sull'unità.
-		if worker.has_method("assign_build_task"):
-			worker.assign_build_task(_target_data)
+		if worker.get_node_or_null("BuildComponent") != null:
+			worker.get_node("BuildComponent").assign_build_task(_target_data)
 		else:
 			# Fallback: almeno mandalo verso l'edificio finché start_repair non esiste.
 			if worker.has_method("interact_with"):

@@ -38,9 +38,8 @@ func _execute_action(_source_entities: Array, _target_data = null) -> void:
 
 	# Manda il primo contadino selezionato a costruire.
 	#for unit in source_entities:   # Sostituire poi builder con unit
-	if builder != null:
-		if builder.has_method("assign_build_task"):
-			builder.assign_build_task(building)
+	if builder != null and builder.get_node_or_null("BuildComponent") != null:
+		builder.get_node("BuildComponent").assign_build_task(building)
 
 
 func get_cost_string() -> String:

@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://carff5gvve3vv" path="res://src/gameplay/entities/components/rallypoint_component.gd" id="6_equy7"]
 [ext_resource type="Texture2D" uid="uid://dhcgdbkobwyd5" path="res://assets/art/race/humans/buildings/Humans - TownHall - 01.tres" id="6_u020x"]
 [ext_resource type="PackedScene" uid="uid://cbrbcd36ibhxf" path="res://src/gameplay/entities/rally_points/humans_rally_point.tscn" id="7_gbvio"]
+[ext_resource type="Script" uid="uid://cdk0ja8oddas6" path="res://src/gameplay/entities/components/drain_component.gd" id="7_mhibq"]
 
 [node name="TownHall" unique_id=1889694065 instance=ExtResource("1_r3mtd")]
 script = ExtResource("2_fr43j")
@@ -24,9 +25,16 @@ script = ExtResource("6_equy7")
 rally_marker_scene = ExtResource("7_gbvio")
 metadata/_custom_type_script = "uid://carff5gvve3vv"
 
-[node name="Sprite2D" parent="." index="8" unique_id=1061573362]
+[node name="DrainComponent" type="Node" parent="." index="8" unique_id=1686297973]
+script = ExtResource("7_mhibq")
+food_provided = 1
+accepts_gold = true
+accepts_wood = true
+metadata/_custom_type_script = "uid://cdk0ja8oddas6"
+
+[node name="Sprite2D" parent="." index="9" unique_id=1061573362]
 texture = ExtResource("6_u020x")
 region_enabled = false
 
-[node name="NavigationObstacle2D" parent="." index="10" unique_id=969329888]
+[node name="NavigationObstacle2D" parent="." index="11" unique_id=969329888]
 radius = 90.0

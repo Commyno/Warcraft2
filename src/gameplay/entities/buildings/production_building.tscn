@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://gqjr7f7ijo08" path="res://src/gameplay/entities/buildings/base_building.tscn" id="1_vl2t2"]
 [ext_resource type="Script" uid="uid://cdk0ja8oddas6" path="res://src/gameplay/entities/components/drain_component.gd" id="2_wuide"]
+[ext_resource type="Script" uid="uid://b22bafe8hx3og" path="res://src/gameplay/entities/components/defend_component.gd" id="3_e55jw"]
 
 [node name="ProductionBuilding" unique_id=1889694065 instance=ExtResource("1_vl2t2")]
 script = ExtResource("2_wuide")
@@ -9,6 +10,6 @@ accepts_gold = false
 accepts_wood = false
 accepts_oil = false
 
-[node name="DrainComponent" type="Node" parent="." index="5" unique_id=1944197679]
-script = ExtResource("2_wuide")
-metadata/_custom_type_script = "uid://cdk0ja8oddas6"
+[node name="DefendComponent" type="Node" parent="." index="5" unique_id=1564275466]
+script = ExtResource("3_e55jw")
+metadata/_custom_type_script = "uid://b22bafe8hx3og"

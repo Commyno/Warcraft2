@@ -4,6 +4,7 @@ extends Node2D
 # Signals
 signal queue_updated(queue: Array[UnitData])
 signal progress_updated(progress_percent: float)
+signal complete_training(data: UnitData)
 
 # Export
 
@@ -99,9 +100,7 @@ func _complete_training(data: UnitData) -> void:
 	current_training_time = 0.0
 	progress_updated.emit(0.0)
 	queue_updated.emit(training_queue)
-	
-	var tile_size = get_parent().tile_size if "tile_size" in get_parent() else Vector2i(1, 1)
-	SpawnManager.spawn_unit_from_building(data, get_parent(), player_owner)
+	complete_training.emit(data)
 
 func get_player_owner() -> Player:
 	if "player_owner" in get_parent():

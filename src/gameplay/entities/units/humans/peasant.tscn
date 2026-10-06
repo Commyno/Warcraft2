@@ -10,6 +10,7 @@
 [ext_resource type="Resource" uid="uid://25sba0lgjko5" path="res://data/action_buttons/menu_build_action_data.tres" id="9_8ackg"]
 [ext_resource type="Script" uid="uid://dqhlr8j2wc061" path="res://src/gameplay/entities/components/gathering_component.gd" id="9_mi00s"]
 [ext_resource type="Resource" uid="uid://5tvi7wxl3b3o" path="res://data/action_buttons/menu_advanced_build_action_data.tres" id="10_igboo"]
+[ext_resource type="Script" uid="uid://cbas5t6145ulh" path="res://src/gameplay/entities/components/build_component.gd" id="10_q015r"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2jfo3"]
 radius = 12.0
@@ -523,7 +524,6 @@ graph_offset = Vector2(125.175064, -78.01023)
 
 [node name="Peasant" unique_id=330192060 instance=ExtResource("1_qa1gv")]
 script = ExtResource("2_1q6u8")
-build_range = 40.0
 available_actions = Array[ExtResource("3_7qhc5")]([null, null, null, ExtResource("7_4b5el"), ExtResource("8_gii3i"), null, ExtResource("9_8ackg"), ExtResource("10_igboo"), null])
 
 [node name="Sprite2D" parent="." index="0" unique_id=1820984858]
@@ -545,13 +545,17 @@ can_attack_ground = true
 script = ExtResource("9_mi00s")
 metadata/_custom_type_script = "uid://dqhlr8j2wc061"
 
-[node name="CollisionShape2D" parent="." index="12" unique_id=152319155]
+[node name="BuildComponent" type="Node" parent="." index="12" unique_id=758435732]
+script = ExtResource("10_q015r")
+metadata/_custom_type_script = "uid://cbas5t6145ulh"
+
+[node name="CollisionShape2D" parent="." index="13" unique_id=152319155]
 shape = SubResource("CircleShape2D_2jfo3")
 
-[node name="AnimationPlayer" parent="." index="13" unique_id=1017868079]
+[node name="AnimationPlayer" parent="." index="14" unique_id=1017868079]
 libraries/ = ExtResource("4_7qhc5")
 
-[node name="AnimationTree" parent="." index="14" unique_id=1411396235]
+[node name="AnimationTree" parent="." index="15" unique_id=1411396235]
 active = false
 tree_root = SubResource("AnimationNodeStateMachine_0lsul")
 parameters/Idle/ResourceState/current_state = "Normal"
@@ -567,7 +571,7 @@ parameters/Walk/Walk_Normal/blend_position = Vector2(0, 0)
 parameters/Walk/Walk_Gold/blend_position = Vector2(0, 0)
 parameters/Walk/Walk_Wood/blend_position = Vector2(0, 0)
 
-[node name="Area2D" parent="." index="15" unique_id=970586467]
+[node name="Area2D" parent="." index="16" unique_id=970586467]
 monitoring = false
 monitorable = false
 

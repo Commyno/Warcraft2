@@ -69,14 +69,9 @@ var current_target: Node2D = null
 var current_tile_target: Vector2i = Vector2i(-1, -1)
 
 var is_interacting: bool = false                # Per tracciare lo stato di interazione
-#var is_processing_grid: bool = false # TRUE quando l'unità sta modificando la griglia intenzionalmente
-#var current_path: Array[Vector2i] = []
-#var current_step_target: Vector2 = Vector2.INF
-#var final_target_global: Vector2 = Vector2.INF
 
 var animation_state: String = "Idle"
 var last_facing_dir: Vector2 = Vector2.DOWN     # Per tracciare lo sguardo relativo all'ultimo movimento
-#var intended_dir: Vector2 = Vector2.DOWN
 
 func _ready() -> void:
 	available_actions.resize(9)

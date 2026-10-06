@@ -2,6 +2,11 @@
 
 [ext_resource type="PackedScene" uid="uid://gqjr7f7ijo08" path="res://src/gameplay/entities/buildings/base_building.tscn" id="1_hybte"]
 [ext_resource type="Script" uid="uid://bsyvfc6bmk8ui" path="res://src/gameplay/entities/buildings/defend_building.gd" id="2_g2w65"]
+[ext_resource type="Script" uid="uid://b22bafe8hx3og" path="res://src/gameplay/entities/components/defend_component.gd" id="3_hybte"]
 
 [node name="DefendBuilding" unique_id=1889694065 instance=ExtResource("1_hybte")]
 script = ExtResource("2_g2w65")
+
+[node name="DefendComponent" type="Node" parent="." index="5" unique_id=1204519464]
+script = ExtResource("3_hybte")
+metadata/_custom_type_script = "uid://b22bafe8hx3og"

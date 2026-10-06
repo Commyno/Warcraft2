@@ -25,6 +25,10 @@ var action_timer: float = 0.0
 
 @onready var unit: BaseUnit = get_parent() as BaseUnit
 
+func setup(data: Resource) -> void:
+	chop_speed = 1.0
+	max_carry = 10
+
 # Chiamato dal _process dell'unità se lo stato è CHOPPING
 func process_chopping(delta: float) -> void:
 	action_timer -= delta
