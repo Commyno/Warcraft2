@@ -33,8 +33,6 @@ func _on_selection_changed(selected_objects: Array[Node2D]) -> void:
 	multi_selection_panel.hide()
 	action_grid_mc.hide()
 
-	multi_selection_panel.update_ui(selected_objects)
-
 	if count == 1:
 		# Show DetailBox
 		single_selection_panel.show()
@@ -45,6 +43,7 @@ func _on_selection_changed(selected_objects: Array[Node2D]) -> void:
 			action_grid_mc.hide()
 	elif count > 1:
 		# Show MultiSelection
+		multi_selection_panel.update_ui(selected_objects)
 		multi_selection_panel.show()
 
 func setup_minimap(camera: Camera2D) -> void:

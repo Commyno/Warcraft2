@@ -2,8 +2,25 @@
 
 [ext_resource type="Texture2D" uid="uid://6steaegwtefg" path="res://assets/GameIcon.png" id="1_lyw5x"]
 [ext_resource type="Script" uid="uid://6t70abaqihw3" path="res://src/ui/hud/elements/selected_unit_icon.gd" id="1_r3hem"]
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="3_bl81c"]
 
-[node name="MarginContainer" type="MarginContainer" unique_id=1187726273]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bl81c"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+corner_detail = 2
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e6cfo"]
+bg_color = Color(0.44979727, 0.7631216, 0, 1)
+
+[node name="SelectedEntityIcon" type="MarginContainer" unique_id=1187726273]
 custom_minimum_size = Vector2(32, 32)
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
@@ -21,8 +38,13 @@ size_flags_vertical = 3
 texture = ExtResource("1_lyw5x")
 expand_mode = 2
 
-[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer" unique_id=31312669]
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer" unique_id=1201143060]
 layout_mode = 2
-step = 1.0
-value = 100.0
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("3_bl81c")
+theme_override_font_sizes/font_size = 6
+theme_override_styles/background = SubResource("StyleBoxFlat_bl81c")
+theme_override_styles/fill = SubResource("StyleBoxFlat_e6cfo")
+max_value = 1.0
+value = 1.0
 show_percentage = false

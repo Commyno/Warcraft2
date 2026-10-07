@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://ctvepiv46wge"]
+
+[ext_resource type="Script" uid="uid://dnalj7e7l7jd7" path="res://src/ui/hud/elements/training_entity_icon.gd" id="1_0asl7"]
+[ext_resource type="Texture2D" uid="uid://6steaegwtefg" path="res://assets/GameIcon.png" id="2_8oghv"]
+
+[node name="TrainingEntityIcon" type="MarginContainer" unique_id=1187726273]
+custom_minimum_size = Vector2(16, 16)
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+script = ExtResource("1_0asl7")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1965527961]
+layout_mode = 2
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer" unique_id=1944179440]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("2_8oghv")
+expand_mode = 2

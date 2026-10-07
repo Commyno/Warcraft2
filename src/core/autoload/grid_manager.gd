@@ -442,7 +442,9 @@ func release_agent(entity_id: int) -> Dictionary:
 	for cell: Vector2i in _owner_by_cell.keys():
 		if reserved_by(cell) == entity_id:
 			_owner_by_cell.erase(cell)
-			_release_blocker_cell(cell) # <-- Usa il decremento invece di forzare a false
+			#_release_blocker_cell(cell) # Rimosso in quanto nel confirm non blocca. E cmq, 
+			#preview_move già controlla _owner_by_cell prima di concedere una cella, quindi
+			#le unità si evitano già a livello logico. L'AStar invece non le vede come ostacoli
 			freed_cells.append(cell)
 	
 	var released_count = freed_cells.size()
@@ -484,6 +486,7 @@ func chop_tree(tile_coords: Vector2i, damage: int) -> int:
 		
 		# Aggiorna il pathfinder a runtime senza rebuild
 		grid.set_point_solid(tile_coords, false)
+		_base_solid.erase(tile_coords)
 		
 	return max(0, wood_yield)
 
@@ -506,6 +509,26 @@ func get_path_for_unit(start_cell: Vector2i, goal_cell: Vector2i) -> Array[Vecto
 	if grid.is_in_boundsv(start_cell) and grid.is_in_boundsv(goal_cell):
 		return grid.get_id_path(start_cell, goal_cell)
 	return []
+
+# Esegue il pathfinding trattando le celle occupate da altri come ostacoli temporanei
+func get_path_avoiding_units(start_cell: Vector2i, target_cell: Vector2i, requester_id: int) -> Array[Vector2i]:
+	# 1. Rendi temporaneamente solide le celle occupate da altri agenti
+	var temp_solid: Array[Vector2i] = []
+	for cell in _owner_by_cell.keys():
+		var owner = _owner_by_cell[cell]
+		if owner != requester_id and not grid.is_point_solid(cell):
+			grid.set_point_solid(cell, true)
+			temp_solid.append(cell)
+
+	# 2. Calcola il percorso
+	var path = grid.get_id_path(start_cell, target_cell, true)
+
+	# 3. Ripristina tutte le celle temporanee
+	for cell in temp_solid:
+		var remains_solid = authored_solid_at(cell) or blocker_count_at(cell) > 0
+		grid.set_point_solid(cell, remains_solid)
+
+	return path
 
 func snap_to_tile(global_pos: Vector2) -> Vector2:
 	if not tile_map_layer:

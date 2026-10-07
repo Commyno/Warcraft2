@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cfdedpxt0467v" path="res://src/ui/hud/elements/building_training_box.gd" id="1_n15np"]
 [ext_resource type="Texture2D" uid="uid://6steaegwtefg" path="res://assets/GameIcon.png" id="2_wt4ix"]
 [ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="3_61s8b"]
+[ext_resource type="PackedScene" uid="uid://ctvepiv46wge" path="res://src/ui/hud/elements/training_entity_icon.tscn" id="4_wt4ix"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6e0s0"]
 bg_color = Color(0, 0, 0, 1)
@@ -55,6 +56,19 @@ expand_mode = 2
 [node name="Control" type="Control" parent="." unique_id=1493308336]
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="QueueContainer" type="MarginContainer" parent="." unique_id=807154041]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="QueueListContainer" type="HBoxContainer" parent="QueueContainer" unique_id=1437660863]
+layout_mode = 2
+
+[node name="TrainingEntityIcon" parent="QueueContainer/QueueListContainer" unique_id=1187726273 instance=ExtResource("4_wt4ix")]
+layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1477593454]
 layout_mode = 2

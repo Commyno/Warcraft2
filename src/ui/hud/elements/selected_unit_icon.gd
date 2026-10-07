@@ -1,20 +1,33 @@
 extends MarginContainer
+class_name SelectedEntityIcon
 
 @onready var texture: TextureRect = $VBoxContainer/TextureRect
 @onready var progress_bar: ProgressBar = $VBoxContainer/ProgressBar
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+var entity: Node2D = null
+var health_component : HealthComponent = null
 
+func setup(_entity: Node2D) -> void:
+	entity = _entity
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+	# Info
+	var selectable_component : SelectableComponent = entity.get_node_or_null("SelectableComponent")
+	if selectable_component:
+		texture.texture = selectable_component.icon
+		texture.expand_mode = TextureRect.EXPAND_FIT_WIDTH
 
-func setup(entity: Node2D) -> void:
-	if entity.has_node("SelectableComponent"):
-		texture.texture = entity.selectable_component.icon
-	texture.expand_mode = TextureRect.EXPAND_FIT_WIDTH
-	progress_bar.value = entity.current_health
-	
+	# Health
+	health_component = entity.get_node_or_null("HealthComponent")
+	if health_component:
+		progress_bar.value = health_component.get_health_percentage()
+		if not health_component.health_changed.is_connected(on_health_changed):
+			health_component.health_changed.is_connected(on_health_changed)
+
+func _exit_tree():
+	if health_component:
+		if health_component.health_changed.is_connected(on_health_changed):
+			health_component.health_changed.disconnect(on_health_changed)
+
+func on_health_changed(new_health: float, max_health: float) -> void:
+	progress_bar.value = new_health / max_health
+		

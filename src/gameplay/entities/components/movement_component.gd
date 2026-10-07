@@ -86,15 +86,7 @@ func _prepare_next_step() -> void:
 
 	# Controllo di adiacenza dinamico leggendo il current_target dall'unità
 	if is_instance_valid(unit.current_target) and unit.current_target is BaseBuilding:
-		var origin: Vector2i = unit.current_target.get_first_tile()
-		var size: Vector2i = unit.current_target.tile_size
-		
-		var min_x = origin.x - 1
-		var max_x = origin.x + size.x
-		var min_y = origin.y - 1
-		var max_y = origin.y + size.y
-
-		if current_cell.x >= min_x and current_cell.x <= max_x and current_cell.y >= min_y and current_cell.y <= max_y:
+		if is_adjacent_to_target(unit.current_target):
 			current_path.clear()
 			_finish_movement()
 			return
@@ -115,16 +107,35 @@ func _prepare_next_step() -> void:
 		else:
 			_repath_around_obstacle(next_cell)
 
+func is_adjacent_to_target(target: Node2D) -> bool:
+	var my_cell := GridManager.get_tile_coords(unit.global_position)
+	
+	if target is BaseBuilding:
+		var origin: Vector2i = target.get_first_tile()
+		var size: Vector2i = target.tile_size
+	
+		var min_x = origin.x - 1
+		var max_x = origin.x + size.x
+		var min_y = origin.y - 1
+		var max_y = origin.y + size.y
+	
+		return my_cell.x >= min_x and my_cell.x <= max_x and my_cell.y >= min_y and my_cell.y <= max_y
+	else:
+		# Per unità o target 1x1 usa Chebyshev
+		var target_cell := GridManager.get_tile_coords(target.global_position)
+		return maxi(abs(my_cell.x - target_cell.x), abs(my_cell.y - target_cell.y)) <= 1
+
 func _repath_around_obstacle(blocked_cell: Vector2i) -> void:
 	is_processing_grid = true
-	GridManager.grid.set_point_solid(blocked_cell, true)
+	#GridManager.grid.set_point_solid(blocked_cell, true)
 	
 	var start_cell = GridManager.get_tile_coords(unit.global_position)
 	var target_cell = GridManager.get_tile_coords(final_target_global)
-	var detour_path = GridManager.grid.get_id_path(start_cell, target_cell, true)
+	#var detour_path = GridManager.grid.get_id_path(start_cell, target_cell, true)
+	var detour_path = GridManager.get_path_avoiding_units(start_cell, target_cell, unit.get_instance_id())
 	
-	var remains_solid = GridManager.authored_solid_at(blocked_cell) or GridManager.blocker_count_at(blocked_cell) > 0
-	GridManager.grid.set_point_solid(blocked_cell, remains_solid)
+	#var remains_solid = GridManager.authored_solid_at(blocked_cell) or GridManager.blocker_count_at(blocked_cell) > 0
+	#GridManager.grid.set_point_solid(blocked_cell, remains_solid)
 	
 	is_processing_grid = false
 	
@@ -146,8 +157,9 @@ func _calculate_path() -> void:
 		current_step_target = GridManager.get_tile_center_global(target_cell)
 		return
 		
-	current_path = GridManager.grid.get_id_path(start_cell, target_cell, true)
-	
+	#current_path = GridManager.grid.get_id_path(start_cell, target_cell, true)
+	current_path = GridManager.get_path_avoiding_units(start_cell, target_cell, unit.get_instance_id())
+
 	if not current_path.is_empty():
 		if current_path[0] == start_cell:
 			current_path.pop_front()
@@ -168,4 +180,11 @@ func _finish_movement() -> void:
 	is_moving = false
 	unit.velocity = Vector2.ZERO
 	current_step_target = Vector2.INF
+
+	# Consolida la cella finale come "occupata da fermo"
+	var unit_id := unit.get_instance_id()
+	var standing_tile := GridManager.get_tile_coords(unit.global_position)
+	GridManager.release_agent(unit_id)
+	GridManager.confirm_move(unit_id, standing_tile, standing_tile)
+
 	movement_finished.emit() # Avvisa la BaseUnit che siamo arrivati!

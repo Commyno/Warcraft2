@@ -1,41 +1,59 @@
 extends PanelContainer
 
-const SELECTED_UNIT_ICON : String = "uid://brjing0k5xjv2"
+const SELECTED_UNIT_ICON : PackedScene = preload("res://src/ui/hud/elements/selected_unit_icon.tscn")
 
 @onready var grid_container: GridContainer = $GridContainer
 
 func _ready() -> void:
 	hide() # All'avvio si nasconde da solo
-	
-	#var manager = get_tree().get_first_node_in_group("selection_manager")
-	#if manager:
-		#manager.selection_changed.connect(_on_selection_changed)
-
-#func _on_selection_changed(selected_objects: Array[Node2D]) -> void:
-	## Selezionate PIÙ di una unità? Mi mostro, altrimenti mi nascondo.
-	#if selected_objects.size() > 1:
-		#show()
-		#_update_ui(selected_objects)
-	#else:
-		#hide()
-		#_update_ui(selected_objects)
 
 func update_ui(entities: Array[Node2D]) -> void:
-	# 1. PULIZIA: Elimina tutti i vecchi nodi figli dal GridContainer
-	for child in grid_container.get_children():
-		child.queue_free()
-		
-	# 2. POPOLAMENTO: Crea un nuovo elemento per ogni entità selezionata
-	for entity in entities:
-		# --- METODO A: Usando una Scena Prefabbricata (Consigliato) ---
-		var hud_scene: PackedScene = ResourceLoader.load(SELECTED_UNIT_ICON) as PackedScene
-		if hud_scene == null:
-			push_error("Could not load selected unit icon scene: " + SELECTED_UNIT_ICON)
-			return
 
-		var portrait = hud_scene.instantiate()
-		grid_container.add_child(portrait)
+# Convertiamo l'array delle entità selezionate in un Dizionario per ricerche super veloci O(1)
+	var new_selection_dict = {}
+	for e in entities:
+		new_selection_dict[e] = true
+
+	var current_badges = grid_container.get_children()
+	var entities_already_in_ui = {}
+
+	# 1. PULIZIA E AGGIORNAMENTO: Rimuovi chi non è più selezionato, aggiorna chi è rimasto
+	for badge in current_badges:
+		# Recuperiamo l'entità associata a questo badge
+		# (Assicurati che lo script del badge abbia 'var entity')
+		var badge_entity = badge.entity if "entity" in badge else null
 		
-		# Se il tuo ritratto ha una funzione per aggiornarsi, passagli l'entità
-		if portrait.has_method("setup_portrait"):
-			portrait.setup_portrait(entity)
+		# Se il badge è orfano o l'entità non è più nella nuova selezione, eliminalo
+		if badge_entity == null or not new_selection_dict.has(badge_entity):
+			badge.queue_free()
+		else:
+			# L'entità è ancora selezionata! Salviamola così non la ricreiamo
+			entities_already_in_ui[badge_entity] = true
+			
+	# 2. POPOLAMENTO: Aggiungi i badge SOLO per le entità che non sono già nella UI
+	for entity in entities:
+		if not entities_already_in_ui.has(entity):
+			var portrait = SELECTED_UNIT_ICON.instantiate()
+			grid_container.add_child(portrait)
+			
+			if portrait.has_method("setup"):
+				portrait.setup(entity)
+
+	## 1. PULIZIA: Elimina tutti i vecchi nodi figli dal GridContainer
+	#for child in grid_container.get_children():
+		#child.queue_free()
+		#
+	## 2. POPOLAMENTO: Crea un nuovo elemento per ogni entità selezionata
+	#for entity in entities:
+		## --- METODO A: Usando una Scena Prefabbricata (Consigliato) ---
+		#var hud_scene: PackedScene = ResourceLoader.load(SELECTED_UNIT_ICON) as PackedScene
+		#if hud_scene == null:
+			#push_error("Could not load selected unit icon scene: " + SELECTED_UNIT_ICON)
+			#return
+#
+		#var portrait = hud_scene.instantiate()
+		#grid_container.add_child(portrait)
+		#
+		## Se il tuo ritratto ha una funzione per aggiornarsi, passagli l'entità
+		#if portrait.has_method("setup_portrait"):
+			#portrait.setup_portrait(entity)
