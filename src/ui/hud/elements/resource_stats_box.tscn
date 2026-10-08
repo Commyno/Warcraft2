@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://cuycp45w1u4p4"]
+
+[ext_resource type="Script" uid="uid://ch22pvis7vl01" path="res://src/ui/hud/elements/resource_stats_box.gd" id="1_6icxs"]
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="1_m65h6"]
+
+[node name="ResourceStatsBox" type="HBoxContainer" unique_id=140984117]
+script = ExtResource("1_6icxs")
+
+[node name="LabelVBoxContainer" type="VBoxContainer" parent="." unique_id=138136167]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="AmountLabel" type="Label" parent="LabelVBoxContainer" unique_id=793439795]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("1_m65h6")
+theme_override_font_sizes/font_size = 8
+text = "Gold Left: "
+horizontal_alignment = 2
+
+[node name="ValueVBoxContainer" type="VBoxContainer" parent="." unique_id=173973576]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="AmountValue" type="Label" parent="ValueVBoxContainer" unique_id=1791001008]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("1_m65h6")
+theme_override_font_sizes/font_size = 8
+text = "0"

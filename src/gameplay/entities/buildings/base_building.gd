@@ -98,7 +98,6 @@ var icon:  Texture :
 			return selectable_component.icon
 		return Globals.NO_IMAGE
 
-var is_depleted: bool = false
 var is_dead: bool = false
 var current_health: int:
 	get():

@@ -201,8 +201,10 @@ func _on_movement_finished() -> void:
 func clear_assignment() -> void:
 	match current_assignment:
 		AssignmentState.GATHER_GOLD:
-			if current_target != null and current_target.has_method("unregister_worker"):
-					current_target.unregister_worker(self)
+			if current_target != null:
+				var resource_component = current_target.get_node_or_null("ResourceComponent")
+				if resource_component:
+					resource_component.unregister_worker(self)
 		AssignmentState.BUILD, AssignmentState.REPAIR:
 			if current_target != null and current_target.has_method("unregister_builder"):
 					current_target.unregister_builder(self)

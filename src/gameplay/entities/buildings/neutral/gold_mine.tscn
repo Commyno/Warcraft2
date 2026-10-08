@@ -2,21 +2,41 @@
 
 [ext_resource type="Script" uid="uid://chvo3gidrbbit" path="res://src/gameplay/entities/buildings/neutral/gold_mine.gd" id="1_f0tba"]
 [ext_resource type="PackedScene" uid="uid://dte1tuljlbqt8" path="res://src/gameplay/entities/buildings/resource_building.tscn" id="1_f7tvw"]
-[ext_resource type="Texture2D" uid="uid://dnf55x07x3dob" path="res://assets/art/ui/icons/Icon - Gold Mine.tres" id="3_f0tba"]
+[ext_resource type="Script" uid="uid://b4yn7h2qqjq6g" path="res://src/resources/ActionData/action_data.gd" id="4_7syh0"]
 [ext_resource type="Texture2D" uid="uid://e0ggs00l7mhs" path="res://assets/art/miscellaneous/Buildings - Miscellaneous.png" id="4_f0tba"]
+[ext_resource type="Script" uid="uid://0jlr34hnd82g" path="res://src/gameplay/entities/components/resource_component.gd" id="5_7syh0"]
 
 [node name="GoldMine" unique_id=1889694065 instance=ExtResource("1_f7tvw")]
 script = ExtResource("1_f0tba")
-max_workers = 4
-resource_per_cycle = 10
-description = "Description Gold Mine"
-icon = ExtResource("3_f0tba")
+player_color = Color(0, 0, 1, 1)
 spritesheet = ExtResource("4_f0tba")
+available_actions = Array[ExtResource("4_7syh0")]([])
+is_under_construction = false
+region_under_construction = Rect2(0, 0, 0, 0)
+region_first_step_build = Rect2(0, 0, 0, 0)
+region_second_step_build = Rect2(0, 0, 0, 0)
 region_completed = Rect2(3, 8, 96, 89)
 region_idle = Rect2(3, 8, 96, 89)
 region_active = Rect2(3, 104, 96, 89)
 region_depleted = Rect2(433, 8, 63, 59)
+tile_size = Vector2i(3, 3)
+requires_water = false
+build_time = 80.0
+basic_armor = 20
+sight_range = 4
+food_provided = 0
+can_attack = false
 can_destroy = false
+basic_damage = 0
+piercing_damage = 0
+attack_range = 0.0
+attack_cooldown = 1.0
+can_attack_air = false
+can_attack_ground = true
 
-[node name="Sprite2D" parent="." index="2" unique_id=1061573362]
+[node name="ResourceComponent" type="Node" parent="." index="5" unique_id=1151345558]
+script = ExtResource("5_7syh0")
+metadata/_custom_type_script = "uid://0jlr34hnd82g"
+
+[node name="Sprite2D" parent="." index="6" unique_id=1061573362]
 region_rect = Rect2(3, 8, 96, 89)

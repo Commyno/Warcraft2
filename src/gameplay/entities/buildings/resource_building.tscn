@@ -6,19 +6,33 @@
 
 [node name="BaseResource" unique_id=1889694065 instance=ExtResource("1_pxcn6")]
 script = ExtResource("2_m4jdb")
-resource_id = 0
-resource_type = 2
-max_resources = 10000
-working_time = 2.0
-max_worker_count = 4
-building_name = "Resource"
-building_spritesheet = ExtResource("3_o8spf")
-region_under_construction = Rect2(0, 0, 0, 0)
-region_half_built = Rect2(0, 0, 0, 0)
-region_completed = Rect2(0, 0, 0, 0)
+player_color = null
+available_actions = null
+is_under_construction = null
+region_under_construction = null
+region_first_step_build = null
+region_second_step_build = null
+region_completed = null
+region_idle = null
+region_active = null
+region_depleted = null
+tile_size = null
+requires_water = null
+build_time = null
+basic_armor = null
+sight_range = null
+food_provided = null
+can_attack = null
+can_destroy = null
+basic_damage = null
+piercing_damage = null
+attack_range = null
+attack_cooldown = null
+can_attack_air = null
+can_attack_ground = null
 
-[node name="Sprite2D" parent="." index="2" unique_id=1061573362]
+[node name="Sprite2D" parent="." index="5" unique_id=1061573362]
 texture = ExtResource("3_o8spf")
 
-[node name="NavigationObstacle2D" parent="." index="4" unique_id=969329888]
+[node name="NavigationObstacle2D" parent="." index="7" unique_id=969329888]
 radius = 90.0

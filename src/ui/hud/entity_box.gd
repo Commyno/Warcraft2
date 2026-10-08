@@ -49,16 +49,8 @@ func setup(_entity: Node2D) -> void:
 	resource_stats_box.hide()
 
 	if entity is ResourceBuilding:
-		if entity.resource_type == Globals.ResourceType.GOLD:
-			amount_label.text = "Gold Left: "
-		elif entity.resource_type == Globals.ResourceType.OIL:
-			amount_label.text = "Oil Left: "
 		resource_stats_box.show()
 		resource_stats_box.setup(entity)
-
-		# Connettiamo il signal per gli aggiornamenti futuri delle risorse
-		if not entity.resources_changed.is_connected(on_resources_changed):
-			entity.resources_changed.connect(on_resources_changed)
 
 	elif entity is BaseBuilding:
 

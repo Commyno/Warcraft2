@@ -111,12 +111,15 @@ text = "Livello 1"
 horizontal_alignment = 1
 
 [node name="EntityTrainingBox" parent="." unique_id=183992946 instance=ExtResource("4_ktols")]
+visible = false
 layout_mode = 2
 
 [node name="EntityStatsBox" parent="." unique_id=1556937344 instance=ExtResource("5_whox7")]
+visible = false
 layout_mode = 2
 
 [node name="EntityProductionBox" parent="." unique_id=29025015 instance=ExtResource("6_ufs0c")]
+visible = false
 layout_mode = 2
 
 [node name="EntityConstrucionBox" type="MarginContainer" parent="." unique_id=2046834147]
@@ -135,41 +138,3 @@ theme_override_font_sizes/font_size = 6
 theme_override_styles/background = SubResource("StyleBoxFlat_w8h8a")
 theme_override_styles/fill = SubResource("StyleBoxFlat_u15ge")
 max_value = 1.0
-
-[node name="ResourceStats" type="HBoxContainer" parent="." unique_id=1926075736]
-layout_mode = 2
-
-[node name="LabelVBoxContainer" type="VBoxContainer" parent="ResourceStats" unique_id=530182344]
-custom_minimum_size = Vector2(50, 0)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_constants/separation = 0
-alignment = 1
-
-[node name="AmountLabel" type="Label" parent="ResourceStats/LabelVBoxContainer" unique_id=8000964]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("3_jwr07")
-theme_override_font_sizes/font_size = 8
-text = "Gold Left: "
-horizontal_alignment = 2
-
-[node name="ValueVBoxContainer" type="VBoxContainer" parent="ResourceStats" unique_id=1178612730]
-custom_minimum_size = Vector2(20, 0)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_constants/separation = 0
-alignment = 1
-
-[node name="AmountValue" type="Label" parent="ResourceStats/ValueVBoxContainer" unique_id=1652692780]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("3_jwr07")
-theme_override_font_sizes/font_size = 8
-text = "0"
