@@ -122,7 +122,8 @@ func _ready() -> void:
 		selectable_component.deselect()
 	
 	if health_component:
-		health_component.process_mode = Node.PROCESS_MODE_DISABLED
+		health_component.hide_health_bar()
+		#health_component.process_mode = Node.PROCESS_MODE_DISABLED
 	
 	if spritesheet and sprite2d:
 		sprite2d.texture = spritesheet
@@ -176,8 +177,9 @@ func _set_player_color(color: Color) -> void:
 
 func _apply_team_color(color: Color) -> void:
 	pass
+# FUNCTION COMPONENT
 
-func get_health_perc() -> float:
+func get_health_percentage() -> float:
 	if health_component:
 		return health_component.get_health_percentage()
 	return 0
@@ -363,7 +365,6 @@ func complete_construction() -> void:
 		player_owner.register_building_completed(entity_id, food_provided)
 
 	if health_component:
-		health_component.process_mode = Node.PROCESS_MODE_PAUSABLE
 		health_component.hide_health_bar()
 		# Imposta la nuova salute e fa scattare il signal
 		health_component.set_health(health_component.max_health)

@@ -32,5 +32,5 @@ func destroy_building() -> void:
 
 # --- GESTIONE LAVORATORI ---
 
-func get_health_perc() -> float:
+func get_health_percentage() -> float:
 	return 1.0 # Questo edificio non può essere distrutto dai giocatori

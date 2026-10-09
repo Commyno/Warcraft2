@@ -21,12 +21,14 @@ func setup(_entity: Node2D) -> void:
 
 	training_icon.texture = entity.icon
 	
-	update()
-	update_queue()
-
 	# Connettiamo il signal per gli aggiornamenti sullo stato di avanzamento
 	training_component = entity.get_node_or_null("TrainingComponent")
+
 	if training_component:
+
+		update()
+		update_queue()
+
 		if not training_component.progress_updated.is_connected(on_progress_updated):
 			training_component.progress_updated.connect(on_progress_updated)
 		if not training_component.queue_updated.is_connected(on_queue_updated):

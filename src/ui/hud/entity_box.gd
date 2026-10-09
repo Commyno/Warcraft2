@@ -23,9 +23,7 @@ extends VBoxContainer
 @onready var build_progress_bar: ProgressBar = $EntityConstrucionBox/BuildProgressBar
 
 # ResourceBox
-@onready var resource_stats_box: HBoxContainer = $ResourceStats
-@onready var amount_label: Label = $ResourceStats/LabelVBoxContainer/AmountLabel
-@onready var amount_value: Label = $ResourceStats/ValueVBoxContainer/AmountValue
+@onready var resource_stats_box: ResourceStatsBox = $ResourceStatsBox
 
 var entity: Node2D
 
@@ -118,33 +116,34 @@ func update() -> void:
 	if entity.has_node("HealthComponent"):
 		var health = entity.health_component.health
 		var max_health = entity.health_component.max_health
-		health_progress_bar.value = health / max_health
+		health_progress_bar.value = entity.get_health_percentage()
 		health_label.text = str(int(health)) + "/" + str(int(max_health))
 
-		entity_construcion_box.hide()
-		entity_training_box.hide()
-		entity_production_box.hide()
-		entity_stats_box.hide()
-		resource_stats_box.hide()
+	entity_construcion_box.hide()
+	entity_training_box.hide()
+	entity_production_box.hide()
+	entity_stats_box.hide()
+	resource_stats_box.hide()
 	
-	if entity is ResourceBuilding:
-		resource_stats_box.show()
-		health_progress_bar.value = 1
-		health_label.text = ""
-		amount_value.text = str(entity.current_resources)
-		
-	elif entity is BaseBuilding:
+			
+	if entity is BaseBuilding:
 		if entity.is_under_construction:
 			entity_construcion_box.show()
-			build_progress_bar.value = entity.get_health_perc()
+			build_progress_bar.value = entity.get_health_percentage()
+
+		elif entity.has_node("ResourceComponent"):
+			resource_stats_box.show()
+			resource_stats_box.setup(entity)
+			health_progress_bar.value = entity.get_health_percentage()
+			health_label.text = ""
 
 		elif entity.has_node("TrainingComponent"):
-			var training_component = entity.training_component
+			var training_component = entity.get_node_or_null("TrainingComponent")
 			if training_component.is_training:
 				entity_training_box.show()
 				entity_training_box.update()
 
-		elif entity.is_resource_dropoff:
+		elif entity.has_node("DrainComponent"):
 			entity_production_box.show()
 			entity_production_box.update()
 

@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bud4ulhsscapf" path="res://src/ui/hud/elements/building_training_box.tscn" id="4_ktols"]
 [ext_resource type="PackedScene" uid="uid://lgqugriddkaa" path="res://src/ui/hud/elements/entity_stats_box.tscn" id="5_whox7"]
 [ext_resource type="PackedScene" uid="uid://c6jbiyb8naevj" path="res://src/ui/hud/elements/building_production_box.tscn" id="6_ufs0c"]
+[ext_resource type="PackedScene" uid="uid://cuycp45w1u4p4" path="res://src/ui/hud/elements/resource_stats_box.tscn" id="7_btjkg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7s165"]
 bg_color = Color(0, 0, 0, 1)
@@ -138,3 +139,7 @@ theme_override_font_sizes/font_size = 6
 theme_override_styles/background = SubResource("StyleBoxFlat_w8h8a")
 theme_override_styles/fill = SubResource("StyleBoxFlat_u15ge")
 max_value = 1.0
+
+[node name="ResourceStatsBox" parent="." unique_id=140984117 instance=ExtResource("7_btjkg")]
+visible = false
+layout_mode = 2

@@ -279,14 +279,15 @@ func _parse_entities_layer(map_node: Node2D, layer_name: String) -> void:
 				spawned_entity = SpawnManager.spawn_building(data, cell_coords, false, null)
 			elif data is UnitData:
 				spawned_entity = SpawnManager.spawn_unit(data, global_pos, null)
-			#var spawned_entity = spawn_entity(data, global_pos, null)
 			
 			# Controlliamo se l'entità è di tipo ResourceBuilding
-			if spawned_entity is ResourceBuilding:
-				if spawned_entity.has_method("setup"):
-					spawned_entity.setup(data)
-					var max_resource = 16000 * MatchData.map_resources
-					spawned_entity.set_resources(max_resource, max_resource)
+			if spawned_entity.has_method("setup"):
+				spawned_entity.setup(data)
+			
+			var resource_component: ResourceComponent = spawned_entity.get_node_or_null("ResourceComponent")
+			if resource_component:
+				var max_resource = 16000 * MatchData.map_resources
+				resource_component.set_resources(max_resource, max_resource)
 	
 	
 	entities_layer.queue_free()

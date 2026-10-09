@@ -271,11 +271,11 @@ script = ExtResource("3_lujnm")
 script = ExtResource("4_fm4u4")
 selection_ring = NodePath("../SelectionRing")
 
+[node name="HealthComponent" parent="." unique_id=515997432 instance=ExtResource("4_wb035")]
+
 [node name="MovementComponent" type="Node" parent="." unique_id=94055350]
 script = ExtResource("10_7mgqi")
 metadata/_custom_type_script = "uid://svinuftck72m"
-
-[node name="HealthComponent" parent="." unique_id=334056186 instance=ExtResource("4_wb035")]
 
 [node name="ManaComponent" type="Node" parent="." unique_id=334562651]
 script = ExtResource("5_mvrlu")

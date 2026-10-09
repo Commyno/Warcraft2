@@ -1,5 +1,5 @@
 class_name HealthComponent
-extends Node
+extends Node2D
 
 # --- SEGNALI ---
 signal health_changed(new_health: float, max_health: float)
@@ -17,7 +17,6 @@ var health: float = 0
 func _ready() -> void:
 	health = max_health
 	if health_bar:
-		health_bar.max_value = max_health
 		health_bar.value = get_health_percentage()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -31,6 +30,9 @@ func setup(data: Resource, _start_health_percentage: float = 1.0) -> void:
 	health = data.max_health * _start_health_percentage
 	health_regen = data.health_regen
 	is_health_regen = data.health_regen > 0
+
+	if health_bar:
+		health_bar.value = get_health_percentage()
 
 func get_health_percentage() -> float:
 	return health / max_health
@@ -62,15 +64,27 @@ func restore(health_restored: float) -> void:
 		_on_health_changed()
 
 func show_health_bar() -> void:
+	process_mode = Node.PROCESS_MODE_PAUSABLE
 	if health_bar:
 		health_bar.show()
 
 func hide_health_bar() -> void:
+	process_mode = Node.PROCESS_MODE_DISABLED
 	if health_bar:
 		health_bar.hide()
 
 func _on_health_changed() -> void:
 	if health_bar:
-		health_bar.value = health
-	
+		health_bar.value = get_health_percentage()
+	_update_health_bar_color()
 	health_changed.emit(health, max_health)
+
+func _update_health_bar_color() -> void:
+	var p := get_health_percentage()
+
+	if p <= 0.5:
+		health_bar.modulate = Color.RED
+	elif p <= 0.75:
+		health_bar.modulate = Color.YELLOW
+	else:
+		health_bar.modulate = Color.GREEN

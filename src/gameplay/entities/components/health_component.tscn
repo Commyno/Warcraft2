@@ -1,22 +1,37 @@
 [gd_scene format=3 uid="uid://dsm022vy7iigk"]
 
 [ext_resource type="Script" uid="uid://dfswhv6v47jm1" path="res://src/gameplay/entities/components/health_component.gd" id="1_wrivc"]
+[ext_resource type="FontFile" uid="uid://87fnlrdxvsam" path="res://assets/art/ui/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf" id="2_yvff4"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c3r7g"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7s165"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+corner_detail = 2
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x52c8"]
-bg_color = Color(0.0643078, 0.66110694, 1.1551381e-06, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ywlsy"]
+bg_color = Color(0.44979727, 0.7631216, 0, 1)
 
-[node name="HealthComponent" type="Node" unique_id=1132978403]
+[node name="HealthComponent" type="Node2D" unique_id=1263535182]
 script = ExtResource("1_wrivc")
 
-[node name="HealthBar" type="ProgressBar" parent="." unique_id=580638321]
+[node name="HealthBar" type="ProgressBar" parent="." unique_id=322297537]
 offset_left = -18.0
 offset_top = -40.0
 offset_right = 22.0
 offset_bottom = -34.0
-theme_override_styles/background = SubResource("StyleBoxFlat_c3r7g")
-theme_override_styles/fill = SubResource("StyleBoxFlat_x52c8")
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("2_yvff4")
+theme_override_font_sizes/font_size = 6
+theme_override_styles/background = SubResource("StyleBoxFlat_7s165")
+theme_override_styles/fill = SubResource("StyleBoxFlat_ywlsy")
 max_value = 1.0
 value = 1.0
 show_percentage = false
