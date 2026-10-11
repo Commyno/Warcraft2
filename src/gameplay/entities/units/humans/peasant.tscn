@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://co67x1u0gnsv1"]
 
-[ext_resource type="PackedScene" uid="uid://c16jrqo7auhk1" path="res://src/gameplay/entities/units/base_unit.tscn" id="1_qa1gv"]
+[ext_resource type="PackedScene" uid="uid://duq736j33bnm2" path="res://src/gameplay/entities/units/melee_unit.tscn" id="1_qa1gv"]
 [ext_resource type="Script" uid="uid://b8n1u6n3uqoua" path="res://src/gameplay/entities/units/humans/peasant.gd" id="2_1q6u8"]
 [ext_resource type="Script" uid="uid://b4yn7h2qqjq6g" path="res://src/resources/ActionData/action_data.gd" id="3_7qhc5"]
 [ext_resource type="Texture2D" uid="uid://c05ctx6gflok6" path="res://assets/art/race/humans/units/peasant/Humans_Peasant_BLUE.png" id="3_uscwp"]
@@ -531,7 +531,7 @@ texture = ExtResource("3_uscwp")
 region_enabled = true
 region_rect = Rect2(330, 153, 29, 30)
 
-[node name="AttackComponent" parent="." index="7" unique_id=85028586]
+[node name="AttackComponent" parent="." index="6" unique_id=143579771]
 basic_damage = 6
 piercing_damage = 3
 damage_dice_sides = 4
@@ -541,6 +541,9 @@ damage_type = 0
 can_attack_air = false
 can_attack_ground = true
 
+[node name="CollisionShape2D" parent="." index="10" unique_id=152319155]
+shape = SubResource("CircleShape2D_2jfo3")
+
 [node name="GatheringComponent" type="Node" parent="." index="11" unique_id=1764505891]
 script = ExtResource("9_mi00s")
 metadata/_custom_type_script = "uid://dqhlr8j2wc061"
@@ -549,14 +552,10 @@ metadata/_custom_type_script = "uid://dqhlr8j2wc061"
 script = ExtResource("10_q015r")
 metadata/_custom_type_script = "uid://cbas5t6145ulh"
 
-[node name="CollisionShape2D" parent="." index="13" unique_id=152319155]
-shape = SubResource("CircleShape2D_2jfo3")
-
-[node name="AnimationPlayer" parent="." index="14" unique_id=1017868079]
+[node name="AnimationPlayer" parent="." index="13" unique_id=1017868079]
 libraries/ = ExtResource("4_7qhc5")
 
-[node name="AnimationTree" parent="." index="15" unique_id=1411396235]
-active = false
+[node name="AnimationTree" parent="." index="14" unique_id=1411396235]
 tree_root = SubResource("AnimationNodeStateMachine_0lsul")
 parameters/Idle/ResourceState/current_state = "Normal"
 parameters/Idle/ResourceState/transition_request = ""
@@ -571,7 +570,7 @@ parameters/Walk/Walk_Normal/blend_position = Vector2(0, 0)
 parameters/Walk/Walk_Gold/blend_position = Vector2(0, 0)
 parameters/Walk/Walk_Wood/blend_position = Vector2(0, 0)
 
-[node name="Area2D" parent="." index="16" unique_id=970586467]
+[node name="Area2D" parent="." index="15" unique_id=970586467]
 monitoring = false
 monitorable = false
 

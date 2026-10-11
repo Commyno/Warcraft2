@@ -148,20 +148,37 @@ func _pick_entity_at(world_pos: Vector2) -> Node2D:
 		return null
 	return hits[0].collider as Node2D
 
+## Metodo con collision shape (Da geestire in futuro)
+#func _get_object_under_mouse(pos: Vector2) -> Node2D:
+	#var space_state = get_viewport().get_world_2d().direct_space_state
+	#var query = PhysicsPointQueryParameters2D.new()
+	#query.position = pos
+	#query.collide_with_areas = true  # Se la miniera è un'Area2D
+	#query.collide_with_bodies = true # Se la miniera è uno StaticBody2D/RigidBody2D
+	#
+	#var results = space_state.intersect_point(query)
+	#
+	#for result in results:
+		#var collider = result.collider
+		## Supponiamo che gli edifici o risorse siano in un gruppo specifico o ereditino da una classe
+		#if collider.is_in_group("interactable") or collider is BaseBuilding:
+			#return collider
+			#
+	#return null
+
+#Metodo con GridManager (Logico)
 func _get_object_under_mouse(pos: Vector2) -> Node2D:
 	var space_state = get_viewport().get_world_2d().direct_space_state
-	var query = PhysicsPointQueryParameters2D.new()
-	query.position = pos
-	query.collide_with_areas = true  # Se la miniera è un'Area2D
-	query.collide_with_bodies = true # Se la miniera è uno StaticBody2D/RigidBody2D
-	
-	var results = space_state.intersect_point(query)
-	
-	for result in results:
-		var collider = result.collider
+
+	var clicked_cell = GridManager.get_tile_coords(pos)
+
+	# Interroghi il manager (presupponendo tu aggiunga questa funzione)
+	var unit_in_cell = GridManager.get_unit_at_cell(clicked_cell)
+
+	if unit_in_cell:
 		# Supponiamo che gli edifici o risorse siano in un gruppo specifico o ereditino da una classe
-		if collider.is_in_group("interactable") or collider is BaseBuilding:
-			return collider
+		if unit_in_cell.is_in_group("interactable"):
+			return unit_in_cell
 			
 	return null
 

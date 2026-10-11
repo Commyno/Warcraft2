@@ -6,6 +6,14 @@ extends BaseUnit
 # Mappa: ability_id -> istante (in secondi) in cui l'abilità torna disponibile.
 var _cooldowns: Dictionary = {}
 
+func _ready() -> void:
+	add_to_group("interactable")
+
+func _physics_process(delta: float) -> void:
+#	Check Attack status
+	if unit_state == UnitState.ATTACKING and attack_component != null:
+		attack_component.process_combat(delta)
+
 ## Applica SOLO l'effetto dell'abilità. Mana e cooldown sono già gestiti
 ## dall'ActionData (can_cast prima, consume dopo). Qui non si paga nulla.
 ## 'target' è polimorfico: null (self), Vector2 (punto), o BaseUnit (entità).

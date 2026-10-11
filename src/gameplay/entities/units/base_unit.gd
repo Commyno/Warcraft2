@@ -30,8 +30,6 @@ enum UnitState { IDLE, MOVING, ATTACKING, PATROLING, BUILDING, REPARING, MINING,
 @onready var movement_component: MovementComponent = $MovementComponent
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var mana_component: ManaComponent = $ManaComponent
-@onready var attack_component: AttackComponent = $AttackComponent
-@onready var defend_component: DefendComponent = $DefendComponent
 @onready var visible_component: VisibleComponent = $VisibleComponent
 @onready var vision_component: VisionComponent = $VisionComponent
 
@@ -101,10 +99,6 @@ func setup(data: Resource) -> void:
 		health_component.setup(data)
 	if mana_component:
 		mana_component.setup(data)
-	if attack_component:
-		attack_component.setup(data)
-	if defend_component:
-		defend_component.setup(data)
 	if vision_component:
 		vision_component.setup(data)
 	

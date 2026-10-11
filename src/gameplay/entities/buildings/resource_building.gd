@@ -8,7 +8,6 @@ extends BaseBuilding
 func _ready() -> void:
 	super()
 	add_to_group("interactable")
-	
 
 # --- SISTEMA DI ESTRAZIONE ---
 

@@ -1,8 +1,9 @@
 class_name Footman
-extends BaseUnit
+extends MeleeUnit
 
 func _ready() -> void:
 	super._ready()
+
 
 # --- GESTIONE ANIMAZIONI ---
 	#Non avendo particolari animazioni, utilizzo quelle codificate 

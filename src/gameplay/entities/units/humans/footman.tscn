@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://d3h8v4klfe4uq"]
 
-[ext_resource type="PackedScene" uid="uid://c16jrqo7auhk1" path="res://src/gameplay/entities/units/base_unit.tscn" id="1_bmnxa"]
+[ext_resource type="PackedScene" uid="uid://duq736j33bnm2" path="res://src/gameplay/entities/units/melee_unit.tscn" id="1_bmnxa"]
 [ext_resource type="Texture2D" uid="uid://bbigol2xir1tg" path="res://assets/art/race/humans/units/footman/Humans - Footman - Idle - downright - 00.tres" id="2_0xybu"]
-[ext_resource type="AnimationLibrary" uid="uid://bpuy2w1wp5d2u" path="res://assets/animations/units/Footman.res" id="3_tj522"]
+[ext_resource type="Script" uid="uid://jo1tmjxi6pec" path="res://src/gameplay/entities/units/humans/footman.gd" id="2_tj522"]
 
 [sub_resource type="Animation" id="Animation_k12jx"]
 length = 0.001
@@ -278,15 +278,10 @@ transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition
 graph_offset = Vector2(-142.41745, -95.234985)
 
 [node name="Footman" unique_id=330192060 instance=ExtResource("1_bmnxa")]
+script = ExtResource("2_tj522")
 
-[node name="Sprite2D" parent="." index="0" unique_id=1820984858]
-texture = ExtResource("2_0xybu")
-region_rect = Rect2(272, 142, 30, 44)
-
-[node name="AnimationPlayer" parent="." index="7" unique_id=1017868079]
+[node name="AnimationPlayer" parent="." index="11" unique_id=1017868079]
 libraries/ = SubResource("AnimationLibrary_xrcm3")
-libraries/Footman = ExtResource("3_tj522")
 
-[node name="AnimationTree" parent="." index="8" unique_id=1411396235]
-active = false
+[node name="AnimationTree" parent="." index="12" unique_id=1411396235]
 tree_root = SubResource("AnimationNodeStateMachine_t2o4m")

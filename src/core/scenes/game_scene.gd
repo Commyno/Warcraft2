@@ -40,6 +40,8 @@ const TILE_MAP_ENTITIES_old: Dictionary = {
 const TILE_MAP_ENTITIES: Dictionary = {
 	381: preload("uid://bbklmd4sqie4g"),
 	382: preload("uid://bbklmd4sqie4g"),
+	383: preload("uid://bastv7u4m0yux"),
+	384: preload("uid://bastv7u4m0yux"),
 	421: preload("uid://biao03okejj7o"),
 	422: preload("uid://biao03okejj7o"),
 	455: preload("uid://dh1x21s721dgh")

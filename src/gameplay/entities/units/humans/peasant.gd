@@ -1,5 +1,5 @@
 class_name Peasant
-extends BaseUnit
+extends MeleeUnit
 
 const PEASANT_TEXTURES = {
 	Color.BLACK: preload("res://assets/art/race/humans/units/peasant/Humans_Peasant_BLACK.png"),
@@ -13,7 +13,6 @@ const PEASANT_TEXTURES = {
 }
 
 # --- PARAMETRI CONFIGURABILI DALL'INSPECTOR ---
-
 
 # --- COMPONENTS ---
 @onready var gathering_component: GatheringComponent = $GatheringComponent

@@ -8,6 +8,7 @@ const STOP_ACTION_DATA = preload("uid://bexvmhf4682mu")
 signal attack_started(target: Node2D)
 signal target_out_of_range(target: Node2D)
 signal target_died()
+signal attack_finished() # Usato per avvisare l'unità di resettare l'incarico (tornare IDLE)
 
 # --- STATISTICHE DI ATTACCO ---
 @export var basic_damage: int = 6
@@ -17,13 +18,18 @@ signal target_died()
 @export var attack_cooldown: float = 1.35
 @export var damage_type: Globals.DamageType = Globals.DamageType.NORMAL
 
+# --- TIPOLOGIE DI ATTACCO ---
 @export var can_attack_air: bool = false
 @export var can_attack_ground: bool = true
+
+# --- ARMI A DISTANZA ---
+@export var projectile_scene: PackedScene = null
 
 # --- STATO INTERNO ---
 var current_target: Node2D = null
 var is_on_cooldown: bool = false
 var cooldown_timer: Timer
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -34,15 +40,12 @@ func _ready() -> void:
 	cooldown_timer.timeout.connect(_on_cooldown_finished)
 	add_child(cooldown_timer)
 
-	# Imposto le azioni relative al Component
-	get_parent().available_actions.resize(9)
-	get_parent().available_actions[1] = ATTACK_ACTION_DATA
-	get_parent().available_actions[2] = STOP_ACTION_DATA
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	# TODO: Gestione cooldown
-	pass
+# Controllo di sicurezza: Una torre potrebbe non avere questo array, ma un fante sì
+	if "available_actions" in get_parent():
+		# Imposto le azioni relative al Component
+		get_parent().available_actions.resize(9)
+		get_parent().available_actions[1] = ATTACK_ACTION_DATA
+		get_parent().available_actions[2] = STOP_ACTION_DATA
 
 func setup(data: Resource) -> void:
 	basic_damage = data.basic_damage
@@ -75,25 +78,62 @@ func can_attack(target: Node2D) -> bool:
 
 # --- ESECUZIONE ATTACCO ---
 
-# Chiamato ogni frame o dal controller dell'unità quando l'incarico è ATTACK
-func process_attack(target: Node2D) -> void:
-	if not is_instance_valid(target):
+# Innesco chiamato dall'AttackActionData
+func set_attack_target(target: Node2D) -> void:
+	current_target = target
+
+# Da chiamare nel _physics_process della BaseUnit quando current_assignment == ATTACK
+func process_combat(delta: float) -> void:
+	if current_target == null or not is_instance_valid(current_target) or ("is_dead" in current_target and current_target.is_dead):
 		current_target = null
 		target_died.emit()
+		attack_finished.emit() # Avvisa la BaseUnit di fare clear_assignment()
 		return
 		
-	current_target = target
+	evaluate_combat_state()
+
+# Il vero e proprio "Cervello" del combattimento
+func evaluate_combat_state() -> void:
+	var parent_entity = get_parent()
 	
 	if not is_in_range(current_target):
+		# IL BERSAGLIO È LONTANO
 		target_out_of_range.emit(current_target)
-		return
 		
-	if can_attack(current_target):
-		# Iniziamo l'attacco!
-		is_on_cooldown = true
-		cooldown_timer.start()
-		attack_started.emit(current_target)
-		# ATTENZIONE: Non sarà inflitto il danno qui! Ma sarà inflitto tramite animazione
+		# Duck Typing: Se può muoversi (Fante), insegue!
+		if parent_entity.has_node("MovementComponent"):
+			if "unit_state" in parent_entity:
+				parent_entity.unit_state = BaseUnit.UnitState.MOVING
+				
+			parent_entity.get_node("MovementComponent").move_to(current_target.global_position)
+			
+		# Se NON può muoversi (Torre), aspetta e basta.
+		else:
+			pass 
+			
+	else:
+		# IL BERSAGLIO È A TIRO
+		
+		# Se stava inseguendo, inchioda
+		if parent_entity.has_node("MovementComponent"):
+			var move_comp = parent_entity.get_node("MovementComponent")
+			if move_comp.is_moving:
+				move_comp.stop_movement()
+				
+		if "unit_state" in parent_entity:
+			parent_entity.unit_state = BaseUnit.UnitState.ATTACKING
+			
+		if "last_facing_dir" in parent_entity:
+			parent_entity.last_facing_dir = (current_target.global_position - parent_entity.global_position).normalized()
+			
+		# Se non siamo in ricarica, colpiamo!
+		if can_attack(current_target):
+			is_on_cooldown = true
+			cooldown_timer.start()
+			
+			# Questo segnale ordina alla BaseUnit di far partire l'AnimationTree 
+			# con lo stato "Attack".
+			attack_started.emit(current_target)
 
 # Questa funzione DEVE essere chiamata dall'AnimationPlayer (tramite Call Method Track)
 # nel momento esatto in cui la spada colpisce o la freccia parte.
@@ -101,15 +141,34 @@ func perform_strike() -> void:
 	if not is_instance_valid(current_target):
 		return
 		
-	# Controlliamo se il bersaglio ha un HealthComponent
-	var health_comp = _get_health_component(current_target)
-	
-	if health_comp != null and not health_comp.is_dead:
-		var final_damage = get_calculated_damage()
-		health_comp.take_damage(final_damage, damage_type)
+	var final_damage = get_calculated_damage()
+
+	# SE ABBIAMO UN PROIETTILE, SIAMO UNITÀ RANGED (O TORRI)
+	if projectile_scene != null:
+		var arrow = projectile_scene.instantiate()
+		
+		# Aggiungiamo la freccia al mondo principale (non all'arciere, altrimenti si muoverebbe con lui)
+		get_tree().current_scene.add_child(arrow)
+		
+		# Facciamo partire la freccia dalla posizione dell'unità
+		arrow.global_position = get_parent().global_position
+		
+		# Inizializziamo il proiettile passandogli il bersaglio e le statistiche calcolate
+		arrow.setup(current_target, final_damage, piercing_damage, damage_type)
+
+	# SE NON ABBIAMO IL PROIETTILE, SIAMO UNITÀ MELEE
 	else:
-		current_target = null
-		target_died.emit()
+		var target_defend_comp = _get_defend_component(current_target)
+		if target_defend_comp != null:
+			target_defend_comp.take_damage(final_damage, piercing_damage, damage_type)
+		else:
+			var health_comp = current_target.get_node_or_null("HealthComponent")
+			if health_comp != null and not health_comp.is_dead:
+				health_comp.take_damage(final_damage)
+			else:
+				current_target = null
+				target_died.emit()
+				attack_finished.emit()
 
 func get_calculated_damage() -> int:
 	var roll = randi_range(1, damage_dice_sides) if damage_dice_sides > 0 else 0
@@ -118,16 +177,11 @@ func get_calculated_damage() -> int:
 func _on_cooldown_finished() -> void:
 	is_on_cooldown = false
 
+# Utility aggiornata per cercare il DefendComponent
+func _get_defend_component(target: Node2D) -> Node:
+	return target.get_node_or_null("DefendComponent")
+
 # Utility per trovare l'HealthComponent del bersaglio, indipendentemente da dove si trova
 func _get_health_component(target: Node2D) -> Node:
 	# Cerca un nodo figlio chiamato specificamente "HealthComponent"
-	var comp = target.get_node_or_null("HealthComponent")
-	if comp != null:
-		return comp
-	# Se la struttura è diversa, puoi fare un check alternativo
-	return null
-
-# Calcolo del danno inflitto (con variazione causale)
-#func get_calculated_damage() -> int:
-	#var roll = randi_range(1, damage_dice_sides) if damage_dice_sides > 0 else 0
-	#return basic_damage + roll
+	return target.get_node_or_null("HealthComponent")

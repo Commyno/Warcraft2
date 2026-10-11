@@ -535,3 +535,22 @@ func snap_to_tile(global_pos: Vector2) -> Vector2:
 		return global_pos
 	var coords = get_tile_coords(global_pos)
 	return get_tile_center_global(coords)
+
+# Restituisce il nodo dell'unità (se presente e valida) in una specifica cella
+func get_unit_at_cell(cell: Vector2i) -> Node2D:
+	# Controlla se la cella ha un proprietario registrato (usando la tua funzione)
+	var owner_id = reserved_by(cell)
+	
+	if owner_id != EMPTY:
+		# Ricava il nodo reale a partire dal suo instance_id
+		var unit_node = instance_from_id(owner_id)
+		
+		# Verifica che il nodo esista ancora (se l'unità è morta e cancellata, questo previene i crash)
+		if is_instance_valid(unit_node) and unit_node is Node2D:
+			return unit_node as Node2D
+		else:
+			# Se il nodo non è più valido (es. distrutto senza chiamare release_agent), 
+			# puliamo la prenotazione fantasma per sicurezza.
+			_owner_by_cell.erase(cell)
+			
+	return null
