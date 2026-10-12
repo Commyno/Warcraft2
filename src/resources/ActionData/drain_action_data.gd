@@ -9,7 +9,7 @@ func _init() -> void:
 	target_mode = ExecutionTargetMode.ALL # Tutti i lavoratori selezionati vanno a raccogliere
 
 func accepts(_entity, _tile, _pos, _units, _player) -> bool:
-	if not is_instance_valid(_entity):
+	if not is_instance_valid(_entity) or not _entity is BaseBuilding:
 		return false
 	# Se ha effetivamente risorse da depositare
 	if _units.size() > 0:

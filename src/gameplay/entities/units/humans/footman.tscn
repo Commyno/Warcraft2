@@ -1,28 +1,8 @@
 [gd_scene format=3 uid="uid://d3h8v4klfe4uq"]
 
 [ext_resource type="PackedScene" uid="uid://duq736j33bnm2" path="res://src/gameplay/entities/units/melee_unit.tscn" id="1_bmnxa"]
-[ext_resource type="Texture2D" uid="uid://bbigol2xir1tg" path="res://assets/art/race/humans/units/footman/Humans - Footman - Idle - downright - 00.tres" id="2_0xybu"]
 [ext_resource type="Script" uid="uid://jo1tmjxi6pec" path="res://src/gameplay/entities/units/humans/footman.gd" id="2_tj522"]
-
-[sub_resource type="Animation" id="Animation_k12jx"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("2_0xybu")]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_xrcm3"]
-_data = {
-&"RESET": SubResource("Animation_k12jx")
-}
+[ext_resource type="AnimationLibrary" uid="uid://ctlhl5nxo0ykd" path="res://assets/animations/units/Humans_Footman.res" id="3_bmnxa"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_it0x8"]
 animation = &"Footman/attack_down"
@@ -258,7 +238,7 @@ advance_mode = 0
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_klbb3"]
 switch_mode = 2
-advance_mode = 0
+advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_we6oq"]
 advance_mode = 0
@@ -280,8 +260,18 @@ graph_offset = Vector2(-142.41745, -95.234985)
 [node name="Footman" unique_id=330192060 instance=ExtResource("1_bmnxa")]
 script = ExtResource("2_tj522")
 
+[node name="AttackComponent" parent="." index="6" unique_id=143579771]
+basic_damage = 6
+piercing_damage = 3
+damage_dice_sides = 4
+attack_range = 40.0
+attack_cooldown = 1.35
+damage_type = 0
+can_attack_air = false
+can_attack_ground = true
+
 [node name="AnimationPlayer" parent="." index="11" unique_id=1017868079]
-libraries/ = SubResource("AnimationLibrary_xrcm3")
+libraries/ = ExtResource("3_bmnxa")
 
 [node name="AnimationTree" parent="." index="12" unique_id=1411396235]
 tree_root = SubResource("AnimationNodeStateMachine_t2o4m")

@@ -235,7 +235,7 @@ func update_animation() -> void:
 		
 	if is_dead:
 		animation_tree.set("parameters/Death/blend_position", move_dir)
-		state_machine.travel("Death")
+		state_machine.start("Death")
 		animation_state = "Death"
 	else:
 		#if is_moving = true and actual_speed > 10.0:

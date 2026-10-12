@@ -1,0 +1,440 @@
+[gd_resource type="AnimationLibrary" format=3 uid="uid://c1ns1ckp18g2a"]
+
+[ext_resource type="Texture2D" uid="uid://bbigol2xir1tg" path="res://assets/art/race/humans/units/footman/Humans - Footman - Idle - downright - 00.tres" id="1_3ivkr"]
+[ext_resource type="Texture2D" uid="uid://c7sa46lqpnaao" path="res://assets/art/race/humans/units/footman/Humans - Footman - Attack - down - 00.tres" id="2_c1jrc"]
+[ext_resource type="Texture2D" uid="uid://gpa18y1cvkbc" path="res://assets/art/race/humans/units/footman/Humans - Footman - Attack - down - 01.tres" id="3_86il7"]
+[ext_resource type="Texture2D" uid="uid://1vjjj5u63ilf" path="res://assets/art/race/humans/units/footman/Humans - Footman - Attack - down - 02.tres" id="4_0gg6v"]
+[ext_resource type="Texture2D" uid="uid://chqai4lcwy4sh" path="res://assets/art/race/humans/units/footman/Humans - Footman - Attack - down - 03.tres" id="5_qwfer"]
+[ext_resource type="Texture2D" uid="uid://o3iviewsp6vp" path="res://assets/art/race/humans/units/footman/Humans - Footman - Attack - downright - 00.tres" id="6_rq1fd"]
+[ext_resource type="Texture2D" uid="uid://dbvw1hgaiqua5" path="res://assets/art/race/humans/units/footman/Humans - Footman - Attack - downright - 01.tres" id="7_jlhun"]
+[ext_resource type="Texture2D" uid="uid://bytjynvmn6k36" path="res://assets/art/race/humans/units/footman/Humans - Footman - Attack - downright - 02.tres" id="8_x3dfl"]
+[ext_resource type="Texture2D" uid="uid://b5gloa7r2ncn8" path="res://assets/art/race/humans/units/footman/Humans - Footman - Attack - downright - 03.tres" id="9_6tmwd"]
+[ext_resource type="Texture2D" uid="uid://bh3w8fk8651uu" path="res://assets/art/race/humans/units/footman/Humans - Footman - Attack - right - 00.tres" id="10_py0cd"]
+[ext_resource type="Texture2D" uid="uid://cj8womufylweo" path="res://assets/art/race/humans/units/footman/Humans - Footman - Attack - right - 01.tres" id="11_r8v1s"]
+[ext_resource type="Texture2D" uid="uid://k4q4fosuwyfg" path="res://assets/art/race/humans/units/footman/Humans - Footman - Attack - right - 02.tres" id="12_fvgxv"]
+[ext_resource type="Texture2D" uid="uid://gn0eu5xupwrx" path="res://assets/art/race/humans/units/footman/Humans - Footman - Attack - right - 03.tres" id="13_x2awj"]
+[ext_resource type="Texture2D" uid="uid://bgp3wd7vrmopp" path="res://assets/art/race/humans/units/footman/Humans - Footman - Attack - up - 00.tres" id="14_hv65w"]
+[ext_resource type="Texture2D" uid="uid://b7xgfdqu6e64w" path="res://assets/art/race/humans/units/footman/Humans - Footman - Attack - up - 01.tres" id="15_yrwhu"]
+[ext_resource type="Texture2D" uid="uid://da0e0xnit1onc" path="res://assets/art/race/humans/units/footman/Humans - Footman - Attack - up - 02.tres" id="16_ovs5x"]
+[ext_resource type="Texture2D" uid="uid://ccmefwd8qewtr" path="res://assets/art/race/humans/units/footman/Humans - Footman - Attack - up - 03.tres" id="17_50y6f"]
+[ext_resource type="Texture2D" uid="uid://c6nk5kogn2xab" path="res://assets/art/race/humans/units/footman/Humans - Footman - Attack - upright - 00.tres" id="18_mdbbd"]
+[ext_resource type="Texture2D" uid="uid://mqtvv02srw31" path="res://assets/art/race/humans/units/footman/Humans - Footman - Attack - upright - 01.tres" id="19_bvqi3"]
+[ext_resource type="Texture2D" uid="uid://cw7rylv27jeb4" path="res://assets/art/race/humans/units/footman/Humans - Footman - Attack - upright - 02.tres" id="20_bl1hw"]
+[ext_resource type="Texture2D" uid="uid://blwsuoiclacn5" path="res://assets/art/race/humans/units/footman/Humans - Footman - Attack - upright - 03.tres" id="21_1tcv5"]
+[ext_resource type="Texture2D" uid="uid://dwtkro6txkrn6" path="res://assets/art/race/humans/units/footman/Humans - Footman - Death - down - 00.tres" id="22_ymdtj"]
+[ext_resource type="Texture2D" uid="uid://bibj4p2qiqomt" path="res://assets/art/race/humans/units/footman/Humans - Footman - Death - down - 01.tres" id="23_atdlc"]
+[ext_resource type="Texture2D" uid="uid://c7edvojfswxhg" path="res://assets/art/race/humans/units/footman/Humans - Footman - Death - down - 02.tres" id="24_8g8nv"]
+[ext_resource type="Texture2D" uid="uid://tbrm0hs4yfr5" path="res://assets/art/race/humans/units/footman/Humans - Footman - Death - up - 00.tres" id="25_ipmy2"]
+[ext_resource type="Texture2D" uid="uid://cqr73pwt1f3so" path="res://assets/art/race/humans/units/footman/Humans - Footman - Death - up - 01.tres" id="26_d2f30"]
+[ext_resource type="Texture2D" uid="uid://b3xfouobj8fr4" path="res://assets/art/race/humans/units/footman/Humans - Footman - Death - up - 02.tres" id="27_ov58h"]
+[ext_resource type="Texture2D" uid="uid://b4xchtdg3kd6i" path="res://assets/art/race/humans/units/footman/Humans - Footman - Idle - down - 00.tres" id="28_4o7y1"]
+[ext_resource type="Texture2D" uid="uid://crieeplh82037" path="res://assets/art/race/humans/units/footman/Humans - Footman - Idle - right - 00.tres" id="29_lmy8n"]
+[ext_resource type="Texture2D" uid="uid://qmkwc1pxvao1" path="res://assets/art/race/humans/units/footman/Humans - Footman - Idle - up - 00.tres" id="30_pt16f"]
+[ext_resource type="Texture2D" uid="uid://dhngjppuii70r" path="res://assets/art/race/humans/units/footman/Humans - Footman - Idle - upright - 00.tres" id="31_xxasv"]
+[ext_resource type="Texture2D" uid="uid://buh1vkjqpmkx6" path="res://assets/art/race/humans/units/footman/Humans - Footman - Walk - down - 01.tres" id="32_c7hfv"]
+[ext_resource type="Texture2D" uid="uid://dba4m7unxi5y8" path="res://assets/art/race/humans/units/footman/Humans - Footman - Walk - down - 00.tres" id="33_3w60u"]
+[ext_resource type="Texture2D" uid="uid://f1vnmr1kfkpc" path="res://assets/art/race/humans/units/footman/Humans - Footman - Walk - down - 02.tres" id="34_tb6d3"]
+[ext_resource type="Texture2D" uid="uid://cjau83v68n1f" path="res://assets/art/race/humans/units/footman/Humans - Footman - Walk - down - 03.tres" id="35_iyniv"]
+[ext_resource type="Texture2D" uid="uid://cn3r3pn8dh5du" path="res://assets/art/race/humans/units/footman/Humans - Footman - Walk - downright - 00.tres" id="36_3vf12"]
+[ext_resource type="Texture2D" uid="uid://c10cfuk6onuhe" path="res://assets/art/race/humans/units/footman/Humans - Footman - Walk - downright - 01.tres" id="37_cmcum"]
+[ext_resource type="Texture2D" uid="uid://c5ixvqnhaywfu" path="res://assets/art/race/humans/units/footman/Humans - Footman - Walk - downright - 02.tres" id="38_plakg"]
+[ext_resource type="Texture2D" uid="uid://2tad2kxrxy85" path="res://assets/art/race/humans/units/footman/Humans - Footman - Walk - downright - 03.tres" id="39_qxk22"]
+[ext_resource type="Texture2D" uid="uid://cobwjdos1kacr" path="res://assets/art/race/humans/units/footman/Humans - Footman - Walk - right - 00.tres" id="40_3q587"]
+[ext_resource type="Texture2D" uid="uid://clw4p3wcto0wn" path="res://assets/art/race/humans/units/footman/Humans - Footman - Walk - right - 01.tres" id="41_bjayt"]
+[ext_resource type="Texture2D" uid="uid://5c3f78s5yqhg" path="res://assets/art/race/humans/units/footman/Humans - Footman - Walk - right - 02.tres" id="42_fs5gf"]
+[ext_resource type="Texture2D" uid="uid://cu8dvke1gnwqk" path="res://assets/art/race/humans/units/footman/Humans - Footman - Walk - right - 03.tres" id="43_cgj75"]
+[ext_resource type="Texture2D" uid="uid://xkuajdpf6k5h" path="res://assets/art/race/humans/units/footman/Humans - Footman - Walk - up - 00.tres" id="44_n4rgr"]
+[ext_resource type="Texture2D" uid="uid://cxafmyoi3vbjy" path="res://assets/art/race/humans/units/footman/Humans - Footman - Walk - up - 01.tres" id="45_b1g32"]
+[ext_resource type="Texture2D" uid="uid://j5h87poecdit" path="res://assets/art/race/humans/units/footman/Humans - Footman - Walk - up - 02.tres" id="46_mrr0g"]
+[ext_resource type="Texture2D" uid="uid://c74ku8lgo2ob0" path="res://assets/art/race/humans/units/footman/Humans - Footman - Walk - up - 03.tres" id="47_u77by"]
+[ext_resource type="Texture2D" uid="uid://cyto7c2dg1r5q" path="res://assets/art/race/humans/units/footman/Humans - Footman - Walk - upright - 00.tres" id="48_ehxoh"]
+[ext_resource type="Texture2D" uid="uid://bosirtw7e4d52" path="res://assets/art/race/humans/units/footman/Humans - Footman - Walk - upright - 01.tres" id="49_2e8yx"]
+[ext_resource type="Texture2D" uid="uid://dfor7c3xvodes" path="res://assets/art/race/humans/units/footman/Humans - Footman - Walk - upright - 02.tres" id="50_e4eox"]
+[ext_resource type="Texture2D" uid="uid://daqf21eh6ali4" path="res://assets/art/race/humans/units/footman/Humans - Footman - Walk - upright - 03.tres" id="51_mjdpf"]
+
+[sub_resource type="Animation" id="Animation_k12jx"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("1_3ivkr")]
+}
+
+[sub_resource type="Animation" id="Animation_uk466"]
+resource_name = "attack_down"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("2_c1jrc"), ExtResource("3_86il7"), ExtResource("4_0gg6v"), ExtResource("5_qwfer")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AttackComponent")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"perform_strike"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_d1sj5"]
+resource_name = "attack_downright"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("6_rq1fd"), ExtResource("7_jlhun"), ExtResource("8_x3dfl"), ExtResource("9_6tmwd")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AttackComponent")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"perform_strike"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_ud30v"]
+resource_name = "attack_right"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("10_py0cd"), ExtResource("11_r8v1s"), ExtResource("12_fvgxv"), ExtResource("13_x2awj")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AttackComponent")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"perform_strike"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_u030a"]
+resource_name = "attack_up"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("14_hv65w"), ExtResource("15_yrwhu"), ExtResource("16_ovs5x"), ExtResource("17_50y6f")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AttackComponent")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"perform_strike"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_dr5mb"]
+resource_name = "attack_upright"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("18_mdbbd"), ExtResource("19_bvqi3"), ExtResource("20_bl1hw"), ExtResource("21_1tcv5")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AttackComponent")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"perform_strike"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_skjny"]
+resource_name = "death_down"
+length = 0.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("22_ymdtj"), ExtResource("23_atdlc"), ExtResource("24_8g8nv")]
+}
+
+[sub_resource type="Animation" id="Animation_co5g1"]
+resource_name = "death_up"
+length = 0.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("25_ipmy2"), ExtResource("26_d2f30"), ExtResource("27_ov58h")]
+}
+
+[sub_resource type="Animation" id="Animation_i7d8o"]
+resource_name = "idle_down"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("28_4o7y1")]
+}
+
+[sub_resource type="Animation" id="Animation_3ubt3"]
+resource_name = "idle_downright"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("1_3ivkr")]
+}
+
+[sub_resource type="Animation" id="Animation_adhdi"]
+resource_name = "idle_right"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("29_lmy8n")]
+}
+
+[sub_resource type="Animation" id="Animation_obt2i"]
+resource_name = "idle_up"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("30_pt16f")]
+}
+
+[sub_resource type="Animation" id="Animation_mtilw"]
+resource_name = "idle_upright"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("31_xxasv")]
+}
+
+[sub_resource type="Animation" id="Animation_mlxvw"]
+resource_name = "walk_down"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("32_c7hfv"), ExtResource("33_3w60u"), ExtResource("34_tb6d3"), ExtResource("35_iyniv")]
+}
+
+[sub_resource type="Animation" id="Animation_jjud6"]
+resource_name = "walk_downright"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("36_3vf12"), ExtResource("37_cmcum"), ExtResource("38_plakg"), ExtResource("39_qxk22")]
+}
+
+[sub_resource type="Animation" id="Animation_xafsu"]
+resource_name = "walk_right"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("40_3q587"), ExtResource("41_bjayt"), ExtResource("42_fs5gf"), ExtResource("43_cgj75")]
+}
+
+[sub_resource type="Animation" id="Animation_rbqye"]
+resource_name = "walk_up"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("44_n4rgr"), ExtResource("45_b1g32"), ExtResource("46_mrr0g"), ExtResource("47_u77by")]
+}
+
+[sub_resource type="Animation" id="Animation_8j6gx"]
+resource_name = "walk_upright"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("48_ehxoh"), ExtResource("49_2e8yx"), ExtResource("50_e4eox"), ExtResource("51_mjdpf")]
+}
+
+[resource]
+_data = {
+&"RESET": SubResource("Animation_k12jx"),
+&"attack_down": SubResource("Animation_uk466"),
+&"attack_downright": SubResource("Animation_d1sj5"),
+&"attack_right": SubResource("Animation_ud30v"),
+&"attack_up": SubResource("Animation_u030a"),
+&"attack_upright": SubResource("Animation_dr5mb"),
+&"death_down": SubResource("Animation_skjny"),
+&"death_up": SubResource("Animation_co5g1"),
+&"idle_down": SubResource("Animation_i7d8o"),
+&"idle_downright": SubResource("Animation_3ubt3"),
+&"idle_right": SubResource("Animation_adhdi"),
+&"idle_up": SubResource("Animation_obt2i"),
+&"idle_upright": SubResource("Animation_mtilw"),
+&"walk_down": SubResource("Animation_mlxvw"),
+&"walk_downright": SubResource("Animation_jjud6"),
+&"walk_right": SubResource("Animation_xafsu"),
+&"walk_up": SubResource("Animation_rbqye"),
+&"walk_upright": SubResource("Animation_8j6gx")
+}

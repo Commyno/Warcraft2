@@ -9,6 +9,8 @@ func _ready() -> void:
 	add_to_group("interactable")
 
 func _physics_process(delta: float) -> void:
+	super(delta)
+
 #	Check Attack status
 	if unit_state == UnitState.ATTACKING and attack_component != null:
 		attack_component.process_combat(delta)

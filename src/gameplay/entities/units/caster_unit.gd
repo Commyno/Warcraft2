@@ -3,6 +3,9 @@ extends BaseUnit
 
 @export var abilities: Array[AbilityData] = []
 
+@onready var attack_component: AttackComponent = $AttackComponent
+@onready var defend_component: DefendComponent = $DefendComponent
+
 # Mappa: ability_id -> istante (in secondi) in cui l'abilità torna disponibile.
 var _cooldowns: Dictionary = {}
 
@@ -10,6 +13,8 @@ func _ready() -> void:
 	add_to_group("interactable")
 
 func _physics_process(delta: float) -> void:
+	super(delta)
+
 #	Check Attack status
 	if unit_state == UnitState.ATTACKING and attack_component != null:
 		attack_component.process_combat(delta)
