@@ -85,10 +85,14 @@ func _recalculate_vision() -> void:
 	
 	for cell in _currently_visible:
 		current_visible_array.append(cell)
-		if not _discovered.has(cell):
-			_discovered[cell] = true
-			newly_discovered.append(cell)
-			
+		#if not _discovered.has(cell):
+			#_discovered[cell] = true
+			#newly_discovered.append(cell)
+		if not previous_visible.has(cell):
+			if not _discovered.has(cell):
+				_discovered[cell] = true
+				newly_discovered.append(cell)
+
 	for cell in previous_visible:
 		if not _currently_visible.has(cell):
 			cells_to_hide.append(cell)
@@ -107,22 +111,38 @@ func _recalculate_vision() -> void:
 	# 4. Comunica ai nemici
 	get_tree().call_group("enemy_visible_components", "check_visibility_state")
 
+# Versione precedente
+#func _add_circle_to_vision(center: Vector2i, radius: int) -> void:
+	#for x in range(-radius, radius + 1):
+		#for y in range(-radius, radius + 1):
+			## Se il punto è all'interno del raggio
+			#if (x * x) + (y * y) <= (radius * radius):
+				#
+				## --- CORREZIONE GLITCH TILESET 16 PEZZI ---
+				## Evitiamo di inserire le 4 estremità assolute (le punte da 1 tile)
+				## per la singola unità in elaborazione.
+				#if abs(x) == radius and y == 0:
+					#continue
+				#if abs(y) == radius and x == 0:
+					#continue
+					#
+				## Se non è una punta estrema, la aggiungiamo alla visione globale
+				#_currently_visible[center + Vector2i(x, y)] = true
+
+# Nuova versione
 func _add_circle_to_vision(center: Vector2i, radius: int) -> void:
+	# Calcoliamo il limite al quadrato una sola volta per ottimizzare.
+	# Sottraendo 'radius' alla fine, ammorbidiamo la circonferenza in modo matematico.
+	# Questo garantisce che le "punte" del cerchio siano larghe almeno 3 tile,
+	# prevenendo i glitch del Terrain Set a 16 pezzi senza bucare i punti cardinali.
+	var limit_sq = (radius * radius) - radius
+	
 	for x in range(-radius, radius + 1):
 		for y in range(-radius, radius + 1):
-			# Se il punto è all'interno del raggio
-			if (x * x) + (y * y) <= (radius * radius):
-				
-				# --- CORREZIONE GLITCH TILESET 16 PEZZI ---
-				# Evitiamo di inserire le 4 estremità assolute (le punte da 1 tile)
-				# per la singola unità in elaborazione.
-				if abs(x) == radius and y == 0:
-					continue
-				if abs(y) == radius and x == 0:
-					continue
-					
-				# Se non è una punta estrema, la aggiungiamo alla visione globale
+			# Se il punto rientra nel nuovo raggio smussato
+			if (x * x) + (y * y) <= limit_sq:
 				_currently_visible[center + Vector2i(x, y)] = true
+
 
 func is_cell_visible(cell: Vector2i) -> bool:
 	return _currently_visible.has(cell)

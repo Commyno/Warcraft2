@@ -20,7 +20,7 @@ func on_depleted() -> void:
 	
 # --- SISTEMA DI DANNO E DISTRUZIONE ---
 #Override delle funzioni di distruzione in quanto non puo essere distrutta
-func take_damage(amount: float) -> void:
+func take_damage(amount: float, piercing_damage: float = 0, source_damage_type: Globals.DamageType = Globals.DamageType.NORMAL) -> void:
 	pass
 
 func heal(amount: float) -> void:

@@ -1,7 +1,7 @@
 extends Node
 
 # --- CONFIGURAZIONE AI ---
-@export var ai_team_id: int = 2 # 1 per il Player, 2 per questa AI, ecc.
+@export var ai_player_id: int = 2 # 1 per il Player, 2 per questa AI, ecc.
 @export var aggro_distance: float = 300.0 # Distanza di ingaggio (300 pixel)
 
 # L'AI penserà e darà ordini ogni mezzo secondo (0.5), molto meglio per le performance!
@@ -26,7 +26,7 @@ func _evaluate_battlefield() -> void:
 	
 	# 2. Separa le truppe dell'AI da quelle nemiche
 	for unit in all_units:
-		if unit.team_id == ai_team_id:
+		if unit.player_id == ai_player_id:
 			my_units.append(unit)
 		else:
 			enemy_units.append(unit)

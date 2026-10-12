@@ -205,13 +205,17 @@ func is_selected() -> bool:
 
 # --- SISTEMA DI DANNO E DISTRUZIONE ---
 
-func take_damage(amount: float) -> void:
+func take_damage(amount: float, piercing_damage: float = 0, source_damage_type: Globals.DamageType = Globals.DamageType.NORMAL) -> void:
 	if is_dead:
 		return
 		
-	if health_component:
-		health_component.damage(amount)
-		print(name, " ha subito ", amount, " danni! Vita attuale: ", health_component.health)
+	var target_defend_comp: DefendComponent = get_node_or_null("DefendComponent")
+	if target_defend_comp != null:
+		target_defend_comp.take_damage(amount, piercing_damage, source_damage_type)
+	else:
+		if health_component:
+			health_component.damage(amount)
+			print(name, " ha subito ", amount, " danni! Vita attuale: ", health_component.health)
 
 # TODO: Passare la funzione di morte al component
 func die() -> void:

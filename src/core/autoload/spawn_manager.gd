@@ -110,7 +110,7 @@ func spawn_unit_from_building(unit_data: UnitData, building: BaseBuilding, owner
 	if rallypoint_component:
 		if rallypoint_component.rallypoint_position != Vector2.INF and rallypoint_component.rallypoint_position != final_spawn_pos:
 			if unit_instance.has_method("move_to"):
-				var safe_target = GridManager.get_available_destination(rallypoint_component.rallypoint_positiontion, unit_id, current_cell, true)
+				var safe_target = GridManager.get_available_destination(rallypoint_component.rallypoint_position, unit_id, current_cell, true)
 				unit_instance.move_to(safe_target)
 	else:
 		GridManager.confirm_move(unit_id, current_cell, current_cell)

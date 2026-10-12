@@ -39,7 +39,7 @@ extends CostData
 @export_group("Combat")
 @export var basic_damage: int = 6           # Danno base (soggetto a riduzione dall'Armor nemica)
 @export var piercing_damage: int = 3        # Danno perforante (ignora l'Armor nemica)
-@export var attack_range: float = 32.0      # Gittata (es. 32px melee ~ 1 tile; 128px ranged ~ 4 tiles)
+@export var attack_range: float = 0.0       # Gittata (es. 32px melee ~ 1 tile; 128px ranged ~ 4 tiles)
 @export var attack_cooldown: float = 1.2    # Secondi tra un fendente/freccia e l'altro
 @export var can_attack_air: bool = false
 @export var can_attack_ground: bool = true

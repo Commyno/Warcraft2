@@ -66,7 +66,7 @@ func _start_interaction(target: Node2D) -> void:
 		gathering_component.interact_with_mine(target)
 		
 	# --- 2. GESTIONE COSTRUZIONE E RIPARAZIONE ---
-	if target is ProductionBuilding:
+	if target is BaseBuilding:
 		# Se l'edificio è in cantiere e il nostro ordine era BUILD
 		if target.is_under_construction and current_assignment == AssignmentState.BUILD:
 			unit_state = UnitState.BUILDING # Forza lo stato
@@ -89,7 +89,8 @@ func _start_interaction(target: Node2D) -> void:
 			
 	# --- 3. GESTIONE DEPOSITO (Municipio / Lumber Mill) ---
 		elif target.is_resource_dropoff:
-			gathering_component.deposit_resources(target)
+			if target.get_node("DrainComponent").accept_resources(gathering_component.current_resource):
+				gathering_component.deposit_resources(target)
 
 # Quando arriva adiacente all'albero
 func _start_tile_interaction(tile_coords: Vector2i) -> void:

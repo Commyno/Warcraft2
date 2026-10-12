@@ -43,9 +43,11 @@ func _execute_action(source_entities: Array, target_data = null) -> void:
 
 	# 2. Assegna l'ordine a tutte le unità selezionate
 	for entity in source_entities:
-		if entity.has_node("AttackComponent"):
+		var attack_component: AttackComponent = entity.get_node("AttackComponent")
+		if attack_component != null:
 			# 1. Imposta l'incarico globale
-			#entity.current_assignment = BaseUnit.AssignmentState.ATTACK
+			entity.current_assignment = BaseUnit.AssignmentState.ATTACK
+			entity.current_target = target_data
 			
 			# 2. Consegna il bersaglio al componente specializzato
-			entity.get_node("AttackComponent").set_attack_target(target_data)
+			attack_component.set_attack_target(target_data)

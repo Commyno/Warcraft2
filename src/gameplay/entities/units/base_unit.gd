@@ -179,10 +179,11 @@ func _on_movement_finished() -> void:
 	
 	# Innesca le interazioni ora che siamo arrivati
 	if current_target != null:
-		if movement_component.is_adjacent_to_target(current_target):
-			_start_interaction(current_target)
-		else:
-			clear_assignment()
+		if is_instance_valid(current_target) and "is_dead" in current_target and not current_target.is_dead:
+			if movement_component.is_adjacent_to_target(current_target):
+				_start_interaction(current_target)
+			else:
+				clear_assignment()
 	elif current_tile_target != Vector2i(-1, -1):
 		# Per i tile (alberi ecc.) Chebyshev diretto va bene, sono sempre 1x1
 		var my_cell := GridManager.get_tile_coords(global_position)
@@ -259,6 +260,17 @@ func update_animation() -> void:
 		sprite2d.flip_h = false
 
 # --- SISTEMA VITA E COMBATTIMENTO ---
+func take_damage(amount: float, piercing_damage: float = 0, source_damage_type: Globals.DamageType = Globals.DamageType.NORMAL) -> void:
+	if is_dead:
+		return
+		
+	var target_defend_comp: DefendComponent = get_node_or_null("DefendComponent")
+	if target_defend_comp != null:
+		target_defend_comp.take_damage(amount, piercing_damage, source_damage_type)
+	else:
+		if health_component:
+			health_component.damage(amount)
+			print(name, " ha subito ", amount, " danni! Vita attuale: ", health_component.health)
 
 func heal(amount: float) -> void:
 	if is_dead:
@@ -282,26 +294,34 @@ func die() -> void:
 	# 1. PULIZIA TOTALE: Ferma il movimento e avvisa miniere/edifici che il lavoratore è morto!
 	clear_assignment() 
 	
-	# 2. DISATTIVA LA FISICA
-	# Usiamo set_deferred per le collisioni per evitare errori se chiamato durante un frame fisico
-	collision_shape.set_deferred("disabled", true)
-	set_physics_process(false) 
-	
-	# 3. AVVIA ANIMAZIONE
-	update_animation()
-	
-	# 4. ATTENDI FINE ANIMAZIONE
-	await get_tree().create_timer(0.6).timeout
-	
-	# 5. GENERA IL CADAVERE (solo visivo)
-	spawn_corpse()
-	
-	# 6. LIBERA LA GRIGLIA
+	# 2. LIBERA LA GRIGLIA
 	# Poiché clear_assignment() ha riprenotato il tile sotto ai suoi piedi per fermarsi,
 	# ora che è definitivamente morto (e c'è solo un cadavere calpestabile), lo liberiamo.
 	GridManager.release_agent(self.get_instance_id())
 	
-	# 7. ELIMINA L'UNITÀ
+	# 3. DISATTIVA LA FISICA
+	# Usiamo set_deferred per le collisioni per evitare errori se chiamato durante un frame fisico
+	collision_shape.set_deferred("disabled", true)
+	set_physics_process(false) 
+	
+	# 4. AVVIA ANIMAZIONE
+	update_animation()
+	
+	# 5. ATTENDI FINE ANIMAZIONE
+	# Salviamo il riferimento al timer per assicurarci che l'albero esista
+	var tree = get_tree()
+	if tree != null:
+		await tree.create_timer(0.6).timeout
+	
+	# 6. CONTROLLO DI SICUREZZA POST-AWAIT
+	# Se il nodo è stato già rimosso forzatamente (es. ricaricamento mappa) interrompiamo.
+	if not is_instance_valid(self) or not is_inside_tree():
+		return
+	
+	# 7. GENERA IL CADAVERE (solo visivo)
+	spawn_corpse()
+	
+	# 8. ELIMINA L'UNITÀ
 	queue_free()
 
 func spawn_corpse() -> void:

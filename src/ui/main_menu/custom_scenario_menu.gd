@@ -58,7 +58,7 @@ func _on_start_game_button_pressed() -> void:
 	
 	MatchData.map_dimensions = map_data["size"]
 	MatchData.max_players = map_data["max_players"]
-	MatchData.name = map_data["name"]
+	MatchData.map_name = map_data["name"]
 
 	# 1.a Gestione dinamica della Fazione
 	var selected_race_id = your_race_ob.get_selected_id()

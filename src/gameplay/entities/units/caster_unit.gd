@@ -12,11 +12,15 @@ var _cooldowns: Dictionary = {}
 func _ready() -> void:
 	add_to_group("interactable")
 
+	if attack_component:
+		# Connette il segnale per l'inizio dell'animazione
+		attack_component.attack_started.connect(_on_attack_started)
+
 func _physics_process(delta: float) -> void:
 	super(delta)
 
 #	Check Attack status
-	if unit_state == UnitState.ATTACKING and attack_component != null:
+	if attack_component != null and current_assignment == AssignmentState.ATTACK:
 		attack_component.process_combat(delta)
 
 ## Applica SOLO l'effetto dell'abilità. Mana e cooldown sono già gestiti
@@ -63,3 +67,23 @@ func get_cooldown_remaining(ability_id: String) -> float:
 
 func is_on_cooldown(ability_id: String) -> bool:
 	return get_cooldown_remaining(ability_id) > 0.0
+
+func _on_attack_started(target: Node2D) -> void:
+	if not state_machine:
+		return
+	
+	# Direzione di movimento basata sulla velocità attuale dell'Avoidance
+	var move_dir: Vector2 = movement_component.intended_dir if movement_component else last_facing_dir
+	# Fallback se l'avoidance ci rallenta o ferma un secondo
+	if move_dir == Vector2.ZERO:
+		move_dir = last_facing_dir
+	last_facing_dir = move_dir
+	
+	# Forza il riavvio dell'animazione di attacco dal primo frame.
+	# Usare .start() invece di .travel() garantisce che l'animazione 
+	# riparta da zero ad ogni singolo colpo (ad ogni fine cooldown).
+	unit_state = UnitState.ATTACKING
+	# Aggiorna BlendSpace e Stato Attack
+	animation_tree.set("parameters/Attack/blend_position", move_dir)
+	state_machine.start("Attack")
+	animation_state = "Attack"

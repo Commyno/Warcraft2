@@ -14,7 +14,7 @@ signal attack_finished() # Usato per avvisare l'unità di resettare l'incarico (
 @export var basic_damage: int = 6
 @export var piercing_damage: int = 3        # Danno perforante (ignora l'Armor nemica)
 @export var damage_dice_sides: int = 4      # Danno finale: basic_damage + randi_range(1, dice_sides)
-@export var attack_range: float = 40.0
+@export var attack_range: float = 0.0
 @export var attack_cooldown: float = 1.35
 @export var damage_type: Globals.DamageType = Globals.DamageType.NORMAL
 
@@ -29,6 +29,7 @@ signal attack_finished() # Usato per avvisare l'unità di resettare l'incarico (
 var current_target: Node2D = null
 var is_on_cooldown: bool = false
 var cooldown_timer: Timer
+var attack_distance: float
 
 
 # Called when the node enters the scene tree for the first time.
@@ -52,6 +53,7 @@ func setup(data: Resource) -> void:
 	piercing_damage = data.piercing_damage
 	#damage_dice_sides = 4
 	attack_range = data.attack_range
+	attack_distance = attack_range * GridManager.get_tile_size().x
 	attack_cooldown =data.attack_cooldown
 	damage_type = data.damage_type
 	cooldown_timer.wait_time = attack_cooldown
@@ -65,11 +67,11 @@ func is_in_range(target: Node2D) -> bool:
 		return false
 	# Usiamo il parent (l'unità vera e propria) per calcolare la distanza
 	var parent = get_parent() as Node2D
-	var distance = parent.global_position.distance_to(target.global_position)
-	return distance <= attack_range
+	var distance = parent.global_position.distance_to(target.global_position) 
+	return distance <= attack_distance
 
 func can_attack(target: Node2D) -> bool:
-	if not is_instance_valid(target):
+	if not is_instance_valid(target) and not target.is_dead:
 		return false
 	if is_on_cooldown:
 		return false
@@ -101,11 +103,15 @@ func evaluate_combat_state() -> void:
 		target_out_of_range.emit(current_target)
 		
 		# Duck Typing: Se può muoversi (Fante), insegue!
-		if parent_entity.has_node("MovementComponent"):
-			if "unit_state" in parent_entity:
-				parent_entity.unit_state = BaseUnit.UnitState.MOVING
-				
-			parent_entity.get_node("MovementComponent").move_to(current_target.global_position)
+		var move_comp: MovementComponent = parent_entity.get_node("MovementComponent")
+		if move_comp != null:
+			# <-- FIX: Evitiamo di ricalcolare il percorso ad ogni singolo frame!
+			# Lo ricalcoliamo solo se non ci stiamo muovendo, o se il bersaglio si è allontanato di oltre un tile (32px)
+			if not move_comp.is_moving or move_comp.final_target_global.distance_to(current_target.global_position) > GridManager.get_tile_size().x:
+				if "unit_state" in parent_entity:
+					parent_entity.unit_state = BaseUnit.UnitState.MOVING
+					
+				move_comp.move_to(current_target.global_position)
 			
 		# Se NON può muoversi (Torre), aspetta e basta.
 		else:
@@ -138,7 +144,7 @@ func evaluate_combat_state() -> void:
 # Questa funzione DEVE essere chiamata dall'AnimationPlayer (tramite Call Method Track)
 # nel momento esatto in cui la spada colpisce o la freccia parte.
 func perform_strike() -> void:
-	if not is_instance_valid(current_target):
+	if not is_instance_valid(current_target) or get_parent().is_dead:
 		return
 		
 	var final_damage = get_calculated_damage()
@@ -158,17 +164,12 @@ func perform_strike() -> void:
 
 	# SE NON ABBIAMO IL PROIETTILE, SIAMO UNITÀ MELEE
 	else:
-		var target_defend_comp = _get_defend_component(current_target)
-		if target_defend_comp != null:
-			target_defend_comp.take_damage(final_damage, piercing_damage, damage_type)
+		if current_target.has_method("take_damage"):
+			current_target.take_damage(final_damage, piercing_damage, damage_type)
 		else:
-			var health_comp = current_target.get_node_or_null("HealthComponent")
-			if health_comp != null and not health_comp.is_dead:
-				health_comp.take_damage(final_damage)
-			else:
-				current_target = null
-				target_died.emit()
-				attack_finished.emit()
+			current_target = null
+			target_died.emit()
+			attack_finished.emit()
 
 func get_calculated_damage() -> int:
 	var roll = randi_range(1, damage_dice_sides) if damage_dice_sides > 0 else 0

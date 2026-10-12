@@ -155,9 +155,12 @@ func get_available_destination(target_global_pos: Vector2, entity_id: int, curre
 		if auto_reserve:
 			confirm_move(entity_id, current_cell, best_tile)
 		return get_tile_center_global(best_tile)
-
-	# Fallback: l'area è completamente sigillata, restituisce la posizione attuale
-	return get_tile_center_global(current_cell)
+	
+	# 4. FALLBACK CORRETTO: 
+	# Se l'area è un vicolo cieco totalmente saturo, NON restituiamo la cella di partenza.
+	# Restituiamo il target originario senza prenotarlo. L'unità marcerà verso il 
+	# "traffico" e il MovementComponent si fermerà in autonomia gestendo l'ingorgo.
+	return target_global_pos
 
 # Trova il punto di spawn in stile Warcraft II, basato su un Rally Point (es. la miniera d'oro)
 func get_warcraft_spawn_position(building: BaseBuilding, entity_id: int, ideal_target: Vector2 = Vector2.INF) -> Vector2:
@@ -554,3 +557,6 @@ func get_unit_at_cell(cell: Vector2i) -> Node2D:
 			_owner_by_cell.erase(cell)
 			
 	return null
+
+func get_tile_size() -> Vector2:
+	return grid.cell_size if grid else Vector2.ZERO

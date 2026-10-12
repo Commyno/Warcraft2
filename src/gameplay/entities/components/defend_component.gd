@@ -27,7 +27,7 @@ func setup(data: Resource) -> void:
 # --- CONTROLLI LOGICI ---
 
 # Ricezione del danno con riduzione tramite Armatura
-func take_damage(amount: float, source_damage_type: Globals.DamageType = Globals.DamageType.NORMAL) -> void:
+func take_damage(amount: float, piercing_damage: float = 0, source_damage_type: Globals.DamageType = Globals.DamageType.NORMAL) -> void:
 	if get_parent().is_dead:
 		return # Non può subire danni se è già morta
 		

@@ -82,7 +82,7 @@ func cancel_unit_at(index: int) -> void:
 	training_queue.remove_at(index)
 	
 	if get_player_owner() != null:
-		get_player_owner().refund_unit(canceled_unit)
+		get_player_owner().refund_resources(canceled_unit.gold_cost, canceled_unit.lumber_cost, canceled_unit.oil_cost)
 	
 	# Se annulliamo la prima unità, resettiamo il timer
 	if index == 0:

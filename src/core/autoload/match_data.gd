@@ -18,6 +18,7 @@ var selected_map_path   : String = ""
 var selected_map_data   : Dictionary = {} # Conterrà tutti i dati (nome, dimensione, giocatori)
 var map_dimensions      : Vector2i = Vector2i.ZERO
 var max_players         : int = 8
+var map_name            : String
 var your_race           : Globals.RaceType = Globals.RaceType.HUMANS
 var map_resources       : Globals.MapResourcesType
 var start_units         : Globals.StartUnitsType
