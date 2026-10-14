@@ -70,6 +70,7 @@ var is_interacting: bool = false                # Per tracciare lo stato di inte
 
 var animation_state: String = "Idle"
 var last_facing_dir: Vector2 = Vector2.DOWN     # Per tracciare lo sguardo relativo all'ultimo movimento
+var last_animation_state: String = ""
 
 func _ready() -> void:
 	available_actions.resize(9)
@@ -108,8 +109,7 @@ func setup(data: Resource) -> void:
 	#pass
 
 func _physics_process(delta: float) -> void:
-	if is_dead or unit_state != UnitState.MOVING:
-		update_animation()
+	if is_dead:
 		return
 		
 	# Deleghiamo il movimento fisico al componente se lo stato è MOVING
@@ -228,30 +228,11 @@ func update_animation() -> void:
 	
 	var actual_speed: float = velocity.length()
 	# Direzione di movimento basata sulla velocità attuale dell'Avoidance
-	var move_dir: Vector2 = movement_component.intended_dir if movement_component else last_facing_dir
+	var move_dir: Vector2 = movement_component.intended_dir if (movement_component and movement_component.is_moving) else last_facing_dir
 
 	# Fallback se l'avoidance ci rallenta o ferma un secondo
 	if move_dir == Vector2.ZERO:
 		move_dir = last_facing_dir
-		
-	if is_dead:
-		animation_tree.set("parameters/Death/blend_position", move_dir)
-		state_machine.start("Death")
-		animation_state = "Death"
-	else:
-		#if is_moving = true and actual_speed > 10.0:
-		if unit_state == UnitState.MOVING and actual_speed > 10.0:
-			last_facing_dir = move_dir
-			# Aggiorna BlendSpace e Stato Walk
-			animation_tree.set("parameters/Walk/blend_position", move_dir)
-			state_machine.travel("Walk")
-			animation_state = "Walk"
-		
-		else:
-			# Aggiorna BlendSpace e Stato Idle
-			animation_tree.set("parameters/Idle/blend_position", move_dir)
-			state_machine.travel("Idle")
-			animation_state = "Idle"
 		
 	# Gestione flip orizzontale
 	if move_dir.x < -0.1:
@@ -284,7 +265,6 @@ func die() -> void:
 		return # Evita che la funzione venga chiamata più volte
 		
 	is_dead = true
-	destroyed.emit()
 	
 	# Nasconde la barra della vita
 	if health_component:
@@ -306,15 +286,9 @@ func die() -> void:
 	# 4. AVVIA ANIMAZIONE
 	update_animation()
 	
-	## 5. ATTENDI FINE ANIMAZIONE
-	## Salviamo il riferimento al timer per assicurarci che l'albero esista
-	#var tree = get_tree()
-	#if tree != null:
-		#await tree.create_timer(0.6).timeout
-		
-	## 6. GENERA IL CADAVERE (solo visivo)
-	#spawn_corpse()
-	
+	# 5. AVVISA CHE E' STATO DISTRUTTO
+	destroyed.emit()
+
 func remove_from_game() -> void:
 	# 1. CONTROLLO DI SICUREZZA POST-AWAIT
 	# Se il nodo è stato già rimosso forzatamente (es. ricaricamento mappa) interrompiamo.

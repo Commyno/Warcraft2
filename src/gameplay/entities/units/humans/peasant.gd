@@ -52,11 +52,6 @@ func _physics_process(delta: float) -> void:
 	if unit_state == UnitState.CHOPPING and gathering_component:
 		gathering_component.process_chopping(delta)
 
-# Quando l'unità muore, pulisce tutto in automatico
-func die() -> void:
-	clear_assignment()
-	super()
-
 
 # --- GESTIONE INTERAZIONE E MINIERA ---
 
@@ -160,19 +155,8 @@ func move_to(target_pos: Vector2) -> void:
 	if unit_state == UnitState.MINING: return
 	super(target_pos)
 
-# --- GESTIONE ANIMAZIONWI ---
-
 func update_animation_parameters(move_velocity: Vector2) -> void:
-	var move_dir: Vector2 = move_velocity.normalized()
-	if move_dir == Vector2.ZERO: return
-	animation_tree.set("parameters/Death/blend_position", move_dir)
-	animation_tree.set("parameters/Walk/Walk_Normal/blend_position", move_dir)
-	animation_tree.set("parameters/Walk/Walk_Gold/blend_position", move_dir)
-	animation_tree.set("parameters/Walk/Walk_Wood/blend_position", move_dir)
-	animation_tree.set("parameters/Idle/Idle_Normal/blend_position", move_dir)
-	animation_tree.set("parameters/Idle/Idle_Gold/blend_position", move_dir)
-	animation_tree.set("parameters/Idle/Idle_Wood/blend_position", move_dir)
-	animation_tree.set("parameters/Attack/blend_position", move_dir)
+	super(move_velocity)
 	
 	var resource_type = gathering_component.current_resource if gathering_component else Globals.ResourceType.NONE
 	match resource_type:
@@ -185,52 +169,3 @@ func update_animation_parameters(move_velocity: Vector2) -> void:
 		Globals.ResourceType.WOOD:
 			animation_tree.set("parameters/Walk/ResourceState/transition_request", "Wood")
 			animation_tree.set("parameters/Idle/ResourceState/transition_request", "Wood")
-
-func update_animation() -> void:
-	if not animation_tree or not state_machine:
-		return
-
-	var actual_speed: float = velocity.length()
-	# Se il componente di movimento c'è ed è attivo, legge la sua intended_dir.
-	# Altrimenti usa last_facing_dir memorizzata nella BaseUnit.
-	var move_dir: Vector2 = movement_component.intended_dir if (movement_component and movement_component.is_moving) else last_facing_dir
-	
-	if move_dir == Vector2.ZERO:
-		move_dir = last_facing_dir
-	
-	update_animation_parameters(move_dir)
-	
-	if is_dead:
-		state_machine.start("Death")
-		animation_state = "Death"
-	else:
-		#if is_moving and actual_speed > 10.0:
-		if unit_state == UnitState.MOVING and actual_speed > 10.0:
-			last_facing_dir = move_dir
-			state_machine.travel("Walk")
-			animation_state = "Walk"
-		elif unit_state == UnitState.RETURNING_RESOURCES:
-			last_facing_dir = move_dir
-			state_machine.travel("Walk")
-			animation_state = "Walk"
-		elif unit_state == UnitState.ATTACKING:
-			state_machine.start("Attack")
-			animation_state = "Attack"
-		elif unit_state == UnitState.CHOPPING:
-			state_machine.start("Attack")
-			animation_state = "Attack"
-		elif unit_state == UnitState.MINING:
-			state_machine.travel("Idle")
-			animation_state = "Idle"
-		elif unit_state == UnitState.BUILDING or unit_state == UnitState.REPARING:
-			state_machine.start("Attack")
-			animation_state = "Attack"
-		else:
-			state_machine.travel("Idle")
-			animation_state = "Idle"
-	
-	# Gestione del flip orizzontale dello Sprite
-	if move_dir.x < -0.1:
-		sprite2d.flip_h = true
-	elif move_dir.x > 0.1:
-		sprite2d.flip_h = false
