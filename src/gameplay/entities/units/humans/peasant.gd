@@ -46,8 +46,9 @@ func setup(data: Resource) -> void:
 	if build_component:
 		build_component.setup(data)
 
-func _process(delta: float) -> void:
-	#super(delta)
+func _physics_process(delta: float) -> void:
+	super(delta)
+
 	if unit_state == UnitState.CHOPPING and gathering_component:
 		gathering_component.process_chopping(delta)
 
@@ -200,7 +201,7 @@ func update_animation() -> void:
 	update_animation_parameters(move_dir)
 	
 	if is_dead:
-		state_machine.travel("Death")
+		state_machine.start("Death")
 		animation_state = "Death"
 	else:
 		#if is_moving and actual_speed > 10.0:
@@ -213,16 +214,16 @@ func update_animation() -> void:
 			state_machine.travel("Walk")
 			animation_state = "Walk"
 		elif unit_state == UnitState.ATTACKING:
-			state_machine.travel("Attack")
+			state_machine.start("Attack")
 			animation_state = "Attack"
 		elif unit_state == UnitState.CHOPPING:
-			state_machine.travel("Attack")
+			state_machine.start("Attack")
 			animation_state = "Attack"
 		elif unit_state == UnitState.MINING:
 			state_machine.travel("Idle")
 			animation_state = "Idle"
 		elif unit_state == UnitState.BUILDING or unit_state == UnitState.REPARING:
-			state_machine.travel("Attack")
+			state_machine.start("Attack")
 			animation_state = "Attack"
 		else:
 			state_machine.travel("Idle")

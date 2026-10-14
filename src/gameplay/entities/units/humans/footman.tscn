@@ -56,30 +56,31 @@ blend_point_7/pos = Vector2(-0.7, -0.7)
 blend_point_7/name = &"attack_up_left"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xcbwv"]
-animation = &"die_down"
+animation = &"death_down"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6iysh"]
-animation = &"die_up"
+animation = &"death_up"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2ps88"]
-animation = &"die_down"
+animation = &"death_down"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_as8ry"]
-animation = &"die_down"
+animation = &"death_down"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5yghf"]
-animation = &"die_up"
+animation = &"death_up"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qq27f"]
-animation = &"die_up"
+animation = &"death_up"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_fumve"]
-animation = &"die_down"
+animation = &"death_down"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rs2rm"]
-animation = &"die_up"
+animation = &"death_up"
 
 [sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_8rxto"]
+blend_mode = 1
 blend_point_0/node = SubResource("AnimationNodeAnimation_xcbwv")
 blend_point_0/pos = Vector2(0, 1)
 blend_point_0/name = &"die_down"

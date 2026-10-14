@@ -11,6 +11,7 @@ func _ready() -> void:
 	if attack_component:
 		# Connette il segnale per l'inizio dell'animazione
 		attack_component.attack_started.connect(_on_attack_started)
+		attack_component.attack_finished.connect(_on_attack_finished)
 
 func _physics_process(delta: float) -> void:
 	super(delta)
@@ -48,3 +49,6 @@ func _on_attack_started(target: Node2D) -> void:
 	animation_tree.set("parameters/Attack/blend_position", move_dir)
 	state_machine.start("Attack")
 	animation_state = "Attack"
+
+func _on_attack_finished(target: Node2D) -> void:
+	clear_assignment()

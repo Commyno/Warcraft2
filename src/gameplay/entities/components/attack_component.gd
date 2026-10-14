@@ -7,7 +7,7 @@ const STOP_ACTION_DATA = preload("uid://bexvmhf4682mu")
 # --- SEGNALI ---
 signal attack_started(target: Node2D)
 signal target_out_of_range(target: Node2D)
-signal target_died()
+signal target_died() # Attenzione, non significa che lo ha ucciso, ma che il target è morto
 signal attack_finished() # Usato per avvisare l'unità di resettare l'incarico (tornare IDLE)
 
 # --- STATISTICHE DI ATTACCO ---
@@ -86,12 +86,11 @@ func set_attack_target(target: Node2D) -> void:
 
 # Da chiamare nel _physics_process della BaseUnit quando current_assignment == ATTACK
 func process_combat(delta: float) -> void:
+	# SICUREZZA CONTINUA: Se il bersaglio svanisce o muore per altre cause
 	if current_target == null or not is_instance_valid(current_target) or ("is_dead" in current_target and current_target.is_dead):
-		current_target = null
-		target_died.emit()
-		attack_finished.emit() # Avvisa la BaseUnit di fare clear_assignment()
+		_target_died_or_invalid()
 		return
-		
+
 	evaluate_combat_state()
 
 # Il vero e proprio "Cervello" del combattimento
@@ -144,7 +143,8 @@ func evaluate_combat_state() -> void:
 # Questa funzione DEVE essere chiamata dall'AnimationPlayer (tramite Call Method Track)
 # nel momento esatto in cui la spada colpisce o la freccia parte.
 func perform_strike() -> void:
-	if not is_instance_valid(current_target) or get_parent().is_dead:
+	# SICUREZZA CONTINUA: Se il bersaglio svanisce o muore per altre cause
+	if not is_instance_valid(current_target) or ( "is_dead" in current_target and current_target.is_dead ):
 		return
 		
 	var final_damage = get_calculated_damage()
@@ -166,11 +166,21 @@ func perform_strike() -> void:
 	else:
 		if current_target.has_method("take_damage"):
 			current_target.take_damage(final_damage, piercing_damage, damage_type)
-		else:
-			current_target = null
-			target_died.emit()
-			attack_finished.emit()
+			
+			# VERIFICA IMMEDIATA POST-COLPO:
+			# Se il bersaglio è morto (tramite la sua variabile is_dead o HealthComponent)
+			if "is_dead" in current_target:
+				if current_target.is_dead:
+					_target_died_or_invalid()
+			elif current_target.has_node("HealthComponent"):
+				# Fallback se usi l'health component
+				var hp_comp = current_target.get_node("HealthComponent")
+				if hp_comp.health <= 0:
+					_target_died_or_invalid()
 
+		else:
+			_target_died_or_invalid()
+		
 func get_calculated_damage() -> int:
 	var roll = randi_range(1, damage_dice_sides) if damage_dice_sides > 0 else 0
 	return basic_damage + roll
@@ -186,3 +196,8 @@ func _get_defend_component(target: Node2D) -> Node:
 func _get_health_component(target: Node2D) -> Node:
 	# Cerca un nodo figlio chiamato specificamente "HealthComponent"
 	return target.get_node_or_null("HealthComponent")
+
+func _target_died_or_invalid() -> void:
+	current_target = null
+	target_died.emit()
+	attack_finished.emit() # Questo farà scattare il clear_assignment() sull'unità

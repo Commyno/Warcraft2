@@ -270,8 +270,7 @@ func take_damage(amount: float, piercing_damage: float = 0, source_damage_type: 
 	else:
 		if health_component:
 			health_component.damage(amount)
-			print(name, " ha subito ", amount, " danni! Vita attuale: ", health_component.health)
-
+	
 func heal(amount: float) -> void:
 	if is_dead:
 		return
@@ -307,24 +306,22 @@ func die() -> void:
 	# 4. AVVIA ANIMAZIONE
 	update_animation()
 	
-	# 5. ATTENDI FINE ANIMAZIONE
-	# Salviamo il riferimento al timer per assicurarci che l'albero esista
-	var tree = get_tree()
-	if tree != null:
-		await tree.create_timer(0.6).timeout
+	## 5. ATTENDI FINE ANIMAZIONE
+	## Salviamo il riferimento al timer per assicurarci che l'albero esista
+	#var tree = get_tree()
+	#if tree != null:
+		#await tree.create_timer(0.6).timeout
+		
+	## 6. GENERA IL CADAVERE (solo visivo)
+	#spawn_corpse()
 	
-	# 6. CONTROLLO DI SICUREZZA POST-AWAIT
+func remove_from_game() -> void:
+	# 1. CONTROLLO DI SICUREZZA POST-AWAIT
 	# Se il nodo è stato già rimosso forzatamente (es. ricaricamento mappa) interrompiamo.
 	if not is_instance_valid(self) or not is_inside_tree():
 		return
-	
-	# 7. GENERA IL CADAVERE (solo visivo)
-	spawn_corpse()
-	
-	# 8. ELIMINA L'UNITÀ
-	queue_free()
 
-func spawn_corpse() -> void:
+	# 2. GENERA IL CADAVERE (solo visivo)
 	# Crea un nuovo nodo Sprite2D
 	var corpse = Sprite2D.new()
 		
@@ -337,6 +334,7 @@ func spawn_corpse() -> void:
 	
 	# Imposta la posizione esatta dell'unità
 	corpse.global_position = global_position
+	corpse.z_index = -1
 	
 	# Opzionale: scurisce leggermente la sagoma per far capire che è un'unità morta
 	corpse.modulate = Color(0.5, 0.5, 0.5, 1.0) 
@@ -348,6 +346,9 @@ func spawn_corpse() -> void:
 	# Imposta un timer per far sparire il cadavere (es. 5 secondi)
 	var despawn_timer = get_tree().create_timer(8.0)
 	despawn_timer.timeout.connect(corpse.queue_free)
+	
+	# 3. ELIMINA L'UNITÀ
+	queue_free()
 
 # --- GESTIONE UI ---
 
