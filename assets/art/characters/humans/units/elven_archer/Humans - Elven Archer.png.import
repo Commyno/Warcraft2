@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bi3kmnvu3l0re"
-path="res://godot/imported/Humans_Peasant_GREEN.png-18437aeb00498af7ad70a3da9ab016c4.ctex"
+uid="uid://blfs175oybmi3"
+path="res://godot/imported/Humans - Elven Archer.png-d89661878e41269e1a2f9932ab53857a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/art/race/humans/units/peasant/Humans_Peasant_GREEN.png"
-dest_files=["res://godot/imported/Humans_Peasant_GREEN.png-18437aeb00498af7ad70a3da9ab016c4.ctex"]
+source_file="res://assets/art/characters/humans/units/elven_archer/Humans - Elven Archer.png"
+dest_files=["res://godot/imported/Humans - Elven Archer.png-d89661878e41269e1a2f9932ab53857a.ctex"]
 
 [params]
 

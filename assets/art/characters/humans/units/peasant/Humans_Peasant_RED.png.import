@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dl6j7ebovj4sk"
-path="res://godot/imported/Humans_Peasant_YELLOW.png-ae3e64ad1d72f78b373dc218e5d33952.ctex"
+uid="uid://dq4twn4h01tfp"
+path="res://godot/imported/Humans_Peasant_RED.png-308b6f9ae338319c471878b90516ef1e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/art/race/humans/units/peasant/Humans_Peasant_YELLOW.png"
-dest_files=["res://godot/imported/Humans_Peasant_YELLOW.png-ae3e64ad1d72f78b373dc218e5d33952.ctex"]
+source_file="res://assets/art/characters/humans/units/peasant/Humans_Peasant_RED.png"
+dest_files=["res://godot/imported/Humans_Peasant_RED.png-308b6f9ae338319c471878b90516ef1e.ctex"]
 
 [params]
 

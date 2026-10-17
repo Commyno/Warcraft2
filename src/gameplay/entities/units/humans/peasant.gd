@@ -2,14 +2,14 @@ class_name Peasant
 extends MeleeUnit
 
 const PEASANT_TEXTURES = {
-	Color.BLACK: preload("res://assets/art/race/humans/units/peasant/Humans_Peasant_BLACK.png"),
-	Color.BLUE: preload("res://assets/art/race/humans/units/peasant/Humans_Peasant_BLUE.png"),
-	Color.GREEN: preload("res://assets/art/race/humans/units/peasant/Humans_Peasant_GREEN.png"),
-	Color.ORANGE: preload("res://assets/art/race/humans/units/peasant/Humans_Peasant_ORANGE.png"),
-	Color.RED: preload("res://assets/art/race/humans/units/peasant/Humans_Peasant_RED.png"),
-	Color.VIOLET: preload("res://assets/art/race/humans/units/peasant/Humans_Peasant_VIOLET.png"),
-	Color.WHITE: preload("res://assets/art/race/humans/units/peasant/Humans_Peasant_WHITE.png"),
-	Color.YELLOW: preload("res://assets/art/race/humans/units/peasant/Humans_Peasant_YELLOW.png"),
+	Color.BLACK: preload("res://assets/art/characters/humans/units/peasant/Humans_Peasant_BLACK.png"),
+	Color.BLUE: preload("res://assets/art/characters/humans/units/peasant/Humans_Peasant_BLUE.png"),
+	Color.GREEN: preload("res://assets/art/characters/humans/units/peasant/Humans_Peasant_GREEN.png"),
+	Color.ORANGE: preload("res://assets/art/characters/humans/units/peasant/Humans_Peasant_ORANGE.png"),
+	Color.RED: preload("res://assets/art/characters/humans/units/peasant/Humans_Peasant_RED.png"),
+	Color.VIOLET: preload("res://assets/art/characters/humans/units/peasant/Humans_Peasant_VIOLET.png"),
+	Color.WHITE: preload("res://assets/art/characters/humans/units/peasant/Humans_Peasant_WHITE.png"),
+	Color.YELLOW: preload("res://assets/art/characters/humans/units/peasant/Humans_Peasant_YELLOW.png"),
 }
 
 # --- PARAMETRI CONFIGURABILI DALL'INSPECTOR ---

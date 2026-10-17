@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cuki6ghnklyoi"
-path="res://godot/imported/Humans_Peasant_BLACK.png-d0a837f77ce7660b78a5ae82b5d905e1.ctex"
+path="res://godot/imported/Humans_Peasant_BLACK.png-c7affb4dd160ef0ae47aea83d9c418cc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/art/race/humans/units/peasant/Humans_Peasant_BLACK.png"
-dest_files=["res://godot/imported/Humans_Peasant_BLACK.png-d0a837f77ce7660b78a5ae82b5d905e1.ctex"]
+source_file="res://assets/art/characters/humans/units/peasant/Humans_Peasant_BLACK.png"
+dest_files=["res://godot/imported/Humans_Peasant_BLACK.png-c7affb4dd160ef0ae47aea83d9c418cc.ctex"]
 
 [params]
 
