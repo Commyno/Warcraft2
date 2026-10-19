@@ -29,7 +29,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_26vwi"]
 resource_name = "attack_down"
-length = 0.39999999999999997
+length = 0.4
 loop_mode = 1
 step = 0.0333
 tracks/0/type = "value"
@@ -73,7 +73,7 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id="Animation_p11qb"]
 resource_name = "attack_downright"
-length = 0.39999999999999997
+length = 0.4
 loop_mode = 1
 step = 0.0333
 tracks/0/type = "value"
@@ -117,7 +117,7 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id="Animation_jbdel"]
 resource_name = "attack_right"
-length = 0.39999999999999997
+length = 0.4
 loop_mode = 1
 step = 0.3333
 tracks/0/type = "value"
@@ -161,7 +161,7 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id="Animation_8nt2f"]
 resource_name = "attack_up"
-length = 0.39999999999999997
+length = 0.4
 loop_mode = 1
 step = 0.0333
 tracks/0/type = "value"
@@ -279,22 +279,6 @@ tracks/0/keys = {
 "values": [Rect2(331, 531, 27, 42)]
 }
 
-[sub_resource type="Animation" id="Animation_xj4l8"]
-resource_name = "idle_down_wood"
-length = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:region_rect")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Rect2(325, 344, 39, 31)]
-}
-
 [sub_resource type="Animation" id="Animation_hra47"]
 resource_name = "idle_downright"
 length = 0.1
@@ -341,6 +325,22 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Rect2(99, 342, 32, 36)]
+}
+
+[sub_resource type="Animation" id="Animation_xj4l8"]
+resource_name = "idle_down_wood"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(325, 344, 39, 31)]
 }
 
 [sub_resource type="Animation" id="Animation_5o2kh"]
@@ -422,22 +422,6 @@ tracks/0/keys = {
 "values": [Rect2(101, 392, 28, 31)]
 }
 
-[sub_resource type="Animation" id="Animation_dnrfq"]
-resource_name = "idle_up_wood"
-length = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:region_rect")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Rect2(95, 202, 39, 27)]
-}
-
 [sub_resource type="Animation" id="Animation_ahyt4"]
 resource_name = "idle_upright"
 length = 0.1
@@ -486,6 +470,22 @@ tracks/0/keys = {
 "values": [Rect2(98, 244, 33, 39)]
 }
 
+[sub_resource type="Animation" id="Animation_dnrfq"]
+resource_name = "idle_up_wood"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(95, 202, 39, 27)]
+}
+
 [sub_resource type="Animation" id="Animation_ncx5w"]
 resource_name = "walk_down"
 length = 0.6
@@ -518,23 +518,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [Rect2(285, 531, 28, 41), Rect2(239, 532, 28, 39), Rect2(285, 531, 28, 41), Rect2(377, 531, 27, 42), Rect2(423, 531, 27, 42), Rect2(377, 531, 27, 42)]
-}
-
-[sub_resource type="Animation" id="Animation_3yaww"]
-resource_name = "walk_down_wood"
-length = 0.6
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:region_rect")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.099999994, 0.19999999, 0.3, 0.39999998, 0.49999997),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [Rect2(279, 346, 39, 28), Rect2(233, 345, 39, 30), Rect2(279, 346, 39, 28), Rect2(371, 343, 39, 33), Rect2(417, 344, 39, 31), Rect2(371, 343, 39, 33)]
 }
 
 [sub_resource type="Animation" id="Animation_jpym0"]
@@ -586,6 +569,23 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [Rect2(51, 343, 35, 34), Rect2(6, 343, 33, 34), Rect2(51, 343, 35, 34), Rect2(144, 343, 33, 34), Rect2(190, 343, 33, 33), Rect2(144, 343, 33, 34)]
+}
+
+[sub_resource type="Animation" id="Animation_3yaww"]
+resource_name = "walk_down_wood"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.099999994, 0.19999999, 0.3, 0.39999998, 0.49999997),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Rect2(279, 346, 39, 28), Rect2(233, 345, 39, 30), Rect2(279, 346, 39, 28), Rect2(371, 343, 39, 33), Rect2(417, 344, 39, 31), Rect2(371, 343, 39, 33)]
 }
 
 [sub_resource type="Animation" id="Animation_6kn7k"]
@@ -673,23 +673,6 @@ tracks/0/keys = {
 "values": [Rect2(55, 390, 28, 35), Rect2(9, 389, 28, 37), Rect2(55, 390, 28, 35), Rect2(147, 391, 27, 33), Rect2(193, 390, 27, 35), Rect2(147, 391, 27, 33)]
 }
 
-[sub_resource type="Animation" id="Animation_meoe6"]
-resource_name = "walk_up_wood"
-length = 0.6
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:region_rect")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.099999994, 0.19999999, 0.3, 0.39999998, 0.49999997),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [Rect2(49, 200, 39, 32), Rect2(3, 199, 40, 34), Rect2(49, 200, 39, 32), Rect2(141, 201, 39, 30), Rect2(187, 199, 39, 33), Rect2(141, 201, 39, 30)]
-}
-
 [sub_resource type="Animation" id="Animation_ltdow"]
 resource_name = "walk_upright"
 length = 0.6
@@ -741,42 +724,59 @@ tracks/0/keys = {
 "values": [Rect2(52, 245, 34, 38), Rect2(5, 245, 36, 38), Rect2(52, 245, 34, 38), Rect2(145, 242, 32, 43), Rect2(191, 241, 32, 45), Rect2(145, 242, 32, 43)]
 }
 
+[sub_resource type="Animation" id="Animation_meoe6"]
+resource_name = "walk_up_wood"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.099999994, 0.19999999, 0.3, 0.39999998, 0.49999997),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Rect2(49, 200, 39, 32), Rect2(3, 199, 40, 34), Rect2(49, 200, 39, 32), Rect2(141, 201, 39, 30), Rect2(187, 199, 39, 33), Rect2(141, 201, 39, 30)]
+}
+
 [resource]
 _data = {
 &"RESET": SubResource("Animation_dh4ht"),
 &"attack_down": SubResource("Animation_26vwi"),
-&"attack_downright": SubResource("Animation_p11qb"),
+&"attack_down_right": SubResource("Animation_p11qb"),
 &"attack_right": SubResource("Animation_jbdel"),
 &"attack_up": SubResource("Animation_8nt2f"),
-&"attack_upright": SubResource("Animation_0lbs2"),
+&"attack_up_right": SubResource("Animation_0lbs2"),
 &"idle_down": SubResource("Animation_tahte"),
 &"idle_down_gold": SubResource("Animation_04cx3"),
+&"idle_down_right": SubResource("Animation_hra47"),
+&"idle_down_right_gold": SubResource("Animation_25tx7"),
+&"idle_down_right_wood": SubResource("Animation_1nt7u"),
 &"idle_down_wood": SubResource("Animation_xj4l8"),
-&"idle_downright": SubResource("Animation_hra47"),
-&"idle_downright_gold": SubResource("Animation_25tx7"),
-&"idle_downright_wood": SubResource("Animation_1nt7u"),
 &"idle_right": SubResource("Animation_5o2kh"),
 &"idle_right_gold": SubResource("Animation_uu2kn"),
 &"idle_right_wood": SubResource("Animation_mn30r"),
 &"idle_up": SubResource("Animation_ot5ql"),
 &"idle_up_gold": SubResource("Animation_c05em"),
+&"idle_up_right": SubResource("Animation_ahyt4"),
+&"idle_up_right_gold": SubResource("Animation_dey8x"),
+&"idle_up_right_wood": SubResource("Animation_o24h0"),
 &"idle_up_wood": SubResource("Animation_dnrfq"),
-&"idle_upright": SubResource("Animation_ahyt4"),
-&"idle_upright_gold": SubResource("Animation_dey8x"),
-&"idle_upright_wood": SubResource("Animation_o24h0"),
 &"walk_down": SubResource("Animation_ncx5w"),
 &"walk_down_gold": SubResource("Animation_tmd7n"),
+&"walk_down_right": SubResource("Animation_jpym0"),
+&"walk_down_right_gold": SubResource("Animation_mvfm6"),
+&"walk_down_right_wood": SubResource("Animation_nj7dd"),
 &"walk_down_wood": SubResource("Animation_3yaww"),
-&"walk_downright": SubResource("Animation_jpym0"),
-&"walk_downright_gold": SubResource("Animation_mvfm6"),
-&"walk_downright_wood": SubResource("Animation_nj7dd"),
 &"walk_right": SubResource("Animation_6kn7k"),
 &"walk_right_gold": SubResource("Animation_rjmop"),
 &"walk_right_wood": SubResource("Animation_d0u4v"),
 &"walk_up": SubResource("Animation_s51k5"),
 &"walk_up_gold": SubResource("Animation_8yg0f"),
-&"walk_up_wood": SubResource("Animation_meoe6"),
-&"walk_upright": SubResource("Animation_ltdow"),
-&"walk_upright_gold": SubResource("Animation_ieb6k"),
-&"walk_upright_wood": SubResource("Animation_cawli")
+&"walk_up_right": SubResource("Animation_ltdow"),
+&"walk_up_right_gold": SubResource("Animation_ieb6k"),
+&"walk_up_right_wood": SubResource("Animation_cawli"),
+&"walk_up_wood": SubResource("Animation_meoe6")
 }

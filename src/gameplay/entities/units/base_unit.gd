@@ -79,11 +79,6 @@ func _ready() -> void:
 	if selectable_component:
 		selectable_component.deselect()
 	
-	# 2. Inizializza e attiva l'AnimationTree in modo sicuro
-	if animation_tree:
-		animation_tree.active = true
-		state_machine = animation_tree.get("parameters/playback")
-	
 	# Ci colleghiamo al segnale del componente invece che al GridManager
 	if movement_component:
 		movement_component.movement_finished.connect(_on_movement_finished)
@@ -171,11 +166,11 @@ func remove_from_selection() -> void:
 func move_to(target_pos: Vector2) -> void:
 	unit_state = UnitState.MOVING
 	movement_component.move_to(target_pos)
-	update_animation()
+	update_face_direction()
 
 func _on_movement_finished() -> void:
 	unit_state = UnitState.IDLE
-	update_animation()
+	update_face_direction()
 	
 	# Innesca le interazioni ora che siamo arrivati
 	if current_target != null:
@@ -213,7 +208,7 @@ func clear_assignment() -> void:
 	if movement_component:
 		movement_component.stop_movement()	
 	
-	update_animation()
+	update_face_direction()
 
 func stop() -> void:
 	# Il comando Stop del giocatore cancella ogni incarico, ferma l'agente 
@@ -221,8 +216,10 @@ func stop() -> void:
 	clear_assignment()
 
 # --- GESTIONE ANIMAZIONI ---
-	
 func update_animation() -> void:
+	update_face_direction()
+
+func update_face_direction() -> void:
 	if not animation_tree or not state_machine:
 		return
 	
@@ -284,7 +281,7 @@ func die() -> void:
 	set_physics_process(false) 
 	
 	# 4. AVVIA ANIMAZIONE
-	update_animation()
+	#update_face_direction()
 	
 	# 5. AVVISA CHE E' STATO DISTRUTTO
 	destroyed.emit()
