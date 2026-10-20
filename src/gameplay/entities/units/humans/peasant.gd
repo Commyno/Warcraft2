@@ -25,7 +25,7 @@ var is_building: bool:
 # --- GESTIONE BASE ---
 
 func _ready() -> void:	
-	super._ready()
+	super()
 
 	# Team color
 	_apply_team_color(Color.BLUE)

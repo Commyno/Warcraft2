@@ -52,7 +52,5 @@ func update_animation_parameters(move_velocity: Vector2) -> void:
 	if move_dir == Vector2.ZERO: return
 	animation_tree.set("parameters/Death/blend_position", move_dir)
 	animation_tree.set("parameters/Attack/blend_position", move_dir)	
-	animation_tree.set("parameters/Idle/Idle_Normal/blend_position", move_dir)
-	animation_tree.set("parameters/Walk/Walk_Normal/blend_position", move_dir)
-	animation_tree.set("parameters/Walk/ResourceState/transition_request", "Normal")
-	animation_tree.set("parameters/Idle/ResourceState/transition_request", "Normal")
+	animation_tree.set("parameters/Idle/blend_position", move_dir)
+	animation_tree.set("parameters/Walk/blend_position", move_dir)
