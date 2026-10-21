@@ -45,9 +45,15 @@ extends CostData
 @export var can_attack_ground: bool = true
 @export var damage_type: Globals.DamageType = Globals.DamageType.NORMAL
 @export var armor_type: Globals.ArmorType = Globals.ArmorType.UNARMORED
+@export_file("*.tscn") var projectile_path: String
 
 # Funzione helper comoda per quando devi effettivamente istanziare l'edificio
 func get_scene() -> PackedScene:
 	if scene_path.is_empty():
 		return null
 	return load(scene_path) as PackedScene
+
+func get_projectile_scene() -> PackedScene:
+	if projectile_path.is_empty():
+		return null
+	return load(projectile_path) as PackedScene

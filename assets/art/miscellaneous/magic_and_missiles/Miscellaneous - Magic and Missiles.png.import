@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://e0ggs00l7mhs"
-path="res://godot/imported/Buildings - Miscellaneous.png-a93220893206d15dc9e1312ff0410fdf.ctex"
+uid="uid://cyfqlv4diwywh"
+path="res://godot/imported/Miscellaneous - Magic and Missiles.png-d7175e9be7002cc16ee25af54e4fa0af.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/art/miscellaneous/Buildings - Miscellaneous.png"
-dest_files=["res://godot/imported/Buildings - Miscellaneous.png-a93220893206d15dc9e1312ff0410fdf.ctex"]
+source_file="res://assets/art/miscellaneous/magic_and_missiles/Miscellaneous - Magic and Missiles.png"
+dest_files=["res://godot/imported/Miscellaneous - Magic and Missiles.png-d7175e9be7002cc16ee25af54e4fa0af.ctex"]
 
 [params]
 

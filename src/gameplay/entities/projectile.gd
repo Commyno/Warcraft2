@@ -15,7 +15,9 @@ func setup(_target: Node2D, _damage: int, _pierce: int, _type: Globals.DamageTyp
 	damage_type = _type
 	
 	# Orienta subito la freccia visivamente verso il bersaglio
-	look_at(target.global_position)
+	if is_instance_valid(target):
+		var dir = global_position.direction_to(target.global_position)
+		_update_directional_sprite(dir)
 
 func _physics_process(delta: float) -> void:
 	# Se il bersaglio muore mentre la freccia è in volo, distruggila
@@ -28,11 +30,14 @@ func _physics_process(delta: float) -> void:
 	global_position += direction * speed * delta
 	
 	# Aggiorna la rotazione per seguire il bersaglio
-	rotation = direction.angle()
+	#_update_directional_sprite(direction)
 
 	# Controllo impatto (Distanza molto piccola)
 	if global_position.distance_to(target.global_position) < 10.0:
 		_impact()
+
+func _update_directional_sprite(dir: Vector2) -> void:
+	pass
 
 func _impact() -> void:
 	# Infligge il danno passando per il DefendComponent

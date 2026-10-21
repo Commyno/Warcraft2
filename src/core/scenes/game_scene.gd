@@ -7,44 +7,17 @@ signal levelup
 # CONSTANTS (SCENE UIDs)
 # ==========================================
 const HUD_ROOT_UID           : String = "uid://ssce78o0mjpg"
-# Mappa per Fazione -> Tipo Entità -> Scena effettiva
-const FACTION_SPAWN_DATABASE: Dictionary = {
-	"Alliance": {
-		"gold_mine": preload("res://src/gameplay/entities/buildings/neutral/gold_mine.tscn"),
-		"town_hall": preload("res://src/gameplay/entities/buildings/humans/town_hall.tscn"),
-		"farm": preload("res://src/gameplay/entities/buildings/humans/farm.tscn"),
-		"peasant": preload("res://src/gameplay/entities/units/humans/peasant.tscn"),
-		"footman": preload("res://src/gameplay/entities/units/humans/footman.tscn")
-	},
-	"Horde": {
-		"gold_mine": preload("res://src/gameplay/entities/buildings/neutral/gold_mine.tscn"),
-		"town_hall": preload("res://src/gameplay/entities/buildings/humans/town_hall.tscn"),
-		"farm": preload("res://src/gameplay/entities/buildings/humans/farm.tscn"),
-		"peon": preload("res://src/gameplay/entities/units/humans/peasant.tscn"),
-		"footman": preload("res://src/gameplay/entities/units/humans/footman.tscn")
-	},
-	"Neutral": {
-		"gold_mine": preload("res://src/gameplay/entities/buildings/neutral/gold_mine.tscn"),
-	}
-}
-
-# Mappatura dei Tile ID di "logic" / "group 0" verso le scene del gioco
-const TILE_MAP_ENTITIES_old: Dictionary = {
-	381: {"faction_key": "Alliance",   "entity_key": "peasant"},
-	382: {"faction_key": "Horde",   "entity_key": "peon"},
-	421: {"faction_key": "Alliance",   "entity_key": "town_hall"},
-	422: {"faction_key": "Horde",   "entity_key": "town_hall"},
-	455: {"faction_key": "Neutral",   "entity_key": "gold_mine"}
-}
 
 const TILE_MAP_ENTITIES: Dictionary = {
-	381: preload("uid://bbklmd4sqie4g"),
-	382: preload("uid://bbklmd4sqie4g"),
-	383: preload("uid://bastv7u4m0yux"),
-	384: preload("uid://bastv7u4m0yux"),
-	421: preload("uid://biao03okejj7o"),
-	422: preload("uid://biao03okejj7o"),
-	455: preload("uid://dh1x21s721dgh")
+	381: preload("uid://bbklmd4sqie4g"), # Peasant
+	382: preload("uid://bbklmd4sqie4g"), # Peon
+	383: preload("uid://bastv7u4m0yux"), # Footman
+	384: preload("uid://bastv7u4m0yux"), # Grunt
+	385: preload("uid://bastv7u4m0yux"), # Elven Archer
+	386: preload("uid://bastv7u4m0yux"), # Throl
+	421: preload("uid://biao03okejj7o"), # Town Hall
+	422: preload("uid://biao03okejj7o"), # Town 
+	455: preload("uid://dh1x21s721dgh")  # Miniera
 }
 
 # ==========================================

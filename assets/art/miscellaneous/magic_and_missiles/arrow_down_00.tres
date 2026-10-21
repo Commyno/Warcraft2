@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" format=3 uid="uid://dyn3ggoy8gash"]
+
+[ext_resource type="Texture2D" uid="uid://cyfqlv4diwywh" path="res://assets/art/miscellaneous/magic_and_missiles/Miscellaneous - Magic and Missiles.png" id="1_l0tca"]
+
+[resource]
+atlas = ExtResource("1_l0tca")
+region = Rect2(981, 116, 3, 30)

@@ -20,6 +20,7 @@ basic_armor = 0
 basic_damage = 3
 piercing_damage = 2
 attack_range = 1.0
+projectile_path = "uid://bdly20yghn71"
 gold_cost = 400
 food_cost = 1
 metadata/_custom_type_script = "uid://bwo8h3bftdqwy"

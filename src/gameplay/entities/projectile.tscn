@@ -4,5 +4,3 @@
 
 [node name="Projectile" type="Node2D" unique_id=1658214070]
 script = ExtResource("1_t3yu8")
-
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=812013261]

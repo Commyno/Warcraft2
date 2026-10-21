@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://bdly20yghn71"]
+
+[ext_resource type="PackedScene" uid="uid://cr12m3kbel456" path="res://src/gameplay/entities/projectile.tscn" id="1_wmx2r"]
+[ext_resource type="Texture2D" uid="uid://dyn3ggoy8gash" path="res://assets/art/miscellaneous/magic_and_missiles/arrow_down_00.tres" id="2_nlley"]
+[ext_resource type="Script" uid="uid://c0nfs25d0vo3h" path="res://src/gameplay/entities/units/humans/projectiles/elven_archer_arrow.gd" id="2_yv7m4"]
+[ext_resource type="Texture2D" uid="uid://ckg2paob5bvai" path="res://assets/art/miscellaneous/magic_and_missiles/arrow_down_right_00.tres" id="3_yv7m4"]
+[ext_resource type="Texture2D" uid="uid://c71avixxcu7s7" path="res://assets/art/miscellaneous/magic_and_missiles/arrow_right_00.tres" id="4_6vi4q"]
+[ext_resource type="Texture2D" uid="uid://q5maw28ioj2o" path="res://assets/art/miscellaneous/magic_and_missiles/arrow_up_00.tres" id="5_lf75q"]
+[ext_resource type="Texture2D" uid="uid://b4mrhxl3ouqje" path="res://assets/art/miscellaneous/magic_and_missiles/arrow_up_right_00.tres" id="6_bys0w"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_my35m"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_nlley")
+}],
+"loop": 1,
+"name": &"down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_yv7m4")
+}],
+"loop": 1,
+"name": &"down_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_6vi4q")
+}],
+"loop": 1,
+"name": &"right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_lf75q")
+}],
+"loop": 1,
+"name": &"up",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_bys0w")
+}],
+"loop": 1,
+"name": &"up_right",
+"speed": 5.0
+}]
+
+[node name="ElvenArcherArrow" unique_id=1658214070 instance=ExtResource("1_wmx2r")]
+script = ExtResource("2_yv7m4")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." index="0" unique_id=898645232]
+sprite_frames = SubResource("SpriteFrames_my35m")
+animation = &"up_right"

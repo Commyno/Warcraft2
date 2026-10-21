@@ -3,8 +3,9 @@
 [ext_resource type="Script" uid="uid://chvo3gidrbbit" path="res://src/gameplay/entities/buildings/neutral/gold_mine.gd" id="1_f0tba"]
 [ext_resource type="PackedScene" uid="uid://dte1tuljlbqt8" path="res://src/gameplay/entities/buildings/resource_building.tscn" id="1_f7tvw"]
 [ext_resource type="Script" uid="uid://b4yn7h2qqjq6g" path="res://src/resources/ActionData/action_data.gd" id="4_7syh0"]
-[ext_resource type="Texture2D" uid="uid://e0ggs00l7mhs" path="res://assets/art/miscellaneous/Buildings - Miscellaneous.png" id="4_f0tba"]
+[ext_resource type="Texture2D" uid="uid://e0ggs00l7mhs" path="res://assets/art/miscellaneous/building/Buildings - Miscellaneous.png" id="4_f0tba"]
 [ext_resource type="Script" uid="uid://0jlr34hnd82g" path="res://src/gameplay/entities/components/resource_component.gd" id="5_7syh0"]
+
 
 [node name="GoldMine" unique_id=1889694065 instance=ExtResource("1_f7tvw")]
 script = ExtResource("1_f0tba")
