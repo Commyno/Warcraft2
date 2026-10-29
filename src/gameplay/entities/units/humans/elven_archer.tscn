@@ -618,7 +618,7 @@ blend_point_3/pos = Vector2(0.7, 0.7)
 blend_point_3/name = &"die_down_right"
 blend_point_4/node = SubResource("AnimationNodeAnimation_uoibe")
 blend_point_4/pos = Vector2(0.7, -0.7)
-blend_point_4/name = &"die_up right"
+blend_point_4/name = &"die_up_right"
 blend_point_5/node = SubResource("AnimationNodeAnimation_g8pv4")
 blend_point_5/pos = Vector2(-0.7, -0.7)
 blend_point_5/name = &"die_up_left"
@@ -630,28 +630,28 @@ blend_point_7/pos = Vector2(0, -1)
 blend_point_7/name = &"die_up"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_fvm61"]
-animation = &"Peasant/idle_up"
+animation = &"idle_up"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_n2xb7"]
-animation = &"Peasant/idle_right"
+animation = &"idle_right"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dibb8"]
-animation = &"Peasant/idle_right"
+animation = &"idle_right"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_0ma2h"]
-animation = &"Peasant/idle_downright"
+animation = &"idle_down_right"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pace7"]
-animation = &"Peasant/idle_upright"
+animation = &"idle_up_right"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_b1xhf"]
-animation = &"Peasant/idle_upright"
+animation = &"idle_up_right"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_db8yb"]
-animation = &"Peasant/idle_downright"
+animation = &"idle_down_right"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3hrbq"]
-animation = &"Peasant/idle_down"
+animation = &"idle_down"
 
 [sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_gilgi"]
 blend_point_0/node = SubResource("AnimationNodeAnimation_fvm61")
@@ -677,31 +677,31 @@ blend_point_6/pos = Vector2(-0.7, 0.7)
 blend_point_6/name = &"idle_down_left"
 blend_point_7/node = SubResource("AnimationNodeAnimation_3hrbq")
 blend_point_7/pos = Vector2(0.1, 1)
-blend_point_7/name = &"Peasant_idle_down"
+blend_point_7/name = &"idle_down"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jwjiu"]
-animation = &"Peasant/walk_up"
+animation = &"walk_up"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_e2tan"]
-animation = &"Peasant/walk_down"
+animation = &"walk_down"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4im13"]
-animation = &"Peasant/walk_right"
+animation = &"walk_right"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3nx0x"]
-animation = &"Peasant/walk_right"
+animation = &"walk_right"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_0fnjf"]
-animation = &"Peasant/walk_up_right"
+animation = &"walk_up_right"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_bi5o5"]
-animation = &"Peasant/walk_down_right"
+animation = &"walk_down_right"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_tf6tg"]
-animation = &"Peasant/walk_down_right"
+animation = &"walk_down_right"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_bjmt5"]
-animation = &"Peasant/idle_upright"
+animation = &"walk_up_right"
 
 [sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_0pkii"]
 blend_point_0/node = SubResource("AnimationNodeAnimation_jwjiu")

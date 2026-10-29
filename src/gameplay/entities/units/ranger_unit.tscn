@@ -2,6 +2,16 @@
 
 [ext_resource type="PackedScene" uid="uid://c16jrqo7auhk1" path="res://src/gameplay/entities/units/base_unit.tscn" id="1_s8niy"]
 [ext_resource type="Script" uid="uid://bpia1us22vwjp" path="res://src/gameplay/entities/units/ranger_unit.gd" id="2_oscut"]
+[ext_resource type="Script" uid="uid://wleo22gywfd1" path="res://src/gameplay/entities/components/attack_component.gd" id="3_s157e"]
+[ext_resource type="Script" uid="uid://b22bafe8hx3og" path="res://src/gameplay/entities/components/defend_component.gd" id="4_6o0vw"]
 
 [node name="RangerUnit" unique_id=330192060 instance=ExtResource("1_s8niy")]
 script = ExtResource("2_oscut")
+
+[node name="AttackComponent" type="Node" parent="." index="6" unique_id=675761502]
+script = ExtResource("3_s157e")
+metadata/_custom_type_script = "uid://wleo22gywfd1"
+
+[node name="DefendComponent" type="Node" parent="." index="7" unique_id=1587935491]
+script = ExtResource("4_6o0vw")
+metadata/_custom_type_script = "uid://b22bafe8hx3og"
