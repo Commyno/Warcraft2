@@ -59,6 +59,7 @@ func setup(data: Resource) -> void:
 	cooldown_timer.wait_time = attack_cooldown
 	can_attack_air = data.can_attack_air
 	can_attack_ground = data.can_attack_ground
+	projectile_scene = data.get_projectile_scene()
 
 # --- CONTROLLI LOGICI ---
 
@@ -71,7 +72,10 @@ func is_in_range(target: Node2D) -> bool:
 	return distance <= attack_distance
 
 func can_attack(target: Node2D) -> bool:
-	if not is_instance_valid(target) and not target.is_dead:
+	if not is_instance_valid(target):
+		return false
+	# Corretto il controllo sulla morte del target
+	if "is_dead" in target and target.is_dead:
 		return false
 	if is_on_cooldown:
 		return false
@@ -120,10 +124,9 @@ func evaluate_combat_state() -> void:
 		# IL BERSAGLIO È A TIRO
 		
 		# Se stava inseguendo, inchioda
-		if parent_entity.has_node("MovementComponent"):
-			var move_comp = parent_entity.get_node("MovementComponent")
-			if move_comp.is_moving:
-				move_comp.stop_movement()
+		var move_comp: MovementComponent = parent_entity.get_node_or_null("MovementComponent")
+		if move_comp != null and move_comp.is_moving:
+			move_comp.stop_movement()
 				
 		if "unit_state" in parent_entity:
 			parent_entity.unit_state = BaseUnit.UnitState.ATTACKING
@@ -134,8 +137,8 @@ func evaluate_combat_state() -> void:
 		# Se non siamo in ricarica, colpiamo!
 		if can_attack(current_target):
 			is_on_cooldown = true
-			cooldown_timer.start()
-			
+			if cooldown_timer.is_stopped():
+				cooldown_timer.start()
 			# Questo segnale ordina alla BaseUnit di far partire l'AnimationTree 
 			# con lo stato "Attack".
 			attack_started.emit(current_target)
@@ -151,14 +154,13 @@ func perform_strike() -> void:
 
 	# SE ABBIAMO UN PROIETTILE, SIAMO UNITÀ RANGED (O TORRI)
 	if projectile_scene != null:
-		var arrow = projectile_scene.instantiate()
+		var arrow = projectile_scene.instantiate() as Projectile
 		
 		# Aggiungiamo la freccia al mondo principale (non all'arciere, altrimenti si muoverebbe con lui)
 		get_tree().current_scene.add_child(arrow)
 		
 		# Facciamo partire la freccia dalla posizione dell'unità
 		arrow.global_position = get_parent().global_position
-		
 		# Inizializziamo il proiettile passandogli il bersaglio e le statistiche calcolate
 		arrow.setup(current_target, final_damage, piercing_damage, damage_type)
 
@@ -166,24 +168,19 @@ func perform_strike() -> void:
 	else:
 		if current_target.has_method("take_damage"):
 			current_target.take_damage(final_damage, piercing_damage, damage_type)
-			
-			# VERIFICA IMMEDIATA POST-COLPO:
-			# Se il bersaglio è morto (tramite la sua variabile is_dead o HealthComponent)
-			if "is_dead" in current_target:
-				if current_target.is_dead:
-					_target_died_or_invalid()
-			elif current_target.has_node("HealthComponent"):
-				# Fallback se usi l'health component
-				var hp_comp = current_target.get_node("HealthComponent")
-				if hp_comp.health <= 0:
-					_target_died_or_invalid()
-
-		else:
+		# VERIFICA IMMEDIATA POST-COLPO:
+		# Se il bersaglio è morto (tramite la sua variabile is_dead o HealthComponent)
+		if "is_dead" in current_target and current_target.is_dead:
 			_target_died_or_invalid()
-		
+
 func get_calculated_damage() -> int:
 	var roll = randi_range(1, damage_dice_sides) if damage_dice_sides > 0 else 0
 	return basic_damage + roll
+
+func stop() -> void:
+	is_on_cooldown = false
+	cooldown_timer.stop()
+	attack_finished.emit() # Questo farà scattare il clear_assignment() sull'unità
 
 func _on_cooldown_finished() -> void:
 	is_on_cooldown = false

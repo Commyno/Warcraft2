@@ -1,4 +1,4 @@
-extends Node2D
+extends Projectile
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 

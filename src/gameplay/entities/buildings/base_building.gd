@@ -70,6 +70,8 @@ enum BuildingState { IDLE, ACTIVE, DEPLETED, DESTROYED, INACTIVE }
 # --- COMPONENTS ---
 @onready var selectable_component: SelectableComponent = get_node_or_null("SelectableComponent")
 @onready var health_component: HealthComponent = $HealthComponent
+@onready var vision_component: VisionComponent = $VisionComponent
+@onready var visible_component: VisibleComponent = $VisibleComponent
 
 # --- SEGNALI ---
 signal upgrade_completed(new_building_data: BuildingData)
@@ -151,7 +153,11 @@ func setup(data: Resource) -> void:
 		selectable_component.setup(data)
 	if health_component:
 		health_component.setup(data)
-
+	if vision_component:
+		vision_component.setup(data)
+	#if visible_component:
+		#visible_component.setup(data)
+	
 	self.tile_size = data.tile_size
 	self.requires_water = data.requires_water
 	self.build_time = data.build_time

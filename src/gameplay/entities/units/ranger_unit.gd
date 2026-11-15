@@ -46,8 +46,14 @@ func _on_attack_started(target: Node2D) -> void:
 	unit_state = UnitState.ATTACKING
 	# Aggiorna BlendSpace e Stato Attack
 	animation_tree.set("parameters/Attack/blend_position", move_dir)
-	state_machine.travel("Attack")
+	state_machine.start("Attack")
 	animation_state = "Attack"
 
 func _on_attack_finished() -> void:
 	clear_assignment()
+
+func clear_assignment() -> void:
+	super()
+	match current_assignment:
+		AssignmentState.ATTACK:
+			attack_component.stop()

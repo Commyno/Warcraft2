@@ -49,6 +49,9 @@ func has_cost() -> bool:
 # Stringa dei costi già formattata, pronta per il tooltip.
 func get_cost_string() -> String:
 	var parts: Array[String] = []
+	if resource_data == null:
+		return ""
+
 	if resource_data.gold_cost > 0: parts.append("Oro: %d" % resource_data.gold_cost)
 	if resource_data.lumber_cost > 0: parts.append("Legna: %d" % resource_data.lumber_cost)
 	if resource_data.oil_cost > 0:  parts.append("Petrolio: %d" % resource_data.oil_cost)

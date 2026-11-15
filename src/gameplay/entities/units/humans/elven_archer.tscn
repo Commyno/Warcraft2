@@ -58,6 +58,20 @@ tracks/1/keys = {
 "update": 1,
 "values": []
 }
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AttackComponent")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.075),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"perform_strike"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_kjy3o"]
 resource_name = "attack_down_right"
@@ -85,6 +99,20 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(),
 "update": 1,
 "values": []
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AttackComponent")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.075),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"perform_strike"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_g8pv4"]
@@ -114,6 +142,20 @@ tracks/1/keys = {
 "update": 1,
 "values": []
 }
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AttackComponent")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.075),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"perform_strike"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_wqwvp"]
 resource_name = "attack_up"
@@ -142,6 +184,20 @@ tracks/1/keys = {
 "update": 1,
 "values": []
 }
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AttackComponent")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.075),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"perform_strike"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_uoibe"]
 resource_name = "attack_up_right"
@@ -169,6 +225,20 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(),
 "update": 1,
 "values": []
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AttackComponent")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.075),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"perform_strike"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_fvm61"]
@@ -748,6 +818,7 @@ advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_7ffem"]
 switch_mode = 2
+advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ge2y0"]
 
@@ -763,7 +834,7 @@ states/Start/position = Vector2(227.5, 172.5)
 states/Walk/node = SubResource("AnimationNodeBlendSpace2D_0pkii")
 states/Walk/position = Vector2(394, -3)
 transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_xs05r"), "Idle", "Walk", SubResource("AnimationNodeStateMachineTransition_1h5nr"), "Walk", "Idle", SubResource("AnimationNodeStateMachineTransition_k7ic0"), "Death", "End", SubResource("AnimationNodeStateMachineTransition_xmspj"), "Idle", "Death", SubResource("AnimationNodeStateMachineTransition_svi37"), "Walk", "Death", SubResource("AnimationNodeStateMachineTransition_5x03o"), "Walk", "Attack", SubResource("AnimationNodeStateMachineTransition_vdv5y"), "Attack", "Idle", SubResource("AnimationNodeStateMachineTransition_7ffem"), "Idle", "Attack", SubResource("AnimationNodeStateMachineTransition_ge2y0")]
-graph_offset = Vector2(-34.77744, -34.342495)
+graph_offset = Vector2(-34.77744, -84.142494)
 
 [node name="ElvenArcher" unique_id=330192060 instance=ExtResource("1_kx3cl")]
 script = ExtResource("2_ax4ql")
@@ -773,8 +844,10 @@ texture = ExtResource("3_6n70m")
 region_enabled = true
 region_rect = Rect2(241, 17, 44, 42)
 
+[node name="AttackComponent" parent="." index="6" unique_id=675761502 node_paths=PackedStringArray("animation_player")]
+animation_player = NodePath("../AnimationPlayer")
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="11" unique_id=186670452]
-active = false
 libraries/ = SubResource("AnimationLibrary_ax4ql")
 
 [node name="AnimationTree" type="AnimationTree" parent="." index="12" unique_id=806456941]

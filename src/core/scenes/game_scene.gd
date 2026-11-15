@@ -13,12 +13,13 @@ const TILE_MAP_ENTITIES: Dictionary = {
 	382: preload("uid://bbklmd4sqie4g"), # Peon
 	383: preload("uid://bastv7u4m0yux"), # Footman
 	384: preload("uid://bastv7u4m0yux"), # Grunt
-	385: preload("uid://bastv7u4m0yux"), # Elven Archer
-	386: preload("uid://bastv7u4m0yux"), # Throl
+	385: preload("uid://cvecbmcoom0nb"), # Elven Archer
+	386: preload("uid://cvecbmcoom0nb"), # Throl
 	421: preload("uid://biao03okejj7o"), # Town Hall
 	422: preload("uid://biao03okejj7o"), # Town 
 	455: preload("uid://dh1x21s721dgh")  # Miniera
 }
+
 
 # ==========================================
 # VARIABLES
