@@ -1,6 +1,10 @@
 class_name VisibleComponent
 extends Node
 
+# ==========================================
+# DICHIARAZIONI
+# ==========================================
+
 enum VisionState {
 	# Area has never been visited before.
 	UNKNOWN,
@@ -16,19 +20,29 @@ signal on_visible_change()
 # --- ESPOSIZIONE ---
 
 
+# --- VARIABILI ---
+
 # Client. Whether the local player can see the actor.
 var is_visible: bool = true
 # Client. Whether the local player has ever seen the actor.
 var was_ever_seen_map: Dictionary = {}  # { player (Player) : stato (bool) }
 # Server. Whether the actor is hidden due to vision, by player. */
 var vision_state: Dictionary = {}  # { player (Player) : vision state (VisionState) }
- 
+
+# ==========================================
+# FUNZIONI
+# ==========================================
+
+# --- EREDITATE ---
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# TODO: Register for events.
 	
 	# Set initial state.
 	is_visible = (get_parent() as Node2D).visible
+
+# --- AGGIUNTIVE ---
 
 func setup() -> void:
 	pass

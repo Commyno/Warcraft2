@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://gqjr7f7ijo08" path="res://src/gameplay/entities/buildings/base_building.tscn" id="1_pxcn6"]
 [ext_resource type="Script" uid="uid://dvxg0fwtkpavx" path="res://src/gameplay/entities/buildings/resource_building.gd" id="2_m4jdb"]
 [ext_resource type="Texture2D" uid="uid://e0ggs00l7mhs" path="res://assets/art/miscellaneous/building/Buildings - Miscellaneous.png" id="3_o8spf"]
-
+[ext_resource type="Script" uid="uid://0jlr34hnd82g" path="res://src/gameplay/entities/components/resource_component.gd" id="4_q8cvv"]
 
 [node name="BaseResource" unique_id=1889694065 instance=ExtResource("1_pxcn6")]
 script = ExtResource("2_m4jdb")
@@ -20,8 +20,6 @@ region_depleted = null
 tile_size = null
 requires_water = null
 build_time = null
-basic_armor = null
-sight_range = null
 food_provided = null
 can_attack = null
 can_destroy = null
@@ -32,8 +30,12 @@ attack_cooldown = null
 can_attack_air = null
 can_attack_ground = null
 
-[node name="Sprite2D" parent="." index="5" unique_id=1061573362]
+[node name="Sprite2D" parent="." index="0" unique_id=1061573362]
 texture = ExtResource("3_o8spf")
 
-[node name="NavigationObstacle2D" parent="." index="7" unique_id=969329888]
+[node name="NavigationObstacle2D" parent="." index="2" unique_id=969329888]
 radius = 90.0
+
+[node name="ResourceComponent" type="Node" parent="." index="9" unique_id=1118598328]
+script = ExtResource("4_q8cvv")
+metadata/_custom_type_script = "uid://0jlr34hnd82g"

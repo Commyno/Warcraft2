@@ -1,6 +1,10 @@
 class_name HealthComponent
 extends Node2D
 
+# ==========================================
+# DICHIARAZIONI
+# ==========================================
+
 # --- SEGNALI ---
 signal health_changed(new_health: float, max_health: float)
 
@@ -11,7 +15,13 @@ signal health_changed(new_health: float, max_health: float)
 @export var is_health_regen: bool = false      # Se la vita si rigenera
 @export var health_regen: float = 0.25          # Vita rigenerata al secondo
 
+# --- VARIABILI ---
+
 var health: float = 0
+
+# ==========================================
+# FUNZIONI
+# ==========================================
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

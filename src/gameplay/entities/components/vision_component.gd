@@ -1,9 +1,20 @@
 class_name VisionComponent
 extends Node
 
+# ==========================================
+# DICHIARAZIONI
+# ==========================================
+
 # --- SEGNALI ---
 
+# --- ESPOSIZIONE ---
 @export var sight_range: int = 4            # Raggio visivo (in tile o unità di misura)
+
+# ==========================================
+# FUNZIONI
+# ==========================================
+
+# --- EREDITATE ---
 
 func _ready() -> void:
 	# Registra questo componente al FogManager appena il nodo entra nella scena
@@ -12,6 +23,8 @@ func _ready() -> void:
 func _exit_tree() -> void:
 	# Rimuove il componente dalla lista quando l'unità muore o viene rimossa (queue_free)
 	FogManager.unregister_vision_component(self)
+
+# --- AGGIUNTIVE ---
 
 func setup(data: Resource) -> void:
 	self.sight_range = data.sight_range

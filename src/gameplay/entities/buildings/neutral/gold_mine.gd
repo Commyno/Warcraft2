@@ -1,9 +1,6 @@
 class_name GoldMine
 extends ResourceBuilding
 
-# --- IDENTIFICAZIONE RISORSA ---
-@onready var resource_component: ResourceComponent = $ResourceComponent
-
 # --- SEGNALI ---
 signal state_changed(old_state: BuildingState, new_state: BuildingState)
 
@@ -24,14 +21,19 @@ func _ready() -> void:
 		health_component.hide_health_bar()
 	
 	if resource_component:
-		resource_component.setup(Globals.ResourceType.GOLD, null)
-		
 		if not resource_component.depleted.is_connected(on_depleted):
 			resource_component.depleted.connect(on_depleted)
 		if not resource_component.worker_entered.is_connected(on_worker_entered):
 			resource_component.worker_entered.connect(on_worker_entered)
 		if not resource_component.worker_exited.is_connected(ok_worker_exited):
 			resource_component.worker_exited.connect(ok_worker_exited)
+
+func setup(data: Resource) -> void:
+	super(data)
+
+	if resource_component:
+		resource_component.setup(data)
+
 
 func _exit_tree() -> void:
 	if resource_component:
@@ -90,6 +92,15 @@ func on_depleted() -> void:
 			resource_component.depleted.disconnect(on_depleted)
 
 # --- GESTIONE LAVORATORI ---
+func register_worker(worker: Node2D) -> bool:
+	if resource_component:
+		return resource_component.register_worker(worker)
+	return false
+
+func unregister_worker(worker: Node2D) -> bool:
+	if resource_component:
+		return resource_component.unregister_worker(worker)
+	return false
 
 func on_worker_entered(worker: Node2D) -> void:
 	if current_state == BuildingState.IDLE:
@@ -102,3 +113,8 @@ func on_worker_entered(worker: Node2D) -> void:
 func ok_worker_exited(worker: Node2D) -> void:
 	if resource_component.active_workers.size() <= 0:
 		change_state(BuildingState.IDLE)
+
+func is_depleted() -> bool:
+	if resource_component:
+		return resource_component.is_depleted
+	return true

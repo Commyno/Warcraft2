@@ -35,8 +35,10 @@ func _ready() -> void:
 	add_child(extraction_timer)
 	extraction_timer.stop()
 
-func setup(_resource_type: Globals.ResourceType, data: Resource) -> void:
-	resource_type = _resource_type
+func setup(data: Resource) -> void:
+	resource_type = data.resource_type
+	current_resources = data.resource_quantity
+	max_resources = data.resource_quantity
 
 func set_resources(_resource: int, _max_resources) -> void: #resource_amount: int, status_active: bool) -> void:
 	current_resources = _resource

@@ -6,7 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://e0ggs00l7mhs" path="res://assets/art/miscellaneous/building/Buildings - Miscellaneous.png" id="4_f0tba"]
 [ext_resource type="Script" uid="uid://0jlr34hnd82g" path="res://src/gameplay/entities/components/resource_component.gd" id="5_7syh0"]
 
-
 [node name="GoldMine" unique_id=1889694065 instance=ExtResource("1_f7tvw")]
 script = ExtResource("1_f0tba")
 player_color = Color(0, 0, 1, 1)
@@ -23,8 +22,6 @@ region_depleted = Rect2(433, 8, 63, 59)
 tile_size = Vector2i(3, 3)
 requires_water = false
 build_time = 80.0
-basic_armor = 20
-sight_range = 4
 food_provided = 0
 can_attack = false
 can_destroy = false
@@ -35,9 +32,9 @@ attack_cooldown = 1.0
 can_attack_air = false
 can_attack_ground = true
 
-[node name="ResourceComponent" type="Node" parent="." index="5" unique_id=1151345558]
+[node name="Sprite2D" parent="." index="0" unique_id=1061573362]
+region_rect = Rect2(3, 8, 96, 89)
+
+[node name="ResourceComponent2" type="Node" parent="." index="5" unique_id=1151345558]
 script = ExtResource("5_7syh0")
 metadata/_custom_type_script = "uid://0jlr34hnd82g"
-
-[node name="Sprite2D" parent="." index="6" unique_id=1061573362]
-region_rect = Rect2(3, 8, 96, 89)

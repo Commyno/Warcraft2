@@ -6,13 +6,16 @@
 [resource]
 script = ExtResource("1_xkntl")
 id = "gold_mine"
-name = "Miniera"
-description = "Descrizione Miniera"
 faction = 2
 type = 1
-icon = ExtResource("2_6qjep")
 scene_path = "uid://bkpxip1v5ofhn"
+name = "Miniera"
+description = "Descrizione Miniera"
+icon = ExtResource("2_6qjep")
 build_time = 0.0
 can_destroy = false
 can_attack_ground = false
+basic_armor = 0
+resource_type = 2
+resource_quantity = 32000.0
 metadata/_custom_type_script = "uid://cjdr3m81ncphw"

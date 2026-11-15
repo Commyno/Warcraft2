@@ -1,6 +1,6 @@
 extends Node2D
 
-@export var radius: float = 32.0          # Raggio del cerchio
+@export var radius: float = 16.0          # Raggio del cerchio
 @export var ring_color: Color = Color(0, 1, 0, 0.8) # Verde semi-trasparente
 @export var line_thickness: float = 2.0   # Spessore della linea
 

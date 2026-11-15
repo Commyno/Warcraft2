@@ -1,6 +1,8 @@
 class_name ResourceBuilding
 extends BaseBuilding
 
+@onready var resource_component: ResourceComponent = $ResourceComponent
+
 # --- SEGNALI ---
 
 # --- VARIABILI INTERNE ---
@@ -8,6 +10,14 @@ extends BaseBuilding
 func _ready() -> void:
 	super()
 	add_to_group("interactable")
+
+func setup(data: Resource) -> void:
+	super(data)
+
+	# Components
+	if resource_component:
+		resource_component.setup(data)
+
 
 # --- SISTEMA DI ESTRAZIONE ---
 

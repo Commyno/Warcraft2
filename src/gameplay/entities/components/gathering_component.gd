@@ -54,7 +54,7 @@ func interact_with_mine(mine: GoldMine) -> void:
 			interaction_finished.emit()
 
 func enter_mine(mine: GoldMine) -> void:
-	if mine.is_depleted:
+	if mine.is_depleted():
 		interaction_finished.emit()
 		return
 		

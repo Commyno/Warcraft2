@@ -75,6 +75,13 @@ enum BuildingType { PRODUCTION, ECONOMY, DEFENSE, TECH }
 @export_group("VisionComponent")
 @export var sight_range: int = 4            # Raggio visivo (in tile)
 
+# ==========================================
+# GATHERING
+# ==========================================
+@export_group("Risorse")
+@export var resource_type: Globals.ResourceType = Globals.ResourceType.NONE   # Tipo di risorza (Oro, legno, petrolio)
+@export var resource_quantity: float = 80.0                                   # Quantità di risorsa disponibile
+
 # Funzione helper comoda per quando devi effettivamente istanziare l'edificio
 func get_scene() -> PackedScene:
 	if scene_path.is_empty():

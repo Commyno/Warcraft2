@@ -1,6 +1,10 @@
 class_name SelectableComponent
 extends Node
 
+# ==========================================
+# DICHIARAZIONI
+# ==========================================
+
 # --- PARAMETRI CONFIGURABILI DALL'INSPECTOR ---
 @export_group("Informazioni UI")
 @export var display_name: String = "Entità"

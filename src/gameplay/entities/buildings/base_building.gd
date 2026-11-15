@@ -37,13 +37,6 @@ enum BuildingState { IDLE, ACTIVE, DEPLETED, DESTROYED, INACTIVE }
 @export var build_time: float = 80.0             # Secondi necessari alla costruzione
 
 # ==========================================
-# STATISTICHE DIFENSIVE E VISIVE
-# ==========================================
-@export_group("Attributes")
-@export var basic_armor: int = 20                 # Gli edifici in WC2 hanno armatura alta
-@export var sight_range: int = 4                 # Raggio visivo (in tile)
-
-# ==========================================
 # CAPACITÀ SPECIALI / SUPPORTO
 # ==========================================
 @export_group("Capabilities")
@@ -138,8 +131,6 @@ func _ready() -> void:
 	# Gestione dello stato iniziale (già costruito)
 	active_builders.clear()	
 	_set_building_region(region_completed)
-	
-	deselect()
 
 func _process(delta: float) -> void:
 	if is_under_construction and not active_builders.is_empty():
@@ -161,8 +152,6 @@ func setup(data: Resource) -> void:
 	self.tile_size = data.tile_size
 	self.requires_water = data.requires_water
 	self.build_time = data.build_time
-	self.basic_armor = data.basic_armor
-	self.sight_range = data.sight_range
 	self.food_provided = data.food_provided
 	self.can_attack = data.can_attack
 	self.basic_damage = data.basic_damage

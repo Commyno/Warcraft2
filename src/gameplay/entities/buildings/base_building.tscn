@@ -17,6 +17,24 @@ radius = 128.0
 [node name="BaseBuilding" type="StaticBody2D" unique_id=1889694065 groups=["buildings", "selectable_units"]]
 script = ExtResource("1_tpccr")
 
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1061573362]
+texture = ExtResource("2_p3hth")
+region_enabled = true
+region_rect = Rect2(270, 17, 119, 104)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=223898250]
+shape = SubResource("CircleShape2D_tpccr")
+
+[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="." unique_id=969329888]
+radius = 70.0
+affect_navigation_mesh = true
+avoidance_layers = 2
+
+[node name="PlacementArea" type="Area2D" parent="." unique_id=735967493]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlacementArea" unique_id=400391067]
+shape = SubResource("CircleShape2D_p3hth")
+
 [node name="SelectionRing" type="Node2D" parent="." unique_id=523229799]
 z_index = -1
 script = ExtResource("3_a17aa")
@@ -35,21 +53,3 @@ metadata/_custom_type_script = "uid://rcn2lisr1672"
 [node name="VisibleComponent" type="Node" parent="." unique_id=1924045657]
 script = ExtResource("6_o5r7y")
 metadata/_custom_type_script = "uid://cuicr8gv1c8yl"
-
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1061573362]
-texture = ExtResource("2_p3hth")
-region_enabled = true
-region_rect = Rect2(270, 17, 119, 104)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=223898250]
-shape = SubResource("CircleShape2D_tpccr")
-
-[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="." unique_id=969329888]
-radius = 70.0
-affect_navigation_mesh = true
-avoidance_layers = 2
-
-[node name="PlacementArea" type="Area2D" parent="." unique_id=735967493]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlacementArea" unique_id=400391067]
-shape = SubResource("CircleShape2D_p3hth")
